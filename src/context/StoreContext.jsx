@@ -1,6 +1,20 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { INITIAL_PRODUCTS, PROMO_CODES } from '../data/initialProducts';
 import { INITIAL_ORDERS } from '../data/initialOrders';
+import { isSupabaseConfigured } from '../lib/supabaseClient';
+import {
+  fetchProductsFromSupabase,
+  seedProductsToSupabase,
+  saveProductToSupabase,
+  deleteProductFromSupabase,
+  fetchOrdersFromSupabase,
+  seedOrdersToSupabase,
+  saveOrderToSupabase,
+  updateOrderStatusInSupabase,
+  subscribeToStoreChanges,
+  formatProductFromDb,
+  formatOrderFromDb
+} from '../services/supabaseService';
 
 const StoreContext = createContext();
 
@@ -20,6 +34,10 @@ export const StoreProvider = ({ children }) => {
 
   // Admin Active Tab: 'analytics' | 'products' | 'orders' | 'inventory'
   const [adminTab, setAdminTab] = useState('analytics');
+
+  // Cloud Sync Status Indicator
+  const [isCloudConnected, setIsCloudConnected] = useState(isSupabaseConfigured);
+  const [isLoadingFromCloud, setIsLoadingFromCloud] = useState(isSupabaseConfigured);
 
   // Products Data
   const [products, setProducts] = useState(() => {
@@ -95,7 +113,111 @@ export const StoreProvider = ({ children }) => {
   // Toasts
   const [toasts, setToasts] = useState([]);
 
-  // Persistence Effects
+  // Toast Helpers
+  const showToast = useCallback((message, type = 'success', duration = 3500) => {
+    const id = Date.now() + Math.random().toString(36).substr(2, 4);
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, duration);
+  }, []);
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  // --- Initial Cloud Load & Real-Time Sync ---
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setIsCloudConnected(false);
+      setIsLoadingFromCloud(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    const syncCloudData = async () => {
+      setIsLoadingFromCloud(true);
+      try {
+        // 1. Products Sync
+        const cloudProducts = await fetchProductsFromSupabase();
+        if (cloudProducts !== null && isMounted) {
+          if (cloudProducts.length === 0) {
+            // Seed initial products to Supabase if table is empty
+            await seedProductsToSupabase(INITIAL_PRODUCTS);
+            setProducts(INITIAL_PRODUCTS);
+          } else {
+            setProducts(cloudProducts);
+          }
+          setIsCloudConnected(true);
+        }
+
+        // 2. Orders Sync
+        const cloudOrders = await fetchOrdersFromSupabase();
+        if (cloudOrders !== null && isMounted) {
+          if (cloudOrders.length === 0) {
+            // Seed initial orders to Supabase if table is empty
+            await seedOrdersToSupabase(INITIAL_ORDERS);
+            setOrders(INITIAL_ORDERS);
+          } else {
+            setOrders(cloudOrders);
+          }
+        }
+      } catch (err) {
+        console.error('Supabase initial sync error:', err);
+        if (isMounted) setIsCloudConnected(false);
+      } finally {
+        if (isMounted) setIsLoadingFromCloud(false);
+      }
+    };
+
+    syncCloudData();
+
+    // Subscribe to Postgres Real-Time Changes
+    const unsubscribe = subscribeToStoreChanges(
+      (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const updated = formatProductFromDb(payload.new);
+          if (updated) {
+            setProducts((prev) => {
+              const idx = prev.findIndex((p) => p.id === updated.id);
+              if (idx > -1) {
+                const next = [...prev];
+                next[idx] = updated;
+                return next;
+              }
+              return [updated, ...prev];
+            });
+          }
+        } else if (payload.eventType === 'DELETE' && payload.old?.id) {
+          setProducts((prev) => prev.filter((p) => p.id !== payload.old.id));
+        }
+      },
+      (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const updatedOrder = formatOrderFromDb(payload.new);
+          if (updatedOrder) {
+            setOrders((prev) => {
+              const idx = prev.findIndex((o) => o.id === updatedOrder.id);
+              if (idx > -1) {
+                const next = [...prev];
+                next[idx] = updatedOrder;
+                return next;
+              }
+              return [updatedOrder, ...prev];
+            });
+          }
+        }
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
+
+  // --- Local Storage Backup Persistence Effects ---
   useEffect(() => {
     localStorage.setItem('lumina_role', role);
   }, [role]);
@@ -116,20 +238,7 @@ export const StoreProvider = ({ children }) => {
     localStorage.setItem('lumina_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Toast Helpers
-  const showToast = (message, type = 'success', duration = 3500) => {
-    const id = Date.now() + Math.random().toString(36).substr(2, 4);
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => {
-      removeToast(id);
-    }, duration);
-  };
-
-  const removeToast = (id) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
-
-  // Cart Calculations
+  // --- Cart Calculations ---
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
   const freeShippingThreshold = 150;
@@ -141,7 +250,7 @@ export const StoreProvider = ({ children }) => {
   const cartDiscountAmount = (cartSubtotal * discountPercent) / 100;
   const cartTotal = Math.max(0, cartSubtotal - cartDiscountAmount + cartShipping);
 
-  // Cart Actions
+  // --- Cart Actions ---
   const addToCart = (product, selectedColor = null, quantity = 1) => {
     const colorToUse = selectedColor || (product.colors && product.colors[0]?.name) || 'Standard';
     const cartItemId = `${product.id}-${colorToUse}`;
@@ -239,7 +348,7 @@ export const StoreProvider = ({ children }) => {
     showToast('Promo code removed', 'info');
   };
 
-  // Favorites / Wishlist Actions
+  // --- Favorites / Wishlist Actions ---
   const toggleFavorite = (productId) => {
     setFavorites((prev) => {
       const isFav = prev.includes(productId);
@@ -257,8 +366,8 @@ export const StoreProvider = ({ children }) => {
 
   const isFavorite = (productId) => favorites.includes(productId);
 
-  // Orders Actions
-  const placeOrder = (customerData, paymentMethod) => {
+  // --- Orders Actions (Cloud + Local) ---
+  const placeOrder = async (customerData, paymentMethod) => {
     if (cart.length === 0) {
       showToast('Cannot checkout with an empty cart!', 'error');
       return null;
@@ -283,24 +392,27 @@ export const StoreProvider = ({ children }) => {
       trackingNumber
     };
 
-    // Deduct stock from products
-    setProducts((prevProducts) =>
-      prevProducts.map((prod) => {
-        const orderedItem = cart.find((item) => item.id === prod.id);
-        if (orderedItem) {
-          return {
-            ...prod,
-            stock: Math.max(0, prod.stock - orderedItem.quantity)
-          };
-        }
-        return prod;
-      })
-    );
+    // 1. Deduct stock in memory and Supabase
+    const updatedProducts = products.map((prod) => {
+      const orderedItem = cart.find((item) => item.id === prod.id);
+      if (orderedItem) {
+        const updated = {
+          ...prod,
+          stock: Math.max(0, prod.stock - orderedItem.quantity)
+        };
+        saveProductToSupabase(updated);
+        return updated;
+      }
+      return prod;
+    });
 
-    // Append to orders
+    setProducts(updatedProducts);
     setOrders((prev) => [newOrder, ...prev]);
 
-    // Clear cart & promo
+    // 2. Save order to Supabase
+    saveOrderToSupabase(newOrder);
+
+    // 3. Clear cart & promo
     clearCart();
     setIsCheckoutOpen(false);
 
@@ -308,24 +420,29 @@ export const StoreProvider = ({ children }) => {
     return newOrder;
   };
 
-  const updateOrderStatus = (orderId, newStatus) => {
+  const updateOrderStatus = async (orderId, newStatus) => {
+    const deliveredAt = newStatus === 'Delivered' ? new Date().toISOString() : null;
+
     setOrders((prevOrders) =>
       prevOrders.map((ord) => {
         if (ord.id === orderId) {
           const updated = { ...ord, status: newStatus };
-          if (newStatus === 'Delivered' && !ord.deliveredAt) {
-            updated.deliveredAt = new Date().toISOString();
+          if (deliveredAt && !ord.deliveredAt) {
+            updated.deliveredAt = deliveredAt;
           }
           return updated;
         }
         return ord;
       })
     );
+
+    // Update in Supabase
+    updateOrderStatusInSupabase(orderId, newStatus, deliveredAt);
     showToast(`Order ${orderId} updated to "${newStatus}"`, 'info');
   };
 
-  // Product CRUD (Admin Operations)
-  const addProduct = (productData) => {
+  // --- Product CRUD (Admin Operations Cloud + Local) ---
+  const addProduct = async (productData) => {
     const id = `prod-${Date.now()}`;
     const newProduct = {
       id,
@@ -351,52 +468,70 @@ export const StoreProvider = ({ children }) => {
     };
 
     setProducts((prev) => [newProduct, ...prev]);
+    saveProductToSupabase(newProduct);
+
     showToast(`Product "${newProduct.name}" added to catalog`, 'success');
     setIsProductFormOpen(false);
     setEditingProduct(null);
   };
 
-  const updateProduct = (productId, updatedData) => {
+  const updateProduct = async (productId, updatedData) => {
+    let savedProd = null;
+
     setProducts((prev) =>
       prev.map((prod) => {
         if (prod.id === productId) {
-          return {
+          savedProd = {
             ...prod,
             ...updatedData,
             price: parseFloat(updatedData.price) || prod.price,
             originalPrice: parseFloat(updatedData.originalPrice) || prod.originalPrice,
             stock: parseInt(updatedData.stock, 10) ?? prod.stock
           };
+          return savedProd;
         }
         return prod;
       })
     );
+
+    if (savedProd) {
+      saveProductToSupabase(savedProd);
+    }
+
     showToast(`Product updated successfully`, 'success');
     setIsProductFormOpen(false);
     setEditingProduct(null);
   };
 
-  const deleteProduct = (productId) => {
+  const deleteProduct = async (productId) => {
     const prod = products.find((p) => p.id === productId);
     setProducts((prev) => prev.filter((p) => p.id !== productId));
+    deleteProductFromSupabase(productId);
     showToast(`Product "${prod?.name || productId}" deleted`, 'info');
   };
 
-  const restockProduct = (productId, amount = 10) => {
+  const restockProduct = async (productId, amount = 10) => {
+    let target = null;
     setProducts((prev) =>
       prev.map((prod) => {
         if (prod.id === productId) {
           const newStock = prod.stock + amount;
-          return { ...prod, stock: newStock };
+          target = { ...prod, stock: newStock };
+          return target;
         }
         return prod;
       })
     );
+
+    if (target) {
+      saveProductToSupabase(target);
+    }
+
     showToast(`Restocked +${amount} units`, 'success');
   };
 
-  // Reset to Demo Data
-  const resetToDemoData = () => {
+  // --- Reset to Demo Data ---
+  const resetToDemoData = async () => {
     setProducts(INITIAL_PRODUCTS);
     setOrders(INITIAL_ORDERS);
     setCart([]);
@@ -406,16 +541,20 @@ export const StoreProvider = ({ children }) => {
     localStorage.removeItem('lumina_orders');
     localStorage.removeItem('lumina_cart');
     localStorage.removeItem('lumina_favorites');
+
+    if (isSupabaseConfigured) {
+      await seedProductsToSupabase(INITIAL_PRODUCTS);
+      await seedOrdersToSupabase(INITIAL_ORDERS);
+    }
+
     showToast('Reset store to default factory demo data', 'info');
   };
 
-  // Computed Filtered Products for Customer Catalog
+  // --- Computed Filtered Products for Customer Catalog ---
   const filteredProducts = products.filter((product) => {
-    // Category Filter
     if (selectedCategory !== 'All' && product.category !== selectedCategory) {
       return false;
     }
-    // Search Query Filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const matchName = product.name.toLowerCase().includes(q);
@@ -426,11 +565,9 @@ export const StoreProvider = ({ children }) => {
         return false;
       }
     }
-    // Stock Filter
     if (inStockOnly && product.stock <= 0) {
       return false;
     }
-    // Price Slider Filter
     if (product.price > maxPrice) {
       return false;
     }
@@ -440,13 +577,12 @@ export const StoreProvider = ({ children }) => {
     if (sortBy === 'price-high') return b.price - a.price;
     if (sortBy === 'rating') return b.rating - a.rating;
     if (sortBy === 'name') return a.name.localeCompare(b.name);
-    // default: featured first
     if (a.isFeatured && !b.isFeatured) return -1;
     if (!a.isFeatured && b.isFeatured) return 1;
     return 0;
   });
 
-  // Admin KPI Analytics Data
+  // --- Admin KPI Analytics Data ---
   const totalRevenue = orders.reduce((sum, ord) => sum + (ord.status !== 'Cancelled' ? ord.total : 0), 0);
   const totalOrdersCount = orders.length;
   const pendingOrdersCount = orders.filter((o) => o.status === 'Pending' || o.status === 'Processing').length;
@@ -462,6 +598,10 @@ export const StoreProvider = ({ children }) => {
         setRole,
         adminTab,
         setAdminTab,
+
+        // Cloud & Connection State
+        isCloudConnected,
+        isLoadingFromCloud,
 
         // Products
         products,

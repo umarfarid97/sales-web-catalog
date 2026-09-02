@@ -21,7 +21,8 @@ export const AdminHeader = () => {
     pendingOrdersCount,
     setRole,
     showToast,
-    orders
+    orders,
+    isCloudConnected
   } = useStore();
 
   const handleAddNewProduct = () => {
@@ -50,15 +51,17 @@ export const AdminHeader = () => {
           <ShieldCheck size={24} />
         </div>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <h1>Store Operations & Admin Portal</h1>
             <div className="admin-status-pill">
-              <span className="admin-live-dot" />
-              <span>Live Engine</span>
+              <span className="admin-live-dot" style={{ backgroundColor: isCloudConnected ? '#10b981' : '#f59e0b' }} />
+              <span>{isCloudConnected ? 'Supabase Cloud DB' : 'Local Storage Mode'}</span>
             </div>
           </div>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Real-time catalog inventory, order fulfillment, and executive business analytics
+            {isCloudConnected
+              ? 'Real-time multi-user synchronization active via Supabase PostgreSQL'
+              : 'Standalone browser storage active. Add Supabase keys to enable cloud sync.'}
           </p>
         </div>
       </div>
