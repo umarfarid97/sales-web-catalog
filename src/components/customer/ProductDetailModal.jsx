@@ -69,6 +69,14 @@ export const ProductDetailModal = () => {
       <div 
         className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
+        style={{
+          maxHeight: '90vh',
+          maxHeight: '90dvh',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          position: 'relative',
+          margin: 'auto'
+        }}
       >
         <button
           className="modal-close-btn"
@@ -78,7 +86,7 @@ export const ProductDetailModal = () => {
           <X size={18} />
         </button>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '40px', padding: '36px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', padding: 'clamp(20px, 3vw, 36px)' }}>
           
           {/* Left: Product Images */}
           <div>
@@ -96,7 +104,7 @@ export const ProductDetailModal = () => {
               <img 
                 src={product.images[activeImageIndex] || product.images[0]} 
                 alt={product.name}
-                style={{ width: '100%', height: '420px', objectFit: 'cover' }}
+                style={{ width: '100%', height: 'clamp(260px, 38vh, 400px)', objectFit: 'cover' }}
               />
 
               {product.refillable && (

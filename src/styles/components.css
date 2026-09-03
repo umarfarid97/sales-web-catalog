@@ -296,15 +296,19 @@
 .modal-content {
   width: 100%;
   max-width: 540px;
-  border-radius: var(--radius-xl);
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-sm);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
   position: relative;
-  overflow: hidden;
   animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: auto;
 }
 
 .modal-content-lg {
-  max-width: 880px;
+  max-width: 980px;
 }
 
 @keyframes modalPop {
