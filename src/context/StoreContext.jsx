@@ -32,6 +32,24 @@ export const StoreProvider = ({ children }) => {
     return localStorage.getItem('lumina_role') || 'customer';
   });
 
+  // Customer View: 'catalog' | 'diagnostic'
+  const [customerView, setCustomerView] = useState('catalog');
+
+  const navigateToDiagnostic = () => {
+    setRole('customer');
+    setCustomerView('diagnostic');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToCatalog = (category = 'All Creations') => {
+    setRole('customer');
+    setCustomerView('catalog');
+    if (category) {
+      setSelectedCategory(category);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Admin Active Tab: 'analytics' | 'products' | 'orders' | 'inventory'
   const [adminTab, setAdminTab] = useState('analytics');
 
@@ -702,9 +720,13 @@ export const StoreProvider = ({ children }) => {
   return (
     <StoreContext.Provider
       value={{
-        // Role & Tabs
+        // Role & Tabs & Views
         role,
         setRole,
+        customerView,
+        setCustomerView,
+        navigateToDiagnostic,
+        navigateToCatalog,
         adminTab,
         setAdminTab,
 

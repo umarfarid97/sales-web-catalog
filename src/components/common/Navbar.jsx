@@ -7,7 +7,9 @@ import {
   X, 
   Cloud, 
   Compass,
-  Menu
+  Menu,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -15,6 +17,9 @@ export const Navbar = () => {
   const { 
     role, 
     setRole, 
+    customerView,
+    navigateToDiagnostic,
+    navigateToCatalog,
     cartTotalItems, 
     setIsCartOpen, 
     searchQuery, 
@@ -64,33 +69,48 @@ export const Navbar = () => {
 
               <div className="dior-navbar-links hide-mobile">
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'All Creations' || selectedCategory === 'All' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('All Creations')}
+                  className={`dior-nav-link ${customerView === 'diagnostic' ? 'active' : ''}`}
+                  onClick={() => navigateToDiagnostic()}
+                  style={{ 
+                    color: customerView === 'diagnostic' ? '#000000' : '#b45309', 
+                    fontWeight: 800, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '5px',
+                    borderBottom: customerView === 'diagnostic' ? '2px solid #000000' : 'none'
+                  }}
+                >
+                  <Sparkles size={13} color="#d97706" />
+                  <span>Find Your Scent</span>
+                </button>
+                <button 
+                  className={`dior-nav-link ${customerView === 'catalog' && (selectedCategory === 'All Creations' || selectedCategory === 'All') ? 'active' : ''}`}
+                  onClick={() => navigateToCatalog('All Creations')}
                 >
                   All (345)
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('Tier S (Launch Icons)')}
+                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
+                  onClick={() => navigateToCatalog('Tier S (Launch Icons)')}
                   style={{ color: selectedCategory === 'Tier S (Launch Icons)' ? '#000000' : '#926917', fontWeight: 700 }}
                 >
                   ★ Tier S (55)
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'Pour Homme' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('Pour Homme')}
+                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Pour Homme' ? 'active' : ''}`}
+                  onClick={() => navigateToCatalog('Pour Homme')}
                 >
                   Pour Homme
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'Pour Femme' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('Pour Femme')}
+                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Pour Femme' ? 'active' : ''}`}
+                  onClick={() => navigateToCatalog('Pour Femme')}
                 >
                   Pour Femme
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('Niche & Unisex')}
+                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
+                  onClick={() => navigateToCatalog('Niche & Unisex')}
                 >
                   Unisex
                 </button>
@@ -101,7 +121,7 @@ export const Navbar = () => {
             <div 
               style={{ textAlign: 'center', cursor: 'pointer', padding: '4px 6px', display: 'flex', justifyContent: 'center' }}
               onClick={() => {
-                setSelectedCategory('All Creations');
+                navigateToCatalog('All Creations');
                 setIsMobileMenuOpen(false);
               }}
               title="VALENSZO Fragrance Malaysia"
@@ -274,36 +294,74 @@ export const Navbar = () => {
           <div className="mobile-nav-drawer">
             <div className="mobile-nav-inner">
               
+              {/* Featured Olfactory Diagnostic Menu Item */}
+              <div style={{ marginBottom: '20px' }}>
+                <button
+                  className="mobile-nav-item"
+                  onClick={() => {
+                    navigateToDiagnostic();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  style={{
+                    background: customerView === 'diagnostic' ? '#000000' : 'linear-gradient(135deg, #18181b 0%, #09090b 100%)',
+                    color: '#ffffff',
+                    border: '1px solid #d97706',
+                    padding: '14px 16px',
+                    borderRadius: 'var(--radius-sm)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 14px rgba(217, 119, 6, 0.18)',
+                    width: '100%'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Sparkles size={16} color="#f59e0b" />
+                    </div>
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.04em', color: '#ffffff' }}>
+                        Find Your Scent
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600 }}>
+                        10-Question Olfactory Diagnostic &rarr;
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} color="#f59e0b" />
+                </button>
+              </div>
+
               <div className="mobile-nav-section-title">Valenszo Portfolio (345 Fragrances)</div>
               <div className="mobile-nav-links">
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'All Creations' || selectedCategory === 'All' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('All Creations'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && (selectedCategory === 'All Creations' || selectedCategory === 'All') ? 'active' : ''}`}
+                  onClick={() => { navigateToCatalog('All Creations'); setIsMobileMenuOpen(false); }}
                 >
                   <span>All Creations (345 Portfolio)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Tier S (Launch Icons)'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
+                  onClick={() => { navigateToCatalog('Tier S (Launch Icons)'); setIsMobileMenuOpen(false); }}
                   style={{ borderLeft: '3px solid #d97706' }}
                 >
                   <span style={{ color: '#d97706', fontWeight: 800 }}>★ Tier S (55 Launch Icons)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Pour Homme' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Pour Homme'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Pour Homme' ? 'active' : ''}`}
+                  onClick={() => { navigateToCatalog('Pour Homme'); setIsMobileMenuOpen(false); }}
                 >
                   <span>Pour Homme (116 Men&apos;s Fragrances)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Pour Femme' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Pour Femme'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Pour Femme' ? 'active' : ''}`}
+                  onClick={() => { navigateToCatalog('Pour Femme'); setIsMobileMenuOpen(false); }}
                 >
                   <span>Pour Femme (229 Women&apos;s Fragrances)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Niche & Unisex'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
+                  onClick={() => { navigateToCatalog('Niche & Unisex'); setIsMobileMenuOpen(false); }}
                 >
                   <span>Unisex &amp; Niche Extraits</span>
                 </button>

@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Customer Components
 import { ProductCatalog } from './components/customer/ProductCatalog';
+import { FragranceDiagnostic } from './components/customer/FragranceDiagnostic';
 import { ProductDetailModal } from './components/customer/ProductDetailModal';
 import { CartDrawer } from './components/customer/CartDrawer';
 import { CheckoutModal } from './components/customer/CheckoutModal';
@@ -28,7 +29,7 @@ import './styles/customer.css';
 import './styles/admin.css';
 
 const MainLayout = () => {
-  const { role, adminTab } = useStore();
+  const { role, adminTab, customerView } = useStore();
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -41,7 +42,11 @@ const MainLayout = () => {
         {role === 'customer' ? (
           /* ================= CUSTOMER STOREFRONT ================= */
           <div className="customer-store-view">
-            <ProductCatalog />
+            {customerView === 'diagnostic' ? (
+              <FragranceDiagnostic />
+            ) : (
+              <ProductCatalog />
+            )}
           </div>
         ) : (
           /* ================= ADMIN MANAGEMENT PORTAL ================= */
