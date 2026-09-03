@@ -1,166 +1,200 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   ShoppingBag, 
   Search, 
-  X, 
-  Heart, 
-  ShieldCheck, 
-  Store, 
-  Truck, 
-  Sparkles,
-  RotateCcw,
-  Flame
+  UserCheck, 
+  Sparkles, 
+  RotateCcw, 
+  X,
+  Compass,
+  Gift,
+  Cloud,
+  Layers
 } from 'lucide-react';
 
 export const Navbar = () => {
-  const {
-    role,
-    setRole,
-    searchQuery,
+  const { 
+    role, 
+    setRole, 
+    cartTotalItems, 
+    setIsCartOpen, 
+    searchQuery, 
     setSearchQuery,
-    cartItemCount,
-    cartSubtotal,
-    setIsCartOpen,
-    favorites,
-    setIsOrderTrackerOpen,
+    isCloudConnected,
     resetToDemoData,
-    isCloudConnected
+    showToast,
+    setIsOrderTrackerOpen,
+    setSelectedCategory
   } = useStore();
 
-  return (
-    <header className="site-header">
-      <div className="container">
-        <div className="nav-container">
-          
-          {/* Brand Logo */}
-          <div 
-            className="brand-logo" 
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setRole('customer');
-              setSearchQuery('');
-            }}
-          >
-            <div className="brand-icon-box" style={{ background: 'var(--accent-gold-gradient)' }}>
-              <Flame size={20} color="#0b0c10" />
-            </div>
-            <div>
-              <span className="font-serif-title" style={{ letterSpacing: '0.12em', fontSize: '1.25rem' }}>LUMINA</span>
-              <span style={{ fontSize: '0.62rem', display: 'block', color: 'var(--accent-gold)', letterSpacing: '0.2em', marginTop: '-2px', textTransform: 'uppercase', fontWeight: '700' }}>
-                HAUTE PARFUMERIE PARIS
-              </span>
-            </div>
-          </div>
+  const [isResetting, setIsResetting] = useState(false);
 
-          {/* Search Bar (Customer Mode) */}
-          {role === 'customer' && (
+  const handleReset = async () => {
+    if (window.confirm('Reset catalog to the complete Dior Sauvage & Haute Parfumerie collection?')) {
+      setIsResetting(true);
+      await resetToDemoData();
+      setIsResetting(false);
+      showToast('Catalog refreshed with the complete Sauvage & Privée collection!', 'success');
+    }
+  };
+
+  return (
+    <>
+      {/* Top Dior Couture Announcement Bar */}
+      <div className="dior-announcement-bar">
+        COMPLIMENTARY ART OF GIFTING &amp; 2 SAMPLES WITH EVERY ORDER &bull; <span>FREE WHITE-GLOVE CLIMATE DELIVERY</span>
+      </div>
+
+      <header className="site-header">
+        <div className="container">
+          <div className="nav-container">
+            
+            {/* Brand Mark: LUMINA • SAUVAGE */}
+            <div 
+              className="brand-logo"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setSelectedCategory('All Creations')}
+            >
+              <div className="brand-icon-box" style={{ background: 'var(--accent-copper-gradient)', width: '38px', height: '38px', borderRadius: '4px' }}>
+                <Sparkles size={20} color="#040711" />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span className="couture-title" style={{ fontSize: '1.25rem', letterSpacing: '0.28em', lineHeight: 1.1 }}>
+                  SAUVAGE
+                </span>
+                <span style={{ fontSize: '0.62rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--accent-copper-light)', fontWeight: 700 }}>
+                  Haute Parfumerie Paris
+                </span>
+              </div>
+            </div>
+
+            {/* Scent Search Bar */}
             <div className="nav-search-wrap">
-              <Search size={18} className="nav-search-icon" style={{ color: 'var(--accent-gold)' }} />
+              <Search size={15} className="nav-search-icon" style={{ color: 'var(--accent-copper-light)' }} />
               <input
                 type="text"
-                placeholder="Search scents, notes (Oud, Vanilla, Rose, Neroli, Cardamom)..."
+                className="nav-search-input"
+                placeholder="Search raw notes (Bergamot, Vanilla, Cardamom, Elixir)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="nav-search-input"
+                aria-label="Search Fragrance Vault"
               />
               {searchQuery && (
-                <button 
-                  onClick={() => setSearchQuery('')}
+                <button
                   className="nav-search-clear"
-                  title="Clear search"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear Search"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               )}
             </div>
-          )}
 
-          {/* Actions & Role Switcher */}
-          <div className="nav-actions">
-            
-            {/* Role Switcher Pill */}
-            <div className="role-toggle-group">
+            {/* Navigation Actions */}
+            <div className="nav-actions">
+              
+              {/* Order Tracker */}
               <button
-                className={`role-toggle-btn ${role === 'customer' ? 'active' : ''}`}
-                onClick={() => setRole('customer')}
-                title="Customer Storefront View"
-              >
-                <Store size={15} />
-                <span>Boutique</span>
-              </button>
-
-              <button
-                className={`role-toggle-btn ${role === 'admin' ? 'active-admin' : ''}`}
-                onClick={() => setRole('admin')}
-                title="Merchant Admin Operations"
-              >
-                <ShieldCheck size={15} />
-                <span>Maison Admin</span>
-              </button>
-            </div>
-
-            {/* Track Order Button */}
-            {role === 'customer' && (
-              <button 
-                className="btn btn-secondary"
-                style={{ padding: '8px 14px', fontSize: '0.85rem' }}
+                className="btn-icon hide-mobile"
                 onClick={() => setIsOrderTrackerOpen(true)}
-                title="Track your fragrance delivery"
+                title="Maison Delivery Tracker"
+                aria-label="Maison Delivery Tracker"
               >
-                <Truck size={15} color="var(--accent-gold)" />
-                <span className="hide-mobile">Track Scent</span>
+                <Compass size={18} />
               </button>
-            )}
 
-            {/* Wishlist Indicator */}
-            {role === 'customer' && (
+              {/* Cloud Sync Status Indicator */}
+              <div 
+                className="hide-mobile"
+                title={isCloudConnected ? "Connected to Supabase PostgreSQL" : "Local Storage Mode"}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '6px', 
+                  padding: '5px 12px', 
+                  borderRadius: 'var(--radius-sm)', 
+                  background: isCloudConnected ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.05)',
+                  border: isCloudConnected ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-subtle)',
+                  fontSize: '0.72rem',
+                  fontFamily: 'var(--font-couture)',
+                  letterSpacing: '0.1em',
+                  fontWeight: 700,
+                  color: isCloudConnected ? '#34d399' : 'var(--text-muted)'
+                }}
+              >
+                <Cloud size={13} />
+                <span>{isCloudConnected ? 'SUPABASE LIVE' : 'OFFLINE'}</span>
+              </div>
+
+              {/* Reset Catalog Button */}
               <button
                 className="btn-icon"
-                title={`Saved Fragrances (${favorites.length})`}
-                style={{ position: 'relative' }}
+                onClick={handleReset}
+                disabled={isResetting}
+                title="Reset / Seed Sauvage Collection"
+                aria-label="Reset Collection"
               >
-                <Heart size={18} color={favorites.length > 0 ? '#fb7185' : 'var(--text-muted)'} fill={favorites.length > 0 ? '#fb7185' : 'none'} />
-                {favorites.length > 0 && (
-                  <span className="nav-badge-count" style={{ backgroundColor: '#fb7185' }}>
-                    {favorites.length}
-                  </span>
-                )}
+                <RotateCcw size={16} className={isResetting ? 'spin' : ''} />
               </button>
-            )}
 
-            {/* Cart Button */}
-            {role === 'customer' && (
-              <button
-                className="btn btn-gold"
-                style={{ padding: '8px 16px', fontSize: '0.88rem', position: 'relative' }}
-                onClick={() => setIsCartOpen(true)}
-                title="Open Shopping Bag"
-              >
-                <ShoppingBag size={17} />
-                <span>Bag</span>
-                {cartItemCount > 0 && (
-                  <span className="badge" style={{ background: '#0b0c10', color: '#fce08b', padding: '1px 7px', fontSize: '0.72rem' }}>
-                    {cartItemCount}
-                  </span>
-                )}
-              </button>
-            )}
+              {/* Role Switcher: Customer vs Maison Admin */}
+              <div className="role-toggle-group">
+                <button
+                  className={`role-toggle-btn ${role === 'customer' ? 'active' : ''}`}
+                  onClick={() => setRole('customer')}
+                  aria-label="Boutique Mode"
+                >
+                  <Sparkles size={13} />
+                  <span>Boutique</span>
+                </button>
+                <button
+                  className={`role-toggle-btn ${role === 'admin' ? 'active-admin' : ''}`}
+                  onClick={() => setRole('admin')}
+                  aria-label="Maison Atelier Mode"
+                >
+                  <UserCheck size={13} />
+                  <span>Atelier</span>
+                </button>
+              </div>
 
-            {/* Factory Demo Reset Button (Convenience Helper) */}
-            <button
-              className="btn-icon"
-              onClick={resetToDemoData}
-              title="Reset to default luxury catalog"
-              style={{ opacity: 0.65 }}
-            >
-              <RotateCcw size={15} />
-            </button>
+              {/* Shopping Bag Button */}
+              {role === 'customer' && (
+                <button
+                  className="btn btn-dior-solid"
+                  onClick={() => setIsCartOpen(true)}
+                  style={{ padding: '10px 18px', position: 'relative' }}
+                  aria-label={`Shopping Bag (${cartTotalItems} items)`}
+                >
+                  <ShoppingBag size={17} />
+                  <span style={{ fontSize: '0.8rem' }}>Bag</span>
+                  {cartTotalItems > 0 && (
+                    <span 
+                      style={{
+                        background: 'var(--accent-copper)',
+                        color: '#040711',
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.72rem',
+                        fontWeight: 900,
+                        marginLeft: '4px'
+                      }}
+                    >
+                      {cartTotalItems}
+                    </span>
+                  )}
+                </button>
+              )}
+
+            </div>
 
           </div>
-
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };

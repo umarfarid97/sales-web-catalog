@@ -1,147 +1,171 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Gift, Copy, Check, Eye, Flame, Feather } from 'lucide-react';
+import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { 
+  Sparkles, 
+  ArrowRight, 
+  Droplets, 
+  Flame, 
+  ShieldCheck, 
+  Gift, 
+  Layers, 
+  Check
+} from 'lucide-react';
+import { SAUVAGE_SPECTRUM_LEVELS } from '../../data/initialProducts';
 
 export const HeroBanner = () => {
-  const { products, setSelectedProductModal, showToast } = useStore();
-  const [copied, setCopied] = useState(false);
-  const [slideIndex, setSlideIndex] = useState(0);
+  const { setSelectedCategory, setSelectedProductModal, products, showToast } = useStore();
+  const [selectedSpectrumId, setSelectedSpectrumId] = useState('elixir');
+  const [copiedPromo, setCopiedPromo] = useState(false);
 
-  const featuredList = products.filter((p) => p.isFeatured).slice(0, 4);
-  const currentHeroProduct = featuredList[slideIndex] || products[0];
+  const activeLevel = SAUVAGE_SPECTRUM_LEVELS.find((l) => l.id === selectedSpectrumId) || SAUVAGE_SPECTRUM_LEVELS[3];
 
-  useEffect(() => {
-    if (featuredList.length <= 1) return;
-    const timer = setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % featuredList.length);
-    }, 6500);
-    return () => clearInterval(timer);
-  }, [featuredList.length]);
-
-  const copyPromo = () => {
-    navigator.clipboard.writeText('LUXE25');
-    setCopied(true);
-    showToast('Promo code LUXE25 copied to clipboard (25% off)!', 'success');
-    setTimeout(() => setCopied(false), 2500);
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText('SAUVAGE25');
+    setCopiedPromo(true);
+    showToast('Privilege Code SAUVAGE25 copied to clipboard (-25% Off)!', 'success');
+    setTimeout(() => setCopiedPromo(false), 3000);
   };
 
-  const scrollToCatalog = () => {
-    const catalogEl = document.getElementById('product-catalog-section');
-    if (catalogEl) {
-      catalogEl.scrollIntoView({ behavior: 'smooth' });
+  const handleOpenProduct = (spectrumId) => {
+    let targetSku = 'SVG-LX-001';
+    if (spectrumId === 'parfum') targetSku = 'SVG-PF-002';
+    if (spectrumId === 'edp') targetSku = 'SVG-EDP-003';
+    if (spectrumId === 'edt') targetSku = 'SVG-EDT-004';
+
+    const match = products.find((p) => p.sku === targetSku);
+    if (match) {
+      setSelectedProductModal(match);
     }
   };
 
-  if (!currentHeroProduct) return null;
-
   return (
-    <section className="hero-section">
+    <section className="sauvage-hero-stage">
+      <div className="sauvage-hero-bg-overlay" />
+
       <div className="container">
-        <div className="hero-banner-card">
+        <div className="sauvage-hero-content">
           
-          {/* Left Content */}
-          <div className="hero-content">
-            <div className="hero-badge">
-              <Sparkles size={13} color="var(--accent-gold)" />
-              <span>Haute Parfumerie &bull; Extrait de Parfum</span>
-            </div>
-
-            <h1 className="hero-title">
-              {currentHeroProduct.name.split(' ').slice(0, 2).join(' ')}{' '}
-              <span className="gold-shimmer-text">
-                {currentHeroProduct.name.split(' ').slice(2).join(' ') || 'Parfum'}
-              </span>
-            </h1>
-
-            <p className="hero-description">
-              {currentHeroProduct.tagline || currentHeroProduct.description}
-            </p>
-
-            <div className="hero-actions">
-              <button 
-                className="btn btn-gold"
-                onClick={scrollToCatalog}
-              >
-                <span>Discover All Scents</span>
-                <ArrowRight size={16} />
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() => setSelectedProductModal(currentHeroProduct)}
-              >
-                <Eye size={16} color="var(--accent-gold)" />
-                <span>Explore Pyramid</span>
-              </button>
-
-              <div className="hero-promo-tag">
-                <Gift size={15} color="var(--accent-gold)" />
-                <span>25% Off:</span>
-                <span className="hero-promo-code">LUXE25</span>
-                <button
-                  onClick={copyPromo}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: copied ? '#34d399' : '#fce08b',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '2px',
-                    marginLeft: '2px'
-                  }}
-                  title="Copy code"
-                >
-                  {copied ? <Check size={14} /> : <Copy size={14} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Perks Row */}
-            <div className="hero-perks-row">
-              <div className="hero-perk-item">
-                <Gift size={14} color="var(--accent-gold)" />
-                <span>2 Free 2ml Samples</span> with every order
-              </div>
-              <div className="hero-perk-item">
-                <Feather size={14} color="var(--accent-gold)" />
-                <span>Free Custom Engraving</span> on all flacons
-              </div>
-            </div>
-
-            {/* Slide Indicators */}
-            {featuredList.length > 1 && (
-              <div style={{ display: 'flex', gap: '8px', marginTop: '24px' }}>
-                {featuredList.map((item, idx) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setSlideIndex(idx)}
-                    style={{
-                      width: idx === slideIndex ? '32px' : '10px',
-                      height: '6px',
-                      borderRadius: '4px',
-                      background: idx === slideIndex ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.15)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                    title={item.name}
-                  />
-                ))}
-              </div>
-            )}
+          {/* Subtitle Badge */}
+          <div className="sauvage-hero-sub">
+            <Sparkles size={14} />
+            <span>Haute Parfumerie &bull; The Art of Creation</span>
           </div>
 
-          {/* Right Visual Image */}
-          <div className="hero-visual">
-            <div className="hero-img-backdrop" />
-            <img
-              src={currentHeroProduct.images[0]}
-              alt={currentHeroProduct.name}
-              className="hero-image"
-              onClick={() => setSelectedProductModal(currentHeroProduct)}
-              style={{ cursor: 'pointer' }}
-            />
+          {/* Epic Sauvage Headline */}
+          <h1 className="sauvage-hero-title">
+            SAUVAGE
+          </h1>
+
+          {/* Poetic Tagline */}
+          <p className="sauvage-hero-tagline">
+            &ldquo;Raw and noble all at once. An olfactory overdose of fresh Reggio Bergamot, Wild Amberwood &amp; Nocturnal Spices under a desert twilight sky.&rdquo;
+          </p>
+
+          {/* Action CTAs */}
+          <div className="sauvage-hero-actions">
+            <button
+              className="btn btn-copper"
+              onClick={() => handleOpenProduct(selectedSpectrumId)}
+              style={{ padding: '14px 34px', fontSize: '0.88rem' }}
+            >
+              <span>Discover {activeLevel.name}</span>
+              <ArrowRight size={16} />
+            </button>
+
+            <button
+              className="btn btn-dior-outline"
+              onClick={() => {
+                const el = document.getElementById('vault-catalog');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              style={{ padding: '14px 30px', fontSize: '0.88rem' }}
+            >
+              <span>Explore The Collection</span>
+            </button>
+          </div>
+
+          {/* Interactive Sauvage Concentration Spectrum Selector */}
+          <div style={{ marginTop: '10px' }}>
+            <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>
+              Select Concentration Spectrum:
+            </div>
+
+            <div className="spectrum-selector-wrap">
+              {SAUVAGE_SPECTRUM_LEVELS.map((lvl) => {
+                const isSelected = selectedSpectrumId === lvl.id;
+                const isElixir = lvl.id === 'elixir';
+                return (
+                  <button
+                    key={lvl.id}
+                    className={`spectrum-level-btn ${isSelected ? (isElixir ? 'active-elixir' : 'active') : ''}`}
+                    onClick={() => setSelectedSpectrumId(lvl.id)}
+                  >
+                    {lvl.name.replace('Sauvage ', '')}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Concentration Spotlight Bar */}
+            <div 
+              style={{
+                marginTop: '16px',
+                padding: '12px 20px',
+                background: 'rgba(7, 12, 24, 0.7)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: 'var(--radius-sm)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '16px',
+                maxWidth: '680px',
+                textAlign: 'left'
+              }}
+            >
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: selectedSpectrumId === 'elixir' ? 'var(--accent-copper)' : '#ffffff', boxShadow: '0 0 10px var(--accent-copper)' }} />
+              <div>
+                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#ffffff', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
+                  {activeLevel.concentration} &bull; <span style={{ color: 'var(--accent-copper-light)' }}>{activeLevel.intensity}</span>
+                </div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                  {activeLevel.description}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Promotional Privilege Code Banner */}
+          <div 
+            style={{
+              marginTop: '28px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              background: 'rgba(226, 135, 67, 0.12)',
+              border: '1px solid rgba(226, 135, 67, 0.35)',
+              padding: '8px 18px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.78rem'
+            }}
+          >
+            <span style={{ color: 'var(--accent-copper-light)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Complimentary Atelier Privilege:
+            </span>
+            <span style={{ color: '#ffffff' }}>Use Code <strong>SAUVAGE25</strong> for 25% Off + 2 Deluxe Travel Vials</span>
+            <button
+              onClick={handleCopyCode}
+              style={{
+                background: 'var(--accent-copper)',
+                border: 'none',
+                color: '#040711',
+                padding: '3px 10px',
+                borderRadius: 'var(--radius-full)',
+                fontWeight: 800,
+                fontSize: '0.7rem',
+                cursor: 'pointer'
+              }}
+            >
+              {copiedPromo ? 'COPIED!' : 'COPY CODE'}
+            </button>
           </div>
 
         </div>

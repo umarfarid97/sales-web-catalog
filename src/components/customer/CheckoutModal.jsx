@@ -1,140 +1,127 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { COMPLIMENTARY_SAMPLES } from '../../data/initialProducts';
-import confetti from 'canvas-confetti';
 import { 
   X, 
-  CheckCircle2, 
+  Check, 
   CreditCard, 
   Truck, 
   ShieldCheck, 
-  ArrowRight, 
-  ArrowLeft, 
+  Gift, 
+  Feather, 
   Sparkles,
-  ShoppingBag,
-  Clock,
-  Copy,
-  Check,
-  Gift,
-  Feather,
-  Flame
+  ArrowRight,
+  CheckCircle2,
+  Lock
 } from 'lucide-react';
 
 export const CheckoutModal = () => {
-  const { 
-    isCheckoutOpen, 
-    setIsCheckoutOpen, 
-    cart, 
-    cartSubtotal, 
-    cartDiscountAmount, 
-    cartShipping, 
+  const {
+    isCheckoutOpen,
+    setIsCheckoutOpen,
+    cart,
+    cartSubtotal,
+    cartDiscountAmount,
+    cartShipping,
     cartTotal,
     appliedPromo,
-    placeOrder,
-    setRole,
-    setAdminTab,
+    createOrder,
     showToast
   } = useStore();
 
-  const [step, setStep] = useState(1); // 1: Client & Samples, 2: Payment & Gifting, 3: Success
-  const [copiedTracking, setCopiedTracking] = useState(false);
-  const [createdOrder, setCreatedOrder] = useState(null);
+  const [step, setStep] = useState(1); // 1: Gifting & Samples, 2: Shipping & Payment, 3: Success Confirmation
+  const [selectedSamples, setSelectedSamples] = useState(['smp-1', 'smp-2']);
+  const [isGiftBoxSelected, setIsGiftBoxSelected] = useState(true);
+  const [giftNote, setGiftNote] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState(null);
 
   // Form State
-  const [shippingInfo, setShippingInfo] = useState({
-    name: 'Lady Genevieve Laurent',
-    email: 'genevieve.laurent@beaute-paris.fr',
-    phone: '+33 6 89 24 11 05',
-    address: '24 Place Vendôme, Apt 3A',
+  const [formData, setFormData] = useState({
+    firstName: 'Alexandre',
+    lastName: 'de Saint-Germain',
+    email: 'alexandre.stgermain@couture.fr',
+    phone: '+33 6 12 34 56 78',
+    address: '30 Avenue Montaigne',
     city: 'Paris',
-    state: 'Île-de-France',
-    zip: '75001',
+    postalCode: '75008',
     country: 'France',
-    giftPackaging: true,
-    giftNote: 'With warm compliments from Paris.',
-    samples: ['Oud Royal Extrait (2ml Vial)', 'Brumes de Vanille (2ml Vial)']
-  });
-
-  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' | 'apple' | 'paypal'
-  const [cardInfo, setCardInfo] = useState({
-    number: '4242 •••• •••• 4242',
-    name: 'GENEVIEVE LAURENT',
-    expiry: '08/29',
-    cvv: '888'
+    paymentMethod: 'credit-card',
+    cardNumber: '•••• •••• •••• 4242',
+    cardExp: '12/28',
+    cardCvc: '•••'
   });
 
   if (!isCheckoutOpen) return null;
 
-  const toggleSample = (sampleName) => {
-    setShippingInfo((prev) => {
-      const current = prev.samples || [];
-      if (current.includes(sampleName)) {
-        return { ...prev, samples: current.filter((s) => s !== sampleName) };
-      }
-      if (current.length >= 2) {
-        showToast('You can select a maximum of 2 complimentary samples', 'info');
-        return prev;
-      }
-      return { ...prev, samples: [...current, sampleName] };
-    });
-  };
-
-  const handleNextStep = (e) => {
-    e.preventDefault();
-    if (step === 1) {
-      if (!shippingInfo.name || !shippingInfo.email || !shippingInfo.address) {
-        showToast('Please fill in all required delivery fields', 'error');
-        return;
-      }
-      setStep(2);
-    } else if (step === 2) {
-      // Place order and trigger confetti!
-      const paymentDesc = paymentMethod === 'card' 
-        ? `Credit Card (Visa **** 4242)` 
-        : paymentMethod === 'apple' 
-        ? 'Apple Pay' 
-        : 'PayPal Express';
-
-      const newOrder = placeOrder(shippingInfo, paymentDesc);
-      if (newOrder) {
-        setCreatedOrder(newOrder);
-        setStep(3);
-
-        // Gold Confetti burst
-        try {
-          confetti({
-            particleCount: 140,
-            spread: 90,
-            colors: ['#d4af37', '#f59e0b', '#fbbf24', '#ffffff', '#e2a8b2'],
-            origin: { y: 0.6 }
-          });
-        } catch (err) {
-          console.log('Confetti triggered', err);
-        }
+  const toggleSample = (sampleId) => {
+    if (selectedSamples.includes(sampleId)) {
+      setSelectedSamples(selectedSamples.filter((id) => id !== sampleId));
+    } else {
+      if (selectedSamples.length < 2) {
+        setSelectedSamples([...selectedSamples, sampleId]);
+      } else {
+        showToast('You may select up to 2 complimentary deluxe samples.', 'warning');
       }
     }
   };
 
-  const copyTracking = () => {
-    if (createdOrder?.trackingNumber) {
-      navigator.clipboard.writeText(createdOrder.trackingNumber);
-      setCopiedTracking(true);
-      showToast('Tracking number copied to clipboard', 'success');
-      setTimeout(() => setCopiedTracking(false), 2500);
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const orderData = {
+        customer: {
+          ...formData,
+          selectedSamples: selectedSamples.map((id) => COMPLIMENTARY_SAMPLES.find((s) => s.id === id)?.name),
+          isGiftBox: isGiftBoxSelected,
+          giftNote: isGiftBoxSelected ? giftNote : null
+        },
+        items: cart.map((item) => ({
+          productId: item.id,
+          name: item.name,
+          sku: item.sku,
+          size: item.selectedSize || '100 ml Grand Flacon',
+          engraving: item.engravingText || null,
+          price: item.price || item.unitPrice,
+          quantity: item.quantity,
+          image: item.images[0]
+        })),
+        subtotal: cartSubtotal,
+        discount: cartDiscountAmount,
+        discountCode: appliedPromo?.code || null,
+        shipping: cartShipping,
+        total: cartTotal,
+        paymentMethod: formData.paymentMethod
+      };
+
+      const newOrder = await createOrder(orderData);
+      setPlacedOrder(newOrder);
+      setStep(3);
+      showToast('Votre commande est confirmée! Order placed with Maison Atelier.', 'success');
+    } catch (err) {
+      console.error('Order creation failed:', err);
+      showToast('Failed to place order. Please try again.', 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div 
       className="modal-overlay"
-      onClick={() => setIsCheckoutOpen(false)}
+      onClick={() => step !== 3 && setIsCheckoutOpen(false)}
     >
       <div 
         className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
-        style={{ border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)' }}
+        style={{ background: 'rgba(7, 11, 24, 0.98)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
       >
-        {/* Close Button */}
         <button
           className="modal-close-btn"
           onClick={() => setIsCheckoutOpen(false)}
@@ -143,497 +130,294 @@ export const CheckoutModal = () => {
           <X size={18} />
         </button>
 
-        {/* Header & Steps Indicator */}
-        <div style={{ padding: '28px 36px 20px', borderBottom: '1px solid rgba(212, 175, 55, 0.2)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-gold)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                White-Glove Fragrance Fulfillment
-              </span>
-              <h2 className="font-serif-title" style={{ fontSize: '1.6rem', fontWeight: 800 }}>
-                {step === 1 && 'Delivery & Complimentary Samples'}
-                {step === 2 && 'Payment & Presentation Gifting'}
-                {step === 3 && 'Order Confirmed'}
-              </h2>
-            </div>
-
-            {/* Stepper Dots */}
-            {step < 3 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: step >= 1 ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.1)',
-                  color: step >= 1 ? '#0b0c10' : '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.8rem',
-                  fontWeight: 800
-                }}>
-                  1
-                </span>
-                <div style={{ width: '20px', height: '2px', background: step >= 2 ? 'var(--accent-gold)' : 'rgba(255, 255, 255, 0.1)' }} />
-                <span style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: step >= 2 ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.1)',
-                  color: step >= 2 ? '#0b0c10' : '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.8rem',
-                  fontWeight: 800
-                }}>
-                  2
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Modal Body */}
-        <div style={{ padding: '28px 36px', maxHeight: '72vh', overflowY: 'auto' }}>
+        <div style={{ padding: '36px' }}>
           
-          {/* STEP 1: Delivery & Sample Selection */}
+          {/* Checkout Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'var(--accent-copper-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#040711' }}>
+              <Sparkles size={22} />
+            </div>
+            <div>
+              <h3 className="couture-title" style={{ fontSize: '1.4rem' }}>Maison White-Glove Checkout</h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The Dior Art of Gifting &bull; Paris Atelier Fulfillment</p>
+            </div>
+          </div>
+
+          {/* STEP 1: The Art of Gifting & 2x Complimentary Samples */}
           {step === 1 && (
-            <form onSubmit={handleNextStep}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
                 
-                {/* Left: Shipping Inputs */}
-                <div>
-                  <h4 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', color: 'var(--accent-gold-light)' }}>
-                    Client &amp; Destination Address
-                  </h4>
+                {/* Left: Art of Gifting Presentation Box */}
+                <div style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '22px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <Gift size={20} color="var(--accent-copper-light)" />
+                    <h4 className="couture-title" style={{ fontSize: '1rem' }}>The Art of Gifting</h4>
+                  </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Full Client Name *</label>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '16px' }}>
+                    Each flacon is cradled in iconic midnight blue gift packaging, sealed with a gold-embossed ribbon.
+                  </p>
+
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '14px' }}>
                     <input
-                      type="text"
-                      required
-                      value={shippingInfo.name}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
-                      className="form-input"
+                      type="checkbox"
+                      checked={isGiftBoxSelected}
+                      onChange={(e) => setIsGiftBoxSelected(e.target.checked)}
+                      style={{ accentColor: 'var(--accent-copper)', width: '16px', height: '16px' }}
                     />
-                  </div>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#ffffff' }}>
+                      Complimentary Dior Signature Gift Packaging
+                    </span>
+                  </label>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                    <div className="form-group">
-                      <label className="form-label">Email Address *</label>
-                      <input
-                        type="email"
-                        required
-                        value={shippingInfo.email}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, email: e.target.value })}
-                        className="form-input"
+                  {isGiftBoxSelected && (
+                    <div>
+                      <label className="form-label">Personalized Calligraphy Card Message</label>
+                      <textarea
+                        rows={3}
+                        placeholder="Write a personal note (e.g. 'To Alexandre, with timeless elegance...')"
+                        value={giftNote}
+                        onChange={(e) => setGiftNote(e.target.value)}
+                        className="form-textarea"
+                        style={{ fontSize: '0.85rem' }}
                       />
                     </div>
-                    <div className="form-group">
-                      <label className="form-label">Phone *</label>
-                      <input
-                        type="tel"
-                        required
-                        value={shippingInfo.phone}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
-                        className="form-input"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Street Address *</label>
-                    <input
-                      type="text"
-                      required
-                      value={shippingInfo.address}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                      className="form-input"
-                    />
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
-                    <div className="form-group">
-                      <label className="form-label">City *</label>
-                      <input
-                        type="text"
-                        required
-                        value={shippingInfo.city}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                        className="form-input"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">State / Region</label>
-                      <input
-                        type="text"
-                        value={shippingInfo.state}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
-                        className="form-input"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Postal Code *</label>
-                      <input
-                        type="text"
-                        required
-                        value={shippingInfo.zip}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
-                        className="form-input"
-                      />
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Right: Complimentary Samples Picker */}
-                <div>
-                  <div style={{ padding: '18px', background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.25)', borderRadius: 'var(--radius-lg)', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Gift size={18} color="var(--accent-gold)" />
-                        <h4 className="font-serif-title" style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
-                          Choose 2 Complimentary Samples
-                        </h4>
-                      </div>
-                      <span className="badge badge-gold" style={{ fontSize: '0.7rem' }}>
-                        {shippingInfo.samples?.length || 0}/2 Selected
-                      </span>
+                {/* Right: 2 Complimentary Samples Selection */}
+                <div style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '22px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Feather size={18} color="var(--accent-copper-light)" />
+                      <h4 className="couture-title" style={{ fontSize: '1rem' }}>2 Deluxe Samples</h4>
                     </div>
-                    
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
-                      Deluxe 2ml spray vials included with our compliments in a velvet sachet.
-                    </p>
+                    <span className="badge badge-copper" style={{ fontSize: '0.68rem' }}>
+                      {selectedSamples.length}/2 Selected
+                    </span>
+                  </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {COMPLIMENTARY_SAMPLES.map((smp) => {
-                        const isSelected = shippingInfo.samples?.includes(smp.name);
-                        return (
-                          <div
-                            key={smp.id}
-                            onClick={() => toggleSample(smp.name)}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              padding: '8px 12px',
-                              borderRadius: 'var(--radius-md)',
-                              background: isSelected ? 'rgba(212, 175, 55, 0.16)' : 'rgba(255, 255, 255, 0.03)',
-                              border: isSelected ? '1px solid var(--accent-gold)' : '1px solid var(--border-subtle)',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s ease'
-                            }}
-                          >
-                            <div>
-                              <div style={{ fontSize: '0.84rem', fontWeight: 600, color: isSelected ? '#fce08b' : 'var(--text-main)' }}>
-                                {smp.name}
-                              </div>
-                              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{smp.family}</div>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
+                    Select 2 complimentary 2ml deluxe spray vials to accompany your parcel:
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {COMPLIMENTARY_SAMPLES.map((sample) => {
+                      const isSelected = selectedSamples.includes(sample.id);
+                      return (
+                        <div
+                          key={sample.id}
+                          onClick={() => toggleSample(sample.id)}
+                          style={{
+                            padding: '10px 14px',
+                            borderRadius: 'var(--radius-sm)',
+                            background: isSelected ? 'rgba(226, 135, 67, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                            border: isSelected ? '1px solid var(--accent-copper)' : '1px solid var(--border-subtle)',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            transition: 'all var(--transition-fast)'
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: isSelected ? '#ffffff' : 'var(--text-main)' }}>
+                              {sample.name}
                             </div>
-                            <div style={{
-                              width: '18px',
-                              height: '18px',
-                              borderRadius: '50%',
-                              border: isSelected ? 'none' : '1px solid var(--border-subtle)',
-                              background: isSelected ? 'var(--accent-gold-gradient)' : 'transparent',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: '#0b0c10'
-                            }}>
-                              {isSelected && <Check size={12} strokeWidth={3} />}
+                            <div style={{ fontSize: '0.72rem', color: 'var(--accent-copper-light)' }}>
+                              {sample.concentration}
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Summary Small Box */}
-                  <div style={{ padding: '14px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.85rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Items ({cart.length})</span>
-                      <span>${cartSubtotal.toFixed(2)}</span>
-                    </div>
-                    {cartDiscountAmount > 0 && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6ee7b7', marginBottom: '6px' }}>
-                        <span>Privilege Discount ({appliedPromo?.discountPercent}%)</span>
-                        <span>-${cartDiscountAmount.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: '1.05rem', color: '#fce08b', paddingTop: '6px', borderTop: '1px solid var(--border-subtle)' }}>
-                      <span>Total</span>
-                      <span>${cartTotal.toFixed(2)}</span>
-                    </div>
+                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: isSelected ? 'none' : '1px solid var(--border-subtle)', background: isSelected ? 'var(--accent-copper)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#040711' }}>
+                            {isSelected && <Check size={12} strokeWidth={3} />}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
               </div>
 
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '28px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+              {/* Action Button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '28px' }}>
                 <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setIsCheckoutOpen(false)}
+                  className="btn btn-copper"
+                  onClick={() => setStep(2)}
+                  style={{ padding: '12px 30px', fontSize: '0.88rem' }}
                 >
-                  Return to Boutique
-                </button>
-                <button type="submit" className="btn btn-gold">
-                  <span>Continue to Payment &amp; Gifting</span>
+                  <span>Continue to Delivery &amp; Payment</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
-            </form>
+            </div>
           )}
 
-          {/* STEP 2: Payment & Gifting Option */}
+          {/* STEP 2: Delivery & Payment Details */}
           {step === 2 && (
-            <form onSubmit={handleNextStep}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
+            <form onSubmit={handleSubmitOrder}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
                 
-                {/* Left: Payment Options */}
+                {/* Delivery Form */}
                 <div>
-                  <h4 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', color: 'var(--accent-gold-light)' }}>
-                    Payment Method
-                  </h4>
-
-                  {/* Payment Selectors */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('card')}
-                      className={`size-option-btn ${paymentMethod === 'card' ? 'active' : ''}`}
-                    >
-                      <CreditCard size={18} color="var(--accent-gold)" style={{ margin: '0 auto 4px' }} />
-                      <span className="size-option-name">Credit Card</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('apple')}
-                      className={`size-option-btn ${paymentMethod === 'apple' ? 'active' : ''}`}
-                    >
-                      <span style={{ fontSize: '1.2rem', display: 'block' }}></span>
-                      <span className="size-option-name">Apple Pay</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('paypal')}
-                      className={`size-option-btn ${paymentMethod === 'paypal' ? 'active' : ''}`}
-                    >
-                      <span style={{ fontSize: '1rem', fontWeight: 800, color: '#38bdf8', display: 'block' }}>PP</span>
-                      <span className="size-option-name">PayPal</span>
-                    </button>
+                  <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '14px' }}>1. Delivery Address</h4>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div className="form-group">
+                      <label className="form-label">First Name</label>
+                      <input type="text" name="firstName" required value={formData.firstName} onChange={handleInputChange} className="form-input" />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Last Name</label>
+                      <input type="text" name="lastName" required value={formData.lastName} onChange={handleInputChange} className="form-input" />
+                    </div>
                   </div>
 
-                  {/* Card Form */}
-                  {paymentMethod === 'card' && (
-                    <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                      <div className="form-group">
-                        <label className="form-label">Card Number</label>
-                        <input
-                          type="text"
-                          value={cardInfo.number}
-                          onChange={(e) => setCardInfo({ ...cardInfo, number: e.target.value })}
-                          className="form-input"
-                        />
-                      </div>
+                  <div className="form-group">
+                    <label className="form-label">Email</label>
+                    <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="form-input" />
+                  </div>
 
-                      <div className="form-group">
-                        <label className="form-label">Name on Card</label>
-                        <input
-                          type="text"
-                          value={cardInfo.name}
-                          onChange={(e) => setCardInfo({ ...cardInfo, name: e.target.value })}
-                          className="form-input"
-                        />
-                      </div>
+                  <div className="form-group">
+                    <label className="form-label">Address</label>
+                    <input type="text" name="address" required value={formData.address} onChange={handleInputChange} className="form-input" />
+                  </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                        <div className="form-group">
-                          <label className="form-label">Expiry (MM/YY)</label>
-                          <input
-                            type="text"
-                            value={cardInfo.expiry}
-                            onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })}
-                            className="form-input"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label className="form-label">CVV</label>
-                          <input
-                            type="password"
-                            value={cardInfo.cvv}
-                            onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })}
-                            className="form-input"
-                          />
-                        </div>
-                      </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div className="form-group">
+                      <label className="form-label">City</label>
+                      <input type="text" name="city" required value={formData.city} onChange={handleInputChange} className="form-input" />
                     </div>
-                  )}
-
-                  {paymentMethod !== 'card' && (
-                    <div style={{ padding: '24px', background: 'rgba(212, 175, 55, 0.08)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(212, 175, 55, 0.3)', textAlign: 'center' }}>
-                      <p style={{ fontSize: '0.92rem', color: '#f3e5ab' }}>
-                        Instant biometrics authorization will be requested upon clicking &quot;Place Fragrance Order&quot;.
-                      </p>
+                    <div className="form-group">
+                      <label className="form-label">Postal Code</label>
+                      <input type="text" name="postalCode" required value={formData.postalCode} onChange={handleInputChange} className="form-input" />
                     </div>
-                  )}
+                  </div>
                 </div>
 
-                {/* Right: Presentation Gift Box & Note */}
+                {/* Payment Simulation */}
                 <div>
-                  <div style={{ padding: '18px', background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.25)', borderRadius: 'var(--radius-lg)', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                      <Gift size={18} color="var(--accent-gold)" />
-                      <h4 className="font-serif-title" style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
-                        Complimentary Gift Presentation
-                      </h4>
+                  <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '14px' }}>2. Secure Payment</h4>
+
+                  <div style={{ padding: '16px', background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                      <Lock size={15} color="#34d399" />
+                      <span style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 700, textTransform: 'uppercase' }}>
+                        256-Bit Encrypted Transaction
+                      </span>
                     </div>
 
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-main)', cursor: 'pointer', marginBottom: '14px' }}>
-                      <input
-                        type="checkbox"
-                        checked={shippingInfo.giftPackaging}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, giftPackaging: e.target.checked })}
-                        style={{ accentColor: 'var(--accent-gold)', width: '16px', height: '16px' }}
-                      />
-                      <span>Hand-wrapped in Gold Embossed Box with Black Silk Ribbon</span>
-                    </label>
+                    <div className="form-group">
+                      <label className="form-label">Card Number</label>
+                      <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} className="form-input" />
+                    </div>
 
-                    {shippingInfo.giftPackaging && (
-                      <div className="form-group" style={{ marginBottom: 0 }}>
-                        <label className="form-label" style={{ fontSize: '0.78rem' }}>Handwritten Calligraphy Card Message</label>
-                        <textarea
-                          rows={3}
-                          value={shippingInfo.giftNote}
-                          onChange={(e) => setShippingInfo({ ...shippingInfo, giftNote: e.target.value })}
-                          placeholder="Write a message to be hand-penned on heavy cotton stationery..."
-                          className="form-textarea"
-                          style={{ fontSize: '0.82rem' }}
-                        />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div className="form-group">
+                        <label className="form-label">Expires</label>
+                        <input type="text" name="cardExp" value={formData.cardExp} onChange={handleInputChange} className="form-input" />
                       </div>
-                    )}
+                      <div className="form-group">
+                        <label className="form-label">CVC</label>
+                        <input type="text" name="cardCvc" value={formData.cardCvc} onChange={handleInputChange} className="form-input" />
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Final Total Box */}
-                  <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+                  {/* Summary */}
+                  <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: 'var(--radius-sm)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                      <span>Subtotal</span>
+                      <span>Subtotal ({cart.length} flacons)</span>
                       <span>${cartSubtotal.toFixed(2)}</span>
                     </div>
                     {cartDiscountAmount > 0 && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#6ee7b7', marginBottom: '6px' }}>
-                        <span>Privilege Discount ({appliedPromo?.discountPercent}%)</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--accent-copper-light)', marginBottom: '6px' }}>
+                        <span>Privilege Discount</span>
                         <span>-${cartDiscountAmount.toFixed(2)}</span>
                       </div>
                     )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                      <span>Delivery</span>
-                      <span>FREE</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
+                      <span>Climate Shipping</span>
+                      <span>{cartShipping === 0 ? 'COMPLIMENTARY' : `$${cartShipping.toFixed(2)}`}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1.25rem', color: '#fce08b', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
-                      <span>Grand Total</span>
-                      <span>${cartTotal.toFixed(2)}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                      <span>Total</span>
+                      <span style={{ fontFamily: 'var(--font-mono)' }}>${cartTotal.toFixed(2)}</span>
                     </div>
                   </div>
+
                 </div>
 
               </div>
 
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '28px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+              {/* Actions */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '28px' }}>
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="btn btn-dior-outline"
                   onClick={() => setStep(1)}
+                  style={{ padding: '12px 24px', fontSize: '0.85rem' }}
                 >
-                  <ArrowLeft size={16} />
-                  <span>Back to Address</span>
+                  &larr; Back to Gifting
                 </button>
-                <button type="submit" className="btn btn-gold" style={{ padding: '13px 32px' }}>
-                  <Sparkles size={16} />
-                  <span>Place Fragrance Order (${cartTotal.toFixed(2)})</span>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn btn-copper"
+                  style={{ padding: '12px 34px', fontSize: '0.88rem' }}
+                >
+                  {isSubmitting ? 'Placing Order...' : `Confirm & Authorize $${cartTotal.toFixed(2)}`}
                 </button>
               </div>
             </form>
           )}
 
           {/* STEP 3: Order Success Confirmation */}
-          {step === 3 && createdOrder && (
-            <div style={{ textAlign: 'center', padding: '20px 10px' }}>
-              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(212, 175, 55, 0.15)', border: '2px solid var(--accent-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'var(--accent-gold)' }}>
-                <CheckCircle2 size={38} />
+          {step === 3 && placedOrder && (
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.15)', border: '2px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', margin: '0 auto 20px' }}>
+                <CheckCircle2 size={36} />
               </div>
 
-              <h3 className="font-serif-title" style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>
-                Thank You, {createdOrder.customer.name}
-              </h3>
-
-              <p style={{ fontSize: '0.98rem', color: 'var(--text-muted)', maxWidth: '520px', margin: '0 auto 24px' }}>
-                Your haute parfumerie order <strong style={{ color: '#fce08b' }}>#{createdOrder.id}</strong> has been registered with our atelier and is being prepared with white-glove care.
+              <div className="couture-sub" style={{ color: 'var(--accent-copper-light)', marginBottom: '6px' }}>
+                Votre Commande est Confirmée
+              </div>
+              <h2 className="couture-title" style={{ fontSize: '1.8rem', marginBottom: '12px' }}>
+                Thank You, {formData.firstName}
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
+                Your Sauvage fragrance order has been transmitted to our Paris Atelier. Your parcel is being carefully prepared in our signature midnight blue gift presentation box.
               </p>
 
-              {/* Tracking Box */}
-              <div style={{ maxWidth: '440px', margin: '0 auto 28px', padding: '16px', background: 'rgba(212, 175, 55, 0.08)', borderRadius: 'var(--radius-md)', border: '1px dashed rgba(212, 175, 55, 0.4)' }}>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
-                  Live Tracking Number
+              {/* Order Tracking Card */}
+              <div style={{ background: 'rgba(11, 17, 34, 0.85)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '20px', maxWidth: '500px', margin: '0 auto 30px', textAlign: 'left' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Order Number</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#ffffff' }}>{placedOrder.id}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
-                    {createdOrder.trackingNumber}
-                  </span>
-                  <button
-                    onClick={copyTracking}
-                    className="btn-icon"
-                    style={{ width: '32px', height: '32px' }}
-                    title="Copy tracking number"
-                  >
-                    {copiedTracking ? <Check size={14} color="#34d399" /> : <Copy size={14} />}
-                  </button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Tracking Code</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-copper-light)' }}>{placedOrder.trackingNumber}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Complimentary Samples</span>
+                  <span style={{ fontSize: '0.82rem', color: '#6ee7b7' }}>2x Deluxe Vials Included</span>
                 </div>
               </div>
 
-              {/* Samples Included Confirmation */}
-              {createdOrder.customer.samples && createdOrder.customer.samples.length > 0 && (
-                <div style={{ maxWidth: '440px', margin: '0 auto 28px', fontSize: '0.85rem', color: '#f3e5ab' }}>
-                  <Gift size={15} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
-                  <strong>Included Samples:</strong> {createdOrder.customer.samples.join(', ')}
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    setIsCheckoutOpen(false);
-                    setStep(1);
-                  }}
-                >
-                  Return to Boutique
-                </button>
-
-                <button
-                  className="btn btn-gold"
-                  onClick={() => {
-                    setIsCheckoutOpen(false);
-                    setRole('admin');
-                    setAdminTab('orders');
-                    setStep(1);
-                  }}
-                >
-                  <span>View in Maison Admin Portal</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
+              <button
+                className="btn btn-dior-solid"
+                onClick={() => setIsCheckoutOpen(false)}
+                style={{ padding: '12px 32px' }}
+              >
+                Return To Collection
+              </button>
             </div>
           )}
 
         </div>
-
       </div>
     </div>
   );

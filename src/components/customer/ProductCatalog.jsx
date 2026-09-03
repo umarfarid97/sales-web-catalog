@@ -1,198 +1,188 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '../../context/StoreContext';
+import { HeroBanner } from './HeroBanner';
+import { SavoirFaireSection } from './SavoirFaireSection';
+import { CategoryFilter } from './CategoryFilter';
 import { ProductCard } from './ProductCard';
 import { 
   SlidersHorizontal, 
-  Search, 
-  X, 
-  RotateCcw, 
   Sparkles, 
-  Flame,
-  Feather
+  Gift, 
+  RefreshCw, 
+  Feather,
+  ArrowRight
 } from 'lucide-react';
 
 export const ProductCatalog = () => {
-  const {
-    filteredProducts,
-    selectedCategory,
-    setSelectedCategory,
-    searchQuery,
-    setSearchQuery,
-    sortBy,
-    setSortBy,
-    inStockOnly,
+  const { 
+    filteredProducts, 
+    sortBy, 
+    setSortBy, 
+    inStockOnly, 
     setInStockOnly,
     maxPrice,
     setMaxPrice,
-    products
+    searchQuery,
+    selectedCategory,
+    setSelectedCategory
   } = useStore();
 
-  const [showFilters, setShowFilters] = useState(false);
-
-  const resetAllFilters = () => {
-    setSelectedCategory('All');
-    setSearchQuery('');
-    setSortBy('featured');
-    setInStockOnly(false);
-    setMaxPrice(600);
-  };
-
-  const hasActiveFilters = 
-    selectedCategory !== 'All' || 
-    searchQuery.trim() !== '' || 
-    inStockOnly || 
-    maxPrice < 600 || 
-    sortBy !== 'featured';
-
   return (
-    <section id="product-catalog-section" className="catalog-section">
-      <div className="container">
-        
-        {/* Catalog Header Toolbar */}
-        <div className="catalog-header">
+    <div>
+      {/* 1. Cinematic Full-Bleed Hero Stage */}
+      <HeroBanner />
+
+      {/* 2. Savoir-Faire Raw Materials Gallery */}
+      <SavoirFaireSection />
+
+      {/* 3. The Olfactory Vault / Catalog Section */}
+      <section id="vault-catalog" style={{ padding: '80px 0 100px' }}>
+        <div className="container">
           
-          <div>
-            <h2 className="font-serif-title" style={{ fontSize: '1.75rem', fontWeight: 800 }}>
-              {selectedCategory === 'All' ? 'Artisanal Fragrance Vault' : selectedCategory}
-              <span className="catalog-count-badge" style={{ fontSize: '0.95rem', fontWeight: 600, marginLeft: '12px' }}>
-                ({filteredProducts.length} {filteredProducts.length === 1 ? 'creation' : 'creations'})
-              </span>
-            </h2>
-            {searchQuery && (
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                Olfactory notes matching <strong style={{ color: 'var(--accent-gold)' }}>&quot;{searchQuery}&quot;</strong>
-              </p>
-            )}
+          {/* Section Heading */}
+          <div className="vault-header-row">
+            <div>
+              <div className="couture-sub" style={{ color: 'var(--accent-copper-light)', marginBottom: '6px' }}>
+                Haute Parfumerie &bull; Collection Vault
+              </div>
+              <h2 className="couture-title" style={{ fontSize: '2rem' }}>
+                {selectedCategory === 'All Creations' ? 'The Complete Sauvage & Privée Range' : selectedCategory}
+              </h2>
+            </div>
+
+            {/* Filter Pills */}
+            <CategoryFilter />
           </div>
 
-          <div className="catalog-controls">
-            
-            {/* Filter Toggle Button */}
-            <button
-              className={`btn ${showFilters ? 'btn-gold' : 'btn-secondary'}`}
-              style={{ padding: '9px 16px', fontSize: '0.88rem' }}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <SlidersHorizontal size={15} />
-              <span>Scent Filters</span>
-              {hasActiveFilters && (
-                <span 
-                  style={{
-                    width: '7px',
-                    height: '7px',
-                    borderRadius: '50%',
-                    background: '#0b0c10'
-                  }}
+          {/* Filter & Sort Controls Bar */}
+          <div 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: 'rgba(11, 17, 34, 0.7)',
+              border: '1px solid var(--border-card)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '14px 22px',
+              marginBottom: '36px',
+              gap: '20px',
+              flexWrap: 'wrap'
+            }}
+          >
+            {/* Left Count */}
+            <div style={{ fontSize: '0.84rem', color: 'var(--text-muted)', fontFamily: 'var(--font-couture)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              Showing <span style={{ color: '#ffffff', fontWeight: 700 }}>{filteredProducts.length}</span> Masterpieces
+            </div>
+
+            {/* Right Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+              
+              {/* Max Price Slider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Price:</span>
+                <input
+                  type="range"
+                  min="100"
+                  max="400"
+                  step="10"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
+                  style={{ accentColor: 'var(--accent-copper)', width: '100px', cursor: 'pointer' }}
                 />
-              )}
-            </button>
+                <span style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-copper-light)' }}>
+                  &le; ${maxPrice}
+                </span>
+              </div>
 
-            {/* Sort Select */}
-            <select
-              className="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              aria-label="Sort fragrances"
+              {/* In Stock Only Checkbox */}
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                <input
+                  type="checkbox"
+                  checked={inStockOnly}
+                  onChange={(e) => setInStockOnly(e.target.checked)}
+                  style={{ accentColor: 'var(--accent-copper)', cursor: 'pointer' }}
+                />
+                <span>Available Reserve</span>
+              </label>
+
+              {/* Sort Dropdown */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Sort:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="form-select"
+                  style={{ width: 'auto', padding: '6px 12px', fontSize: '0.82rem', background: 'rgba(4, 7, 17, 0.9)' }}
+                >
+                  <option value="featured">Featured Masterpieces</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Top Connoisseur Rating</option>
+                  <option value="name">Alphabetical</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          {filteredProducts.length > 0 ? (
+            <div className="products-grid">
+              {filteredProducts.map((prod) => (
+                <ProductCard key={prod.id} product={prod} />
+              ))}
+            </div>
+          ) : (
+            <div 
+              style={{
+                textAlign: 'center',
+                padding: '80px 20px',
+                background: 'rgba(11, 17, 34, 0.5)',
+                border: '1px solid var(--border-card)',
+                borderRadius: 'var(--radius-sm)'
+              }}
             >
-              <option value="featured">Featured Masterpieces</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Highest Rated Sillage</option>
-              <option value="name">Fragrance Name (A - Z)</option>
-            </select>
+              <Sparkles size={36} color="var(--accent-copper)" style={{ marginBottom: '16px' }} />
+              <h3 className="couture-title" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>No Fragrance Found</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '20px' }}>
+                No fragrance matching &quot;{searchQuery || selectedCategory}&quot; under ${maxPrice}.
+              </p>
+              <button
+                className="btn btn-dior-solid"
+                onClick={() => {
+                  setSelectedCategory('All Creations');
+                  setMaxPrice(400);
+                }}
+              >
+                Reset Catalog Filters
+              </button>
+            </div>
+          )}
 
+          {/* 4. Dior Art of Gifting Signature Banner */}
+          <div className="dior-gifting-banner">
+            <div className="dior-gifting-content">
+              <div className="couture-sub">The Dior Art of Gifting &bull; Signature Presentation</div>
+              <h3 className="couture-title">An Unforgettable Couture Experience</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+                Every fragrance creation is packaged with extreme care in an iconic midnight blue gift box, sealed with a gold-embossed ribbon, and accompanied by your complimentary custom flacon engraving and 2 deluxe travel samples.
+              </p>
+            </div>
+            <div>
+              <button 
+                className="btn btn-copper"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              >
+                <span>Discover The Range</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
           </div>
 
         </div>
-
-        {/* Expandable Filter Panel */}
-        {showFilters && (
-          <div style={{
-            padding: '24px',
-            marginBottom: '32px',
-            background: 'rgba(15, 17, 25, 0.85)',
-            border: '1px solid rgba(212, 175, 55, 0.25)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: 'var(--shadow-md)',
-            animation: 'fadeIn 0.3s ease'
-          }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', alignItems: 'center' }}>
-              
-              {/* Max Price Slider */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', fontWeight: 600 }}>
-                  <span style={{ color: 'var(--accent-gold-light)', textTransform: 'uppercase' }}>Maximum Price</span>
-                  <span style={{ color: '#fce08b', fontFamily: 'var(--font-mono)' }}>${maxPrice}</span>
-                </div>
-                <input
-                  type="range"
-                  min="50"
-                  max="600"
-                  step="25"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  style={{ width: '100%', accentColor: 'var(--accent-gold)', cursor: 'pointer' }}
-                />
-              </div>
-
-              {/* Stock Toggle */}
-              <div>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: 'var(--text-main)', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    checked={inStockOnly}
-                    onChange={(e) => setInStockOnly(e.target.checked)}
-                    style={{ accentColor: 'var(--accent-gold)', width: '17px', height: '17px' }}
-                  />
-                  <span>In Stock Flacons Only</span>
-                </label>
-              </div>
-
-              {/* Reset Button */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button
-                  className="btn btn-secondary"
-                  style={{ padding: '8px 16px', fontSize: '0.85rem' }}
-                  onClick={resetAllFilters}
-                >
-                  <RotateCcw size={14} />
-                  <span>Reset All Filters</span>
-                </button>
-              </div>
-
-            </div>
-          </div>
-        )}
-
-        {/* Product Grid */}
-        {filteredProducts.length === 0 ? (
-          <div style={{
-            textAlign: 'center',
-            padding: '80px 20px',
-            background: 'rgba(15, 17, 24, 0.6)',
-            border: '1px dashed rgba(212, 175, 55, 0.3)',
-            borderRadius: 'var(--radius-xl)'
-          }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(212, 175, 55, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--accent-gold)' }}>
-              <Feather size={28} />
-            </div>
-            <h3 className="font-serif-title" style={{ fontSize: '1.4rem', marginBottom: '8px' }}>No Fragrances Found</h3>
-            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
-              No scent profiles matched your selected olfactory family or filter criteria.
-            </p>
-            <button className="btn btn-gold" onClick={resetAllFilters}>
-              <span>Clear Scent Filters</span>
-            </button>
-          </div>
-        ) : (
-          <div className="product-grid">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };

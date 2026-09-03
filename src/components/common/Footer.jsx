@@ -1,229 +1,195 @@
 import React from 'react';
 import { 
-  Sparkles, 
   ShieldCheck, 
-  Truck, 
   Gift, 
-  Award, 
+  RefreshCw, 
+  Feather, 
+  Sparkles, 
+  Mail, 
   ArrowRight,
-  Heart,
-  Flame,
-  Feather
+  Compass
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const Footer = () => {
-  const { setRole, setSelectedCategory } = useStore();
+  const { setSelectedCategory, showToast } = useStore();
+
+  const handleNewsletter = (e) => {
+    e.preventDefault();
+    showToast('Merci! You have been granted Private Access to Sauvage reserve releases.', 'success');
+  };
 
   return (
     <footer className="site-footer">
       <div className="container">
         
-        {/* Value Prop Badges */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '20px',
-          paddingBottom: '48px',
-          marginBottom: '48px',
-          borderBottom: '1px solid var(--border-subtle)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(212, 175, 55, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--accent-gold)'
-            }}>
-              <Truck size={22} />
+        {/* Maison Commitments / Dior Savoir-Faire Bar */}
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '28px',
+            paddingBottom: '50px',
+            borderBottom: '1px solid var(--border-subtle)',
+            marginBottom: '50px'
+          }}
+        >
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+              <Gift size={20} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>White-Glove Shipping</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Climate-controlled & free over $150</p>
+              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>The Art of Gifting</h4>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Each order is prepared in our iconic midnight blue gift box with custom ribbon.</p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(245, 158, 11, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--accent-amber)'
-            }}>
-              <Gift size={22} />
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+              <Feather size={20} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fcd34d' }}>2 Free Deluxe Samples</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Curated with every flacon purchase</p>
+              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>2 Complimentary Samples</h4>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Choose 2 deluxe travel spray vials with every fragrance order.</p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(226, 168, 178, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--accent-rose-gold)'
-            }}>
-              <Feather size={22} />
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6ee7b7', flexShrink: 0 }}>
+              <RefreshCw size={20} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fda4af' }}>Bespoke Bottle Engraving</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Complimentary personalized flacons</p>
+              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>Refillable Flacons</h4>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable eco-luxury flacons designed to be refilled indefinitely.</p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#34d399'
-            }}>
-              <Award size={22} />
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+              <ShieldCheck size={20} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#6ee7b7' }}>Artisanal French Alchemy</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Crafted & macerated in Grasse</p>
+              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>Artisanal French Provenance</h4>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Crafted with rare Reggio bergamot &amp; high-concentration essences.</p>
             </div>
           </div>
         </div>
 
-        {/* Main Footer Links */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1.5fr repeat(3, 1fr)',
-          gap: '40px',
-          paddingBottom: '48px',
-          borderBottom: '1px solid var(--border-subtle)',
-          flexWrap: 'wrap'
-        }}>
-          {/* Col 1: Brand Info */}
+        {/* Footer Navigation & Newsletter */}
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '40px',
+            marginBottom: '50px'
+          }}
+        >
+          {/* Brand Col */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'var(--accent-gold-gradient)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Flame size={18} color="#0b0c10" />
-              </div>
-              <span className="font-serif-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '0.1em' }}>
-                LUMINA
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <span className="couture-title" style={{ fontSize: '1.4rem', letterSpacing: '0.24em' }}>SAUVAGE</span>
             </div>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '20px', maxWidth: '320px' }}>
-              Maison de Haute Parfumerie dedicated to bottling rare botanical essences, aged agarwood extraits, and nocturnal scent alchemies.
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '20px' }}>
+              Raw and noble all at once. An act of creation inspired by wide-open spaces under a blue-sky night.
             </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <span className="badge badge-gold">Paris • Grasse • Geneva</span>
+            <div style={{ fontSize: '0.78rem', color: 'var(--accent-copper-light)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              30 Avenue Montaigne, 75008 Paris
             </div>
           </div>
 
-          {/* Col 2: Olfactory Collections */}
+          {/* Olfactory Collections */}
           <div>
-            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
-              Olfactory Families
-            </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
-              <li>
-                <a href="#catalog" onClick={() => setSelectedCategory('Woody & Smoky')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  Woody & Smoky Ouds
-                </a>
-              </li>
-              <li>
-                <a href="#catalog" onClick={() => setSelectedCategory('Amber & Oriental')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  Amber & Vanilla Oriental
-                </a>
-              </li>
-              <li>
-                <a href="#catalog" onClick={() => setSelectedCategory('Floral & Romantic')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  May Rose & Jasmine Floral
-                </a>
-              </li>
-              <li>
-                <a href="#catalog" onClick={() => setSelectedCategory('Fresh & Citrus')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  Mediterranean Neroli
-                </a>
-              </li>
-              <li>
-                <a href="#catalog" onClick={() => setSelectedCategory('Discovery & Sets')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  Discovery Coffrets
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3: Maison Services */}
-          <div>
-            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
-              Bespoke Services
-            </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
-              <li><span style={{ color: 'var(--text-muted)' }}>Custom Flacon Engraving</span></li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Complimentary Gift Box & Ribbon</span></li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Private Olfactory Consultations</span></li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Scent Layering Masterclasses</span></li>
-            </ul>
-          </div>
-
-          {/* Col 4: Boutique Portal */}
-          <div>
-            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
-              Maison Portal
-            </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>The Collections</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <li>
                 <button 
-                  onClick={() => setRole('admin')}
-                  style={{ background: 'none', border: 'none', color: '#fce08b', cursor: 'pointer', textAlign: 'left', font: 'inherit', fontWeight: '600' }}
+                  onClick={() => setSelectedCategory('Sauvage Spectrum')} 
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  Admin Operations Portal →
+                  Sauvage Spectrum
                 </button>
               </li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Live PostgreSQL Database</span></li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Realtime Inventory Tracking</span></li>
-              <li><span style={{ color: 'var(--text-muted)' }}>Render CDN Cloud Deployed</span></li>
+              <li>
+                <button 
+                  onClick={() => setSelectedCategory('La Collection Privée')} 
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  La Collection Privée
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setSelectedCategory('Woody & Smoky')} 
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  Woody &amp; Smoky Accords
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setSelectedCategory('Discovery & Sets')} 
+                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  Discovery Coffrets
+                </button>
+              </li>
             </ul>
+          </div>
+
+          {/* Client Services */}
+          <div>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>Maison Services</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+              <li>Bespoke Flacon Engraving</li>
+              <li>The Art of Gifting</li>
+              <li>Olfactory Diagnostic Quiz</li>
+              <li>Refill Atelier Locator</li>
+              <li>Order Tracking &amp; Concierge</li>
+            </ul>
+          </div>
+
+          {/* Newsletter / Private Club */}
+          <div>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>Private Access</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+              Subscribe to receive exclusive invitations to rare elixir harvest releases and private previews.
+            </p>
+            <form onSubmit={handleNewsletter} style={{ display: 'flex', gap: '6px' }}>
+              <input
+                type="email"
+                required
+                placeholder="Enter your email address"
+                className="form-input"
+                style={{ padding: '10px 14px', fontSize: '0.85rem' }}
+              />
+              <button type="submit" className="btn btn-dior-solid" style={{ padding: '0 16px' }} aria-label="Subscribe">
+                <ArrowRight size={16} />
+              </button>
+            </form>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingTop: '28px',
-          fontSize: '0.82rem',
-          color: 'var(--text-dim)',
-          flexWrap: 'wrap',
-          gap: '16px'
-        }}>
-          <p>© {new Date().getFullYear()} LUMINA Haute Parfumerie Paris. All Rights Reserved. Crafted with pure olfactory mastery.</p>
+        <div 
+          style={{
+            paddingTop: '24px',
+            borderTop: '1px solid var(--border-subtle)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '14px',
+            fontSize: '0.78rem',
+            color: 'var(--text-dim)'
+          }}
+        >
+          <div>
+            &copy; {new Date().getFullYear()} SAUVAGE Haute Parfumerie. All rights reserved. Handcrafted in France.
+          </div>
           <div style={{ display: 'flex', gap: '20px' }}>
             <span>Privacy Policy</span>
-            <span>Terms of Maison</span>
-            <span>Authenticity Certificate</span>
+            <span>Terms of Savoir-Faire</span>
+            <span>Delivery &amp; Returns</span>
           </div>
         </div>
 

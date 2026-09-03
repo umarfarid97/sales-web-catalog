@@ -3,143 +3,182 @@ import { useStore } from '../../context/StoreContext';
 import { 
   Heart, 
   ShoppingBag, 
-  Star, 
   Eye, 
-  Sparkles,
-  Flame,
-  Feather
+  Sparkles, 
+  RefreshCw,
+  Droplets
 } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
+    setSelectedProductModal, 
     addToCart, 
-    toggleFavorite, 
-    isFavorite, 
-    setSelectedProductModal,
-    cart
+    favorites, 
+    toggleFavorite,
+    showToast
   } = useStore();
 
-  const isFav = isFavorite(product.id);
-  const isOutOfStock = product.stock <= 0;
-  const isLowStock = product.stock > 0 && product.stock < 5;
+  const isFav = favorites.includes(product.id);
 
   const handleQuickAdd = (e) => {
     e.stopPropagation();
-    if (isOutOfStock) return;
-    const defaultColor = product.colors && product.colors[0]?.name ? product.colors[0].name : 'Standard';
-    addToCart(product, defaultColor, 1);
+    const defaultSize = product.sizes?.[1]?.label || product.sizes?.[0]?.label || '100 ml Grand Flacon';
+    const finalPrice = product.price;
+
+    addToCart(product, 1, defaultSize, null, finalPrice);
+    showToast(`Added ${product.name} (${defaultSize}) to your Shopping Bag!`, 'success');
   };
 
+  const intensityScore = product.intensityScore || 4;
+  const maxDots = 5;
+
   return (
-    <article className="perfume-card">
-      
-      {/* Top Image & Overlays */}
-      <div 
-        className="perfume-card-image-wrap"
-        onClick={() => setSelectedProductModal(product)}
-      >
-        <img
-          src={product.images[0]}
-          alt={product.name}
+    <div 
+      className="product-card"
+      onClick={() => setSelectedProductModal(product)}
+      tabIndex={0}
+      role="button"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setSelectedProductModal(product);
+        }
+      }}
+      aria-label={`View ${product.name} details`}
+    >
+      {/* Flacon Visual Stage */}
+      <div className="product-img-wrapper">
+        <img 
+          src={product.images[0]} 
+          alt={product.name} 
+          className="product-img"
           loading="lazy"
-          className="perfume-card-image"
         />
 
-        {/* Top Badges */}
-        <div className="perfume-badge-top">
+        {/* Floating Badges */}
+        <div className="product-badge-float" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {product.badge && (
-            <span className={`badge ${
-              product.badge === 'Iconic Signature' ? 'badge-gold' :
-              product.badge === 'Best Seller' ? 'badge-amber' :
-              product.badge === 'Low Stock' ? 'badge-danger' : 'badge-gold'
-            }`}>
+            <span className="badge badge-copper">
               <Sparkles size={11} />
-              {product.badge}
+              <span>{product.badge}</span>
+            </span>
+          )}
+          {product.refillable && (
+            <span className="badge badge-refillable" style={{ fontSize: '0.65rem' }}>
+              <RefreshCw size={10} />
+              <span>Refillable</span>
             </span>
           )}
         </div>
 
-        {/* Wishlist Button */}
+        {/* Favorite Heart Button */}
         <button
-          className={`perfume-wishlist-btn ${isFav ? 'active' : ''}`}
+          className={`product-fav-btn ${isFav ? 'active' : ''}`}
           onClick={(e) => {
             e.stopPropagation();
             toggleFavorite(product.id);
           }}
-          aria-label={isFav ? 'Remove from wishlist' : 'Save to wishlist'}
+          aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
         >
-          <Heart size={16} fill={isFav ? 'currentColor' : 'none'} />
+          <Heart size={16} fill={isFav ? "currentColor" : "none"} />
         </button>
       </div>
 
-      {/* Product Body */}
-      <div className="perfume-card-body">
+      {/* Product Details Body */}
+      <div className="product-info">
         
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-          <span className="perfume-card-family">{product.category}</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: '#fcd34d' }}>
-            <Star size={12} fill="currentColor" color="#fcd34d" />
-            <span style={{ fontWeight: 700 }}>{product.rating}</span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>({product.reviewsCount})</span>
-          </div>
-        </div>
-
-        <h3 
-          className="perfume-card-title"
-          onClick={() => setSelectedProductModal(product)}
-        >
-          {product.name}
-        </h3>
-
-        <div className="perfume-card-concentration">
+        {/* Concentration Label */}
+        <div className="product-concentration-label">
           {product.concentration || 'Extrait de Parfum'}
         </div>
 
-        {/* Top Notes Preview Tags */}
-        {product.pyramid?.topNotes && (
-          <div className="perfume-notes-preview">
-            {product.pyramid.topNotes.slice(0, 3).map((note, idx) => (
-              <span key={idx} className="perfume-note-tag">
+        {/* Perfume Name */}
+        <h3 className="product-name">
+          {product.name}
+        </h3>
+
+        {/* Poetic Tagline */}
+        <p className="product-tagline">
+          {product.tagline}
+        </p>
+
+        {/* Intensity Meter Dots */}
+        <div className="product-intensity-row">
+          <span>Intensity &bull; {product.olfactoryFamily}</span>
+          <div className="intensity-dots" title={`Intensity: ${intensityScore}/5`}>
+            {Array.from({ length: maxDots }).map((_, i) => (
+              <div 
+                key={i} 
+                className={`intensity-dot ${i < Math.round(intensityScore) ? 'filled' : ''}`} 
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Notes Preview Pills */}
+        {product.pyramid && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '16px' }}>
+            {[...(product.pyramid.topNotes || []), ...(product.pyramid.baseNotes || [])].slice(0, 3).map((note, idx) => (
+              <span 
+                key={idx}
+                style={{
+                  fontSize: '0.72rem',
+                  padding: '2px 8px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid var(--border-subtle)',
+                  color: 'var(--text-muted)'
+                }}
+              >
                 {note}
               </span>
             ))}
           </div>
         )}
 
-        {/* Card Footer: Price & Action */}
-        <div className="perfume-card-footer">
-          <div className="perfume-price-wrap">
-            <span className="perfume-price">${product.price.toFixed(2)}</span>
+        {/* Price & Actions */}
+        <div style={{ marginTop: 'auto' }}>
+          <div className="product-price-row">
+            <span className="product-price">
+              ${product.price.toFixed(2)}
+            </span>
             {product.originalPrice > product.price && (
-              <span className="perfume-price-original">${product.originalPrice.toFixed(2)}</span>
+              <span className="product-original-price">
+                ${product.originalPrice.toFixed(2)}
+              </span>
+            )}
+            {product.discountPercent > 0 && (
+              <span className="badge badge-copper" style={{ marginLeft: 'auto', fontSize: '0.68rem' }}>
+                -{product.discountPercent}%
+              </span>
             )}
           </div>
 
-          <div className="perfume-card-actions">
-            <button 
-              className="btn btn-secondary"
-              style={{ padding: '8px 12px', fontSize: '0.8rem' }}
-              onClick={() => setSelectedProductModal(product)}
-              title="Explore Fragrance Pyramid"
+          <div className="product-card-actions">
+            <button
+              className="btn btn-dior-solid"
+              onClick={handleQuickAdd}
+              style={{ flex: 1, padding: '10px 14px', fontSize: '0.78rem' }}
             >
-              <Eye size={14} color="var(--accent-gold)" />
-              <span>Notes</span>
+              <ShoppingBag size={14} />
+              <span>Quick Buy</span>
             </button>
 
             <button
-              className="btn btn-gold"
-              style={{ padding: '8px 14px', fontSize: '0.8rem' }}
-              onClick={handleQuickAdd}
-              disabled={isOutOfStock}
+              className="btn-icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedProductModal(product);
+              }}
+              title="Explore Scent Pyramid"
+              aria-label="Explore Scent Pyramid"
             >
-              <ShoppingBag size={14} />
-              <span>{isOutOfStock ? 'Sold Out' : 'Bag'}</span>
+              <Eye size={16} />
             </button>
           </div>
         </div>
 
       </div>
-
-    </article>
+    </div>
   );
 };
