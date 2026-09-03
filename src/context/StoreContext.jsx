@@ -631,7 +631,7 @@ export const StoreProvider = ({ children }) => {
 
   // --- Computed Filtered Products for Customer Catalog ---
   const filteredProducts = products.filter((product) => {
-    if (selectedCategory !== 'All' && product.category !== selectedCategory) {
+    if (selectedCategory !== 'All' && selectedCategory !== 'All Creations' && selectedCategory !== 'All Sauvage' && product.category !== selectedCategory) {
       return false;
     }
     if (searchQuery.trim()) {

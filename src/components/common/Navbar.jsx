@@ -258,7 +258,7 @@ export const Navbar = () => {
 
         {/* Luxury Mobile Navigation Drawer */}
         {isMobileMenuOpen && (
-          <div className="mobile-nav-drawer show-mobile">
+          <div className="mobile-nav-drawer">
             <div className="mobile-nav-inner">
               
               <div className="mobile-nav-section-title">Valenszo Collections</div>
