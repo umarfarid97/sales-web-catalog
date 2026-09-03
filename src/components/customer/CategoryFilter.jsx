@@ -7,10 +7,10 @@ export const CategoryFilter = () => {
 
   return (
     <div className="dior-lineup-tabs-section">
-      <div className="container">
+      <div className="container" style={{ height: '100%' }}>
         <div className="dior-lineup-scroll-wrap">
           {OLFACTORY_FAMILIES.map((cat) => {
-            const isActive = selectedCategory === cat;
+            const isActive = selectedCategory === cat || (cat === 'All Creations' && (selectedCategory === 'All' || selectedCategory === 'All Sauvage'));
             return (
               <button
                 key={cat}

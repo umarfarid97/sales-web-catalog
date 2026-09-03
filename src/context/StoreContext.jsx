@@ -631,7 +631,8 @@ export const StoreProvider = ({ children }) => {
 
   // --- Computed Filtered Products for Customer Catalog ---
   const filteredProducts = products.filter((product) => {
-    if (selectedCategory !== 'All' && selectedCategory !== 'All Creations' && selectedCategory !== 'All Sauvage' && product.category !== selectedCategory) {
+    const isAll = selectedCategory === 'All' || selectedCategory === 'All Creations' || selectedCategory === 'All Sauvage';
+    if (!isAll && product.category !== selectedCategory && product.olfactoryFamily !== selectedCategory) {
       return false;
     }
     if (searchQuery.trim()) {
