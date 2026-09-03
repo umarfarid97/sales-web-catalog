@@ -3,11 +3,21 @@ import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 // Helper: Format DB product row to JS camelCase
 export const formatProductFromDb = (row) => {
   if (!row) return null;
+  const specs = typeof row.specs === 'object' && row.specs !== null ? row.specs : {};
   return {
     id: row.id,
     sku: row.sku || '',
+    catalogNo: specs.catalogNo || (row.sku ? Number(row.sku.split('-')[2]) : 0),
     name: row.name,
+    displayName: specs.displayName || row.name,
+    brandInspiration: specs.brandInspiration || '',
+    originalListing: specs.originalListing || '',
+    gender: specs.gender || (row.category === 'Pour Homme' ? 'Men' : row.category === 'Pour Femme' ? 'Women' : 'Unisex'),
     category: row.category,
+    character: specs.character || row.category,
+    olfactoryFamily: specs.olfactoryFamily || specs.character || row.category,
+    traits: Array.isArray(specs.traits) ? specs.traits : (specs.character ? specs.character.split('/').map(t => t.trim()) : []),
+    tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
     tagline: row.tagline || '',
     description: row.description || '',
     price: Number(row.price),
@@ -18,24 +28,24 @@ export const formatProductFromDb = (row) => {
     reviewsCount: Number(row.reviews_count || 0),
     badge: row.badge || '',
     isFeatured: Boolean(row.is_featured),
-    concentration: row.specs?.concentration || 'Extrait de Parfum (32%)',
-    olfactoryFamily: row.category,
-    sillage: row.specs?.sillage || 'Enveloping & Magnetic',
-    longevity: row.specs?.longevity || '14+ Hours (Eternal)',
-    season: row.specs?.season || 'All Seasons',
-    pyramid: row.specs?.pyramid || {
+    concentration: specs.concentration || 'Extrait de Parfum (30%)',
+    sillage: specs.sillage || 'Enveloping & Magnetic',
+    longevity: specs.longevity || '14+ Hours',
+    season: specs.season || 'All Seasons',
+    refillable: specs.refillable !== undefined ? specs.refillable : true,
+    intensityScore: specs.intensityScore || (specs.tier === 'S' ? 5 : 4),
+    pyramid: specs.pyramid || {
       topNotes: ['Calabrian Bergamot', 'Spiced Saffron'],
-      heartNotes: ['Damascena Rose', 'Midnight Jasmine'],
-      baseNotes: ['Royal Agarwood Oud', 'Ambergris', 'Bourbon Vanilla']
+      heartNotes: ['Damascena Rose', 'French Lavender'],
+      baseNotes: ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
     },
-    sizes: row.specs?.sizes || [
-      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
-      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
-      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    sizes: specs.sizes || [
+      { label: '30 ml Travel Atomizer', ml: 30, priceMultiplier: 0.55, isRefillable: true },
+      { label: '50 ml Haute Flacon', ml: 50, priceMultiplier: 0.78, isRefillable: true },
+      { label: '100 ml Collector Flacon', ml: 100, priceMultiplier: 1.0, isRefillable: true }
     ],
-    colors: Array.isArray(row.colors) ? row.colors : [],
     features: Array.isArray(row.features) ? row.features : [],
-    specs: typeof row.specs === 'object' && row.specs !== null ? row.specs : {},
+    specs,
     images: Array.isArray(row.images) ? row.images : []
   };
 };
@@ -57,10 +67,20 @@ export const formatProductToDb = (product) => {
     reviews_count: product.reviewsCount,
     badge: product.badge,
     is_featured: product.isFeatured,
-    colors: product.colors || [],
     features: product.features || [],
     specs: {
       ...product.specs,
+      catalogNo: product.catalogNo,
+      displayName: product.displayName,
+      brandInspiration: product.brandInspiration,
+      originalListing: product.originalListing,
+      gender: product.gender,
+      character: product.character,
+      olfactoryFamily: product.olfactoryFamily,
+      traits: product.traits,
+      tier: product.tier,
+      refillable: product.refillable,
+      intensityScore: product.intensityScore,
       concentration: product.concentration,
       pyramid: product.pyramid,
       sizes: product.sizes,
