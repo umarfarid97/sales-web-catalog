@@ -47,13 +47,24 @@ export const OrderTrackerModal = () => {
     >
       <div 
         className="modal-content"
-        style={{ maxWidth: '640px', border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)' }}
+        style={{
+          maxWidth: '640px',
+          border: '1px solid #e5e7eb',
+          background: '#ffffff',
+          color: '#000000',
+          maxHeight: '90vh',
+          maxHeight: '90dvh',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          margin: 'auto'
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           className="modal-close-btn"
           onClick={() => setIsOrderTrackerOpen(false)}
           aria-label="Close Fragrance Tracker"
+          style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#000000' }}
         >
           <X size={18} />
         </button>
@@ -61,29 +72,29 @@ export const OrderTrackerModal = () => {
         <div style={{ padding: '32px' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(212, 175, 55, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-gold)' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '4px', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
               <Truck size={22} />
             </div>
             <div>
-              <h3 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 800 }}>Maison Delivery Tracker</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Enter your Fragrance Order Reference or Tracking Code</p>
+              <h3 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>Maison Delivery Tracker</h3>
+              <p style={{ fontSize: '0.85rem', color: '#6b7280' }}>Enter your Fragrance Order Reference or Tracking Code</p>
             </div>
           </div>
 
           {/* Search Box */}
           <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px', margin: '20px 0 28px' }}>
             <div style={{ position: 'relative', flex: 1 }}>
-              <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
+              <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#926917' }} />
               <input
                 type="text"
                 placeholder="e.g. ORD-98421 or TRK-VAL-9482710"
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value)}
                 className="form-input"
-                style={{ width: '100%', paddingLeft: '38px' }}
+                style={{ width: '100%', paddingLeft: '38px', background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }}
               />
             </div>
-            <button type="submit" className="btn btn-gold" style={{ padding: '0 20px' }}>
+            <button type="submit" className="btn btn-dior-solid" style={{ padding: '0 24px', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}>
               Track
             </button>
           </form>
@@ -92,17 +103,17 @@ export const OrderTrackerModal = () => {
           {foundOrder ? (
             <div 
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(212, 175, 55, 0.2)',
-                borderRadius: 'var(--radius-lg)',
+                background: '#fafafa',
+                border: '1px solid #e5e7eb',
+                borderRadius: '4px',
                 padding: '24px'
               }}
             >
               {/* Order Meta */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', borderBottom: '1px solid #e5e7eb', paddingBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
                 <div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Tracking Number</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-gold-light)', fontSize: '1.05rem' }}>
+                  <div style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Tracking Number</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#926917', fontSize: '1.05rem' }}>
                     {foundOrder.trackingNumber}
                   </div>
                 </div>
@@ -125,19 +136,18 @@ export const OrderTrackerModal = () => {
                           width: '32px',
                           height: '32px',
                           borderRadius: '50%',
-                          background: isDone ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.08)',
-                          color: isDone ? '#0b0c10' : 'var(--text-dim)',
+                          background: isDone ? '#000000' : '#e5e7eb',
+                          color: isDone ? '#ffffff' : '#6b7280',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '0.85rem',
-                          fontWeight: 800,
-                          boxShadow: isDone ? '0 0 12px rgba(212, 175, 55, 0.4)' : 'none'
+                          fontWeight: 800
                         }}
                       >
                         {isDone ? <CheckCircle2 size={16} strokeWidth={2.5} /> : stepNumber}
                       </div>
-                      <span style={{ fontSize: '0.75rem', marginTop: '6px', color: isDone ? '#fce08b' : 'var(--text-dim)', fontWeight: isDone ? 700 : 500, textAlign: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', marginTop: '6px', color: isDone ? '#000000' : '#9ca3af', fontWeight: isDone ? 700 : 500, textAlign: 'center' }}>
                         {stepName}
                       </span>
                     </div>
@@ -146,21 +156,21 @@ export const OrderTrackerModal = () => {
               </div>
 
               {/* Items in this Order */}
-              <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
-                <div style={{ fontSize: '0.82rem', color: 'var(--accent-gold-light)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
+              <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
+                <div style={{ fontSize: '0.82rem', color: '#926917', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
                   Flacons in this Dispatch
                 </div>
                 {foundOrder.items.map((it, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', margin: '4px 0' }}>
-                    <span style={{ color: 'var(--text-main)' }}>{it.quantity}x {it.name} ({it.size || '100ml'})</span>
-                    <span style={{ color: '#fce08b', fontFamily: 'var(--font-mono)' }}>${(it.price * it.quantity).toFixed(2)}</span>
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', margin: '6px 0' }}>
+                    <span style={{ color: '#111827', fontWeight: 500 }}>{it.quantity}x {it.name} ({it.size || '100ml'})</span>
+                    <span style={{ color: '#000000', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>${(it.price * it.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
 
             </div>
           ) : hasSearched ? (
-            <div style={{ textAlign: 'center', padding: '36px 0', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: '36px 0', color: '#6b7280' }}>
               No fragrance dispatch record found for &quot;{searchId}&quot;.
             </div>
           ) : null}

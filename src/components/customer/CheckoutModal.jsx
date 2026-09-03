@@ -120,7 +120,16 @@ export const CheckoutModal = () => {
       <div 
         className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
-        style={{ background: 'rgba(7, 11, 24, 0.98)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
+        style={{
+          background: '#ffffff',
+          color: '#000000',
+          border: '1px solid #e5e7eb',
+          maxHeight: '90vh',
+          maxHeight: '90dvh',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          margin: 'auto'
+        }}
       >
         <button
           className="modal-close-btn"
@@ -134,12 +143,12 @@ export const CheckoutModal = () => {
           
           {/* Checkout Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'var(--accent-copper-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#040711' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
               <Sparkles size={22} />
             </div>
             <div>
-              <h3 className="couture-title" style={{ fontSize: '1.4rem' }}>Maison White-Glove Checkout</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The Valenszo Art of Gifting &bull; Atelier Fulfillment</p>
+              <h3 className="couture-title" style={{ fontSize: '1.3rem', color: '#000000', fontWeight: 800 }}>Maison White-Glove Checkout</h3>
+              <p style={{ fontSize: '0.85rem', color: '#6b7280' }}>The Valenszo Art of Gifting &bull; Atelier Fulfillment</p>
             </div>
           </div>
 
@@ -149,13 +158,13 @@ export const CheckoutModal = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
                 
                 {/* Left: Art of Gifting Presentation Box */}
-                <div style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '22px' }}>
+                <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '22px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                    <Gift size={20} color="var(--accent-copper-light)" />
-                    <h4 className="couture-title" style={{ fontSize: '1rem' }}>The Art of Gifting</h4>
+                    <Gift size={20} color="#926917" />
+                    <h4 className="couture-title" style={{ fontSize: '1rem', color: '#000000', fontWeight: 700 }}>The Art of Gifting</h4>
                   </div>
 
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '16px' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#4b5563', lineHeight: '1.6', marginBottom: '16px' }}>
                     Each flacon is cradled in iconic Valenszo gift packaging, sealed with a gold-embossed ribbon.
                   </p>
 
@@ -164,41 +173,41 @@ export const CheckoutModal = () => {
                       type="checkbox"
                       checked={isGiftBoxSelected}
                       onChange={(e) => setIsGiftBoxSelected(e.target.checked)}
-                      style={{ accentColor: 'var(--accent-copper)', width: '16px', height: '16px' }}
+                      style={{ accentColor: '#000000', width: '16px', height: '16px' }}
                     />
-                    <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#ffffff' }}>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#000000' }}>
                       Complimentary Valenszo Signature Gift Packaging
                     </span>
                   </label>
 
                   {isGiftBoxSelected && (
                     <div>
-                      <label className="form-label">Personalized Calligraphy Card Message</label>
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Personalized Calligraphy Card Message</label>
                       <textarea
                         rows={3}
                         placeholder="Write a personal note (e.g. 'To Alexandre, with timeless elegance...')"
                         value={giftNote}
                         onChange={(e) => setGiftNote(e.target.value)}
                         className="form-textarea"
-                        style={{ fontSize: '0.85rem' }}
+                        style={{ fontSize: '0.85rem', background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }}
                       />
                     </div>
                   )}
                 </div>
 
                 {/* Right: 2 Complimentary Samples Selection */}
-                <div style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '22px' }}>
+                <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '22px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Feather size={18} color="var(--accent-copper-light)" />
-                      <h4 className="couture-title" style={{ fontSize: '1rem' }}>2 Deluxe Samples</h4>
+                      <Feather size={18} color="#926917" />
+                      <h4 className="couture-title" style={{ fontSize: '1rem', color: '#000000', fontWeight: 700 }}>2 Deluxe Samples</h4>
                     </div>
-                    <span className="badge badge-copper" style={{ fontSize: '0.68rem' }}>
+                    <span style={{ background: '#000000', color: '#ffffff', padding: '3px 8px', borderRadius: '2px', fontSize: '0.68rem', fontWeight: 700 }}>
                       {selectedSamples.length}/2 Selected
                     </span>
                   </div>
 
-                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
+                  <p style={{ fontSize: '0.82rem', color: '#4b5563', marginBottom: '14px' }}>
                     Select 2 complimentary 2ml deluxe spray vials to accompany your parcel:
                   </p>
 
@@ -211,9 +220,9 @@ export const CheckoutModal = () => {
                           onClick={() => toggleSample(sample.id)}
                           style={{
                             padding: '10px 14px',
-                            borderRadius: 'var(--radius-sm)',
-                            background: isSelected ? 'rgba(226, 135, 67, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                            border: isSelected ? '1px solid var(--accent-copper)' : '1px solid var(--border-subtle)',
+                            borderRadius: '4px',
+                            background: isSelected ? '#fdf8eb' : '#ffffff',
+                            border: isSelected ? '1px solid #c5a059' : '1px solid #e5e7eb',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
@@ -222,14 +231,14 @@ export const CheckoutModal = () => {
                           }}
                         >
                           <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: isSelected ? '#ffffff' : 'var(--text-main)' }}>
+                            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#000000' }}>
                               {sample.name}
                             </div>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--accent-copper-light)' }}>
+                            <div style={{ fontSize: '0.72rem', color: '#926917', fontWeight: 600 }}>
                               {sample.concentration}
                             </div>
                           </div>
-                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: isSelected ? 'none' : '1px solid var(--border-subtle)', background: isSelected ? 'var(--accent-copper)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#040711' }}>
+                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: isSelected ? 'none' : '1px solid #d1d5db', background: isSelected ? '#000000' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
                             {isSelected && <Check size={12} strokeWidth={3} />}
                           </div>
                         </div>
@@ -243,9 +252,9 @@ export const CheckoutModal = () => {
               {/* Action Button */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '28px' }}>
                 <button
-                  className="btn btn-copper"
+                  className="btn btn-dior-solid"
                   onClick={() => setStep(2)}
-                  style={{ padding: '12px 30px', fontSize: '0.88rem' }}
+                  style={{ padding: '12px 30px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
                   <span>Continue to Delivery &amp; Payment</span>
                   <ArrowRight size={16} />
@@ -261,87 +270,89 @@ export const CheckoutModal = () => {
                 
                 {/* Delivery Form */}
                 <div>
-                  <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '14px' }}>1. Delivery Address</h4>
+                  <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '14px', fontWeight: 700 }}>1. Delivery Address</h4>
                   
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     <div className="form-group">
-                      <label className="form-label">First Name</label>
-                      <input type="text" name="firstName" required value={formData.firstName} onChange={handleInputChange} className="form-input" />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>First Name</label>
+                      <input type="text" name="firstName" required value={formData.firstName} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Last Name</label>
-                      <input type="text" name="lastName" required value={formData.lastName} onChange={handleInputChange} className="form-input" />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Last Name</label>
+                      <input type="text" name="lastName" required value={formData.lastName} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Email</label>
-                    <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="form-input" />
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Email</label>
+                    <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Address</label>
-                    <input type="text" name="address" required value={formData.address} onChange={handleInputChange} className="form-input" />
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Address</label>
+                    <input type="text" name="address" required value={formData.address} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     <div className="form-group">
-                      <label className="form-label">City</label>
-                      <input type="text" name="city" required value={formData.city} onChange={handleInputChange} className="form-input" />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>City</label>
+                      <input type="text" name="city" required value={formData.city} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Postal Code</label>
-                      <input type="text" name="postalCode" required value={formData.postalCode} onChange={handleInputChange} className="form-input" />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Postal Code</label>
+                      <input type="text" name="postalCode" required value={formData.postalCode} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                   </div>
                 </div>
 
                 {/* Payment Simulation */}
                 <div>
-                  <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '14px' }}>2. Secure Payment</h4>
+                  <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '14px', fontWeight: 700 }}>2. Secure Payment</h4>
 
-                  <div style={{ padding: '16px', background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', marginBottom: '16px' }}>
+                  <div style={{ padding: '16px', background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                      <Lock size={15} color="#34d399" />
-                      <span style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 700, textTransform: 'uppercase' }}>
+                      <Lock size={15} color="#059669" />
+                      <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 700, textTransform: 'uppercase' }}>
                         256-Bit Encrypted Transaction
                       </span>
                     </div>
 
                     <div className="form-group">
-                      <label className="form-label">Card Number</label>
-                      <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} className="form-input" />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Card Number</label>
+                      <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                       <div className="form-group">
-                        <label className="form-label">Expires</label>
-                        <input type="text" name="cardExp" value={formData.cardExp} onChange={handleInputChange} className="form-input" />
+                        <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Expires</label>
+                        <input type="text" name="cardExp" value={formData.cardExp} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                       </div>
                       <div className="form-group">
-                        <label className="form-label">CVC</label>
-                        <input type="text" name="cardCvc" value={formData.cardCvc} onChange={handleInputChange} className="form-input" />
+                        <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>CVC</label>
+                        <input type="text" name="cardCvc" value={formData.cardCvc} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                       </div>
                     </div>
                   </div>
 
                   {/* Summary */}
-                  <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.04)', borderRadius: 'var(--radius-sm)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                  <div style={{ padding: '16px', background: '#f3f4f6', borderRadius: '4px', border: '1px solid #e5e7eb' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#4b5563', marginBottom: '6px' }}>
                       <span>Subtotal ({cart.length} flacons)</span>
-                      <span>${cartSubtotal.toFixed(2)}</span>
+                      <span style={{ color: '#000000', fontWeight: 600 }}>${cartSubtotal.toFixed(2)}</span>
                     </div>
                     {cartDiscountAmount > 0 && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--accent-copper-light)', marginBottom: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#926917', marginBottom: '6px' }}>
                         <span>Privilege Discount</span>
-                        <span>-${cartDiscountAmount.toFixed(2)}</span>
+                        <span style={{ fontWeight: 700 }}>-${cartDiscountAmount.toFixed(2)}</span>
                       </div>
                     )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#4b5563', marginBottom: '8px' }}>
                       <span>Climate Shipping</span>
-                      <span>{cartShipping === 0 ? 'COMPLIMENTARY' : `$${cartShipping.toFixed(2)}`}</span>
+                      <span style={{ color: cartShipping === 0 ? '#059669' : '#000000', fontWeight: 600 }}>
+                        {cartShipping === 0 ? 'COMPLIMENTARY' : `$${cartShipping.toFixed(2)}`}
+                      </span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#000000', paddingTop: '8px', borderTop: '1px solid #e5e7eb' }}>
                       <span>Total</span>
                       <span style={{ fontFamily: 'var(--font-mono)' }}>${cartTotal.toFixed(2)}</span>
                     </div>
@@ -357,7 +368,7 @@ export const CheckoutModal = () => {
                   type="button"
                   className="btn btn-dior-outline"
                   onClick={() => setStep(1)}
-                  style={{ padding: '12px 24px', fontSize: '0.85rem' }}
+                  style={{ padding: '12px 24px', fontSize: '0.85rem', background: '#ffffff', color: '#000000', border: '1px solid #000000', cursor: 'pointer' }}
                 >
                   &larr; Back to Gifting
                 </button>
@@ -365,8 +376,8 @@ export const CheckoutModal = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn btn-copper"
-                  style={{ padding: '12px 34px', fontSize: '0.88rem' }}
+                  className="btn btn-dior-solid"
+                  style={{ padding: '12px 34px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}
                 >
                   {isSubmitting ? 'Placing Order...' : `Confirm & Authorize $${cartTotal.toFixed(2)}`}
                 </button>
@@ -377,40 +388,40 @@ export const CheckoutModal = () => {
           {/* STEP 3: Order Success Confirmation */}
           {step === 3 && placedOrder && (
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.15)', border: '2px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', margin: '0 auto 20px' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#ecfdf5', border: '2px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669', margin: '0 auto 20px' }}>
                 <CheckCircle2 size={36} />
               </div>
 
-              <div className="couture-sub" style={{ color: 'var(--accent-copper-light)', marginBottom: '6px' }}>
+              <div className="couture-sub" style={{ color: '#926917', marginBottom: '6px', fontWeight: 600 }}>
                 Votre Commande est Confirmée
               </div>
-              <h2 className="couture-title" style={{ fontSize: '1.8rem', marginBottom: '12px' }}>
+              <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000', fontWeight: 800, marginBottom: '12px' }}>
                 Thank You, {formData.firstName}
               </h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
+              <p style={{ color: '#4b5563', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
                 Your Valenszo fragrance order has been transmitted to our Atelier. Your parcel is being carefully prepared in our signature luxury gift presentation box.
               </p>
 
               {/* Order Tracking Card */}
-              <div style={{ background: 'rgba(11, 17, 34, 0.85)', border: '1px solid var(--border-card)', borderRadius: 'var(--radius-sm)', padding: '20px', maxWidth: '500px', margin: '0 auto 30px', textAlign: 'left' }}>
+              <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '20px', maxWidth: '500px', margin: '0 auto 30px', textAlign: 'left' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Order Number</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#ffffff' }}>{placedOrder.id}</span>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Order Number</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#000000' }}>{placedOrder.id}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Tracking Code</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-copper-light)' }}>{placedOrder.trackingNumber}</span>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Tracking Code</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#926917' }}>{placedOrder.trackingNumber}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Complimentary Samples</span>
-                  <span style={{ fontSize: '0.82rem', color: '#6ee7b7' }}>2x Deluxe Vials Included</span>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Complimentary Samples</span>
+                  <span style={{ fontSize: '0.82rem', color: '#059669', fontWeight: 600 }}>2x Deluxe Vials Included</span>
                 </div>
               </div>
 
               <button
                 className="btn btn-dior-solid"
                 onClick={() => setIsCheckoutOpen(false)}
-                style={{ padding: '12px 32px' }}
+                style={{ padding: '12px 32px', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}
               >
                 Return To Collection
               </button>
