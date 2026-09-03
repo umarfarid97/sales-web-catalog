@@ -158,24 +158,35 @@
 .cart-drawer-overlay {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background: var(--bg-overlay);
   backdrop-filter: var(--backdrop-blur);
   -webkit-backdrop-filter: var(--backdrop-blur);
-  z-index: 100;
+  z-index: 9999;
   display: flex;
   justify-content: flex-end;
   animation: fadeIn 0.25s ease;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .cart-drawer-panel {
   width: 100%;
   max-width: 440px;
   height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   background: #ffffff;
   color: #000000;
   box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  overscroll-behavior: contain;
   animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -185,18 +196,20 @@
 }
 
 .cart-drawer-header {
-  padding: 24px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-card);
   background: #ffffff;
+  flex-shrink: 0;
 }
 
 .free-shipping-progress {
   padding: 14px 24px;
   background: #fafafa;
   border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 .progress-bar-bg {
@@ -216,8 +229,13 @@
 }
 
 .cart-items-container {
-  flex: 1;
+  flex: 1 1 0px;
+  min-height: 0;
+  max-height: 100%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
   padding: 20px 24px;
   background: #ffffff;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   X, 
@@ -8,10 +8,10 @@ import {
   ShoppingBag, 
   ArrowRight, 
   Tag, 
-  Gift,
-  Truck,
-  Feather,
-  Sparkles
+  Gift, 
+  Truck, 
+  Feather, 
+  Sparkles 
 } from 'lucide-react';
 
 export const CartDrawer = () => {
@@ -36,6 +36,22 @@ export const CartDrawer = () => {
   } = useStore();
 
   const [promoInput, setPromoInput] = useState('');
+
+  // Lock document body scroll while cart drawer is open to prevent background scrolling on mobile
+  useEffect(() => {
+    if (isCartOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+      
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.touchAction = originalTouchAction;
+      };
+    }
+  }, [isCartOpen]);
 
   if (!isCartOpen) return null;
 
@@ -62,6 +78,13 @@ export const CartDrawer = () => {
     <div 
       className="cart-drawer-overlay"
       onClick={() => setIsCartOpen(false)}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        overscrollBehavior: 'contain',
+        touchAction: 'none'
+      }}
     >
       <div 
         className="cart-drawer-panel"
@@ -70,12 +93,20 @@ export const CartDrawer = () => {
           borderLeft: '1px solid #e5e7eb',
           background: '#ffffff',
           color: '#000000',
-          boxShadow: '-10px 0 50px rgba(0, 0, 0, 0.18)'
+          boxShadow: '-10px 0 50px rgba(0, 0, 0, 0.18)',
+          height: '100vh',
+          height: '100dvh',
+          maxHeight: '100vh',
+          maxHeight: '100dvh',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          overscrollBehavior: 'contain'
         }}
       >
         
         {/* Drawer Header */}
-        <div className="cart-drawer-header" style={{ borderBottom: '1px solid #e5e7eb', padding: '24px 28px', background: '#ffffff' }}>
+        <div className="cart-drawer-header" style={{ borderBottom: '1px solid #e5e7eb', padding: '20px 24px', background: '#ffffff', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <ShoppingBag size={20} color="#000000" />
             <h3 className="couture-title" style={{ fontSize: '1.05rem', color: '#000000', fontWeight: 800, letterSpacing: '0.12em' }}>
@@ -105,7 +136,7 @@ export const CartDrawer = () => {
         </div>
 
         {/* Free Shipping Progress Indicator */}
-        <div className="free-shipping-progress" style={{ background: '#fafafa', borderBottom: '1px solid #e5e7eb', padding: '14px 28px' }}>
+        <div className="free-shipping-progress" style={{ background: '#fafafa', borderBottom: '1px solid #e5e7eb', padding: '12px 24px', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', fontWeight: 600, marginBottom: '8px' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: isFreeShipping ? '#059669' : '#111827' }}>
               <Truck size={16} color={isFreeShipping ? '#059669' : '#000000'} />
@@ -129,7 +160,20 @@ export const CartDrawer = () => {
         </div>
 
         {/* Cart Items List */}
-        <div className="cart-items-container" style={{ background: '#ffffff' }}>
+        <div 
+          className="cart-items-container" 
+          style={{ 
+            background: '#ffffff',
+            flex: '1 1 0px',
+            minHeight: 0,
+            maxHeight: '100%',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y',
+            overscrollBehavior: 'contain',
+            padding: '16px 20px'
+          }}
+        >
           {(!cart || cart.length === 0) ? (
             <div className="cart-empty-state" style={{ padding: '60px 24px', textAlign: 'center' }}>
               <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#000000' }}>
@@ -229,7 +273,7 @@ export const CartDrawer = () => {
 
         {/* Drawer Footer & Checkout */}
         {cart.length > 0 && (
-          <div className="cart-drawer-footer" style={{ borderTop: '1px solid #e5e7eb', background: '#ffffff', padding: '24px 28px' }}>
+          <div className="cart-drawer-footer" style={{ borderTop: '1px solid #e5e7eb', background: '#ffffff', padding: '18px 24px', flexShrink: 0 }}>
             
             {/* Promo Code Input */}
             <form onSubmit={handleApplyPromo} style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
