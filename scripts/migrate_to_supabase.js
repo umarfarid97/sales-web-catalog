@@ -3,9 +3,46 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { INITIAL_PRODUCTS } from '../src/data/initialProducts.js';
-import { formatProductToDb } from '../src/services/supabaseService.js';
-import fs from 'fs';
-import path from 'path';
+
+function formatProductToDb(product) {
+  return {
+    id: product.id,
+    sku: product.sku,
+    name: product.name,
+    category: product.category,
+    tagline: product.tagline,
+    description: product.description,
+    price: product.price,
+    original_price: product.originalPrice,
+    discount_percent: product.discountPercent,
+    stock: product.stock,
+    rating: product.rating,
+    reviews_count: product.reviewsCount,
+    badge: product.badge,
+    is_featured: product.isFeatured,
+    features: product.features || [],
+    specs: {
+      catalogNo: product.catalogNo,
+      displayName: product.displayName,
+      brandInspiration: product.brandInspiration,
+      originalListing: product.originalListing,
+      gender: product.gender,
+      character: product.character,
+      olfactoryFamily: product.olfactoryFamily,
+      traits: product.traits,
+      tier: product.tier,
+      refillable: product.refillable,
+      intensityScore: product.intensityScore,
+      concentration: product.concentration,
+      pyramid: product.pyramid,
+      sizes: product.sizes,
+      sillage: product.sillage,
+      longevity: product.longevity,
+      season: product.season
+    },
+    images: product.images || []
+  };
+}
 
 // Read from arguments or environment
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.argv[2];
