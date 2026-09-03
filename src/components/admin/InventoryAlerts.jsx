@@ -2,12 +2,11 @@ import React from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   AlertTriangle, 
-  PackageX, 
   RefreshCw, 
   CheckCircle2, 
   Plus, 
-  ArrowUpRight,
-  ShieldCheck 
+  Flame, 
+  Sparkles
 } from 'lucide-react';
 
 export const InventoryAlerts = () => {
@@ -20,7 +19,7 @@ export const InventoryAlerts = () => {
     lowStockItems.forEach((p) => {
       restockProduct(p.id, 15);
     });
-    showToast(`Batch restocked ${lowStockItems.length} low-stock items (+15 units each)!`, 'success');
+    showToast(`Batch replenished ${lowStockItems.length} fragrance creations (+15 flacons each)!`, 'success');
   };
 
   return (
@@ -28,28 +27,28 @@ export const InventoryAlerts = () => {
       
       {/* Alert Banner */}
       {lowStockItems.length > 0 ? (
-        <div className="inventory-alert-card">
+        <div className="inventory-alert-card" style={{ border: '1px solid rgba(244, 63, 94, 0.35)', background: 'rgba(244, 63, 94, 0.08)' }}>
           <div className="inventory-alert-info">
             <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(244, 63, 94, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fb7185' }}>
               <AlertTriangle size={24} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#ffffff' }}>
-                {lowStockItems.length} Products Require Immediate Replenishment
+              <h3 className="font-serif-title" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#ffffff' }}>
+                {lowStockItems.length} Fragrance Creations Require Atelier Maceration &amp; Flacon Restock
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                {outOfStockItems.length} items are currently completely sold out.
+                {outOfStockItems.length} creations are completely depleted / sold out.
               </p>
             </div>
           </div>
 
           <button
-            className="btn btn-primary"
+            className="btn btn-gold"
             onClick={handleBatchRestock}
             style={{ padding: '10px 20px', fontSize: '0.88rem' }}
           >
             <RefreshCw size={16} />
-            <span>Batch Restock All (+15 Each)</span>
+            <span>Batch Restock All (+15 Flacons Each)</span>
           </button>
         </div>
       ) : (
@@ -69,9 +68,9 @@ export const InventoryAlerts = () => {
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#34d399' }}>Inventory Health Optimal</h3>
+            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#34d399' }}>Flacon Vault Inventory Healthy</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              All catalog products maintain sufficient safety buffer inventory (&gt; 5 units).
+              All signature fragrance creations have sufficient safety reserves (&gt; 5 flacons).
             </p>
           </div>
         </div>
@@ -79,65 +78,48 @@ export const InventoryAlerts = () => {
 
       {/* Low Stock Items Grid */}
       {lowStockItems.length > 0 && (
-        <div className="admin-table-container">
+        <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
           <div className="admin-table-toolbar">
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700 }}>Critical Stock Items</h3>
+            <h3 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
+              Critical Inventory Fragrances
+            </h3>
           </div>
 
-          <table className="admin-data-table">
+          <table className="admin-table">
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Category</th>
-                <th>Current Stock</th>
-                <th>Restock Action</th>
+                <th>Fragrance Creation</th>
+                <th>Olfactory Family</th>
+                <th>Current Reserve</th>
+                <th style={{ textAlign: 'right' }}>Replenish Action</th>
               </tr>
             </thead>
             <tbody>
               {lowStockItems.map((prod) => (
                 <tr key={prod.id}>
                   <td>
-                    <div className="product-row-info">
-                      <img src={prod.images[0]} alt={prod.name} className="product-row-thumb" />
-                      <div>
-                        <div style={{ fontWeight: 600, color: '#ffffff' }}>{prod.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>{prod.sku}</div>
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img src={prod.images[0]} alt={prod.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover' }} />
+                      <span className="font-serif-title" style={{ fontWeight: 700 }}>{prod.name}</span>
                     </div>
                   </td>
-
                   <td>
-                    <span className="badge badge-neutral">{prod.category}</span>
+                    <span className="badge badge-gold" style={{ fontSize: '0.72rem' }}>{prod.category}</span>
                   </td>
-
                   <td>
-                    {prod.stock === 0 ? (
-                      <span className="badge badge-danger">Sold Out (0 units)</span>
-                    ) : (
-                      <span className="badge badge-warning">Critical ({prod.stock} left)</span>
-                    )}
+                    <span className={`badge ${prod.stock === 0 ? 'badge-danger' : 'badge-warning'}`}>
+                      {prod.stock === 0 ? 'Depleted (0 flacons)' : `${prod.stock} flacons left`}
+                    </span>
                   </td>
-
-                  <td>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() => restockProduct(prod.id, 10)}
-                        style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-                      >
-                        <Plus size={13} />
-                        <span>+10 units</span>
-                      </button>
-
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => restockProduct(prod.id, 25)}
-                        style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-                      >
-                        <Plus size={13} />
-                        <span>+25 units</span>
-                      </button>
-                    </div>
+                  <td style={{ textAlign: 'right' }}>
+                    <button
+                      className="btn btn-gold"
+                      style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+                      onClick={() => restockProduct(prod.id, 10)}
+                    >
+                      <Plus size={14} />
+                      <span>Restock +10</span>
+                    </button>
                   </td>
                 </tr>
               ))}

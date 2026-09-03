@@ -4,12 +4,11 @@ import {
   X, 
   Search, 
   Truck, 
-  Package, 
   CheckCircle2, 
   Clock, 
-  AlertCircle,
-  MapPin,
-  Calendar
+  Gift,
+  Feather,
+  Sparkles
 } from 'lucide-react';
 
 export const OrderTrackerModal = () => {
@@ -48,13 +47,13 @@ export const OrderTrackerModal = () => {
     >
       <div 
         className="modal-content"
-        style={{ maxWidth: '640px' }}
+        style={{ maxWidth: '640px', border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)' }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           className="modal-close-btn"
           onClick={() => setIsOrderTrackerOpen(false)}
-          aria-label="Close Order Tracker"
+          aria-label="Close Fragrance Tracker"
         >
           <X size={18} />
         </button>
@@ -62,28 +61,29 @@ export const OrderTrackerModal = () => {
         <div style={{ padding: '32px' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(212, 175, 55, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-gold)' }}>
               <Truck size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700 }}>Real-Time Order Tracking</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Enter your Order Reference ID or Tracking Code</p>
+              <h3 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 800 }}>Maison Delivery Tracker</h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Enter your Fragrance Order Reference or Tracking Code</p>
             </div>
           </div>
 
           {/* Search Box */}
           <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px', margin: '20px 0 28px' }}>
             <div style={{ position: 'relative', flex: 1 }}>
-              <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+              <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
               <input
                 type="text"
-                placeholder="e.g. ORD-89241 or TRK-LUM-9482103"
+                placeholder="e.g. ORD-98421 or TRK-LUM-9482710"
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value)}
+                className="form-input"
                 style={{ width: '100%', paddingLeft: '38px' }}
               />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ padding: '0 20px' }}>
+            <button type="submit" className="btn btn-gold" style={{ padding: '0 20px' }}>
               Track
             </button>
           </form>
@@ -93,17 +93,17 @@ export const OrderTrackerModal = () => {
             <div 
               style={{
                 background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid var(--border-card)',
+                border: '1px solid rgba(212, 175, 55, 0.2)',
                 borderRadius: 'var(--radius-lg)',
                 padding: '24px'
               }}
             >
-              {/* Order Meta Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '14px' }}>
+              {/* Order Meta */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
                 <div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>ORDER REFERENCE</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>
-                    {foundOrder.id}
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Tracking Number</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-gold-light)', fontSize: '1.05rem' }}>
+                    {foundOrder.trackingNumber}
                   </div>
                 </div>
                 <div>
@@ -113,126 +113,60 @@ export const OrderTrackerModal = () => {
                 </div>
               </div>
 
-              {/* Progress Timeline Nodes */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', margin: '30px 0 36px' }}>
-                <div 
-                  style={{
-                    position: 'absolute',
-                    top: '16px',
-                    left: '24px',
-                    right: '24px',
-                    height: '3px',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    zIndex: 1
-                  }}
-                />
-
-                {/* Node 1: Order Placed */}
-                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    background: currentStep >= 1 ? '#10b981' : 'var(--bg-tertiary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff'
-                  }}>
-                    <CheckCircle2 size={16} />
-                  </div>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: currentStep >= 1 ? '#ffffff' : 'var(--text-dim)' }}>Placed</span>
-                </div>
-
-                {/* Node 2: Processing */}
-                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    background: currentStep >= 2 ? '#10b981' : 'var(--bg-tertiary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff'
-                  }}>
-                    <Clock size={16} />
-                  </div>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: currentStep >= 2 ? '#ffffff' : 'var(--text-dim)' }}>Processing</span>
-                </div>
-
-                {/* Node 3: Shipped */}
-                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    background: currentStep >= 3 ? '#10b981' : 'var(--bg-tertiary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff'
-                  }}>
-                    <Truck size={16} />
-                  </div>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: currentStep >= 3 ? '#ffffff' : 'var(--text-dim)' }}>In Transit</span>
-                </div>
-
-                {/* Node 4: Delivered */}
-                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '50%',
-                    background: currentStep >= 4 ? '#10b981' : 'var(--bg-tertiary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff'
-                  }}>
-                    <Package size={16} />
-                  </div>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: currentStep >= 4 ? '#ffffff' : 'var(--text-dim)' }}>Delivered</span>
-                </div>
+              {/* Progress Steps Timeline */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', margin: '30px 0 24px' }}>
+                {['Pending', 'Atelier Packing', 'In Transit', 'Delivered'].map((stepName, i) => {
+                  const stepNumber = i + 1;
+                  const isDone = currentStep >= stepNumber;
+                  return (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2, flex: 1 }}>
+                      <div 
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: isDone ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.08)',
+                          color: isDone ? '#0b0c10' : 'var(--text-dim)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '0.85rem',
+                          fontWeight: 800,
+                          boxShadow: isDone ? '0 0 12px rgba(212, 175, 55, 0.4)' : 'none'
+                        }}
+                      >
+                        {isDone ? <CheckCircle2 size={16} strokeWidth={2.5} /> : stepNumber}
+                      </div>
+                      <span style={{ fontSize: '0.75rem', marginTop: '6px', color: isDone ? '#fce08b' : 'var(--text-dim)', fontWeight: isDone ? 700 : 500, textAlign: 'center' }}>
+                        {stepName}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Order Info Details */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '0.85rem' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <MapPin size={16} color="#818cf8" style={{ marginTop: '2px', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem', fontWeight: 700 }}>RECIPIENT</div>
-                    <div style={{ color: '#ffffff', fontWeight: 600 }}>{foundOrder.customer?.name}</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{foundOrder.customer?.address}, {foundOrder.customer?.city}</div>
-                  </div>
+              {/* Items in this Order */}
+              <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--accent-gold-light)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
+                  Flacons in this Dispatch
                 </div>
-
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <Calendar size={16} color="#34d399" style={{ marginTop: '2px', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem', fontWeight: 700 }}>ORDER DATE</div>
-                    <div style={{ color: '#ffffff', fontWeight: 600 }}>
-                      {new Date(foundOrder.placedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                      {foundOrder.items?.length || 1} items &bull; Total: ${foundOrder.total?.toFixed(2)}
-                    </div>
+                {foundOrder.items.map((it, idx) => (
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', margin: '4px 0' }}>
+                    <span style={{ color: 'var(--text-main)' }}>{it.quantity}x {it.name} ({it.size || '100ml'})</span>
+                    <span style={{ color: '#fce08b', fontFamily: 'var(--font-mono)' }}>${(it.price * it.quantity).toFixed(2)}</span>
                   </div>
-                </div>
+                ))}
               </div>
 
             </div>
-          ) : hasSearched && (
-            <div style={{ textAlign: 'center', padding: '30px', color: '#fb7185' }}>
-              <AlertCircle size={32} style={{ margin: '0 auto 10px' }} />
-              <h4>Order not found</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Please verify your order number format (e.g. ORD-89241).
-              </p>
+          ) : hasSearched ? (
+            <div style={{ textAlign: 'center', padding: '36px 0', color: 'var(--text-muted)' }}>
+              No fragrance dispatch record found for &quot;{searchId}&quot;.
             </div>
-          )}
+          ) : null}
 
         </div>
+
       </div>
     </div>
   );

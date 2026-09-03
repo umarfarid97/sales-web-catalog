@@ -9,7 +9,9 @@ import {
   CheckCircle2, 
   AlertCircle,
   X,
-  CreditCard
+  CreditCard,
+  Gift,
+  Feather
 } from 'lucide-react';
 
 export const OrderManager = () => {
@@ -40,10 +42,10 @@ export const OrderManager = () => {
   return (
     <div>
       
-      <div className="admin-table-container">
+      <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
         
         {/* Status Filter Tabs Toolbar */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', gap: '8px', overflowX: 'auto' }}>
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(212, 175, 55, 0.15)', display: 'flex', gap: '8px', overflowX: 'auto' }}>
           {['All', ...statusOptions].map((st) => {
             const count = getStatusCount(st);
             const isActive = selectedStatusTab === st;
@@ -57,13 +59,14 @@ export const OrderManager = () => {
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.82rem',
                   fontWeight: 600,
-                  background: isActive ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.04)',
-                  color: isActive ? '#ffffff' : 'var(--text-muted)',
-                  border: `1px solid ${isActive ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
+                  background: isActive ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.04)',
+                  color: isActive ? '#0b0c10' : 'var(--text-muted)',
+                  border: `1px solid ${isActive ? 'var(--accent-gold)' : 'var(--border-subtle)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
                   whiteSpace: 'nowrap',
+                  cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
               >
@@ -71,7 +74,7 @@ export const OrderManager = () => {
                 <span 
                   style={{
                     fontSize: '0.72rem',
-                    background: isActive ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+                    background: isActive ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.08)',
                     padding: '1px 6px',
                     borderRadius: 'var(--radius-full)'
                   }}
@@ -86,144 +89,134 @@ export const OrderManager = () => {
         {/* Search Toolbar */}
         <div className="admin-table-toolbar">
           <div style={{ position: 'relative', width: '100%', maxWidth: '360px' }}>
-            <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+            <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
             <input
               type="text"
-              placeholder="Search Order ID, Customer Name, Email, Tracking..."
+              placeholder="Search Order ID, Client Name, Email, Tracking..."
               value={orderSearch}
               onChange={(e) => setOrderSearch(e.target.value)}
+              className="form-input"
               style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '0.85rem' }}
             />
             {orderSearch && (
               <button
                 onClick={() => setOrderSearch('')}
-                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }}
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
               >
                 <X size={14} />
               </button>
             )}
           </div>
-
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Showing <strong>{filteredOrders.length}</strong> orders
-          </div>
         </div>
 
         {/* Orders Table */}
         <div style={{ overflowX: 'auto' }}>
-          <table className="admin-data-table">
+          <table className="admin-table">
             <thead>
               <tr>
-                <th>Order ID & Date</th>
-                <th>Customer</th>
-                <th>Purchased Items</th>
-                <th>Total</th>
+                <th>Order ID</th>
+                <th>Client Name</th>
+                <th>Fragrance Items</th>
+                <th>Presentation Gifting</th>
+                <th>Total Value</th>
                 <th>Fulfillment Status</th>
+                <th>Placed Date</th>
                 <th style={{ textAlign: 'right' }}>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.length > 0 ? (
+              {filteredOrders.length === 0 ? (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-muted)' }}>
+                    No luxury fragrance orders found matching your search.
+                  </td>
+                </tr>
+              ) : (
                 filteredOrders.map((ord) => (
                   <tr key={ord.id}>
                     
-                    {/* Order ID & Date */}
+                    {/* Order ID */}
                     <td>
-                      <div>
-                        <div style={{ fontWeight: 800, color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.95rem' }}>
-                          {ord.id}
-                        </div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '2px' }}>
-                          {new Date(ord.placedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                      </div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-gold-light)', fontSize: '0.85rem' }}>
+                        {ord.id}
+                      </span>
                     </td>
 
                     {/* Customer */}
                     <td>
                       <div>
-                        <div style={{ fontWeight: 600, color: '#ffffff' }}>{ord.customer?.name}</div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>{ord.customer?.email}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '0.9rem' }}>{ord.customer?.name}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{ord.customer?.city}, {ord.customer?.country}</div>
                       </div>
                     </td>
 
                     {/* Items */}
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        {ord.items?.slice(0, 3).map((item, idx) => (
-                          <img
-                            key={idx}
-                            src={item.image}
-                            alt={item.name}
-                            title={`${item.quantity}x ${item.name} (${item.color})`}
-                            style={{
-                              width: '34px',
-                              height: '34px',
-                              borderRadius: '6px',
-                              objectFit: 'cover',
-                              border: '1px solid var(--border-subtle)',
-                              background: '#151822'
-                            }}
-                          />
+                      <div style={{ fontSize: '0.85rem' }}>
+                        {ord.items.map((it, idx) => (
+                          <div key={idx} style={{ color: '#f3e5ab' }}>
+                            {it.quantity}x {it.name} <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>({it.size || '100ml'})</span>
+                          </div>
                         ))}
-                        {ord.items?.length > 3 && (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-                            +{ord.items.length - 3} more
+                      </div>
+                    </td>
+
+                    {/* Gifting / Samples */}
+                    <td>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        {ord.customer?.giftPackaging ? (
+                          <span className="badge badge-gold" style={{ fontSize: '0.68rem', width: 'fit-content' }}>
+                            <Gift size={11} />
+                            <span>Gift Boxed</span>
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Standard Box</span>
+                        )}
+
+                        {ord.customer?.engravingText && (
+                          <span style={{ fontSize: '0.72rem', color: '#fce08b', fontStyle: 'italic' }}>
+                            <Feather size={10} style={{ display: 'inline', marginRight: '3px' }} />
+                            &quot;{ord.customer.engravingText}&quot;
                           </span>
                         )}
-                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginLeft: '4px' }}>
-                          ({ord.items?.reduce((s, i) => s + i.quantity, 0)} pcs)
-                        </span>
                       </div>
                     </td>
 
-                    {/* Total Amount */}
+                    {/* Total */}
                     <td>
-                      <div style={{ fontWeight: 800, color: '#ffffff', fontSize: '1rem', fontFamily: 'var(--font-heading)' }}>
-                        ${ord.total?.toFixed(2)}
-                      </div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
-                        {ord.paymentMethod?.split('(')[0] || 'Paid'}
-                      </div>
+                      <span style={{ fontWeight: 700, color: '#fce08b', fontFamily: 'var(--font-mono)' }}>
+                        ${ord.total.toFixed(2)}
+                      </span>
                     </td>
 
-                    {/* Fulfillment Status Dropdown */}
+                    {/* Status */}
                     <td>
-                      <select
-                        value={ord.status}
-                        onChange={(e) => updateOrderStatus(ord.id, e.target.value)}
-                        className={`order-status-badge status-${ord.status.toLowerCase()}`}
-                        style={{ cursor: 'pointer', outline: 'none' }}
-                      >
-                        {statusOptions.map((st) => (
-                          <option key={st} value={st} style={{ background: '#11131a', color: '#ffffff' }}>
-                            {st}
-                          </option>
-                        ))}
-                      </select>
+                      <span className={`order-status-badge status-${ord.status.toLowerCase()}`}>
+                        {ord.status}
+                      </span>
+                    </td>
+
+                    {/* Date */}
+                    <td>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                        {new Date(ord.placedAt).toLocaleDateString()}
+                      </span>
                     </td>
 
                     {/* Action */}
                     <td style={{ textAlign: 'right' }}>
                       <button
-                        onClick={() => setViewingOrder(ord)}
                         className="btn btn-secondary"
                         style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-                        title="View Detailed Invoice"
+                        onClick={() => setViewingOrder(ord)}
                       >
-                        <Eye size={14} />
+                        <Eye size={13} color="var(--accent-gold)" />
                         <span>Inspect</span>
                       </button>
                     </td>
 
                   </tr>
                 ))
-              ) : (
-                <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-                    No orders found matching the filter.
-                  </td>
-                </tr>
               )}
             </tbody>
           </table>

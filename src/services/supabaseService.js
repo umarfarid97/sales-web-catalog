@@ -18,6 +18,21 @@ export const formatProductFromDb = (row) => {
     reviewsCount: Number(row.reviews_count || 0),
     badge: row.badge || '',
     isFeatured: Boolean(row.is_featured),
+    concentration: row.specs?.concentration || 'Extrait de Parfum (32%)',
+    olfactoryFamily: row.category,
+    sillage: row.specs?.sillage || 'Enveloping & Magnetic',
+    longevity: row.specs?.longevity || '14+ Hours (Eternal)',
+    season: row.specs?.season || 'All Seasons',
+    pyramid: row.specs?.pyramid || {
+      topNotes: ['Calabrian Bergamot', 'Spiced Saffron'],
+      heartNotes: ['Damascena Rose', 'Midnight Jasmine'],
+      baseNotes: ['Royal Agarwood Oud', 'Ambergris', 'Bourbon Vanilla']
+    },
+    sizes: row.specs?.sizes || [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: Array.isArray(row.colors) ? row.colors : [],
     features: Array.isArray(row.features) ? row.features : [],
     specs: typeof row.specs === 'object' && row.specs !== null ? row.specs : {},
@@ -42,10 +57,18 @@ export const formatProductToDb = (product) => {
     reviews_count: product.reviewsCount,
     badge: product.badge,
     is_featured: product.isFeatured,
-    colors: product.colors,
-    features: product.features,
-    specs: product.specs,
-    images: product.images
+    colors: product.colors || [],
+    features: product.features || [],
+    specs: {
+      ...product.specs,
+      concentration: product.concentration,
+      pyramid: product.pyramid,
+      sizes: product.sizes,
+      sillage: product.sillage,
+      longevity: product.longevity,
+      season: product.season
+    },
+    images: product.images || []
   };
 };
 

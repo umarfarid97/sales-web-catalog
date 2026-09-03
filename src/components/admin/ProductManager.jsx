@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
 import { 
   Plus, 
   Search, 
   Edit, 
   Trash2, 
   RefreshCw, 
-  Package, 
   AlertTriangle,
   CheckCircle2,
-  SlidersHorizontal,
-  X
+  X,
+  Flame,
+  Feather
 } from 'lucide-react';
 
 export const ProductManager = () => {
@@ -33,7 +34,7 @@ export const ProductManager = () => {
   };
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete "${name}" from the store catalog?`)) {
+    if (window.confirm(`Are you sure you want to remove "${name}" from the active fragrance catalog?`)) {
       deleteProduct(id);
     }
   };
@@ -51,7 +52,7 @@ export const ProductManager = () => {
     if (searchTable.trim()) {
       const q = searchTable.toLowerCase();
       const matchName = p.name.toLowerCase().includes(q);
-      const matchSku = p.sku.toLowerCase().includes(q);
+      const matchSku = p.sku?.toLowerCase().includes(q);
       if (!matchName && !matchSku) return false;
     }
     return true;
@@ -61,193 +62,205 @@ export const ProductManager = () => {
     <div>
       
       {/* Table Container */}
-      <div className="admin-table-container">
+      <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
         
         {/* Table Toolbar */}
-        <div className="admin-table-toolbar">
+        <div className="admin-table-toolbar" style={{ borderBottom: '1px solid rgba(212, 175, 55, 0.15)' }}>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px', flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', width: '100%', maxWidth: '320px' }}>
-              <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
+              <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
               <input
                 type="text"
-                placeholder="Search SKU, product title..."
+                placeholder="Search SKU, fragrance title..."
                 value={searchTable}
                 onChange={(e) => setSearchTable(e.target.value)}
+                className="form-input"
                 style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '0.85rem' }}
               />
               {searchTable && (
                 <button
                   onClick={() => setSearchTable('')}
-                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
                 >
                   <X size={14} />
                 </button>
               )}
             </div>
 
-            {/* Category Filter */}
+            {/* Olfactory Family Filter */}
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              style={{ height: '40px', fontSize: '0.85rem' }}
+              className="form-select"
+              style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="All">All Categories</option>
-              <option value="Audio">Audio</option>
-              <option value="Wearables">Wearables</option>
-              <option value="Workstation">Workstation</option>
-              <option value="Smart Home">Smart Home</option>
-              <option value="Accessories">Accessories</option>
+              <option value="All">All Olfactory Families</option>
+              {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
+                <option key={fam} value={fam}>{fam}</option>
+              ))}
             </select>
 
-            {/* Stock Filter */}
+            {/* Stock Level Filter */}
             <select
               value={filterStockStatus}
               onChange={(e) => setFilterStockStatus(e.target.value)}
-              style={{ height: '40px', fontSize: '0.85rem' }}
+              className="form-select"
+              style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="all">All Stock Statuses</option>
-              <option value="low">Low Stock (&lt; 5)</option>
-              <option value="out">Out of Stock (0)</option>
+              <option value="all">All Flacon Stock Levels</option>
+              <option value="low">Low Inventory (&lt; 5 flacons)</option>
+              <option value="out">Depleted / Out of Stock</option>
             </select>
           </div>
 
-          <button
-            className="btn btn-emerald"
-            onClick={handleAddNew}
-            style={{ padding: '8px 18px', fontSize: '0.88rem' }}
-          >
-            <Plus size={16} />
-            <span>Add Product</span>
-          </button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              className="btn btn-gold"
+              onClick={handleAddNew}
+              style={{ padding: '8px 16px', fontSize: '0.85rem' }}
+            >
+              <Plus size={16} />
+              <span>Formulate Fragrance</span>
+            </button>
+          </div>
 
         </div>
 
-        {/* Table Content */}
+        {/* Table Body */}
         <div style={{ overflowX: 'auto' }}>
-          <table className="admin-data-table">
+          <table className="admin-table">
             <thead>
               <tr>
-                <th>Item & SKU</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock Level</th>
-                <th>Ratings</th>
+                <th>Fragrance Creation</th>
+                <th>SKU</th>
+                <th>Olfactory Family</th>
+                <th>Concentration</th>
+                <th>Base Price</th>
+                <th>Flacon Stock</th>
+                <th>Sillage Rating</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {tableItems.length > 0 ? (
+              {tableItems.length === 0 ? (
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-muted)' }}>
+                    No fragrance records found matching your filters.
+                  </td>
+                </tr>
+              ) : (
                 tableItems.map((prod) => {
-                  const isOut = prod.stock <= 0;
+                  const isOutOfStock = prod.stock === 0;
                   const isLow = prod.stock > 0 && prod.stock < 5;
 
                   return (
                     <tr key={prod.id}>
-                      {/* Product Thumbnail & Details */}
+                      {/* Product Name & Visual */}
                       <td>
-                        <div className="product-row-info">
-                          <img src={prod.images[0]} alt={prod.name} className="product-row-thumb" />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <img
+                            src={prod.images[0]}
+                            alt={prod.name}
+                            style={{
+                              width: '42px',
+                              height: '42px',
+                              borderRadius: '8px',
+                              objectFit: 'cover',
+                              border: '1px solid rgba(212, 175, 55, 0.25)'
+                            }}
+                          />
                           <div>
-                            <div style={{ fontWeight: 600, color: '#ffffff', fontSize: '0.95rem' }}>
-                              {prod.name}
-                            </div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-                              {prod.sku}
+                            <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.95rem' }}>{prod.name}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+                              {prod.badge && <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 6px', marginRight: '6px' }}>{prod.badge}</span>}
                             </div>
                           </div>
                         </div>
                       </td>
 
+                      {/* SKU */}
+                      <td>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-gold-light)' }}>
+                          {prod.sku || 'N/A'}
+                        </span>
+                      </td>
+
                       {/* Category */}
                       <td>
-                        <span className="badge badge-neutral">{prod.category}</span>
+                        <span className="badge badge-neutral" style={{ background: 'rgba(212, 175, 55, 0.08)', color: '#f3e5ab' }}>
+                          {prod.category}
+                        </span>
+                      </td>
+
+                      {/* Concentration */}
+                      <td>
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                          {prod.concentration?.split(' ')[0] || 'Extrait'}
+                        </span>
                       </td>
 
                       {/* Price */}
                       <td>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                          <span style={{ fontWeight: 700, color: '#ffffff' }}>
-                            ${prod.price.toFixed(2)}
-                          </span>
-                          {prod.originalPrice > prod.price && (
-                            <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textDecoration: 'line-through' }}>
-                              ${prod.originalPrice.toFixed(2)}
-                            </span>
-                          )}
-                        </div>
+                        <span style={{ fontWeight: 700, color: '#fce08b', fontFamily: 'var(--font-mono)' }}>
+                          ${prod.price.toFixed(2)}
+                        </span>
                       </td>
 
-                      {/* Stock Level */}
+                      {/* Stock */}
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          {isOut ? (
-                            <span className="badge badge-danger">Out of Stock (0)</span>
-                          ) : isLow ? (
-                            <span className="badge badge-warning" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                              <AlertTriangle size={12} />
-                              Low Stock ({prod.stock})
-                            </span>
-                          ) : (
-                            <span className="badge badge-success">In Stock ({prod.stock})</span>
-                          )}
+                          <span className={`badge ${
+                            isOutOfStock ? 'badge-danger' :
+                            isLow ? 'badge-warning' : 'badge-success'
+                          }`}>
+                            {prod.stock} flacons
+                          </span>
                         </div>
                       </td>
 
                       {/* Rating */}
                       <td>
-                        <span style={{ color: '#fbbf24', fontWeight: 600 }}>★ {prod.rating}</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginLeft: '4px' }}>
-                          ({prod.reviewsCount})
+                        <span style={{ color: '#fcd34d', fontWeight: 700, fontSize: '0.85rem' }}>
+                          ★ {prod.rating} <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>({prod.reviewsCount})</span>
                         </span>
                       </td>
 
-                      {/* Action Buttons */}
+                      {/* Actions */}
                       <td style={{ textAlign: 'right' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
-                          
-                          {/* Quick Restock */}
+                        <div style={{ display: 'inline-flex', gap: '6px' }}>
                           <button
-                            onClick={() => restockProduct(prod.id, 10)}
-                            className="btn btn-secondary"
-                            style={{ padding: '6px 10px', fontSize: '0.75rem' }}
-                            title="Quick restock +10 units"
-                          >
-                            <RefreshCw size={13} />
-                            <span>+10</span>
-                          </button>
-
-                          {/* Edit */}
-                          <button
-                            onClick={() => handleEdit(prod)}
                             className="btn-icon"
                             style={{ width: '32px', height: '32px' }}
-                            title="Edit Product"
+                            onClick={() => restockProduct(prod.id, 10)}
+                            title="Restock +10 flacons"
                           >
-                            <Edit size={15} />
+                            <RefreshCw size={13} color="var(--accent-gold)" />
                           </button>
 
-                          {/* Delete */}
                           <button
-                            onClick={() => handleDelete(prod.id, prod.name)}
                             className="btn-icon"
-                            style={{ width: '32px', height: '32px', color: '#fb7185' }}
-                            title="Delete Product"
+                            style={{ width: '32px', height: '32px' }}
+                            onClick={() => handleEdit(prod)}
+                            title="Edit creation"
                           >
-                            <Trash2 size={15} />
+                            <Edit size={13} color="#38bdf8" />
                           </button>
 
+                          <button
+                            className="btn-icon"
+                            style={{ width: '32px', height: '32px' }}
+                            onClick={() => handleDelete(prod.id, prod.name)}
+                            title="Delete creation"
+                          >
+                            <Trash2 size={13} color="#f87171" />
+                          </button>
                         </div>
                       </td>
+
                     </tr>
                   );
                 })
-              ) : (
-                <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-                    No products found matching the criteria.
-                  </td>
-                </tr>
               )}
             </tbody>
           </table>

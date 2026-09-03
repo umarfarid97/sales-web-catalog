@@ -9,7 +9,8 @@ import {
   Store, 
   Truck, 
   Sparkles,
-  RotateCcw
+  RotateCcw,
+  Flame
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -23,7 +24,8 @@ export const Navbar = () => {
     setIsCartOpen,
     favorites,
     setIsOrderTrackerOpen,
-    resetToDemoData
+    resetToDemoData,
+    isCloudConnected
   } = useStore();
 
   return (
@@ -40,13 +42,13 @@ export const Navbar = () => {
               setSearchQuery('');
             }}
           >
-            <div className="brand-icon-box">
-              <Sparkles size={22} color="#ffffff" />
+            <div className="brand-icon-box" style={{ background: 'var(--accent-gold-gradient)' }}>
+              <Flame size={20} color="#0b0c10" />
             </div>
             <div>
-              <span>LUMINA</span>
-              <span style={{ fontSize: '0.65rem', display: 'block', color: 'var(--accent-primary)', letterSpacing: '0.15em', marginTop: '-4px' }}>
-                STUDIO STORE
+              <span className="font-serif-title" style={{ letterSpacing: '0.12em', fontSize: '1.25rem' }}>LUMINA</span>
+              <span style={{ fontSize: '0.62rem', display: 'block', color: 'var(--accent-gold)', letterSpacing: '0.2em', marginTop: '-2px', textTransform: 'uppercase', fontWeight: '700' }}>
+                HAUTE PARFUMERIE PARIS
               </span>
             </div>
           </div>
@@ -54,10 +56,10 @@ export const Navbar = () => {
           {/* Search Bar (Customer Mode) */}
           {role === 'customer' && (
             <div className="nav-search-wrap">
-              <Search size={18} className="nav-search-icon" />
+              <Search size={18} className="nav-search-icon" style={{ color: 'var(--accent-gold)' }} />
               <input
                 type="text"
-                placeholder="Search high-fidelity gear, audio, keyboards, smart home..."
+                placeholder="Search scents, notes (Oud, Vanilla, Rose, Neroli, Cardamom)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="nav-search-input"
@@ -85,7 +87,7 @@ export const Navbar = () => {
                 title="Customer Storefront View"
               >
                 <Store size={15} />
-                <span>Store</span>
+                <span>Boutique</span>
               </button>
 
               <button
@@ -94,51 +96,63 @@ export const Navbar = () => {
                 title="Merchant Admin Operations"
               >
                 <ShieldCheck size={15} />
-                <span>Admin View</span>
+                <span>Maison Admin</span>
               </button>
             </div>
 
+            {/* Track Order Button */}
             {role === 'customer' && (
-              <>
-                {/* Track Order Trigger */}
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setIsOrderTrackerOpen(true)}
-                  style={{ padding: '8px 14px', fontSize: '0.82rem' }}
-                  title="Track Your Order"
-                >
-                  <Truck size={15} />
-                  <span>Track Order</span>
-                </button>
-
-                {/* Cart Trigger */}
-                <button
-                  className="cart-trigger-btn"
-                  onClick={() => setIsCartOpen(true)}
-                  aria-label={`Open Cart with ${cartItemCount} items`}
-                >
-                  <ShoppingBag size={18} />
-                  <span>Cart</span>
-                  {cartItemCount > 0 && (
-                    <span className="cart-count-badge">
-                      {cartItemCount}
-                    </span>
-                  )}
-                  {cartSubtotal > 0 && (
-                    <span style={{ fontSize: '0.8rem', color: '#818cf8', marginLeft: '4px', fontWeight: 700 }}>
-                      ${cartSubtotal.toFixed(0)}
-                    </span>
-                  )}
-                </button>
-              </>
+              <button 
+                className="btn btn-secondary"
+                style={{ padding: '8px 14px', fontSize: '0.85rem' }}
+                onClick={() => setIsOrderTrackerOpen(true)}
+                title="Track your fragrance delivery"
+              >
+                <Truck size={15} color="var(--accent-gold)" />
+                <span className="hide-mobile">Track Scent</span>
+              </button>
             )}
 
-            {/* Quick Demo Reset Utility */}
+            {/* Wishlist Indicator */}
+            {role === 'customer' && (
+              <button
+                className="btn-icon"
+                title={`Saved Fragrances (${favorites.length})`}
+                style={{ position: 'relative' }}
+              >
+                <Heart size={18} color={favorites.length > 0 ? '#fb7185' : 'var(--text-muted)'} fill={favorites.length > 0 ? '#fb7185' : 'none'} />
+                {favorites.length > 0 && (
+                  <span className="nav-badge-count" style={{ backgroundColor: '#fb7185' }}>
+                    {favorites.length}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {/* Cart Button */}
+            {role === 'customer' && (
+              <button
+                className="btn btn-gold"
+                style={{ padding: '8px 16px', fontSize: '0.88rem', position: 'relative' }}
+                onClick={() => setIsCartOpen(true)}
+                title="Open Shopping Bag"
+              >
+                <ShoppingBag size={17} />
+                <span>Bag</span>
+                {cartItemCount > 0 && (
+                  <span className="badge" style={{ background: '#0b0c10', color: '#fce08b', padding: '1px 7px', fontSize: '0.72rem' }}>
+                    {cartItemCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {/* Factory Demo Reset Button (Convenience Helper) */}
             <button
-              onClick={resetToDemoData}
               className="btn-icon"
-              title="Reset Demo Data (Factory Defaults)"
-              style={{ width: '36px', height: '36px' }}
+              onClick={resetToDemoData}
+              title="Reset to default luxury catalog"
+              style={{ opacity: 0.65 }}
             >
               <RotateCcw size={15} />
             </button>

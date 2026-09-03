@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { COMPLIMENTARY_SAMPLES } from '../../data/initialProducts';
 import confetti from 'canvas-confetti';
 import { 
   X, 
@@ -13,7 +14,10 @@ import {
   ShoppingBag,
   Clock,
   Copy,
-  Check
+  Check,
+  Gift,
+  Feather,
+  Flame
 } from 'lucide-react';
 
 export const CheckoutModal = () => {
@@ -32,37 +36,54 @@ export const CheckoutModal = () => {
     showToast
   } = useStore();
 
-  const [step, setStep] = useState(1); // 1: Shipping, 2: Payment, 3: Success
+  const [step, setStep] = useState(1); // 1: Client & Samples, 2: Payment & Gifting, 3: Success
   const [copiedTracking, setCopiedTracking] = useState(false);
   const [createdOrder, setCreatedOrder] = useState(null);
 
   // Form State
   const [shippingInfo, setShippingInfo] = useState({
-    name: 'Jordan Vance',
-    email: 'jordan.vance@example.com',
-    phone: '+1 (555) 432-8910',
-    address: '450 Mission Street, Suite 800',
-    city: 'San Francisco',
-    state: 'CA',
-    zip: '94105',
-    country: 'United States'
+    name: 'Lady Genevieve Laurent',
+    email: 'genevieve.laurent@beaute-paris.fr',
+    phone: '+33 6 89 24 11 05',
+    address: '24 Place Vendôme, Apt 3A',
+    city: 'Paris',
+    state: 'Île-de-France',
+    zip: '75001',
+    country: 'France',
+    giftPackaging: true,
+    giftNote: 'With warm compliments from Paris.',
+    samples: ['Oud Royal Extrait (2ml Vial)', 'Brumes de Vanille (2ml Vial)']
   });
 
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' | 'apple' | 'paypal'
   const [cardInfo, setCardInfo] = useState({
     number: '4242 •••• •••• 4242',
-    name: 'JORDAN VANCE',
+    name: 'GENEVIEVE LAURENT',
     expiry: '08/29',
     cvv: '888'
   });
 
   if (!isCheckoutOpen) return null;
 
+  const toggleSample = (sampleName) => {
+    setShippingInfo((prev) => {
+      const current = prev.samples || [];
+      if (current.includes(sampleName)) {
+        return { ...prev, samples: current.filter((s) => s !== sampleName) };
+      }
+      if (current.length >= 2) {
+        showToast('You can select a maximum of 2 complimentary samples', 'info');
+        return prev;
+      }
+      return { ...prev, samples: [...current, sampleName] };
+    });
+  };
+
   const handleNextStep = (e) => {
     e.preventDefault();
     if (step === 1) {
       if (!shippingInfo.name || !shippingInfo.email || !shippingInfo.address) {
-        showToast('Please fill in all required shipping fields', 'error');
+        showToast('Please fill in all required delivery fields', 'error');
         return;
       }
       setStep(2);
@@ -79,11 +100,12 @@ export const CheckoutModal = () => {
         setCreatedOrder(newOrder);
         setStep(3);
 
-        // Confetti burst
+        // Gold Confetti burst
         try {
           confetti({
-            particleCount: 120,
-            spread: 80,
+            particleCount: 140,
+            spread: 90,
+            colors: ['#d4af37', '#f59e0b', '#fbbf24', '#ffffff', '#e2a8b2'],
             origin: { y: 0.6 }
           });
         } catch (err) {
@@ -98,26 +120,19 @@ export const CheckoutModal = () => {
       navigator.clipboard.writeText(createdOrder.trackingNumber);
       setCopiedTracking(true);
       showToast('Tracking number copied to clipboard', 'success');
-      setTimeout(() => setCopiedTracking(false), 2000);
+      setTimeout(() => setCopiedTracking(false), 2500);
     }
-  };
-
-  const viewInAdminPortal = () => {
-    setIsCheckoutOpen(false);
-    setRole('admin');
-    setAdminTab('orders');
-    showToast('Switched to Admin Portal -> Orders Tab', 'info');
   };
 
   return (
     <div 
       className="modal-overlay"
-      onClick={() => step !== 3 && setIsCheckoutOpen(false)}
+      onClick={() => setIsCheckoutOpen(false)}
     >
       <div 
-        className="modal-content"
-        style={{ maxWidth: step === 3 ? '580px' : '640px' }}
+        className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
+        style={{ border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)' }}
       >
         {/* Close Button */}
         <button
@@ -128,402 +143,497 @@ export const CheckoutModal = () => {
           <X size={18} />
         </button>
 
-        <div className="checkout-modal-body">
-          
-          {/* Step Indicator Header (Steps 1 & 2) */}
-          {step < 3 && (
+        {/* Header & Steps Indicator */}
+        <div style={{ padding: '28px 36px 20px', borderBottom: '1px solid rgba(212, 175, 55, 0.2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
             <div>
-              <div className="checkout-step-indicator">
-                
-                <div className={`step-node ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
-                  <div className="step-circle">
-                    {step > 1 ? <CheckCircle2 size={18} /> : '1'}
-                  </div>
-                  <span className="step-label">Shipping Details</span>
-                </div>
-
-                <div className={`step-node ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
-                  <div className="step-circle">
-                    {step > 2 ? <CheckCircle2 size={18} /> : '2'}
-                  </div>
-                  <span className="step-label">Payment Simulation</span>
-                </div>
-
-                <div className="step-node">
-                  <div className="step-circle">3</div>
-                  <span className="step-label">Confirmation</span>
-                </div>
-
-              </div>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-gold)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                White-Glove Fragrance Fulfillment
+              </span>
+              <h2 className="font-serif-title" style={{ fontSize: '1.6rem', fontWeight: 800 }}>
+                {step === 1 && 'Delivery & Complimentary Samples'}
+                {step === 2 && 'Payment & Presentation Gifting'}
+                {step === 3 && 'Order Confirmed'}
+              </h2>
             </div>
-          )}
 
-          {/* STEP 1: Shipping Address */}
+            {/* Stepper Dots */}
+            {step < 3 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  background: step >= 1 ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.1)',
+                  color: step >= 1 ? '#0b0c10' : '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.8rem',
+                  fontWeight: 800
+                }}>
+                  1
+                </span>
+                <div style={{ width: '20px', height: '2px', background: step >= 2 ? 'var(--accent-gold)' : 'rgba(255, 255, 255, 0.1)' }} />
+                <span style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  background: step >= 2 ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.1)',
+                  color: step >= 2 ? '#0b0c10' : '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '0.8rem',
+                  fontWeight: 800
+                }}>
+                  2
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Modal Body */}
+        <div style={{ padding: '28px 36px', maxHeight: '72vh', overflowY: 'auto' }}>
+          
+          {/* STEP 1: Delivery & Sample Selection */}
           {step === 1 && (
             <form onSubmit={handleNextStep}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '6px' }}>
-                Delivery Information
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
-                Enter where you'd like your order delivered.
-              </p>
-
-              <div className="form-group">
-                <label>Full Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={shippingInfo.name}
-                  onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
-                  placeholder="e.g. Jordan Vance"
-                />
-              </div>
-
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    value={shippingInfo.email}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, email: e.target.value })}
-                    placeholder="name@domain.com"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Phone Number</label>
-                  <input
-                    type="tel"
-                    value={shippingInfo.phone}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
-                    placeholder="+1 (555) 000-0000"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Street Address *</label>
-                <input
-                  type="text"
-                  required
-                  value={shippingInfo.address}
-                  onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                  placeholder="Street name, apt, suite"
-                />
-              </div>
-
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>City *</label>
-                  <input
-                    type="text"
-                    required
-                    value={shippingInfo.city}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                    placeholder="City"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>State / Province</label>
-                  <input
-                    type="text"
-                    value={shippingInfo.state}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
-                    placeholder="State / Province"
-                  />
-                </div>
-              </div>
-
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>Postal / ZIP Code *</label>
-                  <input
-                    type="text"
-                    required
-                    value={shippingInfo.zip}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
-                    placeholder="94105"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Country *</label>
-                  <input
-                    type="text"
-                    required
-                    value={shippingInfo.country}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, country: e.target.value })}
-                    placeholder="Country"
-                  />
-                </div>
-              </div>
-
-              {/* Order Mini Summary */}
-              <div 
-                style={{
-                  padding: '16px',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-md)',
-                  margin: '20px 0',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
+                
+                {/* Left: Shipping Inputs */}
                 <div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Cart Subtotal ({cart.length} items)</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>${cartTotal.toFixed(2)}</div>
+                  <h4 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', color: 'var(--accent-gold-light)' }}>
+                    Client &amp; Destination Address
+                  </h4>
+
+                  <div className="form-group">
+                    <label className="form-label">Full Client Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={shippingInfo.name}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div className="form-group">
+                      <label className="form-label">Email Address *</label>
+                      <input
+                        type="email"
+                        required
+                        value={shippingInfo.email}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, email: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Phone *</label>
+                      <input
+                        type="tel"
+                        required
+                        value={shippingInfo.phone}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Street Address *</label>
+                    <input
+                      type="text"
+                      required
+                      value={shippingInfo.address}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+                    <div className="form-group">
+                      <label className="form-label">City *</label>
+                      <input
+                        type="text"
+                        required
+                        value={shippingInfo.city}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">State / Region</label>
+                      <input
+                        type="text"
+                        value={shippingInfo.state}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Postal Code *</label>
+                      <input
+                        type="text"
+                        required
+                        value={shippingInfo.zip}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
+                        className="form-input"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
-                  <span>Continue to Payment</span>
+
+                {/* Right: Complimentary Samples Picker */}
+                <div>
+                  <div style={{ padding: '18px', background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.25)', borderRadius: 'var(--radius-lg)', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Gift size={18} color="var(--accent-gold)" />
+                        <h4 className="font-serif-title" style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
+                          Choose 2 Complimentary Samples
+                        </h4>
+                      </div>
+                      <span className="badge badge-gold" style={{ fontSize: '0.7rem' }}>
+                        {shippingInfo.samples?.length || 0}/2 Selected
+                      </span>
+                    </div>
+                    
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
+                      Deluxe 2ml spray vials included with our compliments in a velvet sachet.
+                    </p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {COMPLIMENTARY_SAMPLES.map((smp) => {
+                        const isSelected = shippingInfo.samples?.includes(smp.name);
+                        return (
+                          <div
+                            key={smp.id}
+                            onClick={() => toggleSample(smp.name)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '8px 12px',
+                              borderRadius: 'var(--radius-md)',
+                              background: isSelected ? 'rgba(212, 175, 55, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+                              border: isSelected ? '1px solid var(--accent-gold)' : '1px solid var(--border-subtle)',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            <div>
+                              <div style={{ fontSize: '0.84rem', fontWeight: 600, color: isSelected ? '#fce08b' : 'var(--text-main)' }}>
+                                {smp.name}
+                              </div>
+                              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{smp.family}</div>
+                            </div>
+                            <div style={{
+                              width: '18px',
+                              height: '18px',
+                              borderRadius: '50%',
+                              border: isSelected ? 'none' : '1px solid var(--border-subtle)',
+                              background: isSelected ? 'var(--accent-gold-gradient)' : 'transparent',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#0b0c10'
+                            }}>
+                              {isSelected && <Check size={12} strokeWidth={3} />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Summary Small Box */}
+                  <div style={{ padding: '14px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '0.85rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Items ({cart.length})</span>
+                      <span>${cartSubtotal.toFixed(2)}</span>
+                    </div>
+                    {cartDiscountAmount > 0 && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6ee7b7', marginBottom: '6px' }}>
+                        <span>Privilege Discount ({appliedPromo?.discountPercent}%)</span>
+                        <span>-${cartDiscountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: '1.05rem', color: '#fce08b', paddingTop: '6px', borderTop: '1px solid var(--border-subtle)' }}>
+                      <span>Total</span>
+                      <span>${cartTotal.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '28px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setIsCheckoutOpen(false)}
+                >
+                  Return to Boutique
+                </button>
+                <button type="submit" className="btn btn-gold">
+                  <span>Continue to Payment &amp; Gifting</span>
                   <ArrowRight size={16} />
                 </button>
               </div>
             </form>
           )}
 
-          {/* STEP 2: Payment Simulator */}
+          {/* STEP 2: Payment & Gifting Option */}
           {step === 2 && (
             <form onSubmit={handleNextStep}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '6px' }}>
-                Payment Method
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
-                Simulated Sandbox Payment &bull; Instant Confirmation
-              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px' }}>
+                
+                {/* Left: Payment Options */}
+                <div>
+                  <h4 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', color: 'var(--accent-gold-light)' }}>
+                    Payment Method
+                  </h4>
 
-              {/* Payment Type Selector */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('card')}
-                  style={{
-                    padding: '12px 10px',
-                    borderRadius: 'var(--radius-md)',
-                    background: paymentMethod === 'card' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                    border: `1px solid ${paymentMethod === 'card' ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.82rem',
-                    fontWeight: 600
-                  }}
-                >
-                  <CreditCard size={20} color={paymentMethod === 'card' ? '#818cf8' : 'var(--text-muted)'} />
-                  <span>Credit Card</span>
-                </button>
+                  {/* Payment Selectors */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('card')}
+                      className={`size-option-btn ${paymentMethod === 'card' ? 'active' : ''}`}
+                    >
+                      <CreditCard size={18} color="var(--accent-gold)" style={{ margin: '0 auto 4px' }} />
+                      <span className="size-option-name">Credit Card</span>
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('apple')}
-                  style={{
-                    padding: '12px 10px',
-                    borderRadius: 'var(--radius-md)',
-                    background: paymentMethod === 'apple' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                    border: `1px solid ${paymentMethod === 'apple' ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.82rem',
-                    fontWeight: 600
-                  }}
-                >
-                  <Sparkles size={20} color={paymentMethod === 'apple' ? '#818cf8' : 'var(--text-muted)'} />
-                  <span>Apple Pay</span>
-                </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('apple')}
+                      className={`size-option-btn ${paymentMethod === 'apple' ? 'active' : ''}`}
+                    >
+                      <span style={{ fontSize: '1.2rem', display: 'block' }}></span>
+                      <span className="size-option-name">Apple Pay</span>
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('paypal')}
-                  style={{
-                    padding: '12px 10px',
-                    borderRadius: 'var(--radius-md)',
-                    background: paymentMethod === 'paypal' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                    border: `1px solid ${paymentMethod === 'paypal' ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.82rem',
-                    fontWeight: 600
-                  }}
-                >
-                  <ShieldCheck size={20} color={paymentMethod === 'paypal' ? '#818cf8' : 'var(--text-muted)'} />
-                  <span>PayPal</span>
-                </button>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMethod('paypal')}
+                      className={`size-option-btn ${paymentMethod === 'paypal' ? 'active' : ''}`}
+                    >
+                      <span style={{ fontSize: '1rem', fontWeight: 800, color: '#38bdf8', display: 'block' }}>PP</span>
+                      <span className="size-option-name">PayPal</span>
+                    </button>
+                  </div>
+
+                  {/* Card Form */}
+                  {paymentMethod === 'card' && (
+                    <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+                      <div className="form-group">
+                        <label className="form-label">Card Number</label>
+                        <input
+                          type="text"
+                          value={cardInfo.number}
+                          onChange={(e) => setCardInfo({ ...cardInfo, number: e.target.value })}
+                          className="form-input"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Name on Card</label>
+                        <input
+                          type="text"
+                          value={cardInfo.name}
+                          onChange={(e) => setCardInfo({ ...cardInfo, name: e.target.value })}
+                          className="form-input"
+                        />
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <div className="form-group">
+                          <label className="form-label">Expiry (MM/YY)</label>
+                          <input
+                            type="text"
+                            value={cardInfo.expiry}
+                            onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label">CVV</label>
+                          <input
+                            type="password"
+                            value={cardInfo.cvv}
+                            onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })}
+                            className="form-input"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentMethod !== 'card' && (
+                    <div style={{ padding: '24px', background: 'rgba(212, 175, 55, 0.08)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(212, 175, 55, 0.3)', textAlign: 'center' }}>
+                      <p style={{ fontSize: '0.92rem', color: '#f3e5ab' }}>
+                        Instant biometrics authorization will be requested upon clicking &quot;Place Fragrance Order&quot;.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right: Presentation Gift Box & Note */}
+                <div>
+                  <div style={{ padding: '18px', background: 'rgba(212, 175, 55, 0.05)', border: '1px solid rgba(212, 175, 55, 0.25)', borderRadius: 'var(--radius-lg)', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                      <Gift size={18} color="var(--accent-gold)" />
+                      <h4 className="font-serif-title" style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
+                        Complimentary Gift Presentation
+                      </h4>
+                    </div>
+
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-main)', cursor: 'pointer', marginBottom: '14px' }}>
+                      <input
+                        type="checkbox"
+                        checked={shippingInfo.giftPackaging}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, giftPackaging: e.target.checked })}
+                        style={{ accentColor: 'var(--accent-gold)', width: '16px', height: '16px' }}
+                      />
+                      <span>Hand-wrapped in Gold Embossed Box with Black Silk Ribbon</span>
+                    </label>
+
+                    {shippingInfo.giftPackaging && (
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '0.78rem' }}>Handwritten Calligraphy Card Message</label>
+                        <textarea
+                          rows={3}
+                          value={shippingInfo.giftNote}
+                          onChange={(e) => setShippingInfo({ ...shippingInfo, giftNote: e.target.value })}
+                          placeholder="Write a message to be hand-penned on heavy cotton stationery..."
+                          className="form-textarea"
+                          style={{ fontSize: '0.82rem' }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Final Total Box */}
+                  <div style={{ padding: '16px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                      <span>Subtotal</span>
+                      <span>${cartSubtotal.toFixed(2)}</span>
+                    </div>
+                    {cartDiscountAmount > 0 && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#6ee7b7', marginBottom: '6px' }}>
+                        <span>Privilege Discount ({appliedPromo?.discountPercent}%)</span>
+                        <span>-${cartDiscountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                      <span>Delivery</span>
+                      <span>FREE</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1.25rem', color: '#fce08b', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                      <span>Grand Total</span>
+                      <span>${cartTotal.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
-              {/* Card Simulator Mock Graphic */}
-              {paymentMethod === 'card' && (
-                <div 
-                  style={{
-                    background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '20px 24px',
-                    marginBottom: '20px',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-                    color: '#ffffff'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                    <span style={{ fontSize: '0.8rem', letterSpacing: '0.1em', opacity: 0.8 }}>LUMINA CHIP EMV</span>
-                    <span style={{ fontSize: '1.2rem', fontWeight: 800, fontStyle: 'italic' }}>VISA</span>
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', letterSpacing: '0.15em', marginBottom: '18px' }}>
-                    {cardInfo.number}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
-                    <div>
-                      <div style={{ opacity: 0.7 }}>CARDHOLDER</div>
-                      <div style={{ fontWeight: 700 }}>{cardInfo.name}</div>
-                    </div>
-                    <div>
-                      <div style={{ opacity: 0.7 }}>EXPIRES</div>
-                      <div style={{ fontWeight: 700 }}>{cardInfo.expiry}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Price Breakdown */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                  <span>Items Total</span>
-                  <span style={{ color: '#ffffff' }}>${cartSubtotal.toFixed(2)}</span>
-                </div>
-                {cartDiscountAmount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#34d399', marginBottom: '6px' }}>
-                    <span>Promo Discount ({appliedPromo?.code})</span>
-                    <span>-${cartDiscountAmount.toFixed(2)}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                  <span>Shipping</span>
-                  <span style={{ color: cartShipping === 0 ? '#34d399' : '#ffffff' }}>
-                    {cartShipping === 0 ? 'FREE' : `$${cartShipping.toFixed(2)}`}
-                  </span>
-                </div>
-                <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '6px 0' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.15rem', fontWeight: 800, color: '#ffffff' }}>
-                  <span>Total Amount</span>
-                  <span style={{ color: 'var(--accent-primary)' }}>${cartTotal.toFixed(2)}</span>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div style={{ display: 'flex', gap: '12px' }}>
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '28px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   onClick={() => setStep(1)}
                 >
                   <ArrowLeft size={16} />
-                  <span>Back</span>
+                  <span>Back to Address</span>
                 </button>
-                <button
-                  type="submit"
-                  className="btn btn-emerald"
-                  style={{ flex: 1, padding: '12px', fontSize: '1rem' }}
-                >
-                  <ShieldCheck size={18} />
-                  <span>Authorize & Pay ${cartTotal.toFixed(2)}</span>
+                <button type="submit" className="btn btn-gold" style={{ padding: '13px 32px' }}>
+                  <Sparkles size={16} />
+                  <span>Place Fragrance Order (${cartTotal.toFixed(2)})</span>
                 </button>
               </div>
             </form>
           )}
 
-          {/* STEP 3: Order Confirmation & Invoice */}
+          {/* STEP 3: Order Success Confirmation */}
           {step === 3 && createdOrder && (
-            <div className="order-success-view">
-              
-              <div className="order-success-icon-box">
-                <CheckCircle2 size={44} color="#10b981" />
+            <div style={{ textAlign: 'center', padding: '20px 10px' }}>
+              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(212, 175, 55, 0.15)', border: '2px solid var(--accent-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'var(--accent-gold)' }}>
+                <CheckCircle2 size={38} />
               </div>
 
-              <h2 style={{ fontSize: '1.85rem', fontWeight: 800, marginBottom: '8px' }}>
-                Order Placed Successfully!
-              </h2>
+              <h3 className="font-serif-title" style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>
+                Thank You, {createdOrder.customer.name}
+              </h3>
 
-              <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', maxWidth: '440px', margin: '0 auto 24px' }}>
-                Thank you, <strong>{createdOrder.customer.name}</strong>. A confirmation email has been sent to <strong>{createdOrder.customer.email}</strong>.
+              <p style={{ fontSize: '0.98rem', color: 'var(--text-muted)', maxWidth: '520px', margin: '0 auto 24px' }}>
+                Your haute parfumerie order <strong style={{ color: '#fce08b' }}>#{createdOrder.id}</strong> has been registered with our atelier and is being prepared with white-glove care.
               </p>
 
-              {/* Order ID & Tracking Card */}
-              <div 
-                style={{
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid var(--border-card)',
-                  borderRadius: 'var(--radius-lg)',
-                  padding: '20px',
-                  marginBottom: '28px',
-                  textAlign: 'left'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '12px' }}>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>ORDER REFERENCE</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>
-                      {createdOrder.id}
-                    </div>
-                  </div>
-                  <span className="badge badge-warning">
-                    <Clock size={12} />
-                    Pending Dispatch
-                  </span>
+              {/* Tracking Box */}
+              <div style={{ maxWidth: '440px', margin: '0 auto 28px', padding: '16px', background: 'rgba(212, 175, 55, 0.08)', borderRadius: 'var(--radius-md)', border: '1px dashed rgba(212, 175, 55, 0.4)' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                  Live Tracking Number
                 </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>TRACKING NUMBER</div>
-                    <div style={{ fontSize: '0.9rem', color: '#ffffff', fontFamily: 'var(--font-mono)' }}>
-                      {createdOrder.trackingNumber}
-                    </div>
-                  </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
+                    {createdOrder.trackingNumber}
+                  </span>
                   <button
                     onClick={copyTracking}
-                    className="btn btn-secondary"
-                    style={{ padding: '6px 12px', fontSize: '0.75rem' }}
+                    className="btn-icon"
+                    style={{ width: '32px', height: '32px' }}
+                    title="Copy tracking number"
                   >
                     {copiedTracking ? <Check size={14} color="#34d399" /> : <Copy size={14} />}
-                    <span>{copiedTracking ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                  Delivery to: <strong>{createdOrder.customer.address}, {createdOrder.customer.city}</strong>
-                </div>
               </div>
+
+              {/* Samples Included Confirmation */}
+              {createdOrder.customer.samples && createdOrder.customer.samples.length > 0 && (
+                <div style={{ maxWidth: '440px', margin: '0 auto 28px', fontSize: '0.85rem', color: '#f3e5ab' }}>
+                  <Gift size={15} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} />
+                  <strong>Included Samples:</strong> {createdOrder.customer.samples.join(', ')}
+                </div>
+              )}
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <button
-                  className="btn btn-primary"
-                  onClick={viewInAdminPortal}
-                  style={{ width: '100%', padding: '12px' }}
-                >
-                  <ShieldCheck size={18} />
-                  <span>Inspect Order in Admin View (Test Real-Time Sync)</span>
-                </button>
-
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
                 <button
                   className="btn btn-secondary"
-                  onClick={() => setIsCheckoutOpen(false)}
-                  style={{ width: '100%', padding: '10px' }}
+                  onClick={() => {
+                    setIsCheckoutOpen(false);
+                    setStep(1);
+                  }}
                 >
-                  Continue Shopping
+                  Return to Boutique
+                </button>
+
+                <button
+                  className="btn btn-gold"
+                  onClick={() => {
+                    setIsCheckoutOpen(false);
+                    setRole('admin');
+                    setAdminTab('orders');
+                    setStep(1);
+                  }}
+                >
+                  <span>View in Maison Admin Portal</span>
+                  <ArrowRight size={16} />
                 </button>
               </div>
-
             </div>
           )}
 
         </div>
+
       </div>
     </div>
   );

@@ -3,10 +3,12 @@ import {
   Sparkles, 
   ShieldCheck, 
   Truck, 
-  RefreshCw, 
-  Headphones, 
+  Gift, 
+  Award, 
   ArrowRight,
-  Heart
+  Heart,
+  Flame,
+  Feather
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
@@ -20,7 +22,7 @@ export const Footer = () => {
         {/* Value Prop Badges */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
           gap: '20px',
           paddingBottom: '48px',
           marginBottom: '48px',
@@ -31,17 +33,55 @@ export const Footer = () => {
               width: '44px',
               height: '44px',
               borderRadius: '12px',
-              background: 'rgba(99, 102, 241, 0.12)',
+              background: 'rgba(212, 175, 55, 0.12)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#818cf8'
+              color: 'var(--accent-gold)'
             }}>
               <Truck size={22} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700 }}>Free Express Shipping</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>On all orders over $150</p>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>White-Glove Shipping</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Climate-controlled & free over $150</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              background: 'rgba(245, 158, 11, 0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--accent-amber)'
+            }}>
+              <Gift size={22} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fcd34d' }}>2 Free Deluxe Samples</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Curated with every flacon purchase</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              background: 'rgba(226, 168, 178, 0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--accent-rose-gold)'
+            }}>
+              <Feather size={22} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#fda4af' }}>Bespoke Bottle Engraving</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Complimentary personalized flacons</p>
             </div>
           </div>
 
@@ -56,164 +96,134 @@ export const Footer = () => {
               justifyContent: 'center',
               color: '#34d399'
             }}>
-              <ShieldCheck size={22} />
+              <Award size={22} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700 }}>2-Year Comprehensive</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Full hardware replacement</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(245, 158, 11, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fbbf24'
-            }}>
-              <RefreshCw size={22} />
-            </div>
-            <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700 }}>30-Day Risk-Free Trial</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Hassle-free instant returns</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              background: 'rgba(6, 182, 212, 0.12)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#22d3ee'
-            }}>
-              <Headphones size={22} />
-            </div>
-            <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700 }}>24/7 Expert Support</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Direct audio & hardware engineers</p>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#6ee7b7' }}>Artisanal French Alchemy</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Crafted & macerated in Grasse</p>
             </div>
           </div>
         </div>
 
-        {/* Footer Grid */}
-        <div className="footer-grid">
-          
-          <div className="footer-brand">
-            <div className="brand-logo" style={{ marginBottom: '12px' }}>
-              <div className="brand-icon-box" style={{ width: '34px', height: '34px' }}>
-                <Sparkles size={18} color="#ffffff" />
+        {/* Main Footer Links */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1.5fr repeat(3, 1fr)',
+          gap: '40px',
+          paddingBottom: '48px',
+          borderBottom: '1px solid var(--border-subtle)',
+          flexWrap: 'wrap'
+        }}>
+          {/* Col 1: Brand Info */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                background: 'var(--accent-gold-gradient)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Flame size={18} color="#0b0c10" />
               </div>
-              <span>LUMINA</span>
+              <span className="font-serif-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '0.1em' }}>
+                LUMINA
+              </span>
             </div>
-            <p>
-              Next-generation lifestyle hardware, ergonomic workstation essentials, and spatial acoustic equipment engineered for creators and pioneers.
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '20px', maxWidth: '320px' }}>
+              Maison de Haute Parfumerie dedicated to bottling rare botanical essences, aged agarwood extraits, and nocturnal scent alchemies.
             </p>
-            <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-              <span className="badge badge-primary">ISO 9001 Certified</span>
-              <span className="badge badge-success">Carbon Neutral</span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <span className="badge badge-gold">Paris • Grasse • Geneva</span>
             </div>
           </div>
 
+          {/* Col 2: Olfactory Collections */}
           <div>
-            <h4 className="footer-title">Collections</h4>
-            <ul className="footer-links">
+            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
+              Olfactory Families
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
               <li>
-                <button 
-                  onClick={() => { setRole('customer'); setSelectedCategory('Audio'); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                  style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}
-                >
-                  Studio Audio
-                </button>
+                <a href="#catalog" onClick={() => setSelectedCategory('Woody & Smoky')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
+                  Woody & Smoky Ouds
+                </a>
               </li>
               <li>
-                <button 
-                  onClick={() => { setRole('customer'); setSelectedCategory('Wearables'); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                  style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}
-                >
-                  Smart Wearables
-                </button>
+                <a href="#catalog" onClick={() => setSelectedCategory('Amber & Oriental')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
+                  Amber & Vanilla Oriental
+                </a>
               </li>
               <li>
-                <button 
-                  onClick={() => { setRole('customer'); setSelectedCategory('Workstation'); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                  style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}
-                >
-                  Workstation Setup
-                </button>
+                <a href="#catalog" onClick={() => setSelectedCategory('Floral & Romantic')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
+                  May Rose & Jasmine Floral
+                </a>
               </li>
               <li>
-                <button 
-                  onClick={() => { setRole('customer'); setSelectedCategory('Smart Home'); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                  style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}
-                >
-                  Ambient Smart Home
-                </button>
+                <a href="#catalog" onClick={() => setSelectedCategory('Fresh & Citrus')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
+                  Mediterranean Neroli
+                </a>
+              </li>
+              <li>
+                <a href="#catalog" onClick={() => setSelectedCategory('Discovery & Sets')} style={{ color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.2s' }}>
+                  Discovery Coffrets
+                </a>
               </li>
             </ul>
           </div>
 
+          {/* Col 3: Maison Services */}
           <div>
-            <h4 className="footer-title">Platform View</h4>
-            <ul className="footer-links">
-              <li>
-                <button 
-                  onClick={() => setRole('customer')}
-                  style={{ color: 'var(--text-muted)', fontSize: '0.88rem' }}
-                >
-                  Customer Storefront
-                </button>
-              </li>
+            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
+              Bespoke Services
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
+              <li><span style={{ color: 'var(--text-muted)' }}>Custom Flacon Engraving</span></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Complimentary Gift Box & Ribbon</span></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Private Olfactory Consultations</span></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Scent Layering Masterclasses</span></li>
+            </ul>
+          </div>
+
+          {/* Col 4: Boutique Portal */}
+          <div>
+            <h4 style={{ fontSize: '0.92rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent-gold-light)', marginBottom: '16px' }}>
+              Maison Portal
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem' }}>
               <li>
                 <button 
                   onClick={() => setRole('admin')}
-                  style={{ color: 'var(--accent-primary)', fontWeight: 600, fontSize: '0.88rem' }}
+                  style={{ background: 'none', border: 'none', color: '#fce08b', cursor: 'pointer', textAlign: 'left', font: 'inherit', fontWeight: '600' }}
                 >
-                  Merchant Admin Console →
+                  Admin Operations Portal →
                 </button>
               </li>
-              <li><a href="#privacy">Privacy & Security</a></li>
-              <li><a href="#terms">Terms of Service</a></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Live PostgreSQL Database</span></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Realtime Inventory Tracking</span></li>
+              <li><span style={{ color: 'var(--text-muted)' }}>Render CDN Cloud Deployed</span></li>
             </ul>
           </div>
-
-          <div>
-            <h4 className="footer-title">Newsletter & Perks</h4>
-            <p style={{ fontSize: '0.85rem', marginBottom: '14px' }}>
-              Subscribe to receive private sale drops and 10% off your first checkout.
-            </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                style={{ flex: 1, fontSize: '0.85rem' }}
-                aria-label="Newsletter email address"
-              />
-              <button className="btn btn-primary" style={{ padding: '0 16px' }} aria-label="Subscribe">
-                <ArrowRight size={16} />
-              </button>
-            </div>
-            <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-dim)' }}>
-              Use promo code <span style={{ color: '#818cf8', fontWeight: 700 }}>LUMINA25</span> for 25% off today!
-            </div>
-          </div>
-
         </div>
 
-        {/* Footer Bottom */}
-        <div className="footer-bottom">
-          <div>
-            © {new Date().getFullYear()} LUMINA Technologies & Lifestyle Inc. All rights reserved.
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            Built with <Heart size={14} color="#f43f5e" fill="#f43f5e" /> for exceptional user and admin experiences.
+        {/* Bottom Bar */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingTop: '28px',
+          fontSize: '0.82rem',
+          color: 'var(--text-dim)',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}>
+          <p>© {new Date().getFullYear()} LUMINA Haute Parfumerie Paris. All Rights Reserved. Crafted with pure olfactory mastery.</p>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <span>Privacy Policy</span>
+            <span>Terms of Maison</span>
+            <span>Authenticity Certificate</span>
           </div>
         </div>
 

@@ -6,10 +6,13 @@ import {
   ShoppingBag, 
   Heart, 
   Check, 
-  Shield, 
+  Gift, 
   Truck, 
-  RotateCcw,
-  AlertTriangle
+  Sparkles,
+  Flame,
+  Feather,
+  Clock,
+  Wind
 } from 'lucide-react';
 
 export const ProductDetailModal = () => {
@@ -23,17 +26,39 @@ export const ProductDetailModal = () => {
 
   const product = selectedProductModal;
   const [activeImgIndex, setActiveImgIndex] = useState(0);
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(() => product?.colors?.[0]?.name || 'Standard');
+  const [engravingText, setEngravingText] = useState('');
   const [quantity, setQuantity] = useState(1);
 
   if (!product) return null;
 
   const isFav = isFavorite(product.id);
   const isOutOfStock = product.stock <= 0;
-  const isLowStock = product.stock > 0 && product.stock < 5;
+  
+  // Calculate price based on selected size
+  const sizesList = product.sizes && product.sizes.length > 0
+    ? product.sizes
+    : [
+        { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+        { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+        { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+      ];
+
+  const currentSizeObj = sizesList[selectedSizeIndex] || sizesList[0];
+  const calculatedPrice = product.price * (currentSizeObj.priceMultiplier || 1.0);
+  const calculatedOriginalPrice = (product.originalPrice || product.price) * (currentSizeObj.priceMultiplier || 1.0);
 
   const handleAddToCart = () => {
-    const success = addToCart(product, selectedColor, quantity);
+    const customizedProduct = {
+      ...product,
+      price: calculatedPrice,
+      originalPrice: calculatedOriginalPrice,
+      selectedSize: currentSizeObj.label,
+      engravingText: engravingText.trim()
+    };
+
+    const success = addToCart(customizedProduct, selectedColor, quantity);
     if (success) {
       setSelectedProductModal(null);
     }
@@ -45,209 +70,224 @@ export const ProductDetailModal = () => {
       onClick={() => setSelectedProductModal(null)}
     >
       <div 
-        className="modal-content modal-content-lg"
+        className="product-detail-card"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
-          className="modal-close-btn"
+          className="product-detail-close-btn"
           onClick={() => setSelectedProductModal(null)}
           aria-label="Close modal"
         >
           <X size={18} />
         </button>
 
-        <div className="product-modal-grid">
-          
-          {/* Left Column: Image Gallery */}
+        {/* Left Column: Media & Visuals */}
+        <div className="product-detail-media">
           <div>
-            <div className="modal-gallery-main">
-              <img
-                src={product.images[activeImgIndex] || product.images[0]}
-                alt={product.name}
-              />
-            </div>
+            <img
+              src={product.images[activeImgIndex] || product.images[0]}
+              alt={product.name}
+              className="product-detail-main-img"
+            />
 
             {product.images.length > 1 && (
-              <div className="modal-gallery-thumbs">
+              <div className="product-detail-thumbs">
                 {product.images.map((img, idx) => (
-                  <div
+                  <img
                     key={idx}
-                    className={`modal-gallery-thumb ${activeImgIndex === idx ? 'active' : ''}`}
+                    src={img}
+                    alt={`Thumbnail ${idx + 1}`}
+                    className={`product-detail-thumb ${activeImgIndex === idx ? 'active' : ''}`}
                     onClick={() => setActiveImgIndex(idx)}
-                  >
-                    <img src={img} alt={`Thumbnail ${idx + 1}`} />
-                  </div>
+                  />
                 ))}
               </div>
             )}
-
-            {/* Value Guarantees Box */}
-            <div 
-              style={{
-                marginTop: '24px',
-                padding: '16px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-subtle)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                <Truck size={16} color="#818cf8" />
-                <span>Free Insured Delivery on orders over $150</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                <Shield size={16} color="#34d399" />
-                <span>2-Year Full Hardware Coverage Warranty</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                <RotateCcw size={16} color="#fbbf24" />
-                <span>30-Day Money-Back Guarantee</span>
-              </div>
-            </div>
           </div>
 
-          {/* Right Column: Product Info & Purchase Form */}
-          <div className="modal-detail-info">
-            
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span className="product-category-tag">{product.category}</span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-                SKU: {product.sku}
-              </span>
+          {/* Maison Value Badges */}
+          <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(212, 175, 55, 0.05)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#f3e5ab', marginBottom: '8px' }}>
+              <Gift size={16} color="var(--accent-gold)" />
+              <span>Includes 2 complimentary 2ml deluxe samples</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem', color: '#f3e5ab' }}>
+              <Truck size={16} color="var(--accent-gold)" />
+              <span>Complimentary insured climate-safe delivery</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Perfume Pyramid & Customization */}
+        <div className="product-detail-content">
+          
+          {/* Header */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <span className="perfume-card-family">{product.category}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#fcd34d' }}>
+                <Star size={14} fill="currentColor" color="#fcd34d" />
+                <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{product.rating}</span>
+                <span style={{ color: 'var(--text-dim)', fontSize: '0.78rem' }}>({product.reviewsCount} verified reviews)</span>
+              </div>
             </div>
 
-            <h2 style={{ fontSize: '1.75rem', marginBottom: '10px', lineHeight: 1.25 }}>
+            <h2 className="font-serif-title" style={{ fontSize: '1.85rem', fontWeight: 800, marginBottom: '6px' }}>
               {product.name}
             </h2>
 
-            {/* Ratings & Stock Status */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-              <div className="product-rating-box">
-                <Star size={15} fill="currentColor" color="#fbbf24" />
-                <span style={{ fontSize: '0.95rem' }}>{product.rating}</span>
-                <span style={{ color: 'var(--text-dim)', fontSize: '0.82rem' }}>
-                  ({product.reviewsCount} customer reviews)
-                </span>
-              </div>
-
-              <span style={{ color: 'var(--border-card)' }}>|</span>
-
-              {isOutOfStock ? (
-                <span className="badge badge-danger">Out of Stock</span>
-              ) : isLowStock ? (
-                <span className="badge badge-warning" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <AlertTriangle size={12} />
-                  Only {product.stock} left in stock
-                </span>
-              ) : (
-                <span className="badge badge-success">In Stock ({product.stock} available)</span>
-              )}
+            <div style={{ fontSize: '0.88rem', color: 'var(--accent-gold-light)', fontStyle: 'italic', marginBottom: '12px' }}>
+              {product.concentration || 'Extrait de Parfum (32% Concentration)'}
             </div>
 
-            {/* Price */}
-            <div className="product-price-row" style={{ marginBottom: '20px' }}>
-              <span className="current-price" style={{ fontSize: '1.85rem' }}>
-                ${product.price.toFixed(2)}
-              </span>
-              {product.originalPrice > product.price && (
-                <span className="original-price" style={{ fontSize: '1.15rem' }}>
-                  ${product.originalPrice.toFixed(2)}
-                </span>
-              )}
-              {product.discountPercent > 0 && (
-                <span className="badge badge-danger">
-                  Save {product.discountPercent}%
-                </span>
-              )}
-            </div>
-
-            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginBottom: '24px', lineHeight: 1.6 }}>
+            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
               {product.description}
             </p>
+          </div>
 
-            {/* Color Variant Selector */}
-            {product.colors && product.colors.length > 0 && (
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '8px' }}>
-                  Select Finish: <span style={{ color: '#818cf8' }}>{selectedColor}</span>
+          {/* Fragrance Pyramid Breakdown */}
+          {product.pyramid && (
+            <div className="fragrance-pyramid-container">
+              <div className="pyramid-header">
+                <span className="pyramid-title">Olfactory Pyramid</span>
+                <Sparkles size={15} color="var(--accent-gold)" />
+              </div>
+
+              {/* Top Notes */}
+              <div className="pyramid-tier">
+                <div className="pyramid-tier-label">
+                  <span>Top Notes</span>
+                  <span className="pyramid-tier-time">0 - 15 min &bull; First Impression</span>
                 </div>
-                <div className="variant-color-select">
-                  {product.colors.map((c) => (
-                    <button
-                      key={c.name}
-                      className={`color-circle-btn ${selectedColor === c.name ? 'active' : ''}`}
-                      style={{ backgroundColor: c.hex }}
-                      onClick={() => setSelectedColor(c.name)}
-                      title={c.name}
-                    />
+                <div className="pyramid-notes-list">
+                  {product.pyramid.topNotes?.map((note, i) => (
+                    <span key={i} className="pyramid-note-pill">{note}</span>
                   ))}
                 </div>
               </div>
-            )}
 
-            {/* Quantity Stepper & Add to Cart */}
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '28px' }}>
-              <div className="quantity-stepper">
-                <button
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  disabled={quantity <= 1 || isOutOfStock}
-                >
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button
-                  onClick={() => setQuantity((q) => Math.min(product.stock, q + 1))}
-                  disabled={quantity >= product.stock || isOutOfStock}
-                >
-                  +
-                </button>
+              {/* Heart Notes */}
+              <div className="pyramid-tier">
+                <div className="pyramid-tier-label">
+                  <span>Heart &amp; Soul Notes</span>
+                  <span className="pyramid-tier-time">2 - 4 hrs &bull; Signature Core</span>
+                </div>
+                <div className="pyramid-notes-list">
+                  {product.pyramid.heartNotes?.map((note, i) => (
+                    <span key={i} className="pyramid-note-pill">{note}</span>
+                  ))}
+                </div>
               </div>
 
+              {/* Base Notes */}
+              <div className="pyramid-tier">
+                <div className="pyramid-tier-label">
+                  <span>Base &amp; Sillage Notes</span>
+                  <span className="pyramid-tier-time">6 - 16+ hrs &bull; Enduring Memory</span>
+                </div>
+                <div className="pyramid-notes-list">
+                  {product.pyramid.baseNotes?.map((note, i) => (
+                    <span key={i} className="pyramid-note-pill">{note}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Performance Gauges */}
+          <div className="scent-metrics-row">
+            <div className="scent-metric-card">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <Clock size={14} color="var(--accent-gold)" />
+                <span className="scent-metric-label">Longevity</span>
+              </div>
+              <div className="scent-metric-value">{product.longevity || '14+ Hours (Eternal)'}</div>
+            </div>
+
+            <div className="scent-metric-card">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                <Wind size={14} color="var(--accent-gold)" />
+                <span className="scent-metric-label">Sillage &amp; Projection</span>
+              </div>
+              <div className="scent-metric-value">{product.sillage || 'Enveloping & Magnetic'}</div>
+            </div>
+          </div>
+
+          {/* Bottle Size Selector */}
+          <div>
+            <div className="size-selector-label">Select Flacon Size</div>
+            <div className="size-selector-options">
+              {sizesList.map((sz, idx) => {
+                const isSelected = selectedSizeIndex === idx;
+                const szPrice = product.price * (sz.priceMultiplier || 1.0);
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`size-option-btn ${isSelected ? 'active' : ''}`}
+                    onClick={() => setSelectedSizeIndex(idx)}
+                  >
+                    <span className="size-option-name">{sz.label}</span>
+                    <span className="size-option-price">${szPrice.toFixed(2)}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Complimentary Flacon Engraving */}
+          <div className="engraving-box">
+            <div className="engraving-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Feather size={14} color="var(--accent-gold)" />
+                <span>Complimentary Flacon Engraving</span>
+              </div>
+              <span style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 700 }}>FREE</span>
+            </div>
+            <input
+              type="text"
+              placeholder="e.g. E.R. • Paris 2026 or With Love"
+              maxLength={26}
+              value={engravingText}
+              onChange={(e) => setEngravingText(e.target.value)}
+              className="form-input"
+              style={{ padding: '8px 12px', fontSize: '0.85rem' }}
+            />
+          </div>
+
+          {/* Price & Add to Shopping Bag */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Total Price</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <span className="perfume-price" style={{ fontSize: '1.75rem' }}>${calculatedPrice.toFixed(2)}</span>
+                {calculatedOriginalPrice > calculatedPrice && (
+                  <span className="perfume-price-original" style={{ fontSize: '1rem' }}>${calculatedOriginalPrice.toFixed(2)}</span>
+                )}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
               <button
-                className="btn btn-primary"
-                style={{ flex: 1, padding: '12px 24px', fontSize: '1rem' }}
+                className={`btn-icon ${isFav ? 'active' : ''}`}
+                onClick={() => toggleFavorite(product.id)}
+                title={isFav ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                style={{ width: '48px', height: '48px' }}
+              >
+                <Heart size={20} fill={isFav ? '#fb7185' : 'none'} color={isFav ? '#fb7185' : 'currentColor'} />
+              </button>
+
+              <button
+                className="btn btn-gold"
+                style={{ padding: '12px 28px', fontSize: '1rem' }}
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
               >
                 <ShoppingBag size={18} />
-                <span>{isOutOfStock ? 'Sold Out' : `Add to Cart • $${(product.price * quantity).toFixed(2)}`}</span>
-              </button>
-
-              <button
-                className={`btn-icon ${isFav ? 'active' : ''}`}
-                onClick={() => toggleFavorite(product.id)}
-                style={{
-                  width: '46px',
-                  height: '46px',
-                  color: isFav ? '#f43f5e' : 'var(--text-muted)'
-                }}
-                aria-label="Toggle Wishlist"
-              >
-                <Heart size={20} fill={isFav ? 'currentColor' : 'none'} />
+                <span>{isOutOfStock ? 'Sold Out' : 'Add to Bag'}</span>
               </button>
             </div>
-
-            {/* Key Features List */}
-            {product.features && (
-              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px' }}>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '10px' }}>
-                  Highlights & Features
-                </h4>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {product.features.map((feat, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                      <Check size={15} color="#34d399" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
           </div>
 
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Zap, Copy, Check, Eye } from 'lucide-react';
+import { Sparkles, ArrowRight, Gift, Copy, Check, Eye, Flame, Feather } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const HeroBanner = () => {
@@ -7,20 +7,21 @@ export const HeroBanner = () => {
   const [copied, setCopied] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
 
-  const featuredList = products.filter((p) => p.isFeatured).slice(0, 3);
+  const featuredList = products.filter((p) => p.isFeatured).slice(0, 4);
   const currentHeroProduct = featuredList[slideIndex] || products[0];
 
   useEffect(() => {
+    if (featuredList.length <= 1) return;
     const timer = setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % (featuredList.length || 1));
-    }, 6000);
+      setSlideIndex((prev) => (prev + 1) % featuredList.length);
+    }, 6500);
     return () => clearInterval(timer);
   }, [featuredList.length]);
 
   const copyPromo = () => {
-    navigator.clipboard.writeText('LUMINA25');
+    navigator.clipboard.writeText('LUXE25');
     setCopied(true);
-    showToast('Promo code LUMINA25 copied to clipboard!', 'success');
+    showToast('Promo code LUXE25 copied to clipboard (25% off)!', 'success');
     setTimeout(() => setCopied(false), 2500);
   };
 
@@ -41,14 +42,14 @@ export const HeroBanner = () => {
           {/* Left Content */}
           <div className="hero-content">
             <div className="hero-badge">
-              <Sparkles size={14} />
-              <span>Flagship Drop &bull; Limited Edition</span>
+              <Sparkles size={13} color="var(--accent-gold)" />
+              <span>Haute Parfumerie &bull; Extrait de Parfum</span>
             </div>
 
             <h1 className="hero-title">
               {currentHeroProduct.name.split(' ').slice(0, 2).join(' ')}{' '}
-              <span className="gradient-text">
-                {currentHeroProduct.name.split(' ').slice(2).join(' ') || 'Series'}
+              <span className="gold-shimmer-text">
+                {currentHeroProduct.name.split(' ').slice(2).join(' ') || 'Parfum'}
               </span>
             </h1>
 
@@ -58,10 +59,10 @@ export const HeroBanner = () => {
 
             <div className="hero-actions">
               <button 
-                className="btn btn-primary"
+                className="btn btn-gold"
                 onClick={scrollToCatalog}
               >
-                <span>Explore Catalog</span>
+                <span>Discover All Scents</span>
                 <ArrowRight size={16} />
               </button>
 
@@ -69,18 +70,21 @@ export const HeroBanner = () => {
                 className="btn btn-secondary"
                 onClick={() => setSelectedProductModal(currentHeroProduct)}
               >
-                <Eye size={16} />
-                <span>Quick View</span>
+                <Eye size={16} color="var(--accent-gold)" />
+                <span>Explore Pyramid</span>
               </button>
 
               <div className="hero-promo-tag">
-                <Zap size={14} color="#fbbf24" />
-                <span>Use code:</span>
-                <span className="hero-promo-code">LUMINA25</span>
+                <Gift size={15} color="var(--accent-gold)" />
+                <span>25% Off:</span>
+                <span className="hero-promo-code">LUXE25</span>
                 <button
                   onClick={copyPromo}
                   style={{
-                    color: copied ? '#34d399' : '#94a3b8',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: copied ? '#34d399' : '#fce08b',
                     display: 'flex',
                     alignItems: 'center',
                     padding: '2px',
@@ -93,21 +97,35 @@ export const HeroBanner = () => {
               </div>
             </div>
 
+            {/* Perks Row */}
+            <div className="hero-perks-row">
+              <div className="hero-perk-item">
+                <Gift size={14} color="var(--accent-gold)" />
+                <span>2 Free 2ml Samples</span> with every order
+              </div>
+              <div className="hero-perk-item">
+                <Feather size={14} color="var(--accent-gold)" />
+                <span>Free Custom Engraving</span> on all flacons
+              </div>
+            </div>
+
             {/* Slide Indicators */}
             {featuredList.length > 1 && (
-              <div style={{ display: 'flex', gap: '6px', marginTop: '32px' }}>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '24px' }}>
                 {featuredList.map((item, idx) => (
                   <button
                     key={item.id}
                     onClick={() => setSlideIndex(idx)}
                     style={{
-                      width: slideIndex === idx ? '28px' : '8px',
-                      height: '8px',
-                      borderRadius: 'var(--radius-full)',
-                      background: slideIndex === idx ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.2)',
+                      width: idx === slideIndex ? '32px' : '10px',
+                      height: '6px',
+                      borderRadius: '4px',
+                      background: idx === slideIndex ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.15)',
+                      border: 'none',
+                      cursor: 'pointer',
                       transition: 'all 0.3s ease'
                     }}
-                    aria-label={`Slide ${idx + 1}`}
+                    title={item.name}
                   />
                 ))}
               </div>
@@ -120,40 +138,10 @@ export const HeroBanner = () => {
             <img
               src={currentHeroProduct.images[0]}
               alt={currentHeroProduct.name}
-              className="hero-main-img"
+              className="hero-image"
               onClick={() => setSelectedProductModal(currentHeroProduct)}
               style={{ cursor: 'pointer' }}
             />
-            
-            {/* Floating Price Pill */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '40px',
-                left: '40px',
-                background: 'rgba(15, 18, 28, 0.85)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                padding: '10px 18px',
-                borderRadius: 'var(--radius-lg)',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
-                zIndex: 3
-              }}
-            >
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>
-                Special Launch Price
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-heading)' }}>
-                  ${currentHeroProduct.price.toFixed(2)}
-                </span>
-                {currentHeroProduct.originalPrice > currentHeroProduct.price && (
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textDecoration: 'line-through' }}>
-                    ${currentHeroProduct.originalPrice.toFixed(2)}
-                  </span>
-                )}
-              </div>
-            </div>
           </div>
 
         </div>

@@ -1,307 +1,447 @@
 export const INITIAL_PRODUCTS = [
   {
     id: 'prod-1',
-    sku: 'LUM-AUD-001',
-    name: 'AeroPulse Wireless Studio Pro',
-    category: 'Audio',
-    tagline: 'Ultra-low latency lossless audio with adaptive active noise cancellation',
-    description: 'Engineered for audiophiles and creators, the AeroPulse Studio Pro delivers 45-hour battery life, custom 40mm titanium drivers, and spatial audio tracking that transforms how you experience music and sound design.',
-    price: 349.99,
-    originalPrice: 399.99,
-    discountPercent: 12,
-    stock: 18,
-    rating: 4.9,
-    reviewsCount: 142,
-    badge: 'Best Seller',
+    sku: 'LUM-OUD-001',
+    name: 'Oud Royal Extrait',
+    category: 'Woody & Smoky',
+    tagline: 'Imperial Wild Agarwood, Spiced Persian Saffron & Velvet Damask Rose',
+    description: 'An opulent masterpiece of olfactory alchemy. Oud Royal Extrait marries 25-year aged wild Cambodian agarwood with glowing crimson saffron, honeyed Taif rose, and crystalline ambergris for an indelible royal sillage that commands presence.',
+    price: 320.00,
+    originalPrice: 380.00,
+    discountPercent: 15,
+    stock: 14,
+    rating: 4.96,
+    reviewsCount: 184,
+    badge: 'Iconic Signature',
     isFeatured: true,
+    concentration: 'Extrait de Parfum (32% Concentration)',
+    olfactoryFamily: 'Woody & Smoky',
+    sillage: 'Intense & Enveloping',
+    longevity: '16+ Hours (Eternal)',
+    season: 'Autumn / Winter / Black Tie Evening',
+    pyramid: {
+      topNotes: ['Persian Saffron', 'Calabrian Bergamot', 'Pink Peppercorn'],
+      heartNotes: ['Taif Damascena Rose', 'Midnight Jasmine', 'Smoked Incense'],
+      baseNotes: ['25-Yr Royal Agarwood Oud', 'Baltic Ambergris', 'Bourbon Vanilla', 'Atlas Cedar']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Obsidian Black', hex: '#18181b' },
-      { name: 'Cosmic Silver', hex: '#94a3b8' },
-      { name: 'Midnight Navy', hex: '#1e3a8a' }
+      { name: 'Royal Gold Cap', hex: '#d4af37' },
+      { name: 'Smoked Obsidian Cap', hex: '#18181b' },
+      { name: 'Rose Gold Cap', hex: '#e2a8b2' }
     ],
     features: [
-      'Hybrid Adaptive Active Noise Cancellation (-42dB)',
-      'Lossless LDAC & aptX HD Wireless Audio',
-      '45 Hours Playback with Quick Charge (10m = 5h)',
-      'Dual Beamforming Microphones with AI Noise Suppression'
+      '32% Pure Artisanal Fragrance Oil Concentration (Extrait Grade)',
+      'Handcrafted in Grasse, France using centuries-old enfleurage techniques',
+      'Heavyweight Smoked Crystal Flacon with 24k Gold Magnetic Closure',
+      'Complimentary Custom Name or Initials Flacon Engraving'
     ],
     specs: {
-      'Driver Size': '40mm Titanium Composite',
-      'Frequency Response': '10Hz - 40kHz',
-      'Bluetooth Version': '5.3 Multipoint',
-      'Weight': '248g'
+      'Concentration': 'Extrait de Parfum',
+      'Maceration Time': '6 Months in French Oak',
+      'Origin': 'Grasse, France',
+      'Formulation': '100% Vegan & Cruelty-Free'
     },
     images: [
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-2',
-    sku: 'LUM-WEAR-002',
-    name: 'Chronos Horizon Smartwatch X5',
-    category: 'Wearables',
-    tagline: 'Aerospace-grade titanium chassis with continuous biometric telemetry',
-    description: 'The Horizon X5 features a sapphire crystal AMOLED screen, dual-frequency GPS, ECG monitoring, and up to 14 days of battery longevity in an ultra-slim, rugged architectural profile.',
-    price: 429.00,
-    originalPrice: 479.00,
-    discountPercent: 10,
-    stock: 9,
-    rating: 4.8,
-    reviewsCount: 98,
-    badge: 'Popular',
+    sku: 'LUM-VAN-002',
+    name: 'Brumes de Vanille Intense',
+    category: 'Amber & Oriental',
+    tagline: 'Smoked Bourbon Vanilla, Golden Benzoin & Roasted Venezuelan Tonka',
+    description: 'Transcending conventional sweetness, Brumes de Vanille is a seductive, nocturnal amber. Hand-harvested Madagascar vanilla pods are roasted over birchwood, bathed in liquid benzoin resin, and softened with creamy sandalwood for a hypnotic, velvet warmth.',
+    price: 285.00,
+    originalPrice: 320.00,
+    discountPercent: 11,
+    stock: 22,
+    rating: 4.92,
+    reviewsCount: 142,
+    badge: 'Best Seller',
     isFeatured: true,
+    concentration: 'Extrait de Parfum (30% Concentration)',
+    olfactoryFamily: 'Amber & Oriental',
+    sillage: 'Generous & Alluring',
+    longevity: '14+ Hours',
+    season: 'Autumn / Winter / Intimate Dates',
+    pyramid: {
+      topNotes: ['Spiced Cardamom', 'Almond Blossom', 'Bitter Orange'],
+      heartNotes: ['Smoked Bourbon Vanilla Pods', 'Heliotrope', 'Orchid'],
+      baseNotes: ['Roasted Tonka Bean', 'Golden Benzoin', 'Mysore Sandalwood', 'White Musk']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Raw Titanium', hex: '#71717a' },
-      { name: 'Stealth Black', hex: '#09090b' },
-      { name: 'Rose Gold', hex: '#fb7185' }
+      { name: 'Warm Amber Glass', hex: '#d97706' },
+      { name: 'Noir Matte', hex: '#111827' }
     ],
     features: [
-      '1.43" Always-On Sapphire Crystal AMOLED (1000 nits)',
-      'Advanced ECG, SpO2 & HRV Heart Health Telemetry',
-      'Dual-Band Multi-Constellation GNSS Navigation',
-      '50m Water Resistant (5 ATM Grade)'
+      'Aged Madagascar Grand Cru Vanilla Caviar Extract',
+      'Ultra-fine Micro-mist Atomizer for cloud dispersion',
+      'Silk Ribbon Packaging with Wax-sealed Certificate',
+      'Zero synthetic dyes — 100% natural nectar hue'
     ],
     specs: {
-      'Battery Life': '14 Days Standard / 36h Full GPS',
-      'Case Material': 'Grade 5 Aerospace Titanium',
-      'Sensors': 'Optical PPG, Bio-impedance, Barometer, Gyro',
-      'Compatibility': 'iOS & Android'
+      'Concentration': 'Extrait de Parfum',
+      'Maceration Time': '4 Months',
+      'Origin': 'Grasse & Florence',
+      'Formulation': 'Phthalate-Free'
     },
     images: [
-      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-3',
-    sku: 'LUM-DESK-003',
-    name: 'OmniDesk Pro Mechanical Keyboard',
-    category: 'Workstation',
-    tagline: 'Gasket-mounted hot-swappable tactile powerhouse with OLED display',
-    description: 'Crafted from a solid CNC aluminum unibody, the OmniDesk Pro delivers supreme acoustic dampening, custom-lubricated switches, per-key programmable RGB, and an interactive telemetry OLED knob.',
-    price: 199.50,
-    originalPrice: 229.00,
-    discountPercent: 13,
-    stock: 4,
-    rating: 4.95,
-    reviewsCount: 215,
-    badge: 'Low Stock',
+    sku: 'LUM-NER-003',
+    name: "Fleur d'Oranger & Néroli Blanc",
+    category: 'Fresh & Citrus',
+    tagline: 'Italian Bigarade Petitgrain, Sparkling Neroli & Sunny Mediterranean Cypress',
+    description: 'An invigorating sun-drenched escape along the Amalfi cliffside. Luminous orange blossom petals distilled at dawn harmonize with Italian green mandarin, cooling petitgrain, and clean white cedar to create an effervescent, aristocratic freshness.',
+    price: 245.00,
+    originalPrice: 275.00,
+    discountPercent: 10,
+    stock: 18,
+    rating: 4.88,
+    reviewsCount: 96,
+    badge: 'Summer Favorite',
     isFeatured: true,
+    concentration: 'Eau de Parfum Intense (24% Concentration)',
+    olfactoryFamily: 'Fresh & Citrus',
+    sillage: 'Radiant & Crisp',
+    longevity: '10+ Hours',
+    season: 'Spring / Summer / Daytime Signature',
+    pyramid: {
+      topNotes: ['Calabrian Green Mandarin', 'Italian Bergamot', 'Grapefruit Zest'],
+      heartNotes: ['Tunisian Neroli', 'Grasse Orange Blossom', 'Petitgrain Bigarade'],
+      baseNotes: ['White Cedarwood', 'Clean Silk Musk', 'Coastal Amber']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Cyberpunk Purple', hex: '#7c3aed' },
-      { name: 'Matte Charcoal', hex: '#27272a' },
-      { name: 'Polar White', hex: '#f8fafc' }
+      { name: 'Crystal Clear Flacon', hex: '#f8fafc' },
+      { name: 'Emerald Tint Flacon', hex: '#059669' }
     ],
     features: [
-      'Full CNC Machined Aluminum Enclosure with Brass Weight',
-      'Factory Lubricated Linear Gateron Jade Switches',
-      'Programmable Rotary Knob with 128x64 Mini OLED',
-      'Tri-Mode Connectivity (2.4GHz, Bluetooth 5.2, USB-C)'
+      'Harvested from certified organic Italian coastal groves',
+      'Cold-pressed extraction preserves delicate citrus volatiles',
+      'Crisp, uplifting projection without sharp chemical edges',
+      'Perfect signature everyday luxury scent'
     ],
     specs: {
-      'Layout': '75% Compact (82 Keys)',
-      'Polling Rate': '1000Hz (1ms)',
-      'Battery': '4000mAh Rechargable',
-      'Keycaps': 'Double-shot PBT Cherry Profile'
+      'Concentration': 'Eau de Parfum Intense',
+      'Maceration Time': '3 Months',
+      'Origin': 'Riviera, Italy & Grasse',
+      'Formulation': 'Hypoallergenic Certified'
     },
     images: [
-      'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-4',
-    sku: 'LUM-SMART-004',
-    name: 'AuraGlow Ambient Smart Lamp',
-    category: 'Smart Home',
-    tagline: 'Circadian rhythm synchronization and immersive sound-reactive illumination',
-    description: 'Bring biometric lighting to your workspace and bedroom. AuraGlow mimics the natural progression of daylight to boost focus during working hours and promote restful melatonin production at night.',
-    price: 129.00,
-    originalPrice: 159.00,
-    discountPercent: 19,
-    stock: 22,
-    rating: 4.7,
-    reviewsCount: 76,
-    badge: 'Sale',
-    isFeatured: false,
+    sku: 'LUM-SAN-004',
+    name: 'Santale Royale Nocturne',
+    category: 'Woody & Smoky',
+    tagline: 'Creamy Mysore Sandalwood, Violet Leaf, Cracked Cardamom & Suede',
+    description: 'An enigmatic, contemporary interpretation of classic sandalwood. Velvety Australian and Mysore sandalwood intertwine with fresh crushed cardamom, dewy violet leaf, and warm Tuscan suede for an understated elegance that whispers sophistication.',
+    price: 295.00,
+    originalPrice: 340.00,
+    discountPercent: 13,
+    stock: 8,
+    rating: 4.94,
+    reviewsCount: 167,
+    badge: 'Editor Pick',
+    isFeatured: true,
+    concentration: 'Extrait de Parfum (30% Concentration)',
+    olfactoryFamily: 'Woody & Smoky',
+    sillage: 'Subtle yet Magnetic',
+    longevity: '14+ Hours',
+    season: 'Year-Round / Office to Black Tie',
+    pyramid: {
+      topNotes: ['Guatemalan Cardamom', 'Violet Leaf', 'Papyrus'],
+      heartNotes: ['Iris Concrete', 'Virginia Cedar', 'Cypress'],
+      baseNotes: ['Mysore Sandalwood', 'Tuscan Suede Leather', 'Iso-E Super Pure', 'Cashmeran']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Frost White', hex: '#f1f5f9' },
-      { name: 'Anodized Silver', hex: '#cbd5e1' }
+      { name: 'Deep Espresso Wood', hex: '#451a03' },
+      { name: 'Brushed Brass', hex: '#d4af37' }
     ],
     features: [
-      '16.8 Million Colors + Pure High-CRI 98+ Tunable White',
-      'Matter & Apple HomeKit / Google Assistant Certified',
-      'Integrated Qi2 15W Magnetic Wireless Charging Base',
-      'Capacitive Touch Slide Dimmer'
+      'Sustainable plantation-grown Mysore Sandalwood species',
+      'Silky, non-sticky oil formulation that nourishes skin',
+      'Unisex architectural scent profile beloved worldwide',
+      'Hand-numbered limited production batch'
     ],
     specs: {
-      'Max Brightness': '1200 Lumens',
-      'Color Temp': '1800K - 6500K',
-      'Power Consumption': '18W Max',
-      'Dimensions': '180mm x 320mm'
+      'Concentration': 'Extrait de Parfum',
+      'Maceration Time': '5 Months',
+      'Origin': 'Paris, France',
+      'Formulation': 'Cruelty-Free'
     },
     images: [
-      'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-5',
-    sku: 'LUM-ACC-005',
-    name: 'Vortex MagSafe 3-in-1 Fast Charging Station',
-    category: 'Accessories',
-    tagline: 'Sculpted aircraft-grade aluminum dock for Phone, Watch, and Earbuds',
-    description: 'Declutter your nightstand and desk. The Vortex 3-in-1 provides simultaneous 15W fast charging with seamless magnetic alignment and floating viewing angles in portrait or landscape.',
-    price: 89.99,
-    originalPrice: 109.99,
-    discountPercent: 18,
-    stock: 35,
-    rating: 4.85,
-    reviewsCount: 310,
-    badge: 'Top Pick',
-    isFeatured: true,
+    sku: 'LUM-ROS-005',
+    name: 'Rose Velours Impériale',
+    category: 'Floral & Romantic',
+    tagline: 'Crimson May Rose, Candied Lychee, Blackcurrant & Cashmere Musk',
+    description: 'A seductive celebration of the Queen of Flowers. Handpicked Centifolia roses blended with tart blackcurrant bud, luscious lychee, and whisper-soft cashmere musk. Neither powdery nor vintage — vibrant, modern, and intoxicatingly romantic.',
+    price: 275.00,
+    originalPrice: 310.00,
+    discountPercent: 11,
+    stock: 15,
+    rating: 4.91,
+    reviewsCount: 118,
+    badge: 'Romantic Choice',
+    isFeatured: false,
+    concentration: 'Eau de Parfum Supreme (26% Concentration)',
+    olfactoryFamily: 'Floral & Romantic',
+    sillage: 'Beguiling & Lush',
+    longevity: '12+ Hours',
+    season: 'Spring / Autumn / Special Occasions',
+    pyramid: {
+      topNotes: ['Rosewater Mist', 'Sparkling Lychee', 'Blackcurrant Cassis'],
+      heartNotes: ['Grasse Centifolia Rose Absolute', 'Damask Rose Petals', 'Magnolia'],
+      baseNotes: ['Cashmere Woods', 'White Patchouli', 'Modern Ambergris']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Space Gray', hex: '#3f3f46' },
-      { name: 'Silver Mist', hex: '#e2e8f0' }
+      { name: 'Rose Quartz Tint', hex: '#fb7185' },
+      { name: 'Champagne Gold', hex: '#fce08b' }
     ],
     features: [
-      'Official Apple Qi2 15W Certified Fast Magnetic Wireless',
-      'Foldable Travel-Friendly Architectural Design',
-      'Weighted Anti-Slip Base with Heat Dissipation Channels',
-      'Includes 45W GaN Power Adapter & Braided Cable'
+      'Over 10,000 hand-harvested May rose petals per 100ml flacon',
+      'Luminous floral trail that turns heads gently',
+      'Includes complimentary engraved atomizer charm',
+      'Custom gold-embossed presentation chest'
     ],
     specs: {
-      'Total Output': '25W Concurrent',
-      'Input': 'USB-C PD 3.0',
-      'Weight': '320g',
-      'Protection': 'FOD, OVP, OTP Temperature Sensing'
+      'Concentration': 'Eau de Parfum Supreme',
+      'Maceration Time': '4 Months',
+      'Origin': 'Grasse, France',
+      'Formulation': '100% Vegan'
     },
     images: [
-      'https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1622445262464-84b1456045b6?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-6',
-    sku: 'LUM-AUD-006',
-    name: 'EchoPod Sonic Hi-Res Earbuds',
-    category: 'Audio',
-    tagline: 'Dual balanced armature drivers with crystal-clear spatial audio',
-    description: 'Uncompromising acoustic fidelity in pocket format. Features 32-hour playback with case, IPX7 waterproof rating, and low-latency gaming mode.',
-    price: 159.00,
-    originalPrice: 189.00,
-    discountPercent: 15,
-    stock: 15,
-    rating: 4.65,
-    reviewsCount: 88,
-    badge: '',
-    isFeatured: false,
+    sku: 'LUM-TAB-006',
+    name: 'Tabac & Cognac Réserve',
+    category: 'Gourmand & Spiced',
+    tagline: 'Aged Cognac Barrels, Blonde Havana Leaf, Cocoa & Dark Honey',
+    description: 'An opulent private club in liquid form. Rich blond tobacco leaves steeped in aged French oak cognac, dusted with dark Venezuelan cacao, bitter cinnamon bark, and wild wildflower honey. Decadent, warm, and unapologetically addictive.',
+    price: 310.00,
+    originalPrice: 350.00,
+    discountPercent: 11,
+    stock: 11,
+    rating: 4.97,
+    reviewsCount: 156,
+    badge: 'Cult Classic',
+    isFeatured: true,
+    concentration: 'Extrait de Parfum (33% Concentration)',
+    olfactoryFamily: 'Gourmand & Spiced',
+    sillage: 'Monolithic & Warm',
+    longevity: '18+ Hours (Eternal)',
+    season: 'Autumn / Winter / Speakeasy Nights',
+    pyramid: {
+      topNotes: ['VSOP Cognac Accord', 'Wild Honey', 'Nutmeg'],
+      heartNotes: ['Blonde Havana Tobacco', 'Ceylon Cinnamon', 'Dark Cacao Butter'],
+      baseNotes: ['Bourbon Vanilla Extract', 'Tonka Bean', 'French Oak', 'Labdanum']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Gloss Pearl', hex: '#f8fafc' },
-      { name: 'Onyx Matte', hex: '#18181b' }
+      { name: 'Smoked Cognac Glass', hex: '#78350f' },
+      { name: 'Antiqued Gold', hex: '#b45309' }
     ],
     features: [
-      'Active Noise Cancellation up to 38dB',
-      'Wireless Qi Fast Charging Case',
-      'Multipoint Bluetooth 5.4 connection',
-      'IPX7 Sweat and Rain Protection'
+      'Real oak barrel infusion creates genuine aged boozy nuances',
+      'Unsurpassed 18+ hour staying power on fabric and skin',
+      'Bespoke heavy weighted zamak metallic cap',
+      'The definitive evening cold-weather fragrance'
     ],
     specs: {
-      'Playtime': '8h Earbuds + 24h Case',
-      'Codecs': 'AAC, SBC, LHDC 5.0',
-      'Latency': '45ms Gaming Mode'
+      'Concentration': 'Extrait de Parfum',
+      'Maceration Time': '8 Months',
+      'Origin': 'Cognac & Paris, France',
+      'Formulation': 'Artisanal Batch'
     },
     images: [
-      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-7',
-    sku: 'LUM-DESK-007',
-    name: 'ErgoView 4K UltraWide Monitor Arm',
-    category: 'Workstation',
-    tagline: 'Gas spring counterbalance mechanism with internal cable routing',
-    description: 'Supports heavy 49" ultrawide displays effortlessly. Full 360-degree rotation, tilt, and height articulation with premium powder-coated steel construction.',
-    price: 145.00,
-    originalPrice: 175.00,
-    discountPercent: 17,
-    stock: 2,
-    rating: 4.9,
-    reviewsCount: 64,
-    badge: 'Low Stock',
+    sku: 'LUM-JAS-007',
+    name: 'Jasmin Éthéré & Ambre Blanc',
+    category: 'Floral & Romantic',
+    tagline: 'Night-blooming Jasmine Sambac, Crisp Nashi Pear & Silken White Amber',
+    description: 'An ethereal nocturnal garden bathed in silver moonlight. Pristine night-blooming Grasse jasmine married with juicy crystalline Asian pear, sparkling pink pepper, and a second-skin veil of white amber and pure cashmere.',
+    price: 265.00,
+    originalPrice: 295.00,
+    discountPercent: 10,
+    stock: 19,
+    rating: 4.89,
+    reviewsCount: 88,
+    badge: 'Trending',
     isFeatured: false,
+    concentration: 'Eau de Parfum (22% Concentration)',
+    olfactoryFamily: 'Floral & Romantic',
+    sillage: 'Airy & Mesmerizing',
+    longevity: '11+ Hours',
+    season: 'Spring / Summer Evenings',
+    pyramid: {
+      topNotes: ['Nashi Pear', 'Pink Peppercorn', 'Dewy Violet Leaves'],
+      heartNotes: ['Night-Blooming Jasmine Sambac', 'Lily of the Valley', 'White Peony'],
+      baseNotes: ['White Amber', 'Silken Musks', 'Sandalwood']
+    },
+    sizes: [
+      { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
+      { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+      { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+    ],
     colors: [
-      { name: 'Stealth Black', hex: '#0f172a' },
-      { name: 'Pure White', hex: '#f1f5f9' }
+      { name: 'Opaline White', hex: '#f1f5f9' },
+      { name: 'Platinum Silver', hex: '#cbd5e1' }
     ],
     features: [
-      'Supports Screens from 17" to 49" (up to 20kg / 44 lbs)',
-      'Integrated Quick-Release VESA 75/100 Bracket',
-      'Dual USB 3.0 Pass-through Ports in Base',
-      'Desk Clamp & Grommet Mounting included'
+      'Night-harvested jasmine picked at maximum scent release',
+      'Gentle, hypoallergenic formulation suitable for sensitive skin',
+      'Perfect signature everyday romantic fragrance',
+      'Packaged in an opaline lacquered bottle with velvet pouch'
     ],
     specs: {
-      'Tilt Range': '+90° to -45°',
-      'Swivel': '180°',
-      'Rotation': '360°',
-      'Max Height': '510mm'
+      'Concentration': 'Eau de Parfum',
+      'Maceration Time': '3 Months',
+      'Origin': 'Grasse, France',
+      'Formulation': 'Eco-Friendly Extract'
     },
     images: [
-      'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=1000&q=80'
     ]
   },
   {
     id: 'prod-8',
-    sku: 'LUM-SMART-008',
-    name: 'Zenith Smart Air Purifier & Ionizer',
-    category: 'Smart Home',
-    tagline: 'Medical-grade H13 True HEPA filtration with laser PM2.5 monitoring',
-    description: 'Clean up to 1,200 sq ft in 30 minutes. Real-time air quality index display with whisper-quiet sleep mode operating at under 22dB.',
-    price: 279.00,
-    originalPrice: 320.00,
-    discountPercent: 12,
-    stock: 11,
-    rating: 4.75,
-    reviewsCount: 112,
-    badge: 'Eco Friendly',
-    isFeatured: false,
+    sku: 'LUM-SET-008',
+    name: "L'Élixir Masterpiece Discovery Coffret",
+    category: 'Discovery & Sets',
+    tagline: '5x 10ml Collector Flacons + $50 Voucher towards Full Size Bottle',
+    description: 'The ultimate olfactory voyage. Experience the complete LUMINA Haute Parfumerie collection in luxury 10ml travel-ready spray atomizers. Includes: Oud Royal, Brumes de Vanille, Fleur d’Oranger, Santale Royale, and Tabac & Cognac, packaged in a handcrafted lacquer vault.',
+    price: 185.00,
+    originalPrice: 240.00,
+    discountPercent: 23,
+    stock: 25,
+    rating: 4.99,
+    reviewsCount: 310,
+    badge: 'Best Gift Set',
+    isFeatured: true,
+    concentration: 'Discovery Set (5x 10ml Extrait / EDP Sprays)',
+    olfactoryFamily: 'Discovery & Sets',
+    sillage: 'Varies by Fragrance',
+    longevity: '12-18 Hours per Fragrance',
+    season: 'All Seasons / The Perfect Luxury Gift',
+    pyramid: {
+      topNotes: ['Includes 5 Signature Scents Across All Olfactory Families'],
+      heartNotes: ['Curated by Master French Parfumeurs'],
+      baseNotes: ['Comes with $50 Credit towards any 100ml Flacon']
+    },
+    sizes: [
+      { label: '5x 10ml Collector Coffret', ml: 50, priceMultiplier: 1.0 }
+    ],
     colors: [
-      { name: 'Minimalist Gray', hex: '#64748b' },
-      { name: 'Nordic White', hex: '#f8fafc' }
+      { name: 'Piano Black Lacquer Vault', hex: '#09090b' },
+      { name: 'Imperial Gold Chest', hex: '#d4af37' }
     ],
     features: [
-      '4-Stage Filtration: Pre-filter, H13 HEPA, Activated Carbon, Ionizer',
-      'Real-Time OLED Air Quality Telemetry',
-      'WiFi App Control & Voice Scheduling',
-      'WhisperQuiet 21dB Sleep Mode'
+      'Contains 5 Deluxe 10ml spray atomizers with metallic caps',
+      'Includes $50 redeemable gift certificate for any 100ml purchase',
+      'Luxury velvet-lined presentation box with magnetic ribbon',
+      'Ideal introduction to high-end bespoke artisanal perfumery'
     ],
     specs: {
-      'CADR': '400 m³/h',
-      'Coverage Area': 'Up to 1,200 sq ft',
-      'Filter Lifespan': '8-12 Months'
+      'Includes': '5x 10ml Eau de Parfum & Extraits',
+      'Voucher Value': '$50 Included',
+      'Packaging': 'Lacquered Wooden Chest',
+      'Travel Ready': 'TSA Carry-on Approved'
     },
     images: [
-      'https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=80'
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=1000&q=80'
     ]
   }
 ];
 
-export const CATEGORIES = [
-  { id: 'All', name: 'All Products', icon: 'Sparkles' },
-  { id: 'Audio', name: 'Premium Audio', icon: 'Headphones' },
-  { id: 'Wearables', name: 'Wearables', icon: 'Watch' },
-  { id: 'Workstation', name: 'Workstation', icon: 'Laptop' },
-  { id: 'Smart Home', name: 'Smart Home', icon: 'Home' },
-  { id: 'Accessories', name: 'Accessories', icon: 'Zap' }
+export const PROMO_CODES = {
+  'LUXE25': {
+    code: 'LUXE25',
+    discountPercent: 25,
+    description: '25% Off Premier Haute Parfumerie Purchase'
+  },
+  'PARFUM10': {
+    code: 'PARFUM10',
+    discountPercent: 10,
+    description: '10% Off Entire Fragrance Order'
+  },
+  'VIPGOLD': {
+    code: 'VIPGOLD',
+    discountPercent: 20,
+    description: 'VIP Gold Member 20% Discount'
+  }
+};
+
+export const OLFACTORY_FAMILIES = [
+  'All',
+  'Woody & Smoky',
+  'Amber & Oriental',
+  'Floral & Romantic',
+  'Fresh & Citrus',
+  'Gourmand & Spiced',
+  'Discovery & Sets'
 ];
 
-export const PROMO_CODES = {
-  'LUMINA25': { discountPercent: 25, description: 'Special 25% Off Storewide' },
-  'WELCOME10': { discountPercent: 10, description: 'Welcome 10% Off First Order' },
-  'VIP50': { discountPercent: 50, description: 'Exclusive VIP 50% Off Voucher' }
-};
+export const COMPLIMENTARY_SAMPLES = [
+  { id: 'smp-1', name: 'Oud Royal Extrait (2ml Vial)', family: 'Woody & Smoky' },
+  { id: 'smp-2', name: 'Brumes de Vanille (2ml Vial)', family: 'Amber & Oriental' },
+  { id: 'smp-3', name: "Fleur d'Oranger & Néroli (2ml Vial)", family: 'Fresh & Citrus' },
+  { id: 'smp-4', name: 'Santale Royale Nocturne (2ml Vial)', family: 'Woody & Smoky' },
+  { id: 'smp-5', name: 'Rose Velours Impériale (2ml Vial)', family: 'Floral & Romantic' },
+  { id: 'smp-6', name: 'Tabac & Cognac Réserve (2ml Vial)', family: 'Gourmand & Spiced' }
+];

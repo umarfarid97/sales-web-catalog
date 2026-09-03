@@ -1,147 +1,151 @@
 export const INITIAL_ORDERS = [
   {
-    id: 'ORD-89241',
+    id: 'ORD-98421',
     customer: {
-      name: 'Alexander Wright',
-      email: 'alex.wright@example.com',
-      phone: '+1 (555) 234-5678',
-      address: '742 Evergreen Terrace',
-      city: 'Seattle',
-      state: 'WA',
-      zip: '98101',
-      country: 'United States'
+      name: 'Victoria von Habsburg',
+      email: 'victoria.habsburg@luxury-estates.ch',
+      phone: '+41 79 555 3821',
+      address: 'Villa Belle Époque, 12 Quai du Mont-Blanc',
+      city: 'Geneva',
+      state: 'GE',
+      zip: '1201',
+      country: 'Switzerland',
+      giftPackaging: true,
+      giftNote: 'Happy 30th Birthday my darling! May this scent remind you of our Paris nights.',
+      engravingText: 'V.H. • Paris 2026',
+      samples: ['Oud Royal Extrait (2ml Vial)', 'Brumes de Vanille (2ml Vial)']
     },
     items: [
       {
+        cartItemId: 'prod-1-100 ml Grand Flacon-Royal Gold Cap',
         id: 'prod-1',
-        name: 'AeroPulse Wireless Studio Pro',
-        price: 349.99,
+        name: 'Oud Royal Extrait',
+        price: 320.00,
+        originalPrice: 380.00,
+        image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80',
+        color: 'Royal Gold Cap',
+        size: '100 ml Grand Flacon',
+        category: 'Woody & Smoky',
         quantity: 1,
-        color: 'Obsidian Black',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=300&q=80'
+        engraving: 'V.H. • Paris 2026'
       },
       {
-        id: 'prod-5',
-        name: 'Vortex MagSafe 3-in-1 Fast Charging Station',
-        price: 89.99,
-        quantity: 1,
-        color: 'Space Gray',
-        image: 'https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?auto=format&fit=crop&w=300&q=80'
+        cartItemId: 'prod-8-5x 10ml Collector Coffret-Piano Black Lacquer Vault',
+        id: 'prod-8',
+        name: "L'Élixir Masterpiece Discovery Coffret",
+        price: 185.00,
+        originalPrice: 240.00,
+        image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80',
+        color: 'Piano Black Lacquer Vault',
+        size: '5x 10ml Collector Coffret',
+        category: 'Discovery & Sets',
+        quantity: 1
       }
     ],
-    subtotal: 439.98,
-    discount: 43.99,
-    discountCode: 'WELCOME10',
+    subtotal: 505.00,
+    discount: 126.25,
+    discountCode: 'LUXE25',
     shipping: 0,
-    total: 395.99,
+    total: 378.75,
     status: 'Delivered',
-    paymentMethod: 'Credit Card (Visa **** 4242)',
-    placedAt: '2026-08-28T14:32:00Z',
-    deliveredAt: '2026-08-31T11:20:00Z',
-    trackingNumber: 'TRK-LUM-9482103'
+    paymentMethod: 'apple-pay',
+    placedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    deliveredAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    trackingNumber: 'TRK-LUM-9482710'
   },
   {
-    id: 'ORD-89242',
+    id: 'ORD-98422',
+    customer: {
+      name: 'Julian Montgomery',
+      email: 'julian.m@montgomery-capital.co.uk',
+      phone: '+44 20 7946 0912',
+      address: '42 Mayfair Square, Flat 4B',
+      city: 'London',
+      state: 'Greater London',
+      zip: 'W1J 8AJ',
+      country: 'United Kingdom',
+      giftPackaging: true,
+      giftNote: 'With compliments from the Partners.',
+      engravingText: 'J.M. • Mayfair',
+      samples: ['Tabac & Cognac Réserve (2ml Vial)', 'Santale Royale Nocturne (2ml Vial)']
+    },
+    items: [
+      {
+        cartItemId: 'prod-6-100 ml Grand Flacon-Smoked Cognac Glass',
+        id: 'prod-6',
+        name: 'Tabac & Cognac Réserve',
+        price: 310.00,
+        originalPrice: 350.00,
+        image: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=1000&q=80',
+        color: 'Smoked Cognac Glass',
+        size: '100 ml Grand Flacon',
+        category: 'Gourmand & Spiced',
+        quantity: 2,
+        engraving: 'J.M. • Mayfair'
+      }
+    ],
+    subtotal: 620.00,
+    discount: 62.00,
+    discountCode: 'PARFUM10',
+    shipping: 0,
+    total: 558.00,
+    status: 'Processing',
+    paymentMethod: 'credit-card',
+    placedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+    deliveredAt: null,
+    trackingNumber: 'TRK-LUM-5839201'
+  },
+  {
+    id: 'ORD-98423',
     customer: {
       name: 'Elena Rostova',
-      email: 'elena.rostova@techmail.io',
-      phone: '+1 (555) 876-5432',
-      address: '10880 Wilshire Blvd #1400',
-      city: 'Los Angeles',
-      state: 'CA',
-      zip: '90024',
-      country: 'United States'
+      email: 'elena.rostova@design-studio.fr',
+      phone: '+33 6 12 34 56 78',
+      address: '18 Rue du Faubourg Saint-Honoré',
+      city: 'Paris',
+      state: 'Île-de-France',
+      zip: '75008',
+      country: 'France',
+      giftPackaging: false,
+      giftNote: '',
+      engravingText: '',
+      samples: ["Fleur d'Oranger & Néroli (2ml Vial)", 'Rose Velours Impériale (2ml Vial)']
     },
     items: [
       {
+        cartItemId: 'prod-2-50 ml Classic Flacon-Warm Amber Glass',
         id: 'prod-2',
-        name: 'Chronos Horizon Smartwatch X5',
-        price: 429.00,
-        quantity: 1,
-        color: 'Raw Titanium',
-        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=300&q=80'
-      }
-    ],
-    subtotal: 429.00,
-    discount: 107.25,
-    discountCode: 'LUMINA25',
-    shipping: 0,
-    total: 321.75,
-    status: 'Shipped',
-    paymentMethod: 'Apple Pay',
-    placedAt: '2026-08-30T09:15:00Z',
-    trackingNumber: 'TRK-LUM-7731920'
-  },
-  {
-    id: 'ORD-89243',
-    customer: {
-      name: 'Marcus Sterling',
-      email: 'm.sterling@capital.org',
-      phone: '+1 (555) 345-9876',
-      address: '350 5th Ave',
-      city: 'New York',
-      state: 'NY',
-      zip: '10118',
-      country: 'United States'
-    },
-    items: [
-      {
-        id: 'prod-3',
-        name: 'OmniDesk Pro Mechanical Keyboard',
-        price: 199.50,
-        quantity: 2,
-        color: 'Matte Charcoal',
-        image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=300&q=80'
+        name: 'Brumes de Vanille Intense',
+        price: 205.20,
+        originalPrice: 230.40,
+        image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1000&q=80',
+        color: 'Warm Amber Glass',
+        size: '50 ml Classic Flacon',
+        category: 'Amber & Oriental',
+        quantity: 1
       },
       {
-        id: 'prod-7',
-        name: 'ErgoView 4K UltraWide Monitor Arm',
-        price: 145.00,
-        quantity: 1,
-        color: 'Stealth Black',
-        image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=300&q=80'
+        cartItemId: 'prod-5-10 ml Travel Atomizer-Rose Quartz Tint',
+        id: 'prod-5',
+        name: 'Rose Velours Impériale',
+        price: 77.00,
+        originalPrice: 86.80,
+        image: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=1000&q=80',
+        color: 'Rose Quartz Tint',
+        size: '10 ml Travel Atomizer',
+        category: 'Floral & Romantic',
+        quantity: 1
       }
     ],
-    subtotal: 544.00,
+    subtotal: 282.20,
     discount: 0,
     discountCode: '',
     shipping: 0,
-    total: 544.00,
-    status: 'Processing',
-    paymentMethod: 'PayPal',
-    placedAt: '2026-09-01T16:40:00Z',
-    trackingNumber: 'TRK-LUM-3829011'
-  },
-  {
-    id: 'ORD-89244',
-    customer: {
-      name: 'Sophia Chen',
-      email: 'sophia.c@designstudio.co',
-      phone: '+1 (555) 901-2345',
-      address: '500 Howard St',
-      city: 'San Francisco',
-      state: 'CA',
-      zip: '94105',
-      country: 'United States'
-    },
-    items: [
-      {
-        id: 'prod-4',
-        name: 'AuraGlow Ambient Smart Lamp',
-        price: 129.00,
-        quantity: 1,
-        color: 'Frost White',
-        image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=300&q=80'
-      }
-    ],
-    subtotal: 129.00,
-    discount: 0,
-    discountCode: '',
-    shipping: 15.00,
-    total: 144.00,
+    total: 282.20,
     status: 'Pending',
-    paymentMethod: 'Credit Card (Mastercard **** 8821)',
-    placedAt: '2026-09-02T10:12:00Z',
-    trackingNumber: 'TRK-LUM-PENDING'
+    paymentMethod: 'apple-pay',
+    placedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    deliveredAt: null,
+    trackingNumber: 'TRK-LUM-2940182'
   }
 ];

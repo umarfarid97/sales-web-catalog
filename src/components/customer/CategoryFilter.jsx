@@ -1,53 +1,56 @@
 import React from 'react';
-import { CATEGORIES } from '../../data/initialProducts';
+import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
 import { useStore } from '../../context/StoreContext';
 import { 
   Sparkles, 
-  Headphones, 
-  Watch, 
-  Laptop, 
-  Home, 
-  Zap 
+  Flame, 
+  Heart, 
+  Sun, 
+  Coffee, 
+  Gift,
+  Feather
 } from 'lucide-react';
 
-const ICON_MAP = {
-  Sparkles: Sparkles,
-  Headphones: Headphones,
-  Watch: Watch,
-  Laptop: Laptop,
-  Home: Home,
-  Zap: Zap
+const FAMILY_ICONS = {
+  'All': Sparkles,
+  'Woody & Smoky': Flame,
+  'Amber & Oriental': Feather,
+  'Floral & Romantic': Heart,
+  'Fresh & Citrus': Sun,
+  'Gourmand & Spiced': Coffee,
+  'Discovery & Sets': Gift
 };
 
 export const CategoryFilter = () => {
   const { selectedCategory, setSelectedCategory, products } = useStore();
 
-  const getCategoryCount = (catId) => {
-    if (catId === 'All') return products.length;
-    return products.filter((p) => p.category === catId).length;
+  const getCategoryCount = (family) => {
+    if (family === 'All') return products.length;
+    return products.filter((p) => p.category === family).length;
   };
 
   return (
-    <div className="category-bar-wrapper">
+    <div className="category-filter-section">
       <div className="container">
-        <div className="category-pills-list">
-          {CATEGORIES.map((cat) => {
-            const IconComponent = ICON_MAP[cat.icon] || Sparkles;
-            const count = getCategoryCount(cat.id);
-            const isActive = selectedCategory === cat.id;
+        <div className="category-filter-container">
+          {OLFACTORY_FAMILIES.map((family) => {
+            const IconComponent = FAMILY_ICONS[family] || Sparkles;
+            const count = getCategoryCount(family);
+            const isActive = selectedCategory === family;
 
             return (
               <button
-                key={cat.id}
+                key={family}
                 className={`category-pill ${isActive ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => setSelectedCategory(family)}
               >
-                <IconComponent size={16} />
-                <span>{cat.name}</span>
+                <IconComponent size={15} color={isActive ? '#0b0c10' : 'var(--accent-gold)'} />
+                <span>{family}</span>
                 <span 
                   style={{
                     fontSize: '0.72rem',
-                    background: isActive ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+                    background: isActive ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+                    color: isActive ? '#0b0c10' : 'var(--text-muted)',
                     padding: '2px 7px',
                     borderRadius: 'var(--radius-full)',
                     fontWeight: 700

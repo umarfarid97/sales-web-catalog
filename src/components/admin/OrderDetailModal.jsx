@@ -3,14 +3,15 @@ import { useStore } from '../../context/StoreContext';
 import { 
   X, 
   Truck, 
-  Calendar, 
   MapPin, 
   CreditCard, 
   CheckCircle2, 
   Clock, 
-  PackageCheck,
-  Copy,
-  Check
+  Copy, 
+  Check,
+  Gift,
+  Feather,
+  Sparkles
 } from 'lucide-react';
 
 export const OrderDetailModal = () => {
@@ -43,6 +44,7 @@ export const OrderDetailModal = () => {
       <div 
         className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
+        style={{ border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)', maxHeight: '90vh', overflowY: 'auto' }}
       >
         <button
           className="modal-close-btn"
@@ -55,10 +57,10 @@ export const OrderDetailModal = () => {
         <div style={{ padding: '32px' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '20px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(212, 175, 55, 0.2)', paddingBottom: '20px', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
+                <h3 className="font-serif-title" style={{ fontSize: '1.5rem', fontWeight: 800 }}>
                   Order {order.id}
                 </h3>
                 <span className={`order-status-badge status-${order.status.toLowerCase()}`}>
@@ -74,21 +76,21 @@ export const OrderDetailModal = () => {
             <div style={{ display: 'flex', gap: '8px' }}>
               {order.status === 'Pending' && (
                 <button 
-                  className="btn btn-primary"
+                  className="btn btn-gold"
                   style={{ padding: '8px 14px', fontSize: '0.82rem' }}
                   onClick={() => handleStatusChange('Processing')}
                 >
-                  Start Processing
+                  Start Atelier Packing
                 </button>
               )}
               {order.status === 'Processing' && (
                 <button 
-                  className="btn btn-primary"
+                  className="btn btn-gold"
                   style={{ padding: '8px 14px', fontSize: '0.82rem' }}
                   onClick={() => handleStatusChange('Shipped')}
                 >
                   <Truck size={14} />
-                  <span>Dispatch & Ship</span>
+                  <span>Dispatch White-Glove Courier</span>
                 </button>
               )}
               {order.status === 'Shipped' && (
@@ -98,137 +100,159 @@ export const OrderDetailModal = () => {
                   onClick={() => handleStatusChange('Delivered')}
                 >
                   <CheckCircle2 size={14} />
-                  <span>Confirm Delivery</span>
+                  <span>Mark Delivered</span>
                 </button>
               )}
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '28px' }}>
+          {/* Grid Layout: Client & Delivery Info */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px', marginBottom: '28px' }}>
             
-            {/* Left: Line Items List */}
-            <div>
-              <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '14px' }}>
-                Items Purchased ({order.items?.length || 0})
-              </h4>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-                {order.items?.map((item, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '14px',
-                      padding: '12px',
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      borderRadius: 'var(--radius-md)',
-                      border: '1px solid var(--border-subtle)'
-                    }}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{ width: '56px', height: '56px', borderRadius: '8px', objectFit: 'cover', background: '#141722' }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, color: '#ffffff', fontSize: '0.92rem' }}>{item.name}</div>
-                      <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
-                        Variant: <span style={{ color: '#818cf8' }}>{item.color}</span> &bull; Qty: <strong>{item.quantity}</strong>
-                      </div>
-                    </div>
-                    <div style={{ fontWeight: 700, color: '#ffffff', fontSize: '0.95rem' }}>
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </div>
-                  </div>
-                ))}
+            {/* Client Card */}
+            <div style={{ padding: '20px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <MapPin size={16} color="var(--accent-gold)" />
+                <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>Client &amp; Destination</h4>
               </div>
 
-              {/* Financial Breakdown */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                  <span>Subtotal</span>
-                  <span>${order.subtotal?.toFixed(2)}</span>
-                </div>
-                {order.discount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#34d399', marginBottom: '6px' }}>
-                    <span>Discount ({order.discountCode || 'Promo'})</span>
-                    <span>-${order.discount?.toFixed(2)}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                  <span>Shipping Fee</span>
-                  <span>{order.shipping === 0 ? 'FREE' : `$${order.shipping?.toFixed(2)}`}</span>
-                </div>
-                <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '6px 0' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.15rem', fontWeight: 800, color: '#ffffff' }}>
-                  <span>Total Paid</span>
-                  <span style={{ color: 'var(--accent-primary)' }}>${order.total?.toFixed(2)}</span>
-                </div>
+              <div style={{ fontSize: '0.9rem', lineHeight: '1.6' }}>
+                <p><strong style={{ color: 'var(--text-main)' }}>{order.customer.name}</strong></p>
+                <p style={{ color: 'var(--text-muted)' }}>{order.customer.email} &bull; {order.customer.phone}</p>
+                <p style={{ color: 'var(--text-muted)', marginTop: '4px' }}>
+                  {order.customer.address}, {order.customer.city}, {order.customer.state} {order.customer.zip}, {order.customer.country}
+                </p>
               </div>
+
+              {/* Gift & Engraving Callout */}
+              {order.customer.giftPackaging && (
+                <div style={{ marginTop: '14px', padding: '10px 12px', background: 'rgba(212, 175, 55, 0.08)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(212, 175, 55, 0.25)', fontSize: '0.82rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#fce08b', fontWeight: 700, marginBottom: '4px' }}>
+                    <Gift size={13} />
+                    <span>Luxury Gift Presentation &amp; Calligraphy Card</span>
+                  </div>
+                  {order.customer.giftNote && (
+                    <p style={{ color: '#f3e5ab', fontStyle: 'italic' }}>&quot;{order.customer.giftNote}&quot;</p>
+                  )}
+                </div>
+              )}
+
+              {/* Included Samples */}
+              {order.customer.samples && order.customer.samples.length > 0 && (
+                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: '#f3e5ab' }}>
+                  <strong>Included Samples:</strong> {order.customer.samples.join(', ')}
+                </div>
+              )}
             </div>
 
-            {/* Right: Customer & Shipping Details */}
-            <div>
-              
-              {/* Shipping Address Card */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                  <MapPin size={16} color="#818cf8" />
-                  <h5 style={{ fontSize: '0.9rem', fontWeight: 700 }}>Customer & Shipping</h5>
-                </div>
-                <div style={{ fontSize: '0.88rem', color: '#ffffff', fontWeight: 600, marginBottom: '2px' }}>
-                  {order.customer?.name}
-                </div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '2px' }}>
-                  {order.customer?.address}
-                </div>
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                  {order.customer?.city}, {order.customer?.state} {order.customer?.zip}, {order.customer?.country}
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-                  Email: <span style={{ color: '#818cf8' }}>{order.customer?.email}</span>
-                </div>
-                {order.customer?.phone && (
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-                    Phone: {order.customer.phone}
-                  </div>
-                )}
+            {/* Tracking & Payment Details */}
+            <div style={{ padding: '20px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <CreditCard size={16} color="var(--accent-gold)" />
+                <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>Payment &amp; Courier</h4>
               </div>
 
-              {/* Payment & Tracking Card */}
-              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '18px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                  <CreditCard size={16} color="#34d399" />
-                  <h5 style={{ fontSize: '0.9rem', fontWeight: 700 }}>Payment & Tracking</h5>
+              <div style={{ fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div>
+                  <span style={{ color: 'var(--text-dim)' }}>Payment: </span>
+                  <span style={{ fontWeight: 600 }}>{order.paymentMethod}</span>
                 </div>
 
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                  Method: <strong style={{ color: '#ffffff' }}>{order.paymentMethod}</strong>
-                </div>
-
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                  Tracking Number:
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(0, 0, 0, 0.3)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: '#818cf8', flex: 1 }}>
-                    {order.trackingNumber || 'TRK-LUM-PENDING'}
+                <div>
+                  <span style={{ color: 'var(--text-dim)' }}>Tracking Number: </span>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-gold-light)', fontWeight: 700 }}>
+                    {order.trackingNumber}
                   </span>
-                  <button
-                    onClick={copyTracking}
-                    style={{ color: copied ? '#34d399' : 'var(--text-dim)', padding: '2px' }}
-                    title="Copy Tracking Number"
-                  >
-                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                  <button onClick={copyTracking} style={{ background: 'none', border: 'none', color: 'var(--accent-gold)', marginLeft: '6px', cursor: 'pointer' }}>
+                    {copied ? <Check size={13} color="#34d399" /> : <Copy size={13} />}
                   </button>
                 </div>
-              </div>
 
+                <div>
+                  <span style={{ color: 'var(--text-dim)' }}>Fulfillment Status: </span>
+                  <span className={`badge status-${order.status.toLowerCase()}`} style={{ fontSize: '0.72rem' }}>
+                    {order.status}
+                  </span>
+                </div>
+              </div>
             </div>
 
           </div>
 
+          {/* Items Table */}
+          <h4 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '12px', color: 'var(--accent-gold-light)' }}>
+            Ordered Fragrances ({order.items.length})
+          </h4>
+
+          <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Flacon Creation</th>
+                  <th>Flacon Size</th>
+                  <th>Custom Engraving</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th style={{ textAlign: 'right' }}>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img src={item.image} alt={item.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover' }} />
+                        <span className="font-serif-title" style={{ fontWeight: 700 }}>{item.name}</span>
+                      </div>
+                    </td>
+                    <td>{item.size || '100 ml Grand Flacon'}</td>
+                    <td>
+                      {item.engraving ? (
+                        <span style={{ color: '#fce08b', fontStyle: 'italic', fontSize: '0.8rem' }}>
+                          <Feather size={11} style={{ display: 'inline', marginRight: '4px' }} />
+                          &quot;{item.engraving}&quot;
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>None</span>
+                      )}
+                    </td>
+                    <td>{item.quantity}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td style={{ textAlign: 'right', fontWeight: 700, color: '#fce08b' }}>
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Totals Summary */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.9rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
+                <span>Subtotal:</span>
+                <span>${order.subtotal.toFixed(2)}</span>
+              </div>
+              {order.discount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6ee7b7' }}>
+                  <span>Discount ({order.discountCode}):</span>
+                  <span>-${order.discount.toFixed(2)}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
+                <span>Shipping:</span>
+                <span>{order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1.2rem', color: '#fce08b', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+                <span>Total:</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>${order.total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
     </div>
   );

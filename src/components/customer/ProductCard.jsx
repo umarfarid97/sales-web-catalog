@@ -5,8 +5,9 @@ import {
   ShoppingBag, 
   Star, 
   Eye, 
-  Check, 
-  AlertTriangle 
+  Sparkles,
+  Flame,
+  Feather
 } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
@@ -22,138 +23,119 @@ export const ProductCard = ({ product }) => {
   const isOutOfStock = product.stock <= 0;
   const isLowStock = product.stock > 0 && product.stock < 5;
 
-  // Check if item is already in cart
-  const inCartItem = cart.find((i) => i.id === product.id);
+  const handleQuickAdd = (e) => {
+    e.stopPropagation();
+    if (isOutOfStock) return;
+    const defaultColor = product.colors && product.colors[0]?.name ? product.colors[0].name : 'Standard';
+    addToCart(product, defaultColor, 1);
+  };
 
   return (
-    <article className="product-card">
+    <article className="perfume-card">
       
       {/* Top Image & Overlays */}
       <div 
-        className="product-card-img-wrap"
+        className="perfume-card-image-wrap"
         onClick={() => setSelectedProductModal(product)}
       >
         <img
           src={product.images[0]}
           alt={product.name}
           loading="lazy"
-          className="product-card-img"
+          className="perfume-card-image"
         />
 
         {/* Top Badges */}
-        <div className="product-badges-top">
+        <div className="perfume-badge-top">
           {product.badge && (
             <span className={`badge ${
-              product.badge === 'Sale' ? 'badge-danger' :
-              product.badge === 'Best Seller' ? 'badge-primary' :
-              product.badge === 'Low Stock' ? 'badge-warning' : 'badge-neutral'
+              product.badge === 'Iconic Signature' ? 'badge-gold' :
+              product.badge === 'Best Seller' ? 'badge-amber' :
+              product.badge === 'Low Stock' ? 'badge-danger' : 'badge-gold'
             }`}>
+              <Sparkles size={11} />
               {product.badge}
-            </span>
-          )}
-          {product.discountPercent > 0 && (
-            <span className="badge badge-danger">
-              -{product.discountPercent}%
             </span>
           )}
         </div>
 
         {/* Wishlist Button */}
         <button
-          className={`product-fav-btn ${isFav ? 'active' : ''}`}
+          className={`perfume-wishlist-btn ${isFav ? 'active' : ''}`}
           onClick={(e) => {
             e.stopPropagation();
             toggleFavorite(product.id);
           }}
           aria-label={isFav ? 'Remove from wishlist' : 'Save to wishlist'}
         >
-          <Heart size={18} fill={isFav ? 'currentColor' : 'none'} />
+          <Heart size={16} fill={isFav ? 'currentColor' : 'none'} />
         </button>
-
-        {/* Quick View Hover Overlay */}
-        <div className="product-quick-view-overlay">
-          <button 
-            className="btn btn-secondary"
-            style={{ padding: '8px 16px', fontSize: '0.82rem' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedProductModal(product);
-            }}
-          >
-            <Eye size={15} />
-            <span>Quick View</span>
-          </button>
-        </div>
       </div>
 
       {/* Product Body */}
-      <div className="product-card-body">
+      <div className="perfume-card-body">
         
-        <div className="product-meta-row">
-          <span className="product-category-tag">{product.category}</span>
-          <div className="product-rating-box">
-            <Star size={13} fill="currentColor" color="#fbbf24" />
-            <span>{product.rating}</span>
-            <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>
-              ({product.reviewsCount})
-            </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+          <span className="perfume-card-family">{product.category}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', color: '#fcd34d' }}>
+            <Star size={12} fill="currentColor" color="#fcd34d" />
+            <span style={{ fontWeight: 700 }}>{product.rating}</span>
+            <span style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>({product.reviewsCount})</span>
           </div>
         </div>
 
         <h3 
-          className="product-card-title"
+          className="perfume-card-title"
           onClick={() => setSelectedProductModal(product)}
         >
           {product.name}
         </h3>
 
-        <p className="product-card-tagline">
-          {product.tagline || product.description}
-        </p>
-
-        {/* Price Row */}
-        <div className="product-price-row">
-          <span className="current-price">
-            ${product.price.toFixed(2)}
-          </span>
-          {product.originalPrice > product.price && (
-            <span className="original-price">
-              ${product.originalPrice.toFixed(2)}
-            </span>
-          )}
-          
-          {isLowStock && (
-            <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: 600 }}>
-              <AlertTriangle size={12} />
-              Only {product.stock} left!
-            </span>
-          )}
-          {isOutOfStock && (
-            <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: '#fb7185', fontWeight: 700 }}>
-              Sold Out
-            </span>
-          )}
+        <div className="perfume-card-concentration">
+          {product.concentration || 'Extrait de Parfum'}
         </div>
 
-        {/* Card Actions */}
-        <div className="product-card-footer">
-          <button
-            className="add-cart-btn"
-            onClick={() => addToCart(product, null, 1)}
-            disabled={isOutOfStock}
-          >
-            {inCartItem ? (
-              <>
-                <Check size={16} />
-                <span>In Cart ({inCartItem.quantity})</span>
-              </>
-            ) : (
-              <>
-                <ShoppingBag size={16} />
-                <span>{isOutOfStock ? 'Out of Stock' : 'Add to Cart'}</span>
-              </>
+        {/* Top Notes Preview Tags */}
+        {product.pyramid?.topNotes && (
+          <div className="perfume-notes-preview">
+            {product.pyramid.topNotes.slice(0, 3).map((note, idx) => (
+              <span key={idx} className="perfume-note-tag">
+                {note}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Card Footer: Price & Action */}
+        <div className="perfume-card-footer">
+          <div className="perfume-price-wrap">
+            <span className="perfume-price">${product.price.toFixed(2)}</span>
+            {product.originalPrice > product.price && (
+              <span className="perfume-price-original">${product.originalPrice.toFixed(2)}</span>
             )}
-          </button>
+          </div>
+
+          <div className="perfume-card-actions">
+            <button 
+              className="btn btn-secondary"
+              style={{ padding: '8px 12px', fontSize: '0.8rem' }}
+              onClick={() => setSelectedProductModal(product)}
+              title="Explore Fragrance Pyramid"
+            >
+              <Eye size={14} color="var(--accent-gold)" />
+              <span>Notes</span>
+            </button>
+
+            <button
+              className="btn btn-gold"
+              style={{ padding: '8px 14px', fontSize: '0.8rem' }}
+              onClick={handleQuickAdd}
+              disabled={isOutOfStock}
+            >
+              <ShoppingBag size={14} />
+              <span>{isOutOfStock ? 'Sold Out' : 'Bag'}</span>
+            </button>
+          </div>
         </div>
 
       </div>
