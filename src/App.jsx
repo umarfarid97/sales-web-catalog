@@ -5,8 +5,6 @@ import { Footer } from './components/common/Footer';
 import { ToastContainer } from './components/common/ToastContainer';
 
 // Customer Components
-import { HeroBanner } from './components/customer/HeroBanner';
-import { CategoryFilter } from './components/customer/CategoryFilter';
 import { ProductCatalog } from './components/customer/ProductCatalog';
 import { ProductDetailModal } from './components/customer/ProductDetailModal';
 import { CartDrawer } from './components/customer/CartDrawer';
@@ -42,8 +40,6 @@ const MainLayout = () => {
         {role === 'customer' ? (
           /* ================= CUSTOMER STOREFRONT ================= */
           <div className="customer-store-view">
-            <HeroBanner />
-            <CategoryFilter />
             <ProductCatalog />
           </div>
         ) : (

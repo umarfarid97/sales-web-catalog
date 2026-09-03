@@ -56,11 +56,11 @@
 .dior-hero-media-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1920&auto=format&fit=crop&q=85');
+  background-image: url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1920&auto=format&fit=crop&q=85');
   background-size: cover;
-  background-position: center 35%;
-  opacity: 0.45;
-  filter: contrast(1.1) brightness(0.75);
+  background-position: center 60%;
+  opacity: 0.5;
+  filter: contrast(1.15) brightness(0.7);
 }
 
 .dior-hero-content {
