@@ -39,12 +39,18 @@ export const StoreProvider = ({ children }) => {
   const [isCloudConnected, setIsCloudConnected] = useState(isSupabaseConfigured);
   const [isLoadingFromCloud, setIsLoadingFromCloud] = useState(isSupabaseConfigured);
 
-  // Products Data
+  // Products Data (Auto-purges old headphone cache)
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('lumina_products');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // If cached data contains old tech products (like Headphones/Audio/Keyboards), clear it
+        if (Array.isArray(parsed) && parsed.some((p) => p.sku?.startsWith('LUM-AUD') || p.category === 'Audio' || p.category === 'Wearables')) {
+          localStorage.removeItem('lumina_products');
+          return INITIAL_PRODUCTS;
+        }
+        return parsed;
       } catch (e) {
         console.error('Failed to parse saved products', e);
       }
@@ -57,7 +63,13 @@ export const StoreProvider = ({ children }) => {
     const saved = localStorage.getItem('lumina_cart');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Clear cart if it had old headphones
+        if (Array.isArray(parsed) && parsed.some((p) => p.category === 'Audio' || p.category === 'Wearables')) {
+          localStorage.removeItem('lumina_cart');
+          return [];
+        }
+        return parsed;
       } catch (e) {
         console.error('Failed to parse saved cart', e);
       }
@@ -70,7 +82,12 @@ export const StoreProvider = ({ children }) => {
     const saved = localStorage.getItem('lumina_orders');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some((o) => o.items?.some((it) => it.category === 'Audio'))) {
+          localStorage.removeItem('lumina_orders');
+          return INITIAL_ORDERS;
+        }
+        return parsed;
       } catch (e) {
         console.error('Failed to parse saved orders', e);
       }
@@ -142,8 +159,9 @@ export const StoreProvider = ({ children }) => {
         // 1. Products Sync
         const cloudProducts = await fetchProductsFromSupabase();
         if (cloudProducts !== null && isMounted) {
-          if (cloudProducts.length === 0) {
-            // Seed initial products to Supabase if table is empty
+          const hasLegacy = cloudProducts.some((p) => p.sku?.startsWith('LUM-AUD') || p.category === 'Audio' || p.category === 'Wearables');
+          if (cloudProducts.length === 0 || hasLegacy) {
+            // Seed luxury perfume catalog to Supabase
             await seedProductsToSupabase(INITIAL_PRODUCTS);
             setProducts(INITIAL_PRODUCTS);
           } else {
@@ -155,8 +173,9 @@ export const StoreProvider = ({ children }) => {
         // 2. Orders Sync
         const cloudOrders = await fetchOrdersFromSupabase();
         if (cloudOrders !== null && isMounted) {
-          if (cloudOrders.length === 0) {
-            // Seed initial orders to Supabase if table is empty
+          const hasLegacyOrders = cloudOrders.some((o) => o.items?.some((it) => it.category === 'Audio'));
+          if (cloudOrders.length === 0 || hasLegacyOrders) {
+            // Seed initial perfume orders to Supabase
             await seedOrdersToSupabase(INITIAL_ORDERS);
             setOrders(INITIAL_ORDERS);
           } else {
