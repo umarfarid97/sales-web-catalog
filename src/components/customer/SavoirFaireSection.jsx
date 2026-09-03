@@ -1,59 +1,44 @@
 import React from 'react';
 import { SAVOIR_FAIRE_RAW_MATERIALS } from '../../data/initialProducts';
-import { Sparkles, Compass, MapPin, Feather } from 'lucide-react';
+import { MapPin, Sparkles } from 'lucide-react';
 
 export const SavoirFaireSection = () => {
   return (
-    <section className="savoir-faire-section">
+    <section className="dior-savoir-faire-banner">
       <div className="container">
         
-        {/* Section Header */}
-        <div className="section-header-centered">
-          <div className="couture-sub">
-            Artisanal Provenance &bull; French Savoir-Faire
+        {/* Header */}
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto' }}>
+          <div className="couture-sub" style={{ color: '#e5e7eb', marginBottom: '8px' }}>
+            French Savoir-Faire &bull; Sustainable Sourcing
           </div>
-          <h2 className="couture-title" style={{ fontSize: 'clamp(1.7rem, 3vw, 2.4rem)' }}>
+          <h2 className="couture-title" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', color: '#ffffff' }}>
             The Art of Raw Materials
           </h2>
-          <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.7' }}>
-            François Demachy envisioned Sauvage as an act of creation dictated by exceptional raw materials. Each ingredient is sustainably sourced from exclusive partner harvests across the globe.
+          <p style={{ fontSize: '0.95rem', color: '#9ca3af', lineHeight: '1.7', marginTop: '12px' }}>
+            Sauvage is an act of creation dictated by exceptional raw materials. Each ingredient is carefully selected from sustainable, long-standing partner harvests around the world.
           </p>
         </div>
 
-        {/* 4 Key Ingredients Grid */}
-        <div className="raw-materials-grid">
+        {/* 4 Materials Grid */}
+        <div className="dior-materials-grid">
           {SAVOIR_FAIRE_RAW_MATERIALS.map((mat) => (
-            <div key={mat.id} className="raw-material-card">
-              <div className="raw-material-img-wrap">
-                <img src={mat.image} alt={mat.name} className="raw-material-img" />
-                <div 
-                  style={{
-                    position: 'absolute',
-                    bottom: '12px',
-                    left: '12px',
-                    background: 'rgba(4, 7, 17, 0.85)',
-                    backdropFilter: 'blur(8px)',
-                    padding: '4px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.68rem',
-                    fontFamily: 'var(--font-couture)',
-                    letterSpacing: '0.12em',
-                    fontWeight: 700,
-                    color: 'var(--accent-copper-light)',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  {mat.role}
-                </div>
-              </div>
+            <div key={mat.id} className="dior-material-card">
+              <img src={mat.image} alt={mat.name} className="dior-material-img" />
 
-              <div className="raw-material-body">
-                <div className="raw-material-origin" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <div className="dior-material-info">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', color: '#e28743', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700, marginBottom: '6px' }}>
                   <MapPin size={12} />
                   <span>{mat.origin}</span>
                 </div>
-                <h3 className="raw-material-title">{mat.name}</h3>
-                <p className="raw-material-desc">{mat.description}</p>
+
+                <h3 className="couture-title" style={{ fontSize: '1.1rem', color: '#ffffff', marginBottom: '8px' }}>
+                  {mat.name}
+                </h3>
+
+                <p style={{ fontSize: '0.86rem', color: '#9ca3af', lineHeight: '1.5' }}>
+                  {mat.description}
+                </p>
               </div>
             </div>
           ))}

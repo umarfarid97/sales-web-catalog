@@ -4,17 +4,12 @@ import {
   X, 
   ShoppingBag, 
   Heart, 
-  Star, 
   Sparkles, 
-  Layers, 
-  Wind, 
   Clock, 
-  Check, 
+  Wind, 
+  RefreshCw, 
+  Feather, 
   Gift, 
-  Feather,
-  RefreshCw,
-  Droplets,
-  Flame,
   ShieldCheck
 } from 'lucide-react';
 
@@ -30,12 +25,11 @@ export const ProductDetailModal = () => {
 
   const product = selectedProductModal;
 
-  // Selected Flacon Size State
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(1); // Default to 100ml
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [engravingText, setEngravingText] = useState('');
-  const [showEngravingInput, setShowEngravingInput] = useState(false);
+  const [showEngraving, setShowEngraving] = useState(false);
 
   if (!product) return null;
 
@@ -43,9 +37,9 @@ export const ProductDetailModal = () => {
   const sizes = product.sizes && product.sizes.length > 0 
     ? product.sizes 
     : [
-        { label: '60 ml Flacon', ml: 60, priceMultiplier: 0.75, isRefillable: true },
-        { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0, isRefillable: true },
-        { label: '200 ml Eco-Refillable', ml: 200, priceMultiplier: 1.68, isRefillable: true }
+        { label: '60 ml', ml: 60, priceMultiplier: 0.75, isRefillable: true },
+        { label: '100 ml', ml: 100, priceMultiplier: 1.0, isRefillable: true },
+        { label: '200 ml Refillable', ml: 200, priceMultiplier: 1.68, isRefillable: true }
       ];
 
   const currentSizeObj = sizes[selectedSizeIndex] || sizes[0];
@@ -56,12 +50,12 @@ export const ProductDetailModal = () => {
       product, 
       quantity, 
       currentSizeObj.label, 
-      showEngravingInput && engravingText.trim() ? engravingText.trim() : null,
+      showEngraving && engravingText.trim() ? engravingText.trim() : null,
       dynamicPrice
     );
 
-    const engravingMsg = showEngravingInput && engravingText.trim() ? ` with bespoke engraving "${engravingText}"` : '';
-    showToast(`Added ${quantity}x ${product.name} (${currentSizeObj.label})${engravingMsg} to your Bag!`, 'success');
+    const engMsg = showEngraving && engravingText.trim() ? ` with custom engraving "${engravingText}"` : '';
+    showToast(`Added ${quantity}x ${product.name} (${currentSizeObj.label})${engMsg} to your Bag!`, 'success');
     setSelectedProductModal(null);
   };
 
@@ -74,28 +68,27 @@ export const ProductDetailModal = () => {
     >
       <div 
         className="modal-content modal-content-lg"
-        style={{ background: 'rgba(7, 11, 24, 0.98)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           className="modal-close-btn"
           onClick={() => setSelectedProductModal(null)}
-          aria-label="Close dialog"
+          aria-label="Close"
         >
           <X size={18} />
         </button>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '36px', padding: '36px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '40px', padding: '36px' }}>
           
-          {/* Left Column: Flacon Gallery */}
+          {/* Left: Product Images */}
           <div>
             <div 
               style={{
                 width: '100%',
                 borderRadius: 'var(--radius-sm)',
                 overflow: 'hidden',
-                background: 'radial-gradient(circle at center, rgba(18, 30, 64, 0.6) 0%, rgba(4, 7, 17, 0.95) 80%)',
-                border: '1px solid var(--border-card)',
+                background: '#fbfbfb',
+                border: '1px solid var(--border-subtle)',
                 marginBottom: '16px',
                 position: 'relative'
               }}
@@ -103,32 +96,31 @@ export const ProductDetailModal = () => {
               <img 
                 src={product.images[activeImageIndex] || product.images[0]} 
                 alt={product.name}
-                style={{ width: '100%', height: '400px', objectFit: 'cover' }}
+                style={{ width: '100%', height: '420px', objectFit: 'cover' }}
               />
-              
+
               {product.refillable && (
                 <div 
                   style={{
                     position: 'absolute',
                     bottom: '14px',
                     left: '14px',
-                    background: 'rgba(4, 7, 17, 0.85)',
-                    backdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(16, 185, 129, 0.4)',
-                    color: '#6ee7b7',
+                    background: '#ffffff',
+                    border: '1px solid #e5e7eb',
                     padding: '4px 12px',
-                    borderRadius: 'var(--radius-full)',
+                    borderRadius: 'var(--radius-sm)',
                     fontSize: '0.72rem',
                     fontFamily: 'var(--font-couture)',
-                    letterSpacing: '0.1em',
                     fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    color: '#047857',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px'
                   }}
                 >
                   <RefreshCw size={12} />
-                  <span>100% Sustainable &amp; Refillable</span>
+                  <span>Refillable Flacon</span>
                 </div>
               )}
             </div>
@@ -145,7 +137,7 @@ export const ProductDetailModal = () => {
                       height: '64px',
                       borderRadius: 'var(--radius-sm)',
                       overflow: 'hidden',
-                      border: activeImageIndex === idx ? '2px solid #ffffff' : '1px solid var(--border-subtle)',
+                      border: activeImageIndex === idx ? '2px solid #000000' : '1px solid var(--border-subtle)',
                       background: 'none',
                       padding: 0,
                       cursor: 'pointer'
@@ -156,184 +148,140 @@ export const ProductDetailModal = () => {
                 ))}
               </div>
             )}
-
-            {/* Performance Gauges */}
-            <div 
-              style={{
-                marginTop: '24px',
-                padding: '18px',
-                background: 'rgba(11, 17, 34, 0.75)',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-card)'
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '0.85rem' }}>
-                <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Clock size={14} color="var(--accent-copper)" /> Longevity
-                </span>
-                <span style={{ fontWeight: 700, color: '#ffffff' }}>{product.longevity || '16+ Hours (Eternal)'}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                <span style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Wind size={14} color="var(--accent-copper)" /> Sillage &amp; Trail
-                </span>
-                <span style={{ fontWeight: 700, color: '#ffffff' }}>{product.sillage || 'Magnetic & Enveloping'}</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Right Column: Olfactory Architecture & Order Actions */}
-          <div>
+          {/* Right: Olfactory Details & Sizing */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-              <span className="badge badge-copper">
-                {product.category}
-              </span>
-              <span className="couture-sub" style={{ color: 'var(--accent-copper-light)' }}>
-                {product.concentration}
-              </span>
+            <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#6b7280', marginBottom: '6px' }}>
+              {product.category === 'Sauvage Spectrum' ? `FRAGRANCE - ${product.concentration}` : product.category}
             </div>
 
-            <h2 className="couture-title" style={{ fontSize: '1.8rem', letterSpacing: '0.14em', marginBottom: '8px', color: '#ffffff' }}>
+            <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '8px', color: '#000000' }}>
               {product.name}
             </h2>
 
-            <p style={{ fontStyle: 'italic', color: 'var(--text-muted)', fontSize: '0.92rem', marginBottom: '16px' }}>
+            <p style={{ fontStyle: 'italic', color: '#6b7280', fontSize: '0.92rem', marginBottom: '14px' }}>
               &ldquo;{product.tagline}&rdquo;
             </p>
 
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.65', marginBottom: '20px' }}>
+            <p style={{ fontSize: '0.9rem', color: '#374151', lineHeight: '1.65', marginBottom: '20px' }}>
               {product.description}
             </p>
 
-            {/* 3-Tier Olfactory Notes Pyramid */}
+            {/* Olfactory Notes Architecture */}
             {product.pyramid && (
-              <div style={{ margin: '20px 0' }}>
-                <div className="couture-sub" style={{ color: 'var(--accent-copper-light)', marginBottom: '8px' }}>
-                  Olfactory Pyramid &bull; Savoir-Faire Architecture
+              <div style={{ padding: '16px', background: '#f8f9fa', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', marginBottom: '20px' }}>
+                <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-couture)', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#000000', marginBottom: '10px' }}>
+                  Olfactory Notes
                 </div>
 
-                <div className="fragrance-pyramid-container">
-                  {/* Top */}
-                  <div className="pyramid-tier-card">
-                    <span className="pyramid-badge tier-top">Top Notes (0-15m)</span>
-                    <div className="pyramid-notes-list">
-                      {product.pyramid.topNotes?.map((n, i) => (
-                        <span key={i} className="pyramid-note-pill">{n}</span>
-                      ))}
-                    </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem' }}>
+                  <div>
+                    <strong>Top Notes:</strong> <span style={{ color: '#4b5563' }}>{product.pyramid.topNotes?.join(', ')}</span>
                   </div>
-
-                  {/* Heart */}
-                  <div className="pyramid-tier-card">
-                    <span className="pyramid-badge tier-heart">Heart Notes (2-4h)</span>
-                    <div className="pyramid-notes-list">
-                      {product.pyramid.heartNotes?.map((n, i) => (
-                        <span key={i} className="pyramid-note-pill">{n}</span>
-                      ))}
-                    </div>
+                  <div>
+                    <strong>Heart Notes:</strong> <span style={{ color: '#4b5563' }}>{product.pyramid.heartNotes?.join(', ')}</span>
                   </div>
-
-                  {/* Base */}
-                  <div className="pyramid-tier-card">
-                    <span className="pyramid-badge tier-base">Base Trail (6-16h+)</span>
-                    <div className="pyramid-notes-list">
-                      {product.pyramid.baseNotes?.map((n, i) => (
-                        <span key={i} className="pyramid-note-pill">{n}</span>
-                      ))}
-                    </div>
+                  <div>
+                    <strong>Base Notes:</strong> <span style={{ color: '#4b5563' }}>{product.pyramid.baseNotes?.join(', ')}</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Flacon Sizing Selector */}
-            <div style={{ margin: '20px 0 16px' }}>
-              <div className="couture-sub" style={{ color: '#ffffff', marginBottom: '8px' }}>
-                Select Flacon Format
+            {/* Size Selector */}
+            <div style={{ marginBottom: '18px' }}>
+              <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                Select Format
               </div>
-              <div className="flacon-size-group">
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {sizes.map((s, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className={`flacon-size-chip ${selectedSizeIndex === idx ? 'active' : ''}`}
+                    type="button"
                     onClick={() => setSelectedSizeIndex(idx)}
+                    style={{
+                      padding: '10px 18px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: selectedSizeIndex === idx ? '#000000' : '#ffffff',
+                      color: selectedSizeIndex === idx ? '#ffffff' : '#000000',
+                      border: selectedSizeIndex === idx ? '1px solid #000000' : '1px solid var(--border-subtle)',
+                      fontFamily: 'var(--font-couture)',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '2px'
+                    }}
                   >
-                    <div className="flacon-chip-label">{s.label}</div>
-                    <div className="flacon-chip-price">${Math.round(product.price * s.priceMultiplier).toFixed(2)}</div>
-                  </div>
+                    <span>{s.label}</span>
+                    <span style={{ fontSize: '0.72rem', opacity: selectedSizeIndex === idx ? 0.9 : 0.6 }}>
+                      ${Math.round(product.price * s.priceMultiplier).toFixed(2)}
+                    </span>
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Bespoke Gold Flacon Engraving Accordion */}
-            <div 
-              style={{
-                background: 'rgba(226, 135, 67, 0.08)',
-                border: '1px solid rgba(226, 135, 67, 0.3)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '14px 18px',
-                marginBottom: '24px'
-              }}
-            >
+            {/* Complimentary Engraving */}
+            <div style={{ padding: '12px 16px', background: '#fdf8eb', border: '1px solid #f3d99d', borderRadius: 'var(--radius-sm)', marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.84rem', fontWeight: 700, color: 'var(--accent-copper-light)', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
-                  <Feather size={15} />
-                  <span>Complimentary Flacon Engraving Atelier</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', fontWeight: 700, color: '#926917', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
+                  <Feather size={14} />
+                  <span>Complimentary Flacon Engraving</span>
                 </div>
                 <button
                   type="button"
-                  onClick={() => setShowEngravingInput(!showEngravingInput)}
-                  style={{ background: 'none', border: 'none', color: '#ffffff', textDecoration: 'underline', fontSize: '0.78rem', cursor: 'pointer' }}
+                  onClick={() => setShowEngraving(!showEngraving)}
+                  style={{ background: 'none', border: 'none', color: '#000000', textDecoration: 'underline', fontSize: '0.76rem', cursor: 'pointer', fontWeight: 600 }}
                 >
-                  {showEngravingInput ? 'Cancel' : '+ Add Initials'}
+                  {showEngraving ? 'Cancel' : '+ Add Initials'}
                 </button>
               </div>
 
-              {showEngravingInput && (
+              {showEngraving && (
                 <div style={{ marginTop: '10px' }}>
                   <input
                     type="text"
-                    maxLength={24}
+                    maxLength={20}
                     placeholder="e.g. C.D. • PARIS"
                     value={engravingText}
                     onChange={(e) => setEngravingText(e.target.value.toUpperCase())}
                     className="form-input"
-                    style={{ padding: '8px 12px', fontSize: '0.85rem', letterSpacing: '0.15em' }}
+                    style={{ padding: '8px 12px', fontSize: '0.85rem' }}
                   />
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '4px' }}>
-                    Personalized in hand-engraved gold lettering by our master engraver.
-                  </div>
                 </div>
               )}
             </div>
 
-            {/* Price & Add to Bag */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-card)' }}>
+            {/* Bottom Actions */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)', marginTop: 'auto' }}>
               <div>
-                <div style={{ fontSize: '0.74rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Total Price</div>
-                <div className="product-price" style={{ fontSize: '1.8rem' }}>
+                <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase' }}>Price</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.7rem', fontWeight: 800, color: '#000000' }}>
                   ${(dynamicPrice * quantity).toFixed(2)}
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
-                  className="btn btn-dior-solid"
+                  className="btn btn-dior-black"
                   onClick={handleAddToCart}
-                  style={{ padding: '14px 28px', fontSize: '0.88rem' }}
+                  style={{ padding: '14px 32px' }}
                 >
                   <ShoppingBag size={16} />
-                  <span>Add To Bag</span>
+                  <span>Order Now</span>
                 </button>
 
                 <button
-                  className={`btn-icon ${isFav ? 'active' : ''}`}
+                  className="btn-icon"
                   onClick={() => toggleFavorite(product.id)}
                   aria-label="Wishlist"
-                  style={{ width: '48px', height: '48px' }}
+                  style={{ width: '48px', height: '48px', color: isFav ? '#ef4444' : '#000000' }}
                 >
                   <Heart size={18} fill={isFav ? "currentColor" : "none"} />
                 </button>

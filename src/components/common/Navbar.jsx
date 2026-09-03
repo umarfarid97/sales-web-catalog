@@ -7,10 +7,9 @@ import {
   Sparkles, 
   RotateCcw, 
   X,
-  Compass,
-  Gift,
+  Heart,
   Cloud,
-  Layers
+  Compass
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -25,86 +24,112 @@ export const Navbar = () => {
     resetToDemoData,
     showToast,
     setIsOrderTrackerOpen,
+    selectedCategory,
     setSelectedCategory
   } = useStore();
 
   const [isResetting, setIsResetting] = useState(false);
+  const [showSearchBox, setShowSearchBox] = useState(false);
 
   const handleReset = async () => {
-    if (window.confirm('Reset catalog to the complete Dior Sauvage & Haute Parfumerie collection?')) {
+    if (window.confirm('Reset catalog to the official Dior Sauvage & La Collection Privée catalog?')) {
       setIsResetting(true);
       await resetToDemoData();
       setIsResetting(false);
-      showToast('Catalog refreshed with the complete Sauvage & Privée collection!', 'success');
+      showToast('Catalog refreshed with the official Dior Sauvage collection!', 'success');
     }
   };
 
   return (
     <>
-      {/* Top Dior Couture Announcement Bar */}
+      {/* Top Dior Announcement Banner */}
       <div className="dior-announcement-bar">
-        COMPLIMENTARY ART OF GIFTING &amp; 2 SAMPLES WITH EVERY ORDER &bull; <span>FREE WHITE-GLOVE CLIMATE DELIVERY</span>
+        COMPLIMENTARY DIOR ART OF GIFTING &bull; <span>2 DELUXE SAMPLES WITH EVERY ORDER</span> &bull; FREE DELIVERY
       </div>
 
       <header className="site-header">
         <div className="container">
           <div className="nav-container">
             
-            {/* Brand Mark: LUMINA • SAUVAGE */}
+            {/* Left Column: Dior Navigation Links */}
+            <div className="dior-navbar-links hide-mobile">
+              <button 
+                className={`dior-nav-link ${selectedCategory === 'All Sauvage' || selectedCategory === 'All Creations' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('All Creations')}
+              >
+                Sauvage
+              </button>
+              <button 
+                className={`dior-nav-link ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('La Collection Privée')}
+              >
+                La Collection Privée
+              </button>
+              <button 
+                className={`dior-nav-link ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('Discovery & Sets')}
+              >
+                Gift Sets
+              </button>
+            </div>
+
+            {/* Center Column: Iconic Centered DIOR Logo */}
             <div 
-              className="brand-logo"
-              style={{ cursor: 'pointer' }}
+              style={{ textAlign: 'center', cursor: 'pointer' }}
               onClick={() => setSelectedCategory('All Creations')}
             >
-              <div className="brand-icon-box" style={{ background: 'var(--accent-copper-gradient)', width: '38px', height: '38px', borderRadius: '4px' }}>
-                <Sparkles size={20} color="#040711" />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span className="couture-title" style={{ fontSize: '1.25rem', letterSpacing: '0.28em', lineHeight: 1.1 }}>
-                  SAUVAGE
-                </span>
-                <span style={{ fontSize: '0.62rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: 'var(--accent-copper-light)', fontWeight: 700 }}>
-                  Haute Parfumerie Paris
-                </span>
+              <div className="dior-brand-heading" style={{ fontSize: '2rem', letterSpacing: '0.36em' }}>
+                DIOR
               </div>
             </div>
 
-            {/* Scent Search Bar */}
-            <div className="nav-search-wrap">
-              <Search size={15} className="nav-search-icon" style={{ color: 'var(--accent-copper-light)' }} />
-              <input
-                type="text"
-                className="nav-search-input"
-                placeholder="Search raw notes (Bergamot, Vanilla, Cardamom, Elixir)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search Fragrance Vault"
-              />
-              {searchQuery && (
+            {/* Right Column: Search, Atelier Mode & Shopping Bag */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              
+              {/* Scent Search Trigger / Input */}
+              {showSearchBox ? (
+                <div style={{ position: 'relative', width: '220px' }}>
+                  <input
+                    type="text"
+                    autoFocus
+                    className="form-input"
+                    placeholder="Search Sauvage..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ padding: '6px 30px 6px 12px', fontSize: '0.82rem' }}
+                  />
+                  <button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setShowSearchBox(false);
+                    }}
+                    style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
                 <button
-                  className="nav-search-clear"
-                  onClick={() => setSearchQuery('')}
-                  aria-label="Clear Search"
+                  className="btn-icon"
+                  onClick={() => setShowSearchBox(true)}
+                  title="Search Sauvage Fragrances"
+                  aria-label="Search"
                 >
-                  <X size={14} />
+                  <Search size={17} />
                 </button>
               )}
-            </div>
 
-            {/* Navigation Actions */}
-            <div className="nav-actions">
-              
               {/* Order Tracker */}
               <button
                 className="btn-icon hide-mobile"
                 onClick={() => setIsOrderTrackerOpen(true)}
-                title="Maison Delivery Tracker"
-                aria-label="Maison Delivery Tracker"
+                title="Delivery Tracker"
+                aria-label="Delivery Tracker"
               >
-                <Compass size={18} />
+                <Compass size={17} />
               </button>
 
-              {/* Cloud Sync Status Indicator */}
+              {/* Cloud Sync Status */}
               <div 
                 className="hide-mobile"
                 title={isCloudConnected ? "Connected to Supabase PostgreSQL" : "Local Storage Mode"}
@@ -112,19 +137,18 @@ export const Navbar = () => {
                   display: 'flex', 
                   alignItems: 'center', 
                   gap: '6px', 
-                  padding: '5px 12px', 
+                  padding: '4px 8px', 
                   borderRadius: 'var(--radius-sm)', 
-                  background: isCloudConnected ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.05)',
-                  border: isCloudConnected ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-subtle)',
-                  fontSize: '0.72rem',
+                  background: isCloudConnected ? '#ecfdf5' : '#f3f4f6',
+                  fontSize: '0.68rem',
                   fontFamily: 'var(--font-couture)',
                   letterSpacing: '0.1em',
                   fontWeight: 700,
-                  color: isCloudConnected ? '#34d399' : 'var(--text-muted)'
+                  color: isCloudConnected ? '#059669' : '#6b7280'
                 }}
               >
-                <Cloud size={13} />
-                <span>{isCloudConnected ? 'SUPABASE LIVE' : 'OFFLINE'}</span>
+                <Cloud size={12} />
+                <span>{isCloudConnected ? 'LIVE' : 'LOCAL'}</span>
               </div>
 
               {/* Reset Catalog Button */}
@@ -132,54 +156,72 @@ export const Navbar = () => {
                 className="btn-icon"
                 onClick={handleReset}
                 disabled={isResetting}
-                title="Reset / Seed Sauvage Collection"
+                title="Reset / Seed Dior Sauvage Catalog"
                 aria-label="Reset Collection"
               >
-                <RotateCcw size={16} className={isResetting ? 'spin' : ''} />
+                <RotateCcw size={15} className={isResetting ? 'spin' : ''} />
               </button>
 
-              {/* Role Switcher: Customer vs Maison Admin */}
-              <div className="role-toggle-group">
+              {/* Role Toggle Switcher: Boutique vs Atelier Admin */}
+              <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: 'var(--radius-sm)', padding: '3px', gap: '2px' }}>
                 <button
-                  className={`role-toggle-btn ${role === 'customer' ? 'active' : ''}`}
                   onClick={() => setRole('customer')}
-                  aria-label="Boutique Mode"
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: 'var(--radius-sm)',
+                    border: 'none',
+                    background: role === 'customer' ? '#000000' : 'transparent',
+                    color: role === 'customer' ? '#ffffff' : '#6b7280',
+                    fontFamily: 'var(--font-couture)',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    cursor: 'pointer'
+                  }}
                 >
-                  <Sparkles size={13} />
-                  <span>Boutique</span>
+                  Boutique
                 </button>
                 <button
-                  className={`role-toggle-btn ${role === 'admin' ? 'active-admin' : ''}`}
                   onClick={() => setRole('admin')}
-                  aria-label="Maison Atelier Mode"
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: 'var(--radius-sm)',
+                    border: 'none',
+                    background: role === 'admin' ? '#000000' : 'transparent',
+                    color: role === 'admin' ? '#ffffff' : '#6b7280',
+                    fontFamily: 'var(--font-couture)',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    cursor: 'pointer'
+                  }}
                 >
-                  <UserCheck size={13} />
-                  <span>Atelier</span>
+                  Atelier
                 </button>
               </div>
 
               {/* Shopping Bag Button */}
               {role === 'customer' && (
                 <button
-                  className="btn btn-dior-solid"
+                  className="btn btn-dior-black"
                   onClick={() => setIsCartOpen(true)}
-                  style={{ padding: '10px 18px', position: 'relative' }}
+                  style={{ padding: '9px 18px', fontSize: '0.78rem' }}
                   aria-label={`Shopping Bag (${cartTotalItems} items)`}
                 >
-                  <ShoppingBag size={17} />
-                  <span style={{ fontSize: '0.8rem' }}>Bag</span>
+                  <ShoppingBag size={16} />
+                  <span>Bag</span>
                   {cartTotalItems > 0 && (
                     <span 
                       style={{
-                        background: 'var(--accent-copper)',
-                        color: '#040711',
+                        background: '#ffffff',
+                        color: '#000000',
                         borderRadius: '50%',
-                        width: '20px',
-                        height: '20px',
+                        width: '18px',
+                        height: '18px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '0.72rem',
+                        fontSize: '0.7rem',
                         fontWeight: 900,
                         marginLeft: '4px'
                       }}

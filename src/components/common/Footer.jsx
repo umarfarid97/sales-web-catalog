@@ -5,9 +5,7 @@ import {
   RefreshCw, 
   Feather, 
   Sparkles, 
-  Mail, 
-  ArrowRight,
-  Compass
+  ArrowRight
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
@@ -16,62 +14,54 @@ export const Footer = () => {
 
   const handleNewsletter = (e) => {
     e.preventDefault();
-    showToast('Merci! You have been granted Private Access to Sauvage reserve releases.', 'success');
+    showToast('Merci! You have been subscribed to Dior Fragrance previews.', 'success');
   };
 
   return (
-    <footer className="site-footer">
+    <footer style={{ background: '#f8f9fa', borderTop: '1px solid var(--border-subtle)', padding: '60px 0 30px' }}>
       <div className="container">
         
-        {/* Maison Commitments / Dior Savoir-Faire Bar */}
+        {/* Dior 4 Pillars */}
         <div 
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '28px',
-            paddingBottom: '50px',
+            gap: '24px',
+            paddingBottom: '48px',
             borderBottom: '1px solid var(--border-subtle)',
-            marginBottom: '50px'
+            marginBottom: '48px'
           }}
         >
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+          <div style={{ textAlign: 'center', padding: '16px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
               <Gift size={20} />
             </div>
-            <div>
-              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>The Art of Gifting</h4>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Each order is prepared in our iconic midnight blue gift box with custom ribbon.</p>
-            </div>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Dior Art of Gifting</h4>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Complimentary iconic Dior gift box with signature ribbon.</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+          <div style={{ textAlign: 'center', padding: '16px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
               <Feather size={20} />
             </div>
-            <div>
-              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>2 Complimentary Samples</h4>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Choose 2 deluxe travel spray vials with every fragrance order.</p>
-            </div>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>2 Deluxe Samples</h4>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6ee7b7', flexShrink: 0 }}>
+          <div style={{ textAlign: 'center', padding: '16px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
               <RefreshCw size={20} />
             </div>
-            <div>
-              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>Refillable Flacons</h4>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable eco-luxury flacons designed to be refilled indefinitely.</p>
-            </div>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Refillable Flacons</h4>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable design: refill your Sauvage flacon infinitely.</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: 'rgba(226, 135, 67, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-copper-light)', flexShrink: 0 }}>
+          <div style={{ textAlign: 'center', padding: '16px' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
               <ShieldCheck size={20} />
             </div>
-            <div>
-              <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px' }}>Artisanal French Provenance</h4>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Crafted with rare Reggio bergamot &amp; high-concentration essences.</p>
-            </div>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Free Climate Delivery</h4>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>White-glove delivery on all orders over $150.</p>
           </div>
         </div>
 
@@ -81,89 +71,81 @@ export const Footer = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '40px',
-            marginBottom: '50px'
+            marginBottom: '48px'
           }}
         >
           {/* Brand Col */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-              <span className="couture-title" style={{ fontSize: '1.4rem', letterSpacing: '0.24em' }}>SAUVAGE</span>
+            <div className="dior-brand-heading" style={{ fontSize: '1.6rem', marginBottom: '12px' }}>
+              DIOR
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '20px' }}>
-              Raw and noble all at once. An act of creation inspired by wide-open spaces under a blue-sky night.
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '14px' }}>
+              Sauvage is an act of creation inspired by wide-open spaces. An ozone blue sky that sprawls above a rocky landscape, white-hot beneath the desert sun.
             </p>
-            <div style={{ fontSize: '0.78rem', color: 'var(--accent-copper-light)', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              30 Avenue Montaigne, 75008 Paris
+            <div style={{ fontSize: '0.74rem', color: '#000000', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              30 Avenue Montaigne, 75008 Paris, France
             </div>
           </div>
 
-          {/* Olfactory Collections */}
+          {/* Fragrance Collections */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>The Collections</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Fragrance Collections</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <li>
                 <button 
-                  onClick={() => setSelectedCategory('Sauvage Spectrum')} 
-                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                  onClick={() => setSelectedCategory('All Creations')} 
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  Sauvage Spectrum
+                  Sauvage Complete Line
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => setSelectedCategory('La Collection Privée')} 
-                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  La Collection Privée
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => setSelectedCategory('Woody & Smoky')} 
-                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
-                >
-                  Woody &amp; Smoky Accords
+                  La Collection Privée Christian Dior
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => setSelectedCategory('Discovery & Sets')} 
-                  style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.88rem', cursor: 'pointer', textAlign: 'left' }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  Discovery Coffrets
+                  Discovery Coffrets &amp; Gift Sets
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Client Services */}
+          {/* Client Care */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>Maison Services</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              <li>Bespoke Flacon Engraving</li>
-              <li>The Art of Gifting</li>
-              <li>Olfactory Diagnostic Quiz</li>
-              <li>Refill Atelier Locator</li>
-              <li>Order Tracking &amp; Concierge</li>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Client Services</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.86rem', color: '#4b5563' }}>
+              <li>Complimentary Bottle Engraving</li>
+              <li>The Dior Art of Gifting</li>
+              <li>Sauvage Refill Station Locator</li>
+              <li>Track Your Delivery</li>
+              <li>Contact Maison Concierge</li>
             </ul>
           </div>
 
-          {/* Newsletter / Private Club */}
+          {/* Newsletter */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '18px' }}>Private Access</h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
-              Subscribe to receive exclusive invitations to rare elixir harvest releases and private previews.
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Newsletter</h4>
+            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+              Subscribe to receive exclusive Dior Fragrance news and private previews.
             </p>
             <form onSubmit={handleNewsletter} style={{ display: 'flex', gap: '6px' }}>
               <input
                 type="email"
                 required
-                placeholder="Enter your email address"
+                placeholder="Enter email address"
                 className="form-input"
-                style={{ padding: '10px 14px', fontSize: '0.85rem' }}
+                style={{ padding: '8px 12px', fontSize: '0.82rem' }}
               />
-              <button type="submit" className="btn btn-dior-solid" style={{ padding: '0 16px' }} aria-label="Subscribe">
-                <ArrowRight size={16} />
+              <button type="submit" className="btn btn-dior-black" style={{ padding: '0 16px' }} aria-label="Subscribe">
+                <ArrowRight size={15} />
               </button>
             </form>
           </div>
@@ -178,18 +160,18 @@ export const Footer = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '14px',
-            fontSize: '0.78rem',
-            color: 'var(--text-dim)'
+            gap: '12px',
+            fontSize: '0.74rem',
+            color: '#6b7280'
           }}
         >
           <div>
-            &copy; {new Date().getFullYear()} SAUVAGE Haute Parfumerie. All rights reserved. Handcrafted in France.
+            &copy; {new Date().getFullYear()} Parfums Christian Dior. All rights reserved.
           </div>
           <div style={{ display: 'flex', gap: '20px' }}>
             <span>Privacy Policy</span>
+            <span>Legal Notice</span>
             <span>Terms of Savoir-Faire</span>
-            <span>Delivery &amp; Returns</span>
           </div>
         </div>
 

@@ -1,83 +1,74 @@
 /* ==========================================================================
-   LUMINA SAUVAGE - DIOR-INSPIRED HAUTE COUTURE FRAGRANCE DESIGN SYSTEM
-   Midnight Sapphire, Twilight Copper Horizon, High-Contrast Minimalist Luxury
+   DIOR SAUVAGE OFFICIAL E-BOUTIQUE DESIGN SYSTEM
+   Luminous Clean White, Jet Black Contrast, High-Fashion Editorial Kerning
    ========================================================================== */
 
 :root {
-  /* Color Palette - Dior Sauvage Midnight & Twilight Horizon */
-  --bg-primary: #040711;
-  --bg-secondary: #070c18;
-  --bg-tertiary: #0b1122;
-  --bg-card: rgba(11, 17, 34, 0.78);
-  --bg-card-hover: rgba(16, 24, 48, 0.92);
-  --bg-glass: rgba(7, 12, 24, 0.82);
-  --bg-glass-heavy: rgba(4, 7, 17, 0.96);
-  --bg-overlay: rgba(2, 4, 10, 0.88);
+  /* Color Palette - Dior Haute Couture White & Jet Black */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #f1f2f4;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+  --bg-glass-heavy: rgba(255, 255, 255, 0.98);
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+  --bg-dark-section: #050811;
+  --bg-dior-navy: #080d1a;
 
-  /* Sauvage Dusk Copper & Twilight Amber Accents */
-  --accent-copper: #e28743;
-  --accent-copper-light: #f5b078;
-  --accent-copper-dark: #b85d19;
-  --accent-copper-gradient: linear-gradient(135deg, #f5b078 0%, #e28743 50%, #b85d19 100%);
-  --accent-copper-glow: rgba(226, 135, 67, 0.32);
-
-  --accent-gold: #d4af37;
-  --accent-gold-light: #f7e7b4;
-  --accent-gold-gradient: linear-gradient(135deg, #f7e7b4 0%, #d4af37 60%, #a67c1e 100%);
-
-  --accent-blue-glow: rgba(30, 58, 138, 0.45);
-  --accent-emerald: #10b981;
-  --accent-rose: #f43f5e;
+  /* Dior Jet Black & Platinum Accents */
+  --dior-black: #000000;
+  --dior-black-hover: #1f2937;
+  --dior-white: #ffffff;
+  --dior-charcoal: #111827;
+  --dior-gold: #c5a059;
+  --dior-gold-light: #e6c88b;
+  --dior-copper: #d97706;
 
   /* Primary Theme Accent */
-  --accent-primary: #ffffff;
-  --accent-primary-hover: #e5e7eb;
-  --accent-secondary: #e28743;
-  --accent-gradient: linear-gradient(135deg, #ffffff 0%, #e28743 60%, #b85d19 100%);
+  --accent-primary: #000000;
+  --accent-primary-hover: #1f2937;
+  --accent-secondary: #c5a059;
+  --accent-copper-gradient: linear-gradient(135deg, #f5b078 0%, #e28743 50%, #b85d19 100%);
 
   /* Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.12);
-  --border-focus: rgba(226, 135, 67, 0.7);
-  --border-copper: rgba(226, 135, 67, 0.35);
-  --border-white: rgba(255, 255, 255, 0.3);
+  --border-subtle: #e5e7eb;
+  --border-card: #e5e7eb;
+  --border-hover: #000000;
+  --border-focus: #000000;
 
   /* Typography */
-  --font-couture: 'Montserrat', 'Outfit', sans-serif;
-  --font-serif-title: 'Cinzel', 'Playfair Display', Georgia, serif;
-  --font-serif-body: 'Playfair Display', Georgia, serif;
+  --font-dior: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --font-couture: 'Montserrat', 'Outfit', -apple-system, sans-serif;
   --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Text Colors */
-  --text-main: #ffffff;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
-  --text-copper: #f5b078;
-  --text-gold: #f7e7b4;
-  --text-inverse: #040711;
+  --text-main: #000000;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+  --text-inverse: #ffffff;
 
-  /* Shadows & Glows */
-  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.75);
-  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.9);
-  --shadow-copper: 0 6px 30px rgba(226, 135, 67, 0.28);
-  --shadow-blue: 0 8px 40px rgba(7, 15, 36, 0.8);
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.7);
 
-  /* Blur & Radius */
-  --backdrop-blur: blur(16px);
-  --backdrop-blur-heavy: blur(28px);
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
-  --radius-xl: 20px;
+  /* Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
   --radius-full: 9999px;
 
   /* Transitions */
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Base Reset */
@@ -100,11 +91,6 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(14, 28, 64, 0.45) 0%, transparent 60%),
-    radial-gradient(circle at 10% 40%, rgba(226, 135, 67, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(7, 18, 48, 0.35) 0%, transparent 50%);
-  background-attachment: fixed;
 }
 
 /* Custom Minimal Scrollbar */
@@ -114,53 +100,52 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: #000000;
   border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-copper);
 }
 
 /* Haute Couture Typography Helpers */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-couture);
   color: var(--text-main);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  line-height: 1.2;
+  line-height: 1.25;
+}
+
+.dior-brand-heading {
+  font-family: var(--font-dior);
+  font-weight: 900;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #000000;
 }
 
 .couture-title {
   font-family: var(--font-couture);
   font-weight: 800;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .couture-sub {
   font-family: var(--font-couture);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
-.font-serif-title {
-  font-family: var(--font-serif-title);
-  letter-spacing: 0.08em;
-}
-
-/* Top Couture Announcement Ticker Bar */
+/* Top Dior Announcement Marquee Bar */
 .dior-announcement-bar {
   background: #000000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   padding: 8px 24px;
   text-align: center;
   font-family: var(--font-couture);
@@ -168,57 +153,43 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #ffffff;
+  border-bottom: 1px solid #1f2937;
 }
 
 .dior-announcement-bar span {
-  color: var(--accent-copper-light);
+  color: var(--dior-gold-light);
 }
 
-/* Dior Minimalist Panels & Cards */
-.glass-panel {
-  background: var(--bg-card);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
+/* Header & Navigation Bar */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-subtle);
   transition: all var(--transition-normal);
-}
-
-.glass-panel:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-.glass-card {
-  background: var(--bg-card);
-  backdrop-filter: var(--backdrop-blur);
-  -webkit-backdrop-filter: var(--backdrop-blur);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
-  position: relative;
-  overflow: hidden;
 }
 
-.glass-card:hover {
-  background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: var(--shadow-copper);
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 74px;
+  gap: 24px;
 }
 
-/* Haute Couture Buttons */
+/* Dior Iconic Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 26px;
+  padding: 12px 28px;
   font-family: var(--font-couture);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
@@ -229,78 +200,73 @@ h1, h2, h3, h4, h5, h6 {
   user-select: none;
 }
 
-/* Solid White / Crisp Black Button */
-.btn-primary, .btn-dior-solid {
-  background: #ffffff;
-  color: #040711;
-  border-color: #ffffff;
-  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
+/* Dior Solid Black Button */
+.btn-primary, .btn-dior-solid, .btn-dior-black {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
 }
 
-.btn-primary:hover, .btn-dior-solid:hover {
-  background: #e5e7eb;
-  color: #000000;
-  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.35);
+.btn-primary:hover, .btn-dior-solid:hover, .btn-dior-black:hover {
+  background: #262626;
+  border-color: #262626;
+  color: #ffffff;
   transform: translateY(-1px);
 }
 
-/* Copper Twilight Button */
-.btn-copper, .btn-gold {
-  background: var(--accent-copper-gradient);
-  color: #040711;
-  border-color: var(--accent-copper);
-  font-weight: 800;
-  box-shadow: 0 4px 20px var(--accent-copper-glow);
-}
-
-.btn-copper:hover, .btn-gold:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 28px rgba(226, 135, 67, 0.45);
-  transform: translateY(-1px);
-}
-
-/* Dior Ghost Outline Button */
+/* Dior Ghost / Outline Button */
 .btn-secondary, .btn-dior-outline {
   background: transparent;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #000000;
+  border: 1px solid #000000;
 }
 
 .btn-secondary:hover, .btn-dior-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #ffffff;
+  background: #000000;
   color: #ffffff;
 }
 
+/* White Button on Dark Sections */
+.btn-dior-white {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+}
+
+.btn-dior-white:hover {
+  background: #f3f4f6;
+  color: #000000;
+}
+
 .btn-icon {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
   border: 1px solid var(--border-subtle);
-  color: var(--text-main);
+  color: #000000;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-icon:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.35);
+  background: #000000;
+  border-color: #000000;
   color: #ffffff;
 }
 
-/* Badges */
+/* Dior Badges & Tags */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 10px;
+  padding: 4px 8px;
   font-family: var(--font-couture);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -308,40 +274,27 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid transparent;
 }
 
-.badge-copper, .badge-gold, .badge-primary {
-  background: rgba(226, 135, 67, 0.16);
-  color: var(--accent-copper-light);
-  border-color: rgba(226, 135, 67, 0.4);
+.badge-black, .badge-primary {
+  background: #000000;
+  color: #ffffff;
+}
+
+.badge-gold {
+  background: #fdf8eb;
+  color: #926917;
+  border-color: #f3d99d;
 }
 
 .badge-refillable {
-  background: rgba(16, 185, 129, 0.12);
-  color: #6ee7b7;
-  border-color: rgba(16, 185, 129, 0.3);
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
 }
 
 .badge-neutral {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-muted);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.badge-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.badge-warning {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fde68a;
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.badge-success {
-  background: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
-  border-color: rgba(16, 185, 129, 0.3);
+  background: #f3f4f6;
+  color: #4b5563;
+  border-color: #e5e7eb;
 }
 
 /* Form Inputs */
@@ -354,40 +307,92 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-label {
   font-family: var(--font-couture);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: #374151;
 }
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  padding: 12px 16px;
-  background: rgba(7, 11, 22, 0.85);
-  border: 1px solid var(--border-card);
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  color: var(--text-main);
+  color: #000000;
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   transition: all var(--transition-fast);
   outline: none;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
-  border-color: #ffffff;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-  background: rgba(11, 17, 34, 0.95);
+  border-color: #000000;
+  box-shadow: 0 0 0 1px #000000;
 }
 
-/* Container */
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 580px;
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content-lg {
+  max-width: 960px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: #f3f4f6;
+  border: 1px solid var(--border-subtle);
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* Layout Container */
 .container {
-  max-width: 1360px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 32px;
 }
 
-/* App Layout */
 .app-layout {
   display: flex;
   flex-direction: column;
@@ -398,12 +403,39 @@ h1, h2, h3, h4, h5, h6 {
   flex: 1;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+/* Toast Container */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 380px;
+}
+
+.toast-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: #000000;
+  border: 1px solid #262626;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  font-size: 0.85rem;
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
