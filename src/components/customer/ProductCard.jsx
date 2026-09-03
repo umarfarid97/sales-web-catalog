@@ -58,16 +58,38 @@ export const ProductCard = ({ product }) => {
         </button>
 
         {/* Floating Badges */}
-        <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', flexDirection: 'column', gap: '4px', zIndex: 2 }}>
-          {product.badge && (
-            <span className="badge badge-black">
-              {product.badge}
+        <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', flexDirection: 'column', gap: '4px', zIndex: 2 }}>
+          {product.tier && (
+            <span 
+              className="badge"
+              style={{
+                background: product.tier === 'S' ? '#000000' : product.tier === 'A' ? '#111827' : '#374151',
+                color: product.tier === 'S' ? '#f59e0b' : '#ffffff',
+                border: product.tier === 'S' ? '1px solid #d97706' : '1px solid rgba(255,255,255,0.2)',
+                fontSize: '0.64rem',
+                fontWeight: 800,
+                letterSpacing: '0.08em',
+                padding: '2px 8px',
+                borderRadius: '2px'
+              }}
+            >
+              {product.tier === 'S' ? '★ TIER S · ICON' : product.tier === 'A' ? 'TIER A · PREMIUM' : `TIER ${product.tier}`}
             </span>
           )}
-          {product.refillable && (
-            <span className="badge badge-refillable">
-              <RefreshCw size={10} />
-              <span>Refillable</span>
+          {product.catalogNo && (
+            <span 
+              className="badge"
+              style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                color: '#111827',
+                fontSize: '0.64rem',
+                fontWeight: 800,
+                padding: '2px 6px',
+                borderRadius: '2px',
+                border: '1px solid #e5e7eb'
+              }}
+            >
+              NO. {product.catalogNo}
             </span>
           )}
         </div>
@@ -76,14 +98,21 @@ export const ProductCard = ({ product }) => {
       {/* Card Info Body */}
       <div className="dior-card-body">
         
-        {/* Category */}
-        <div className="dior-card-category">
-          {product.category === 'Sauvage Spectrum' ? `FRAGRANCE - ${product.concentration}` : product.category}
+        {/* Category & Inspiration Line */}
+        <div className="dior-card-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+          <span style={{ fontSize: '0.66rem' }}>
+            {product.gender ? `${product.gender.toUpperCase()}` : ''} {product.character ? `· ${product.character.split('/')[0].trim()}` : ''}
+          </span>
+          {product.brandInspiration && (
+            <span style={{ color: '#926917', fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.06em' }}>
+              {product.brandInspiration}
+            </span>
+          )}
         </div>
 
         {/* Title */}
-        <h3 className="dior-card-title">
-          {product.name}
+        <h3 className="dior-card-title" style={{ fontSize: '1.02rem', lineHeight: '1.3' }}>
+          {product.displayName || product.name}
         </h3>
 
         {/* Short Note Summary */}
@@ -106,8 +135,8 @@ export const ProductCard = ({ product }) => {
             ${product.price.toFixed(2)}
           </div>
 
-          <div style={{ fontSize: '0.74rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            Engraving Available
+          <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            {product.concentration ? product.concentration.split('(')[0].trim() : 'Extrait'}
           </div>
         </div>
 

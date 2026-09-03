@@ -64,22 +64,35 @@ export const Navbar = () => {
 
               <div className="dior-navbar-links hide-mobile">
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'All Sauvage' || selectedCategory === 'All Creations' ? 'active' : ''}`}
+                  className={`dior-nav-link ${selectedCategory === 'All Creations' || selectedCategory === 'All' ? 'active' : ''}`}
                   onClick={() => setSelectedCategory('All Creations')}
                 >
-                  Creations
+                  All (345)
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('La Collection Privée')}
+                  className={`dior-nav-link ${selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('Tier S (Launch Icons)')}
+                  style={{ color: selectedCategory === 'Tier S (Launch Icons)' ? '#000000' : '#926917', fontWeight: 700 }}
                 >
-                  La Collection Privée
+                  ★ Tier S (55)
                 </button>
                 <button 
-                  className={`dior-nav-link ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory('Discovery & Sets')}
+                  className={`dior-nav-link ${selectedCategory === 'Pour Homme' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('Pour Homme')}
                 >
-                  Gift Sets
+                  Pour Homme
+                </button>
+                <button 
+                  className={`dior-nav-link ${selectedCategory === 'Pour Femme' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('Pour Femme')}
+                >
+                  Pour Femme
+                </button>
+                <button 
+                  className={`dior-nav-link ${selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('Niche & Unisex')}
+                >
+                  Unisex
                 </button>
               </div>
             </div>
@@ -261,31 +274,38 @@ export const Navbar = () => {
           <div className="mobile-nav-drawer">
             <div className="mobile-nav-inner">
               
-              <div className="mobile-nav-section-title">Valenszo Collections</div>
+              <div className="mobile-nav-section-title">Valenszo Portfolio (345 Fragrances)</div>
               <div className="mobile-nav-links">
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'All Creations' || selectedCategory === 'All Sauvage' ? 'active' : ''}`}
+                  className={`mobile-nav-item ${selectedCategory === 'All Creations' || selectedCategory === 'All' ? 'active' : ''}`}
                   onClick={() => { setSelectedCategory('All Creations'); setIsMobileMenuOpen(false); }}
                 >
-                  <span>All Creations</span>
+                  <span>All Creations (345 Portfolio)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Sauvage Spectrum' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Sauvage Spectrum'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Tier S (Launch Icons)'); setIsMobileMenuOpen(false); }}
+                  style={{ borderLeft: '3px solid #d97706' }}
                 >
-                  <span>Sauvage Spectrum</span>
+                  <span style={{ color: '#d97706', fontWeight: 800 }}>★ Tier S (55 Launch Icons)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('La Collection Privée'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${selectedCategory === 'Pour Homme' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Pour Homme'); setIsMobileMenuOpen(false); }}
                 >
-                  <span>La Collection Privée</span>
+                  <span>Pour Homme (116 Men&apos;s Fragrances)</span>
                 </button>
                 <button 
-                  className={`mobile-nav-item ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
-                  onClick={() => { setSelectedCategory('Discovery & Sets'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${selectedCategory === 'Pour Femme' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Pour Femme'); setIsMobileMenuOpen(false); }}
                 >
-                  <span>Gift Sets &amp; Discovery</span>
+                  <span>Pour Femme (229 Women&apos;s Fragrances)</span>
+                </button>
+                <button 
+                  className={`mobile-nav-item ${selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Niche & Unisex'); setIsMobileMenuOpen(false); }}
+                >
+                  <span>Unisex &amp; Niche Extraits</span>
                 </button>
               </div>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { HeroBanner } from './HeroBanner';
 import { CategoryFilter } from './CategoryFilter';
@@ -27,9 +27,18 @@ export const ProductCatalog = () => {
     setSelectedCategory
   } = useStore();
 
+  const [visibleCount, setVisibleCount] = useState(24);
+
+  // Reset pagination on filter or search changes
+  useEffect(() => {
+    setVisibleCount(24);
+  }, [selectedCategory, searchQuery, inStockOnly, maxPrice, sortBy]);
+
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+
   return (
     <div>
-      {/* 1. Cinematic Dior Sauvage Campaign Hero */}
+      {/* 1. Cinematic Campaign Hero */}
       <HeroBanner />
 
       {/* 2. Sticky Category Lineup Tabs */}
@@ -43,7 +52,7 @@ export const ProductCatalog = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                {selectedCategory === 'All Creations' ? 'Valenszo Fragrance Collection' : selectedCategory}
+                {selectedCategory === 'All Creations' ? 'Valenszo Fragrance Portfolio' : 'Valenszo Collection'}
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
                 {selectedCategory}
@@ -53,8 +62,8 @@ export const ProductCatalog = () => {
             {/* Filter & Sort Bar */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
               
-              <div style={{ fontSize: '0.82rem', color: '#6b7280', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
-                {filteredProducts.length} {filteredProducts.length === 1 ? 'PRODUCT' : 'PRODUCTS'}
+              <div style={{ fontSize: '0.82rem', color: '#000000', fontWeight: 700, fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
+                {filteredProducts.length} {filteredProducts.length === 1 ? 'CREATION' : 'CREATIONS'}
               </div>
 
               {/* Price Filter */}
@@ -62,7 +71,7 @@ export const ProductCatalog = () => {
                 <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Price:</span>
                 <input
                   type="range"
-                  min="100"
+                  min="80"
                   max="400"
                   step="10"
                   value={maxPrice}
@@ -92,11 +101,11 @@ export const ProductCatalog = () => {
                 className="form-select"
                 style={{ width: 'auto', padding: '6px 10px', fontSize: '0.8rem', border: '1px solid #e5e7eb' }}
               >
-                <option value="featured">Featured</option>
+                <option value="featured">Tier S Icons First</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
                 <option value="rating">Top Rated</option>
-                <option value="name">Name</option>
+                <option value="name">Name A-Z</option>
               </select>
 
             </div>
@@ -104,11 +113,29 @@ export const ProductCatalog = () => {
 
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
-            <div className="dior-products-grid">
-              {filteredProducts.map((prod) => (
-                <ProductCard key={prod.id} product={prod} />
-              ))}
-            </div>
+            <>
+              <div className="dior-products-grid">
+                {displayedProducts.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+                ))}
+              </div>
+
+              {filteredProducts.length > visibleCount && (
+                <div style={{ textAlign: 'center', marginTop: '48px' }}>
+                  <p style={{ fontSize: '0.82rem', color: '#6b7280', marginBottom: '14px', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
+                    SHOWING {visibleCount} OF {filteredProducts.length} CREATIONS
+                  </p>
+                  <button
+                    className="btn btn-dior-black"
+                    onClick={() => setVisibleCount((prev) => prev + 24)}
+                    style={{ padding: '13px 36px', fontSize: '0.82rem', letterSpacing: '0.1em' }}
+                  >
+                    <span>Discover More Creations</span>
+                    <ArrowRight size={15} />
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div 
               style={{

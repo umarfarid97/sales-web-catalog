@@ -39,22 +39,23 @@ export const StoreProvider = ({ children }) => {
   const [isCloudConnected, setIsCloudConnected] = useState(isSupabaseConfigured);
   const [isLoadingFromCloud, setIsLoadingFromCloud] = useState(isSupabaseConfigured);
 
-  // Products Data (Auto-purges old headphone cache)
+  // Products Data (Auto-purges old cache to load the full 345 VALENSZO portfolio)
   const [products, setProducts] = useState(() => {
+    const version = localStorage.getItem('valenszo_catalog_version');
     const saved = localStorage.getItem('lumina_products');
-    if (saved) {
+    if (saved && version === 'v3_portfolio_345') {
       try {
         const parsed = JSON.parse(saved);
-        // If cached data contains old tech products (like Headphones/Audio/Keyboards), clear it
-        if (Array.isArray(parsed) && parsed.some((p) => p.sku?.startsWith('LUM-AUD') || p.category === 'Audio' || p.category === 'Wearables')) {
-          localStorage.removeItem('lumina_products');
-          return INITIAL_PRODUCTS;
+        if (Array.isArray(parsed) && parsed.length >= 300) {
+          return parsed;
         }
-        return parsed;
       } catch (e) {
         console.error('Failed to parse saved products', e);
       }
     }
+    // Upgrade to 345 real fragrances
+    localStorage.setItem('valenszo_catalog_version', 'v3_portfolio_345');
+    localStorage.setItem('lumina_products', JSON.stringify(INITIAL_PRODUCTS));
     return INITIAL_PRODUCTS;
   });
 
@@ -632,34 +633,60 @@ export const StoreProvider = ({ children }) => {
   // --- Computed Filtered Products for Customer Catalog ---
   const filteredProducts = products.filter((product) => {
     const isAll = selectedCategory === 'All' || selectedCategory === 'All Creations' || selectedCategory === 'All Sauvage';
-    if (!isAll && product.category !== selectedCategory && product.olfactoryFamily !== selectedCategory) {
-      return false;
-    }
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const matchName = product.name.toLowerCase().includes(q);
-      const matchDesc = product.description.toLowerCase().includes(q);
-      const matchCategory = product.category.toLowerCase().includes(q);
-      const matchTagline = product.tagline?.toLowerCase().includes(q);
-      if (!matchName && !matchDesc && !matchCategory && !matchTagline) {
+    if (!isAll) {
+      if (selectedCategory === 'Tier S (Launch Icons)' || selectedCategory === 'Tier S' || selectedCategory === 'Tier S Icons') {
+        if (product.tier !== 'S') return false;
+      } else if (selectedCategory === 'Tier A (Premium)' || selectedCategory === 'Tier A') {
+        if (product.tier !== 'A') return false;
+      } else if (selectedCategory === 'Pour Homme' || selectedCategory === 'Men') {
+        if (product.gender !== 'Men') return false;
+      } else if (selectedCategory === 'Pour Femme' || selectedCategory === 'Women') {
+        if (product.gender !== 'Women') return false;
+      } else if (selectedCategory === 'Niche & Unisex' || selectedCategory === 'Unisex') {
+        if (product.gender !== 'Unisex' && product.category !== 'Niche & Unisex') return false;
+      } else if (
+        product.character !== selectedCategory &&
+        product.olfactoryFamily !== selectedCategory &&
+        product.category !== selectedCategory
+      ) {
         return false;
       }
     }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchName = product.name?.toLowerCase().includes(q);
+      const matchBrand = product.brandInspiration?.toLowerCase().includes(q);
+      const matchListing = product.originalListing?.toLowerCase().includes(q);
+      const matchDesc = product.description?.toLowerCase().includes(q);
+      const matchCategory = product.category?.toLowerCase().includes(q);
+      const matchCharacter = product.character?.toLowerCase().includes(q);
+      const matchSku = product.sku?.toLowerCase().includes(q);
+      const matchNo = String(product.catalogNo) === q || `no. ${product.catalogNo}` === q || `no ${product.catalogNo}` === q || `#${product.catalogNo}` === q;
+      if (!matchName && !matchBrand && !matchListing && !matchDesc && !matchCategory && !matchCharacter && !matchSku && !matchNo) {
+        return false;
+      }
+    }
+
     if (inStockOnly && product.stock <= 0) {
       return false;
     }
+
     if (product.price > maxPrice) {
       return false;
     }
+
     return true;
   }).sort((a, b) => {
     if (sortBy === 'price-low') return a.price - b.price;
     if (sortBy === 'price-high') return b.price - a.price;
     if (sortBy === 'rating') return b.rating - a.rating;
     if (sortBy === 'name') return a.name.localeCompare(b.name);
-    if (a.isFeatured && !b.isFeatured) return -1;
-    if (!a.isFeatured && b.isFeatured) return 1;
-    return 0;
+    // Default sort: Tier S first, then Tier A, then Catalog No
+    const tierWeight = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
+    const diffTier = (tierWeight[b.tier] || 0) - (tierWeight[a.tier] || 0);
+    if (diffTier !== 0) return diffTier;
+    return (a.catalogNo || 0) - (b.catalogNo || 0);
   });
 
   // --- Admin KPI Analytics Data ---
