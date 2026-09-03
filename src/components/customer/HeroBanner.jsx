@@ -30,15 +30,15 @@ export const HeroBanner = () => {
             Maison Valenszo &bull; Fragrance Malaysia
           </div>
 
-          <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div className="valenszo-monogram-mark" style={{ fontSize: '3.2rem', color: '#ffffff', marginBottom: '-6px' }} aria-hidden="true">
+          <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '100vw' }}>
+            <div className="valenszo-monogram-mark" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.2rem)', color: '#ffffff', marginBottom: '-4px' }} aria-hidden="true">
               <span className="vl-v">V</span>
               <span className="vl-l">L</span>
             </div>
-            <h1 className="dior-hero-title" style={{ fontFamily: 'var(--font-brand)', letterSpacing: '0.28em', margin: '0', fontSize: 'clamp(2.5rem, 6vw, 4.4rem)' }}>
+            <h1 className="dior-hero-title" style={{ fontFamily: 'var(--font-brand)', margin: '0' }}>
               VALENSZO
             </h1>
-            <div style={{ fontFamily: 'var(--font-couture)', fontSize: '0.74rem', letterSpacing: '0.44em', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
+            <div style={{ fontFamily: 'var(--font-couture)', fontSize: 'clamp(0.62rem, 1.8vw, 0.74rem)', letterSpacing: 'clamp(0.18em, 1.2vw, 0.44em)', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
               FRAGRANCE MALAYSIA
             </div>
           </div>

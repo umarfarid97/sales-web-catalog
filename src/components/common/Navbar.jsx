@@ -4,9 +4,10 @@ import {
   ShoppingBag, 
   Search, 
   RotateCcw, 
-  X,
-  Cloud,
-  Compass
+  X, 
+  Cloud, 
+  Compass,
+  Menu
 } from 'lucide-react';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -28,6 +29,7 @@ export const Navbar = () => {
 
   const [isResetting, setIsResetting] = useState(false);
   const [showSearchBox, setShowSearchBox] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleReset = async () => {
     if (window.confirm('Reset catalog to the official Valenszo fragrance collection?')) {
@@ -45,62 +47,81 @@ export const Navbar = () => {
         COMPLIMENTARY VALENSZO ART OF GIFTING &bull; <span>2 DELUXE SAMPLES WITH EVERY ORDER</span> &bull; FREE DELIVERY
       </div>
 
-      <header className="site-header">
+      <header className="site-header" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
         <div className="container">
           <div className="nav-container">
             
-            {/* Left Column: Valenszo Navigation Links */}
-            <div className="dior-navbar-links hide-mobile">
+            {/* Left Column: Mobile Menu Trigger (on mobile) or Desktop Nav Links (on desktop) */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <button 
-                className={`dior-nav-link ${selectedCategory === 'All Sauvage' || selectedCategory === 'All Creations' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('All Creations')}
+                className="btn-icon show-mobile"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Toggle Navigation Menu"
+                style={{ width: '38px', height: '38px', border: 'none', background: 'transparent' }}
               >
-                Creations
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
-              <button 
-                className={`dior-nav-link ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('La Collection Privée')}
-              >
-                La Collection Privée
-              </button>
-              <button 
-                className={`dior-nav-link ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
-                onClick={() => setSelectedCategory('Discovery & Sets')}
-              >
-                Gift Sets
-              </button>
+
+              <div className="dior-navbar-links hide-mobile">
+                <button 
+                  className={`dior-nav-link ${selectedCategory === 'All Sauvage' || selectedCategory === 'All Creations' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('All Creations')}
+                >
+                  Creations
+                </button>
+                <button 
+                  className={`dior-nav-link ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('La Collection Privée')}
+                >
+                  La Collection Privée
+                </button>
+                <button 
+                  className={`dior-nav-link ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory('Discovery & Sets')}
+                >
+                  Gift Sets
+                </button>
+              </div>
             </div>
 
             {/* Center Column: Iconic Centered VALENSZO Logo with VL Monogram */}
             <div 
-              style={{ textAlign: 'center', cursor: 'pointer', padding: '4px 12px' }}
-              onClick={() => setSelectedCategory('All Creations')}
+              style={{ textAlign: 'center', cursor: 'pointer', padding: '4px 6px', display: 'flex', justifyContent: 'center' }}
+              onClick={() => {
+                setSelectedCategory('All Creations');
+                setIsMobileMenuOpen(false);
+              }}
               title="VALENSZO Fragrance Malaysia"
             >
-              <ValenszoLogo size="md" subtitle="FRAGRANCE MALAYSIA" />
+              <div className="hide-mobile">
+                <ValenszoLogo size="md" subtitle="FRAGRANCE MALAYSIA" />
+              </div>
+              <div className="show-mobile">
+                <ValenszoLogo size="sm" subtitle="FRAGRANCE MALAYSIA" />
+              </div>
             </div>
 
-            {/* Right Column: Search, Atelier Mode & Shopping Bag */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            {/* Right Column: Search, Secondary Actions & Shopping Bag */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               
               {/* Scent Search Trigger / Input */}
               {showSearchBox ? (
-                <div style={{ position: 'relative', width: '220px' }}>
+                <div style={{ position: 'relative', width: 'clamp(140px, 30vw, 220px)' }}>
                   <input
                     type="text"
                     autoFocus
                     className="form-input"
-                    placeholder="Search Valenszo..."
+                    placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{ padding: '6px 30px 6px 12px', fontSize: '0.82rem' }}
+                    style={{ padding: '6px 28px 6px 10px', fontSize: '0.8rem', height: '34px' }}
                   />
                   <button
                     onClick={() => {
                       setSearchQuery('');
                       setShowSearchBox(false);
                     }}
-                    style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
+                    style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
                   >
                     <X size={14} />
                   </button>
@@ -111,12 +132,13 @@ export const Navbar = () => {
                   onClick={() => setShowSearchBox(true)}
                   title="Search Valenszo Fragrances"
                   aria-label="Search"
+                  style={{ width: '36px', height: '36px' }}
                 >
                   <Search size={17} />
                 </button>
               )}
 
-              {/* Order Tracker */}
+              {/* Order Tracker (Desktop only) */}
               <button
                 className="btn-icon hide-mobile"
                 onClick={() => setIsOrderTrackerOpen(true)}
@@ -126,7 +148,7 @@ export const Navbar = () => {
                 <Compass size={17} />
               </button>
 
-              {/* Cloud Sync Status */}
+              {/* Cloud Sync Status (Desktop only) */}
               <div 
                 className="hide-mobile"
                 title={isCloudConnected ? "Connected to Supabase PostgreSQL" : "Local Storage Mode"}
@@ -148,9 +170,9 @@ export const Navbar = () => {
                 <span>{isCloudConnected ? 'LIVE' : 'LOCAL'}</span>
               </div>
 
-              {/* Reset Catalog Button */}
+              {/* Reset Catalog Button (Desktop only) */}
               <button
-                className="btn-icon"
+                className="btn-icon hide-mobile"
                 onClick={handleReset}
                 disabled={isResetting}
                 title="Reset / Seed Valenszo Catalog"
@@ -159,8 +181,8 @@ export const Navbar = () => {
                 <RotateCcw size={15} className={isResetting ? 'spin' : ''} />
               </button>
 
-              {/* Role Toggle Switcher: Boutique vs Atelier Admin */}
-              <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: 'var(--radius-sm)', padding: '3px', gap: '2px' }}>
+              {/* Role Toggle Switcher: Boutique vs Atelier Admin (Desktop only) */}
+              <div className="hide-mobile" style={{ display: 'flex', background: '#f3f4f6', borderRadius: 'var(--radius-sm)', padding: '3px', gap: '2px' }}>
                 <button
                   onClick={() => setRole('customer')}
                   style={{
@@ -197,16 +219,16 @@ export const Navbar = () => {
                 </button>
               </div>
 
-              {/* Shopping Bag Button */}
+              {/* Shopping Bag Button (Responsive: compact on phone, labeled on desktop) */}
               {role === 'customer' && (
                 <button
                   className="btn btn-dior-black"
                   onClick={() => setIsCartOpen(true)}
-                  style={{ padding: '9px 18px', fontSize: '0.78rem' }}
+                  style={{ padding: '8px 14px', fontSize: '0.76rem', height: '36px' }}
                   aria-label={`Shopping Bag (${cartTotalItems} items)`}
                 >
                   <ShoppingBag size={16} />
-                  <span>Bag</span>
+                  <span className="hide-mobile">Bag</span>
                   {cartTotalItems > 0 && (
                     <span 
                       style={{
@@ -218,9 +240,9 @@ export const Navbar = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '0.7rem',
+                        fontSize: '0.68rem',
                         fontWeight: 900,
-                        marginLeft: '4px'
+                        marginLeft: '2px'
                       }}
                     >
                       {cartTotalItems}
@@ -233,6 +255,107 @@ export const Navbar = () => {
 
           </div>
         </div>
+
+        {/* Luxury Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="mobile-nav-drawer show-mobile">
+            <div className="mobile-nav-inner">
+              
+              <div className="mobile-nav-section-title">Valenszo Collections</div>
+              <div className="mobile-nav-links">
+                <button 
+                  className={`mobile-nav-item ${selectedCategory === 'All Creations' || selectedCategory === 'All Sauvage' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('All Creations'); setIsMobileMenuOpen(false); }}
+                >
+                  <span>All Creations</span>
+                </button>
+                <button 
+                  className={`mobile-nav-item ${selectedCategory === 'Sauvage Spectrum' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Sauvage Spectrum'); setIsMobileMenuOpen(false); }}
+                >
+                  <span>Sauvage Spectrum</span>
+                </button>
+                <button 
+                  className={`mobile-nav-item ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('La Collection Privée'); setIsMobileMenuOpen(false); }}
+                >
+                  <span>La Collection Privée</span>
+                </button>
+                <button 
+                  className={`mobile-nav-item ${selectedCategory === 'Discovery & Sets' ? 'active' : ''}`}
+                  onClick={() => { setSelectedCategory('Discovery & Sets'); setIsMobileMenuOpen(false); }}
+                >
+                  <span>Gift Sets &amp; Discovery</span>
+                </button>
+              </div>
+
+              <div className="mobile-nav-divider" />
+
+              <div className="mobile-nav-section-title">Maison Services</div>
+              <div className="mobile-nav-actions">
+                <button 
+                  className="mobile-nav-action-btn"
+                  onClick={() => { setIsOrderTrackerOpen(true); setIsMobileMenuOpen(false); }}
+                >
+                  <Compass size={16} color="#926917" />
+                  <span>Track Fragrance Delivery</span>
+                </button>
+
+                <button 
+                  className="mobile-nav-action-btn"
+                  onClick={() => { handleReset(); setIsMobileMenuOpen(false); }}
+                >
+                  <RotateCcw size={16} className={isResetting ? 'spin' : ''} />
+                  <span>Reset Valenszo Catalog</span>
+                </button>
+              </div>
+
+              <div className="mobile-nav-divider" />
+
+              <div className="mobile-nav-section-title">Experience Mode</div>
+              <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
+                <button
+                  onClick={() => { setRole('customer'); setIsMobileMenuOpen(false); }}
+                  style={{
+                    flex: 1,
+                    padding: '9px 12px',
+                    border: 'none',
+                    borderRadius: '3px',
+                    background: role === 'customer' ? '#000000' : 'transparent',
+                    color: role === 'customer' ? '#ffffff' : '#4b5563',
+                    fontWeight: 700,
+                    fontSize: '0.76rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Boutique
+                </button>
+                <button
+                  onClick={() => { setRole('admin'); setIsMobileMenuOpen(false); }}
+                  style={{
+                    flex: 1,
+                    padding: '9px 12px',
+                    border: 'none',
+                    borderRadius: '3px',
+                    background: role === 'admin' ? '#000000' : 'transparent',
+                    color: role === 'admin' ? '#ffffff' : '#4b5563',
+                    fontWeight: 700,
+                    fontSize: '0.76rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Atelier Admin
+                </button>
+              </div>
+
+              <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
+                {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
+              </div>
+
+            </div>
+          </div>
+        )}
+
       </header>
     </>
   );
