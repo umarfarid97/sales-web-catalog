@@ -43,7 +43,7 @@ export const StoreProvider = ({ children }) => {
   const [products, setProducts] = useState(() => {
     const version = localStorage.getItem('valenszo_catalog_version');
     const saved = localStorage.getItem('lumina_products');
-    if (saved && version === 'v3_portfolio_345') {
+    if (saved && version === 'v3_portfolio_345_traits') {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length >= 300) {
@@ -53,8 +53,8 @@ export const StoreProvider = ({ children }) => {
         console.error('Failed to parse saved products', e);
       }
     }
-    // Upgrade to 345 real fragrances
-    localStorage.setItem('valenszo_catalog_version', 'v3_portfolio_345');
+    // Upgrade to 345 real fragrances with structured characteristics
+    localStorage.setItem('valenszo_catalog_version', 'v3_portfolio_345_traits');
     localStorage.setItem('lumina_products', JSON.stringify(INITIAL_PRODUCTS));
     return INITIAL_PRODUCTS;
   });
@@ -647,7 +647,8 @@ export const StoreProvider = ({ children }) => {
       } else if (
         product.character !== selectedCategory &&
         product.olfactoryFamily !== selectedCategory &&
-        product.category !== selectedCategory
+        product.category !== selectedCategory &&
+        !product.traits?.some((t) => t.toLowerCase() === selectedCategory.toLowerCase())
       ) {
         return false;
       }
@@ -661,9 +662,10 @@ export const StoreProvider = ({ children }) => {
       const matchDesc = product.description?.toLowerCase().includes(q);
       const matchCategory = product.category?.toLowerCase().includes(q);
       const matchCharacter = product.character?.toLowerCase().includes(q);
+      const matchTraits = product.traits?.some((t) => t.toLowerCase().includes(q));
       const matchSku = product.sku?.toLowerCase().includes(q);
       const matchNo = String(product.catalogNo) === q || `no. ${product.catalogNo}` === q || `no ${product.catalogNo}` === q || `#${product.catalogNo}` === q;
-      if (!matchName && !matchBrand && !matchListing && !matchDesc && !matchCategory && !matchCharacter && !matchSku && !matchNo) {
+      if (!matchName && !matchBrand && !matchListing && !matchDesc && !matchCategory && !matchCharacter && !matchTraits && !matchSku && !matchNo) {
         return false;
       }
     }

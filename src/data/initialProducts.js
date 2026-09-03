@@ -136,6 +136,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Fresh / Aquatic / Citrus.",
@@ -213,6 +218,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Clinique. Fresh / Aquatic / Citrus.",
@@ -290,6 +300,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Fresh / Aquatic / Citrus.",
@@ -367,6 +382,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dunhill. Fresh / Aquatic / Citrus.",
@@ -444,6 +464,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Jaguar. Fresh / Aquatic / Citrus.",
@@ -521,6 +546,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Polo. Fresh / Aquatic / Citrus.",
@@ -598,6 +628,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Davidoff. Fresh / Aquatic / Citrus.",
@@ -675,6 +710,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Fresh / Aquatic / Citrus.",
@@ -752,6 +792,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Ralph Lauren. Fresh / Aquatic / Citrus.",
@@ -829,6 +874,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Fresh / Aquatic / Citrus.",
@@ -906,6 +956,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Montblanc. Fresh / Aquatic / Citrus.",
@@ -983,6 +1038,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Montblanc Legend. Fresh / Aquatic / Citrus.",
@@ -1060,6 +1120,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Azzora. Fresh / Aquatic / Citrus.",
@@ -1137,6 +1202,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fresh / Aquatic / Citrus.",
@@ -1214,6 +1284,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Davidoff. Fresh / Aquatic / Citrus.",
@@ -1291,6 +1366,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Fresh / Aquatic / Citrus.",
@@ -1368,6 +1448,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Fresh / Aquatic / Citrus.",
@@ -1445,6 +1530,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Fresh / Aquatic / Citrus.",
@@ -1522,6 +1612,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Fresh / Aquatic / Citrus.",
@@ -1599,6 +1694,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Nishane. Fresh / Aquatic / Citrus.",
@@ -1676,6 +1776,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Fresh / Aquatic / Citrus.",
@@ -1753,6 +1858,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Fresh / Aquatic / Citrus",
     "olfactoryFamily": "Fresh / Aquatic / Citrus",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Fresh / Aquatic / Citrus.",
@@ -1830,6 +1940,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Jimmy Cho Men. Blue / Aromatic / Fresh-Woody.",
@@ -1907,6 +2022,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Creed. Blue / Aromatic / Fresh-Woody.",
@@ -1984,6 +2104,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Blue / Aromatic / Fresh-Woody.",
@@ -2061,6 +2186,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Montblanc. Blue / Aromatic / Fresh-Woody.",
@@ -2138,6 +2268,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Gucci. Blue / Aromatic / Fresh-Woody.",
@@ -2215,6 +2350,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Mont Blanc. Blue / Aromatic / Fresh-Woody.",
@@ -2292,6 +2432,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Chanel. Blue / Aromatic / Fresh-Woody.",
@@ -2369,6 +2514,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Blue / Aromatic / Fresh-Woody.",
@@ -2446,6 +2596,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dior. Blue / Aromatic / Fresh-Woody.",
@@ -2523,6 +2678,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Versace. Blue / Aromatic / Fresh-Woody.",
@@ -2600,6 +2760,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Coach. Blue / Aromatic / Fresh-Woody.",
@@ -2677,6 +2842,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Blue / Aromatic / Fresh-Woody.",
@@ -2754,6 +2924,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Blue / Aromatic / Fresh-Woody.",
@@ -2831,6 +3006,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Blue / Aromatic / Fresh-Woody",
     "olfactoryFamily": "Blue / Aromatic / Fresh-Woody",
+    "traits": [
+      "Blue",
+      "Aromatic",
+      "Fresh-Woody"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Blue / Aromatic / Fresh-Woody.",
@@ -2908,6 +3088,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Sweet / Amber / Gourmand.",
@@ -2985,6 +3170,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Sweet / Amber / Gourmand.",
@@ -3062,6 +3252,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Sweet / Amber / Gourmand.",
@@ -3139,6 +3334,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Amber / Gourmand.",
@@ -3216,6 +3416,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Amber / Gourmand.",
@@ -3293,6 +3498,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -3370,6 +3580,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Versace. Sweet / Amber / Gourmand.",
@@ -3447,6 +3662,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -3524,6 +3744,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Amber / Gourmand.",
@@ -3601,6 +3826,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Raplh Lauren. Sweet / Amber / Gourmand.",
@@ -3678,6 +3908,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -3755,6 +3990,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Sweet / Amber / Gourmand.",
@@ -3832,6 +4072,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Diesel. Sweet / Amber / Gourmand.",
@@ -3909,6 +4154,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Maison Francis Kurkdjian. Sweet / Amber / Gourmand.",
@@ -3986,6 +4236,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Sweet / Amber / Gourmand.",
@@ -4063,6 +4318,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Azzaro. Sweet / Amber / Gourmand.",
@@ -4140,6 +4400,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Armani. Sweet / Amber / Gourmand.",
@@ -4217,6 +4482,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Versace. Sweet / Amber / Gourmand.",
@@ -4294,6 +4564,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Amber / Gourmand.",
@@ -4371,6 +4646,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Amber / Gourmand.",
@@ -4448,6 +4728,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Amouage. Sweet / Amber / Gourmand.",
@@ -4525,6 +4810,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -4602,6 +4892,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -4679,6 +4974,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Sweet / Amber / Gourmand.",
@@ -4756,6 +5056,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Valentino. Sweet / Amber / Gourmand.",
@@ -4833,6 +5138,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Amber / Gourmand.",
@@ -4910,6 +5220,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Sweet / Amber / Gourmand",
     "olfactoryFamily": "Sweet / Amber / Gourmand",
+    "traits": [
+      "Sweet",
+      "Amber",
+      "Gourmand"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Valentino. Sweet / Amber / Gourmand.",
@@ -4987,6 +5302,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Dunhill. Spicy / Warm / Tobacco.",
@@ -5064,6 +5384,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Spicy / Warm / Tobacco.",
@@ -5141,6 +5466,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Haute Parfumerie. Spicy / Warm / Tobacco.",
@@ -5218,6 +5548,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Spicy / Warm / Tobacco.",
@@ -5295,6 +5630,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Victor&rolf. Spicy / Warm / Tobacco.",
@@ -5372,6 +5712,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Armani Code. Spicy / Warm / Tobacco.",
@@ -5449,6 +5794,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Spicy / Warm / Tobacco.",
@@ -5526,6 +5876,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Dior. Spicy / Warm / Tobacco.",
@@ -5603,6 +5958,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Alfred Dunhill. Spicy / Warm / Tobacco.",
@@ -5680,6 +6040,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Lattafah. Spicy / Warm / Tobacco.",
@@ -5757,6 +6122,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Spicy / Warm / Tobacco",
     "olfactoryFamily": "Spicy / Warm / Tobacco",
+    "traits": [
+      "Spicy",
+      "Warm",
+      "Tobacco"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Lattafah. Spicy / Warm / Tobacco.",
@@ -5834,6 +6204,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by James Bond. Oud / Oriental / Resinous.",
@@ -5911,6 +6286,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Gucci. Oud / Oriental / Resinous.",
@@ -5988,6 +6368,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Oud / Oriental / Resinous.",
@@ -6065,6 +6450,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Oud / Oriental / Resinous.",
@@ -6142,6 +6532,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Halfeti. Oud / Oriental / Resinous.",
@@ -6219,6 +6614,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Oud / Oriental / Resinous",
     "olfactoryFamily": "Oud / Oriental / Resinous",
+    "traits": [
+      "Oud",
+      "Oriental",
+      "Resinous"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Lattafah. Oud / Oriental / Resinous.",
@@ -6296,6 +6696,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Leather / Smoky / Dark",
     "olfactoryFamily": "Leather / Smoky / Dark",
+    "traits": [
+      "Leather",
+      "Smoky",
+      "Dark"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Leather / Smoky / Dark.",
@@ -6373,6 +6778,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Leather / Smoky / Dark",
     "olfactoryFamily": "Leather / Smoky / Dark",
+    "traits": [
+      "Leather",
+      "Smoky",
+      "Dark"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Dior. Leather / Smoky / Dark.",
@@ -6450,6 +6860,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Leather / Smoky / Dark",
     "olfactoryFamily": "Leather / Smoky / Dark",
+    "traits": [
+      "Leather",
+      "Smoky",
+      "Dark"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (35%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Leather / Smoky / Dark.",
@@ -6527,6 +6942,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Woody / Vetiver / Green.",
@@ -6604,6 +7024,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by John Varvatos. Woody / Vetiver / Green.",
@@ -6681,6 +7106,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Woody / Vetiver / Green.",
@@ -6758,6 +7188,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hermes. Woody / Vetiver / Green.",
@@ -6835,6 +7270,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Ralph Lauren. Woody / Vetiver / Green.",
@@ -6912,6 +7352,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Woody / Vetiver / Green.",
@@ -6989,6 +7434,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Montblanc. Woody / Vetiver / Green.",
@@ -7066,6 +7516,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Guy Laroche. Woody / Vetiver / Green.",
@@ -7143,6 +7598,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Woody / Vetiver / Green",
     "olfactoryFamily": "Woody / Vetiver / Green",
+    "traits": [
+      "Woody",
+      "Vetiver",
+      "Green"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Woody / Vetiver / Green.",
@@ -7220,6 +7680,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Clean / Musk / Powdery.",
@@ -7297,6 +7762,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Prada. Clean / Musk / Powdery.",
@@ -7374,6 +7844,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Mont Blanc. Clean / Musk / Powdery.",
@@ -7451,6 +7926,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Clean / Musk / Powdery.",
@@ -7528,6 +8008,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Floral / Fruity / Niche-Unisex",
     "olfactoryFamily": "Floral / Fruity / Niche-Unisex",
+    "traits": [
+      "Floral",
+      "Fruity",
+      "Niche-Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Floral / Fruity / Niche-Unisex.",
@@ -7605,6 +8090,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Floral / Fruity / Niche-Unisex",
     "olfactoryFamily": "Floral / Fruity / Niche-Unisex",
+    "traits": [
+      "Floral",
+      "Fruity",
+      "Niche-Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Floral / Fruity / Niche-Unisex.",
@@ -7682,6 +8172,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Floral / Fruity / Niche-Unisex",
     "olfactoryFamily": "Floral / Fruity / Niche-Unisex",
+    "traits": [
+      "Floral",
+      "Fruity",
+      "Niche-Unisex"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Le Labo. Floral / Fruity / Niche-Unisex.",
@@ -7759,6 +8254,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Floral / Fruity / Niche-Unisex",
     "olfactoryFamily": "Floral / Fruity / Niche-Unisex",
+    "traits": [
+      "Floral",
+      "Fruity",
+      "Niche-Unisex"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Marfa. Floral / Fruity / Niche-Unisex.",
@@ -7836,6 +8336,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Floral / Fruity / Niche-Unisex",
     "olfactoryFamily": "Floral / Fruity / Niche-Unisex",
+    "traits": [
+      "Floral",
+      "Fruity",
+      "Niche-Unisex"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Martin Margiela. Floral / Fruity / Niche-Unisex.",
@@ -7913,6 +8418,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dunhill. Classic / Fougere / Heritage.",
@@ -7990,6 +8500,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Classic / Fougere / Heritage.",
@@ -8067,6 +8582,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jaguar. Classic / Fougere / Heritage.",
@@ -8144,6 +8664,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Classic / Fougere / Heritage.",
@@ -8221,6 +8746,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Classic / Fougere / Heritage.",
@@ -8298,6 +8828,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Davidoff Champion. Classic / Fougere / Heritage.",
@@ -8375,6 +8910,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dunhill. Classic / Fougere / Heritage.",
@@ -8452,6 +8992,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Etienne Aigner. Classic / Fougere / Heritage.",
@@ -8529,6 +9074,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Tommy Hilfinger. Classic / Fougere / Heritage.",
@@ -8606,6 +9156,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Ferrari. Classic / Fougere / Heritage.",
@@ -8683,6 +9238,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by David Beckham. Classic / Fougere / Heritage.",
@@ -8760,6 +9320,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Classic / Fougere / Heritage.",
@@ -8837,6 +9402,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by James Bond. Classic / Fougere / Heritage.",
@@ -8914,6 +9484,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Haute Parfumerie. Classic / Fougere / Heritage.",
@@ -8991,6 +9566,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Homme",
     "character": "Classic / Fougere / Heritage",
     "olfactoryFamily": "Classic / Fougere / Heritage",
+    "traits": [
+      "Classic",
+      "Fougere",
+      "Heritage"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Classic / Fougere / Heritage.",
@@ -9068,6 +9648,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Burberry Body. Fruity / Juicy / Tropical.",
@@ -9145,6 +9730,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Escada Sexy Graffiti. Fruity / Juicy / Tropical.",
@@ -9222,6 +9812,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by My Burberry. Fruity / Juicy / Tropical.",
@@ -9299,6 +9894,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Britney Spears. Fruity / Juicy / Tropical.",
@@ -9376,6 +9976,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Escada. Fruity / Juicy / Tropical.",
@@ -9453,6 +10058,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Guess Pink. Fruity / Juicy / Tropical.",
@@ -9530,6 +10140,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Escada. Fruity / Juicy / Tropical.",
@@ -9607,6 +10222,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Brithney Spear. Fruity / Juicy / Tropical.",
@@ -9684,6 +10304,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Salvatore Ferragamo. Fruity / Juicy / Tropical.",
@@ -9761,6 +10386,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Burberry. Fruity / Juicy / Tropical.",
@@ -9838,6 +10468,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by The Body Shop. Fruity / Juicy / Tropical.",
@@ -9915,6 +10550,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Escada. Fruity / Juicy / Tropical.",
@@ -9992,6 +10632,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Britney Spears. Fruity / Juicy / Tropical.",
@@ -10069,6 +10714,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity / Juicy / Tropical.",
@@ -10146,6 +10796,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paris Hilton. Fruity / Juicy / Tropical.",
@@ -10223,6 +10878,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity / Juicy / Tropical.",
@@ -10300,6 +10960,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by The Bodyshop. Fruity / Juicy / Tropical.",
@@ -10377,6 +11042,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Haute Parfumerie. Fruity / Juicy / Tropical.",
@@ -10454,6 +11124,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paris Hilton. Fruity / Juicy / Tropical.",
@@ -10531,6 +11206,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paris Hilton. Fruity / Juicy / Tropical.",
@@ -10608,6 +11288,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Nina Ricci. Fruity / Juicy / Tropical.",
@@ -10685,6 +11370,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Brithney Spear. Fruity / Juicy / Tropical.",
@@ -10762,6 +11452,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Escada. Fruity / Juicy / Tropical.",
@@ -10839,6 +11534,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Britney Spears. Fruity / Juicy / Tropical.",
@@ -10916,6 +11616,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paris Hilton. Fruity / Juicy / Tropical.",
@@ -10993,6 +11698,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity / Juicy / Tropical.",
@@ -11070,6 +11780,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Versace. Fruity / Juicy / Tropical.",
@@ -11147,6 +11862,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fruity / Juicy / Tropical.",
@@ -11224,6 +11944,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity / Juicy / Tropical",
     "olfactoryFamily": "Fruity / Juicy / Tropical",
+    "traits": [
+      "Fruity",
+      "Juicy",
+      "Tropical"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Fruity / Juicy / Tropical.",
@@ -11301,6 +12026,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Floral / Bouquet.",
@@ -11378,6 +12107,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Floral / Bouquet.",
@@ -11455,6 +12188,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Floral / Bouquet.",
@@ -11532,6 +12269,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Marc Jacobs. Floral / Bouquet.",
@@ -11609,6 +12350,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Floral / Bouquet.",
@@ -11686,6 +12431,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Floral / Bouquet.",
@@ -11763,6 +12512,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Floral / Bouquet.",
@@ -11840,6 +12593,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Elli Saab Le Parfum. Floral / Bouquet.",
@@ -11917,6 +12674,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Salavatore Ferragamo. Floral / Bouquet.",
@@ -11994,6 +12755,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Estee Lauder. Floral / Bouquet.",
@@ -12071,6 +12836,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lanvin. Floral / Bouquet.",
@@ -12148,6 +12917,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Kenzo. Floral / Bouquet.",
@@ -12225,6 +12998,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Floral / Bouquet.",
@@ -12302,6 +13079,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Floral / Bouquet.",
@@ -12379,6 +13160,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Floral / Bouquet.",
@@ -12456,6 +13241,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lancome. Floral / Bouquet.",
@@ -12533,6 +13322,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Estee Lauder. Floral / Bouquet.",
@@ -12610,6 +13403,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Floral / Bouquet.",
@@ -12687,6 +13484,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Mark Jacobs. Floral / Bouquet.",
@@ -12764,6 +13565,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Marc Jacobs. Floral / Bouquet.",
@@ -12841,6 +13646,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Anna Sui. Floral / Bouquet.",
@@ -12918,6 +13727,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Prada. Floral / Bouquet.",
@@ -12995,6 +13808,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Floral / Bouquet.",
@@ -13072,6 +13889,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Floral / Bouquet",
     "olfactoryFamily": "Floral / Bouquet",
+    "traits": [
+      "Floral",
+      "Bouquet"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Floral / Bouquet.",
@@ -13149,6 +13970,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Avril Lavigne. Rose / Peony / Romantic Floral.",
@@ -13226,6 +14052,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Rose / Peony / Romantic Floral.",
@@ -13303,6 +14134,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Rose / Peony / Romantic Floral.",
@@ -13380,6 +14216,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Nina Ricci. Rose / Peony / Romantic Floral.",
@@ -13457,6 +14298,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lancome. Rose / Peony / Romantic Floral.",
@@ -13534,6 +14380,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Rose / Peony / Romantic Floral.",
@@ -13611,6 +14462,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Rose / Peony / Romantic Floral.",
@@ -13688,6 +14544,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Rose / Peony / Romantic Floral.",
@@ -13765,6 +14626,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Rose / Peony / Romantic Floral.",
@@ -13842,6 +14708,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Rose / Peony / Romantic Floral.",
@@ -13919,6 +14790,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Parfums de Marly. Rose / Peony / Romantic Floral.",
@@ -13996,6 +14872,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Zara. Rose / Peony / Romantic Floral.",
@@ -14073,6 +14954,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Rose / Peony / Romantic Floral.",
@@ -14150,6 +15036,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Rose / Peony / Romantic Floral.",
@@ -14227,6 +15118,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Rose / Peony / Romantic Floral",
     "olfactoryFamily": "Rose / Peony / Romantic Floral",
+    "traits": [
+      "Rose",
+      "Peony",
+      "Romantic Floral"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Rose / Peony / Romantic Floral.",
@@ -14304,6 +15200,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Lancome. Sweet / Gourmand / Vanilla.",
@@ -14381,6 +15282,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by The Body Shop. Sweet / Gourmand / Vanilla.",
@@ -14458,6 +15364,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Sweet / Gourmand / Vanilla.",
@@ -14535,6 +15446,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Viva La Juicy Couture. Sweet / Gourmand / Vanilla.",
@@ -14612,6 +15528,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Thierry Mugler. Sweet / Gourmand / Vanilla.",
@@ -14689,6 +15610,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Sweet / Gourmand / Vanilla.",
@@ -14766,6 +15692,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Victor & Rolf. Sweet / Gourmand / Vanilla.",
@@ -14843,6 +15774,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Victor And Rolf. Sweet / Gourmand / Vanilla.",
@@ -14920,6 +15856,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Lolita Lemprika. Sweet / Gourmand / Vanilla.",
@@ -14997,6 +15938,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Sweet / Gourmand / Vanilla.",
@@ -15074,6 +16020,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Sweet / Gourmand / Vanilla.",
@@ -15151,6 +16102,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Ariana Grande. Sweet / Gourmand / Vanilla.",
@@ -15228,6 +16184,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Lancome. Sweet / Gourmand / Vanilla.",
@@ -15305,6 +16266,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Ariana Grande. Sweet / Gourmand / Vanilla.",
@@ -15382,6 +16348,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Ariana Grande. Sweet / Gourmand / Vanilla.",
@@ -15459,6 +16430,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Billie Eilish. Sweet / Gourmand / Vanilla.",
@@ -15536,6 +16512,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Miu Miu. Sweet / Gourmand / Vanilla.",
@@ -15613,6 +16594,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Lattafa. Sweet / Gourmand / Vanilla.",
@@ -15690,6 +16676,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Moschino. Sweet / Gourmand / Vanilla.",
@@ -15767,6 +16758,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Burberry. Sweet / Gourmand / Vanilla.",
@@ -15844,6 +16840,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Ariana Grande. Sweet / Gourmand / Vanilla.",
@@ -15921,6 +16922,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Kayali. Sweet / Gourmand / Vanilla.",
@@ -15998,6 +17004,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Lattafa. Sweet / Gourmand / Vanilla.",
@@ -16075,6 +17086,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Haute Parfumerie. Sweet / Gourmand / Vanilla.",
@@ -16152,6 +17168,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Kayali. Sweet / Gourmand / Vanilla.",
@@ -16229,6 +17250,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Kayali. Sweet / Gourmand / Vanilla.",
@@ -16306,6 +17332,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Sweet / Gourmand / Vanilla.",
@@ -16383,6 +17414,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Sweet / Gourmand / Vanilla.",
@@ -16460,6 +17496,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Kayali. Sweet / Gourmand / Vanilla.",
@@ -16537,6 +17578,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Cheirose 62. Sweet / Gourmand / Vanilla.",
@@ -16614,6 +17660,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Sweet / Gourmand / Vanilla",
     "olfactoryFamily": "Sweet / Gourmand / Vanilla",
+    "traits": [
+      "Sweet",
+      "Gourmand",
+      "Vanilla"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum Intense (25%)",
     "tagline": "Artisanal extraction inspired by Zara. Sweet / Gourmand / Vanilla.",
@@ -16691,6 +17742,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Amber / Warm / Oriental",
     "olfactoryFamily": "Amber / Warm / Oriental",
+    "traits": [
+      "Amber",
+      "Warm",
+      "Oriental"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Amber / Warm / Oriental.",
@@ -16768,6 +17824,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Amber / Warm / Oriental",
     "olfactoryFamily": "Amber / Warm / Oriental",
+    "traits": [
+      "Amber",
+      "Warm",
+      "Oriental"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Angel Heart. Amber / Warm / Oriental.",
@@ -16845,6 +17906,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Amber / Warm / Oriental",
     "olfactoryFamily": "Amber / Warm / Oriental",
+    "traits": [
+      "Amber",
+      "Warm",
+      "Oriental"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Amber / Warm / Oriental.",
@@ -16922,6 +17988,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Amber / Warm / Oriental",
     "olfactoryFamily": "Amber / Warm / Oriental",
+    "traits": [
+      "Amber",
+      "Warm",
+      "Oriental"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bvlgari. Amber / Warm / Oriental.",
@@ -16999,6 +18070,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Clinique. Fresh / Aquatic / Citrus / Green.",
@@ -17076,6 +18153,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Ralph Lauren. Fresh / Aquatic / Citrus / Green.",
@@ -17153,6 +18236,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dkny. Fresh / Aquatic / Citrus / Green.",
@@ -17230,6 +18319,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fresh / Aquatic / Citrus / Green.",
@@ -17307,6 +18402,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Issey Miyaki. Fresh / Aquatic / Citrus / Green.",
@@ -17384,6 +18485,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Fresh / Aquatic / Citrus / Green.",
@@ -17461,6 +18568,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by The Bodyshop. Fresh / Aquatic / Citrus / Green.",
@@ -17538,6 +18651,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Davidoff. Fresh / Aquatic / Citrus / Green.",
@@ -17615,6 +18734,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by The Body Shop. Fresh / Aquatic / Citrus / Green.",
@@ -17692,6 +18817,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Dkny. Fresh / Aquatic / Citrus / Green.",
@@ -17769,6 +18900,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Hermes. Fresh / Aquatic / Citrus / Green.",
@@ -17846,6 +18983,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Davidoff. Fresh / Aquatic / Citrus / Green.",
@@ -17923,6 +19066,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "B",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Hermes. Fresh / Aquatic / Citrus / Green.",
@@ -18000,6 +19149,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fresh / Aquatic / Citrus / Green.",
@@ -18077,6 +19232,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "S",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Kayali. Fresh / Aquatic / Citrus / Green.",
@@ -18154,6 +19315,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "A",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fresh / Aquatic / Citrus / Green.",
@@ -18231,6 +19398,12 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Fresh / Aquatic / Citrus / Green",
     "olfactoryFamily": "Fresh / Aquatic / Citrus / Green",
+    "traits": [
+      "Fresh",
+      "Aquatic",
+      "Citrus",
+      "Green"
+    ],
     "tier": "C",
     "concentration": "Eau de Parfum (20%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fresh / Aquatic / Citrus / Green.",
@@ -18308,6 +19481,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lovely Jessica Parker. Clean / Musk / Powdery.",
@@ -18385,6 +19563,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Clean / Musk / Powdery.",
@@ -18462,6 +19645,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by The Body Shop. Clean / Musk / Powdery.",
@@ -18539,6 +19727,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Clean / Musk / Powdery.",
@@ -18616,6 +19809,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jennifer Lopez. Clean / Musk / Powdery.",
@@ -18693,6 +19891,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Prada. Clean / Musk / Powdery.",
@@ -18770,6 +19973,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Givenchy. Clean / Musk / Powdery.",
@@ -18847,6 +20055,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Clean / Musk / Powdery",
     "olfactoryFamily": "Clean / Musk / Powdery",
+    "traits": [
+      "Clean",
+      "Musk",
+      "Powdery"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Narciso Rodriguez. Clean / Musk / Powdery.",
@@ -18924,6 +20137,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Anna Sui. Fruity-Floral / Mass Appeal.",
@@ -19001,6 +20218,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Justin Bieber. Fruity-Floral / Mass Appeal.",
@@ -19078,6 +20299,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fruity-Floral / Mass Appeal.",
@@ -19155,6 +20380,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -19232,6 +20461,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Katy Perry. Fruity-Floral / Mass Appeal.",
@@ -19309,6 +20542,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Selena Gomez. Fruity-Floral / Mass Appeal.",
@@ -19386,6 +20623,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Katy Perry. Fruity-Floral / Mass Appeal.",
@@ -19463,6 +20704,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jennifer Lopez. Fruity-Floral / Mass Appeal.",
@@ -19540,6 +20785,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -19617,6 +20866,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Taylor Swift. Fruity-Floral / Mass Appeal.",
@@ -19694,6 +20947,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Selena Gomez Vivamore. Fruity-Floral / Mass Appeal.",
@@ -19771,6 +21028,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paris Hilton. Fruity-Floral / Mass Appeal.",
@@ -19848,6 +21109,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Fruity-Floral / Mass Appeal.",
@@ -19925,6 +21190,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Fruity-Floral / Mass Appeal.",
@@ -20002,6 +21271,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Fruity-Floral / Mass Appeal.",
@@ -20079,6 +21352,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Fruity-Floral / Mass Appeal.",
@@ -20156,6 +21433,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Elizabeth Arden. Fruity-Floral / Mass Appeal.",
@@ -20233,6 +21514,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Katy Perry. Fruity-Floral / Mass Appeal.",
@@ -20310,6 +21595,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Fruity-Floral / Mass Appeal.",
@@ -20387,6 +21676,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fruity-Floral / Mass Appeal.",
@@ -20464,6 +21757,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Versace. Fruity-Floral / Mass Appeal.",
@@ -20541,6 +21838,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Amour Amour. Fruity-Floral / Mass Appeal.",
@@ -20618,6 +21919,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lancome. Fruity-Floral / Mass Appeal.",
@@ -20695,6 +22000,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Anna Sui. Fruity-Floral / Mass Appeal.",
@@ -20772,6 +22081,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Katy Perry. Fruity-Floral / Mass Appeal.",
@@ -20849,6 +22162,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Kenzo. Fruity-Floral / Mass Appeal.",
@@ -20926,6 +22243,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Etienne Aigner. Fruity-Floral / Mass Appeal.",
@@ -21003,6 +22324,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Christina Aguilera. Fruity-Floral / Mass Appeal.",
@@ -21080,6 +22405,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Ralph Lauren. Fruity-Floral / Mass Appeal.",
@@ -21157,6 +22486,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by One Direction. Fruity-Floral / Mass Appeal.",
@@ -21234,6 +22567,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chloe. Fruity-Floral / Mass Appeal.",
@@ -21311,6 +22648,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dkny. Fruity-Floral / Mass Appeal.",
@@ -21388,6 +22729,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -21465,6 +22810,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Fruity-Floral / Mass Appeal.",
@@ -21542,6 +22891,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Fruity-Floral / Mass Appeal.",
@@ -21619,6 +22972,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Fruity-Floral / Mass Appeal.",
@@ -21696,6 +23053,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Juliana Paes. Fruity-Floral / Mass Appeal.",
@@ -21773,6 +23134,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -21850,6 +23215,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -21927,6 +23296,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -22004,6 +23377,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -22081,6 +23458,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Fruity-Floral / Mass Appeal.",
@@ -22158,6 +23539,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fruity-Floral / Mass Appeal.",
@@ -22235,6 +23620,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fruity-Floral / Mass Appeal.",
@@ -22312,6 +23701,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Taylor Swift. Fruity-Floral / Mass Appeal.",
@@ -22389,6 +23782,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dunhil. Fruity-Floral / Mass Appeal.",
@@ -22466,6 +23863,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -22543,6 +23944,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -22620,6 +24025,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Fruity-Floral / Mass Appeal.",
@@ -22697,6 +24106,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Ariana Grande. Fruity-Floral / Mass Appeal.",
@@ -22774,6 +24187,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Versace. Fruity-Floral / Mass Appeal.",
@@ -22851,6 +24268,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Salvatore Ferragamo. Fruity-Floral / Mass Appeal.",
@@ -22928,6 +24349,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Chanel. Fruity-Floral / Mass Appeal.",
@@ -23005,6 +24430,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -23082,6 +24511,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Paco Rabanne. Fruity-Floral / Mass Appeal.",
@@ -23159,6 +24592,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fruity-Floral / Mass Appeal.",
@@ -23236,6 +24673,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -23313,6 +24754,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -23390,6 +24835,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Cacharel. Fruity-Floral / Mass Appeal.",
@@ -23467,6 +24916,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -23544,6 +24997,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Fruity-Floral / Mass Appeal.",
@@ -23621,6 +25078,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Fruity-Floral / Mass Appeal.",
@@ -23698,6 +25159,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Scarlet. Fruity-Floral / Mass Appeal.",
@@ -23775,6 +25240,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Playboy. Fruity-Floral / Mass Appeal.",
@@ -23852,6 +25321,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Gucci. Fruity-Floral / Mass Appeal.",
@@ -23929,6 +25402,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Giorgio Armani. Fruity-Floral / Mass Appeal.",
@@ -24006,6 +25483,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fruity-Floral / Mass Appeal.",
@@ -24083,6 +25564,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Mugler. Fruity-Floral / Mass Appeal.",
@@ -24160,6 +25645,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Bath & Body Works. Fruity-Floral / Mass Appeal.",
@@ -24237,6 +25726,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Donna. Fruity-Floral / Mass Appeal.",
@@ -24314,6 +25807,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Kilian Paris. Fruity-Floral / Mass Appeal.",
@@ -24391,6 +25888,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Coach. Fruity-Floral / Mass Appeal.",
@@ -24468,6 +25969,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Valentino. Fruity-Floral / Mass Appeal.",
@@ -24545,6 +26050,10 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Fruity-Floral / Mass Appeal",
     "olfactoryFamily": "Fruity-Floral / Mass Appeal",
+    "traits": [
+      "Fruity-Floral",
+      "Mass Appeal"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Shakira. Fruity-Floral / Mass Appeal.",
@@ -24622,6 +26131,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Dark / Seductive / Night.",
@@ -24699,6 +26213,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Calvin Klein. Dark / Seductive / Night.",
@@ -24776,6 +26295,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lancome. Dark / Seductive / Night.",
@@ -24853,6 +26377,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Dark / Seductive / Night.",
@@ -24930,6 +26459,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Dark / Seductive / Night.",
@@ -25007,6 +26541,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Dark / Seductive / Night.",
@@ -25084,6 +26623,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dolce & Gabbana. Dark / Seductive / Night.",
@@ -25161,6 +26705,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Lancome. Dark / Seductive / Night.",
@@ -25238,6 +26787,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Dark / Seductive / Night.",
@@ -25315,6 +26869,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Victoria's Secret. Dark / Seductive / Night.",
@@ -25392,6 +26951,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Dark / Seductive / Night.",
@@ -25469,6 +27033,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Dior. Dark / Seductive / Night.",
@@ -25546,6 +27115,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Emporio Armani. Dark / Seductive / Night.",
@@ -25623,6 +27197,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jean Paul Gaultier. Dark / Seductive / Night.",
@@ -25700,6 +27279,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Yves Saint Laurent. Dark / Seductive / Night.",
@@ -25777,6 +27361,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Hugo Boss. Dark / Seductive / Night.",
@@ -25854,6 +27443,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Pour Femme",
     "character": "Dark / Seductive / Night",
     "olfactoryFamily": "Dark / Seductive / Night",
+    "traits": [
+      "Dark",
+      "Seductive",
+      "Night"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Carolina Herrera. Dark / Seductive / Night.",
@@ -25931,6 +27525,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Niche / Woody / Unisex.",
@@ -26008,6 +27607,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Maison Francis Kurkdjian. Niche / Woody / Unisex.",
@@ -26085,6 +27689,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Ex Nihilo. Niche / Woody / Unisex.",
@@ -26162,6 +27771,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Tom Ford. Niche / Woody / Unisex.",
@@ -26239,6 +27853,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "A",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Nishane. Niche / Woody / Unisex.",
@@ -26316,6 +27935,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Penhaligons. Niche / Woody / Unisex.",
@@ -26393,6 +28017,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "C",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Jo Malone London. Niche / Woody / Unisex.",
@@ -26470,6 +28099,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Amouage. Niche / Woody / Unisex.",
@@ -26547,6 +28181,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "S",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Kilian. Niche / Woody / Unisex.",
@@ -26624,6 +28263,11 @@ export const INITIAL_PRODUCTS = [
     "category": "Niche & Unisex",
     "character": "Niche / Woody / Unisex",
     "olfactoryFamily": "Niche / Woody / Unisex",
+    "traits": [
+      "Niche",
+      "Woody",
+      "Unisex"
+    ],
     "tier": "B",
     "concentration": "Extrait de Parfum (30%)",
     "tagline": "Artisanal extraction inspired by Louis Vuitton. Niche / Woody / Unisex.",

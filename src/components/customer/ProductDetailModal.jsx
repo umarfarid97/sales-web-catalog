@@ -161,13 +161,59 @@ export const ProductDetailModal = () => {
           {/* Right: Olfactory Details & Sizing */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             
-            <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#6b7280', marginBottom: '6px' }}>
-              {product.category === 'Sauvage Spectrum' ? `FRAGRANCE - ${product.concentration}` : product.category}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+              <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#6b7280' }}>
+                {product.gender ? `${product.gender.toUpperCase()} · ` : ''}{product.category}
+              </div>
+              {product.tier && (
+                <span 
+                  style={{
+                    background: product.tier === 'S' ? '#000000' : '#1f2937',
+                    color: product.tier === 'S' ? '#f59e0b' : '#ffffff',
+                    fontSize: '0.66rem',
+                    fontWeight: 800,
+                    padding: '2px 8px',
+                    borderRadius: '2px',
+                    letterSpacing: '0.08em'
+                  }}
+                >
+                  {product.tier === 'S' ? '★ TIER S ICON' : `TIER ${product.tier}`}
+                </span>
+              )}
             </div>
 
-            <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '8px', color: '#000000' }}>
-              {product.name}
+            <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '4px', color: '#000000' }}>
+              {product.displayName || product.name}
             </h2>
+
+            {product.brandInspiration && (
+              <div style={{ fontSize: '0.82rem', color: '#926917', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '10px' }}>
+                Inspired by {product.brandInspiration} &bull; Catalog No. {product.catalogNo}
+              </div>
+            )}
+
+            {/* Structured Characteristic Facet Pills */}
+            {product.traits && product.traits.length > 0 && (
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
+                {product.traits.map((trait, tIdx) => (
+                  <span 
+                    key={tIdx} 
+                    style={{
+                      background: '#f4f4f5',
+                      color: '#27272a',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.04em',
+                      padding: '3px 10px',
+                      borderRadius: '12px',
+                      border: '1px solid #e4e4e7'
+                    }}
+                  >
+                    {trait}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <p style={{ fontStyle: 'italic', color: '#6b7280', fontSize: '0.92rem', marginBottom: '14px' }}>
               &ldquo;{product.tagline}&rdquo;
