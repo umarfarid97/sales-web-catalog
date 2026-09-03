@@ -27,15 +27,24 @@ export const HeroBanner = () => {
         <div className="dior-hero-content">
           
           <div className="dior-hero-eyebrow">
-            Maison Christian Dior &bull; Fragrance
+            Maison Valenszo &bull; Fragrance Malaysia
           </div>
 
-          <h1 className="dior-hero-title">
-            SAUVAGE
-          </h1>
+          <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="valenszo-monogram-mark" style={{ fontSize: '3.2rem', color: '#ffffff', marginBottom: '-6px' }} aria-hidden="true">
+              <span className="vl-v">V</span>
+              <span className="vl-l">L</span>
+            </div>
+            <h1 className="dior-hero-title" style={{ fontFamily: 'var(--font-brand)', letterSpacing: '0.28em', margin: '0', fontSize: 'clamp(2.5rem, 6vw, 4.4rem)' }}>
+              VALENSZO
+            </h1>
+            <div style={{ fontFamily: 'var(--font-couture)', fontSize: '0.74rem', letterSpacing: '0.44em', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
+              FRAGRANCE MALAYSIA
+            </div>
+          </div>
 
           <p className="dior-hero-tagline">
-            Raw and noble all at once. An act of creation inspired by wide-open spaces under a blue-sky night.
+            Raw, noble, and magnetic all at once. An act of olfactory creation dictated by rare essences and timeless elegance.
           </p>
 
           <div className="dior-hero-buttons">
@@ -53,7 +62,7 @@ export const HeroBanner = () => {
               onClick={handleDiscoverElixir}
               style={{ padding: '14px 32px', borderColor: '#ffffff', color: '#ffffff' }}
             >
-              <span>Discover Sauvage Elixir</span>
+              <span>Discover Valenszo Elixir</span>
             </button>
           </div>
 

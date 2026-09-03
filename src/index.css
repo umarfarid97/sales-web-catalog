@@ -37,8 +37,9 @@
   --border-hover: #000000;
   --border-focus: #000000;
 
-  /* Typography */
-  --font-dior: 'Cinzel', 'Playfair Display', Georgia, serif;
+  /* Typography - VALENSZO Luxury Didone & Modern Couture */
+  --font-brand: 'Bodoni Moda', 'Playfair Display', 'Cinzel', Didot, 'Bodoni MT', Georgia, serif;
+  --font-dior: var(--font-brand);
   --font-couture: 'Montserrat', 'Outfit', -apple-system, sans-serif;
   --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -118,12 +119,66 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.25;
 }
 
-.dior-brand-heading {
-  font-family: var(--font-dior);
-  font-weight: 900;
-  letter-spacing: 0.32em;
+.dior-brand-heading,
+.valenszo-brand-heading {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: #000000;
+  font-optical-sizing: auto;
+}
+
+/* VALENSZO Bottle Monogram Emblem (interlocking VL) */
+.valenszo-monogram-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: var(--font-brand);
+  line-height: 1;
+  user-select: none;
+  font-optical-sizing: auto;
+}
+
+.valenszo-monogram-mark .vl-v {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+
+.valenszo-monogram-mark .vl-l {
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+  margin-left: -0.32em;
+}
+
+.valenszo-brand-block {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.valenszo-brand-name {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-optical-sizing: auto;
+  line-height: 1.1;
+}
+
+.valenszo-brand-sub {
+  font-family: var(--font-couture);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .couture-title {

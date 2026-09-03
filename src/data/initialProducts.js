@@ -432,15 +432,17 @@ export const INITIAL_PRODUCTS = [
 ];
 
 export const PROMO_CODES = [
-  { code: 'SAUVAGE25', discountPercent: 25, description: '25% Off Sauvage First Purchase' },
+  { code: 'VALENSZO25', discountPercent: 25, description: '25% Off Valenszo First Purchase' },
+  { code: 'VALENSZO10', discountPercent: 10, description: '10% Off Entire Fragrance Order' },
+  { code: 'SAUVAGE25', discountPercent: 25, description: '25% Off Valenszo First Purchase' },
   { code: 'DIOR10', discountPercent: 10, description: '10% Off Entire Fragrance Order' },
   { code: 'PRIVEE20', discountPercent: 20, description: '20% Off La Collection Privée' }
 ];
 
 export const COMPLIMENTARY_SAMPLES = [
-  { id: 'smp-1', name: 'Sauvage Elixir (2ml Deluxe Spray)', concentration: 'Elixir Concentrate' },
-  { id: 'smp-2', name: 'Sauvage Parfum (2ml Deluxe Spray)', concentration: 'Parfum Extrême' },
+  { id: 'smp-1', name: 'Valenszo Elixir (2ml Deluxe Spray)', concentration: 'Elixir Concentrate' },
+  { id: 'smp-2', name: 'Valenszo Parfum (2ml Deluxe Spray)', concentration: 'Parfum Extrême' },
   { id: 'smp-3', name: 'Oud Ispahan (2ml Privée Spray)', concentration: 'Extrait de Parfum' },
   { id: 'smp-4', name: 'Tobacco Volute (2ml Privée Spray)', concentration: 'Extrait de Parfum' },
-  { id: 'smp-5', name: 'Gris Dior (2ml Privée Spray)', concentration: 'Eau de Parfum' }
+  { id: 'smp-5', name: 'Gris Valenszo (2ml Privée Spray)', concentration: 'Eau de Parfum' }
 ];

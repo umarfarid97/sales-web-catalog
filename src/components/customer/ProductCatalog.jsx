@@ -43,7 +43,7 @@ export const ProductCatalog = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                {selectedCategory === 'All Creations' ? 'Sauvage Fragrance Collection' : selectedCategory}
+                {selectedCategory === 'All Creations' ? 'Valenszo Fragrance Collection' : selectedCategory}
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
                 {selectedCategory}
@@ -141,7 +141,7 @@ export const ProductCatalog = () => {
       {/* 4. Savoir-Faire Raw Materials Showcase */}
       <SavoirFaireSection />
 
-      {/* 5. The Dior Art of Gifting Experience */}
+      {/* 5. The Valenszo Art of Gifting Experience */}
       <section className="dior-gifting-experience">
         <div className="container">
           <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto' }}>
@@ -149,10 +149,10 @@ export const ProductCatalog = () => {
               Online Boutique Privileges
             </div>
             <h2 className="couture-title" style={{ fontSize: '2rem', color: '#000000' }}>
-              The Dior Art of Gifting
+              The Valenszo Art of Gifting
             </h2>
             <p style={{ color: '#4b5563', fontSize: '0.92rem', lineHeight: '1.6' }}>
-              Make each gift unique with personalized engraving, iconic Dior presentation boxes, and complimentary deluxe samples.
+              Make each gift unique with personalized engraving, iconic Valenszo presentation boxes, and complimentary deluxe samples.
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export const ProductCatalog = () => {
               </div>
               <h3 className="couture-title" style={{ fontSize: '0.95rem', marginBottom: '8px' }}>Iconic Gift Box</h3>
               <p style={{ fontSize: '0.84rem', color: '#6b7280' }}>
-                Every order is nestled in the signature Dior gift box, tied with a custom ribbon.
+                Every order is nestled in the signature Valenszo gift box, tied with a custom ribbon.
               </p>
             </div>
 

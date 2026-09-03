@@ -16,7 +16,7 @@ export const SavoirFaireSection = () => {
             The Art of Raw Materials
           </h2>
           <p style={{ fontSize: '0.95rem', color: '#9ca3af', lineHeight: '1.7', marginTop: '12px' }}>
-            Sauvage is an act of creation dictated by exceptional raw materials. Each ingredient is carefully selected from sustainable, long-standing partner harvests around the world.
+            Valenszo is an act of creation dictated by exceptional raw materials. Each ingredient is carefully selected from sustainable, long-standing partner harvests around the world.
           </p>
         </div>
 

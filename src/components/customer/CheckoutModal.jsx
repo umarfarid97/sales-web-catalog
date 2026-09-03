@@ -139,7 +139,7 @@ export const CheckoutModal = () => {
             </div>
             <div>
               <h3 className="couture-title" style={{ fontSize: '1.4rem' }}>Maison White-Glove Checkout</h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The Dior Art of Gifting &bull; Paris Atelier Fulfillment</p>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The Valenszo Art of Gifting &bull; Atelier Fulfillment</p>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export const CheckoutModal = () => {
                   </div>
 
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '16px' }}>
-                    Each flacon is cradled in iconic midnight blue gift packaging, sealed with a gold-embossed ribbon.
+                    Each flacon is cradled in iconic Valenszo gift packaging, sealed with a gold-embossed ribbon.
                   </p>
 
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '14px' }}>
@@ -167,7 +167,7 @@ export const CheckoutModal = () => {
                       style={{ accentColor: 'var(--accent-copper)', width: '16px', height: '16px' }}
                     />
                     <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#ffffff' }}>
-                      Complimentary Dior Signature Gift Packaging
+                      Complimentary Valenszo Signature Gift Packaging
                     </span>
                   </label>
 
@@ -388,7 +388,7 @@ export const CheckoutModal = () => {
                 Thank You, {formData.firstName}
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
-                Your Sauvage fragrance order has been transmitted to our Paris Atelier. Your parcel is being carefully prepared in our signature midnight blue gift presentation box.
+                Your Valenszo fragrance order has been transmitted to our Atelier. Your parcel is being carefully prepared in our signature luxury gift presentation box.
               </p>
 
               {/* Order Tracking Card */}

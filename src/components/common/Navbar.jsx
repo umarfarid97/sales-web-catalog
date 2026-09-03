@@ -3,14 +3,12 @@ import { useStore } from '../../context/StoreContext';
 import { 
   ShoppingBag, 
   Search, 
-  UserCheck, 
-  Sparkles, 
   RotateCcw, 
   X,
-  Heart,
   Cloud,
   Compass
 } from 'lucide-react';
+import { ValenszoLogo } from './ValenszoLogo';
 
 export const Navbar = () => {
   const { 
@@ -32,32 +30,32 @@ export const Navbar = () => {
   const [showSearchBox, setShowSearchBox] = useState(false);
 
   const handleReset = async () => {
-    if (window.confirm('Reset catalog to the official Dior Sauvage & La Collection Privée catalog?')) {
+    if (window.confirm('Reset catalog to the official Valenszo fragrance collection?')) {
       setIsResetting(true);
       await resetToDemoData();
       setIsResetting(false);
-      showToast('Catalog refreshed with the official Dior Sauvage collection!', 'success');
+      showToast('Catalog refreshed with the official Valenszo collection!', 'success');
     }
   };
 
   return (
     <>
-      {/* Top Dior Announcement Banner */}
+      {/* Top Valenszo Announcement Banner */}
       <div className="dior-announcement-bar">
-        COMPLIMENTARY DIOR ART OF GIFTING &bull; <span>2 DELUXE SAMPLES WITH EVERY ORDER</span> &bull; FREE DELIVERY
+        COMPLIMENTARY VALENSZO ART OF GIFTING &bull; <span>2 DELUXE SAMPLES WITH EVERY ORDER</span> &bull; FREE DELIVERY
       </div>
 
       <header className="site-header">
         <div className="container">
           <div className="nav-container">
             
-            {/* Left Column: Dior Navigation Links */}
+            {/* Left Column: Valenszo Navigation Links */}
             <div className="dior-navbar-links hide-mobile">
               <button 
                 className={`dior-nav-link ${selectedCategory === 'All Sauvage' || selectedCategory === 'All Creations' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('All Creations')}
               >
-                Sauvage
+                Creations
               </button>
               <button 
                 className={`dior-nav-link ${selectedCategory === 'La Collection Privée' ? 'active' : ''}`}
@@ -73,14 +71,13 @@ export const Navbar = () => {
               </button>
             </div>
 
-            {/* Center Column: Iconic Centered DIOR Logo */}
+            {/* Center Column: Iconic Centered VALENSZO Logo with VL Monogram */}
             <div 
-              style={{ textAlign: 'center', cursor: 'pointer' }}
+              style={{ textAlign: 'center', cursor: 'pointer', padding: '4px 12px' }}
               onClick={() => setSelectedCategory('All Creations')}
+              title="VALENSZO Fragrance Malaysia"
             >
-              <div className="dior-brand-heading" style={{ fontSize: '2rem', letterSpacing: '0.36em' }}>
-                DIOR
-              </div>
+              <ValenszoLogo size="md" subtitle="FRAGRANCE MALAYSIA" />
             </div>
 
             {/* Right Column: Search, Atelier Mode & Shopping Bag */}
@@ -93,7 +90,7 @@ export const Navbar = () => {
                     type="text"
                     autoFocus
                     className="form-input"
-                    placeholder="Search Sauvage..."
+                    placeholder="Search Valenszo..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     style={{ padding: '6px 30px 6px 12px', fontSize: '0.82rem' }}
@@ -112,7 +109,7 @@ export const Navbar = () => {
                 <button
                   className="btn-icon"
                   onClick={() => setShowSearchBox(true)}
-                  title="Search Sauvage Fragrances"
+                  title="Search Valenszo Fragrances"
                   aria-label="Search"
                 >
                   <Search size={17} />
@@ -156,7 +153,7 @@ export const Navbar = () => {
                 className="btn-icon"
                 onClick={handleReset}
                 disabled={isResetting}
-                title="Reset / Seed Dior Sauvage Catalog"
+                title="Reset / Seed Valenszo Catalog"
                 aria-label="Reset Collection"
               >
                 <RotateCcw size={15} className={isResetting ? 'spin' : ''} />

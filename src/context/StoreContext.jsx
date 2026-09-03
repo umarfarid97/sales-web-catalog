@@ -348,16 +348,20 @@ export const StoreProvider = ({ children }) => {
 
   const applyPromoCode = (code) => {
     const formatted = code.trim().toUpperCase();
-    if (PROMO_CODES[formatted]) {
+    const promo = Array.isArray(PROMO_CODES)
+      ? PROMO_CODES.find((p) => p.code === formatted)
+      : PROMO_CODES[formatted];
+
+    if (promo) {
       setAppliedPromo({
         code: formatted,
-        discountPercent: PROMO_CODES[formatted].discountPercent,
-        description: PROMO_CODES[formatted].description
+        discountPercent: promo.discountPercent,
+        description: promo.description
       });
-      showToast(`Promo "${formatted}" applied! (${PROMO_CODES[formatted].discountPercent}% off)`, 'success');
+      showToast(`Promo "${formatted}" applied! (${promo.discountPercent}% off)`, 'success');
       return true;
     } else {
-      showToast(`Invalid promo code "${code}". Try "LUMINA25" or "WELCOME10"`, 'error');
+      showToast(`Invalid promo code "${code}". Try "VALENSZO25" or "VALENSZO10"`, 'error');
       return false;
     }
   };

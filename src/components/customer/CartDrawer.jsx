@@ -120,7 +120,7 @@ export const CartDrawer = () => {
               </div>
               <h4 className="couture-title" style={{ fontSize: '1.05rem', marginBottom: '8px' }}>Your Bag is Empty</h4>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '20px' }}>
-                Discover our iconic Sauvage concentrations and La Collection Privée.
+                Discover our iconic Valenszo concentrations and La Collection Privée.
               </p>
               <button
                 className="btn btn-dior-solid"
@@ -202,7 +202,7 @@ export const CartDrawer = () => {
             <form onSubmit={handleApplyPromo} style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
               <input
                 type="text"
-                placeholder="Privilege Code (e.g. SAUVAGE25)"
+                placeholder="Privilege Code (e.g. VALENSZO25)"
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                 className="form-input"

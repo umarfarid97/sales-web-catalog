@@ -8,20 +8,21 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { ValenszoLogo } from './ValenszoLogo';
 
 export const Footer = () => {
   const { setSelectedCategory, showToast } = useStore();
 
   const handleNewsletter = (e) => {
     e.preventDefault();
-    showToast('Merci! You have been subscribed to Dior Fragrance previews.', 'success');
+    showToast('Merci! You have been subscribed to Valenszo Fragrance previews.', 'success');
   };
 
   return (
     <footer style={{ background: '#f8f9fa', borderTop: '1px solid var(--border-subtle)', padding: '60px 0 30px' }}>
       <div className="container">
         
-        {/* Dior 4 Pillars */}
+        {/* Valenszo 4 Pillars */}
         <div 
           style={{
             display: 'grid',
@@ -36,8 +37,8 @@ export const Footer = () => {
             <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
               <Gift size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Dior Art of Gifting</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Complimentary iconic Dior gift box with signature ribbon.</p>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Valenszo Art of Gifting</h4>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Complimentary iconic Valenszo gift box with signature ribbon.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '16px' }}>
@@ -53,7 +54,7 @@ export const Footer = () => {
               <RefreshCw size={20} />
             </div>
             <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Refillable Flacons</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable design: refill your Sauvage flacon infinitely.</p>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable design: refill your Valenszo flacon infinitely.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '16px' }}>
@@ -76,14 +77,14 @@ export const Footer = () => {
         >
           {/* Brand Col */}
           <div>
-            <div className="dior-brand-heading" style={{ fontSize: '1.6rem', marginBottom: '12px' }}>
-              DIOR
+            <div style={{ marginBottom: '14px', display: 'flex', justifyContent: 'flex-start' }}>
+              <ValenszoLogo size="md" layout="horizontal" subtitle="FRAGRANCE MALAYSIA" style={{ alignItems: 'flex-start' }} />
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '14px' }}>
-              Sauvage is an act of creation inspired by wide-open spaces. An ozone blue sky that sprawls above a rocky landscape, white-hot beneath the desert sun.
+              Valenszo is an act of creation inspired by noble essences and rare raw materials. Handcrafted luxury fragrances with timeless elegance.
             </p>
             <div style={{ fontSize: '0.74rem', color: '#000000', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              30 Avenue Montaigne, 75008 Paris, France
+              Kuala Lumpur &bull; Paris &bull; Worldwide Delivery
             </div>
           </div>
 
@@ -96,7 +97,7 @@ export const Footer = () => {
                   onClick={() => setSelectedCategory('All Creations')} 
                   style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
                 >
-                  Sauvage Complete Line
+                  Valenszo Complete Line
                 </button>
               </li>
               <li>
@@ -166,7 +167,7 @@ export const Footer = () => {
           }}
         >
           <div>
-            &copy; {new Date().getFullYear()} Parfums Christian Dior. All rights reserved.
+            &copy; {new Date().getFullYear()} Valenszo Fragrance Malaysia. All rights reserved.
           </div>
           <div style={{ display: 'flex', gap: '20px' }}>
             <span>Privacy Policy</span>
