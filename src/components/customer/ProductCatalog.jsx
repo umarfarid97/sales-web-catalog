@@ -24,7 +24,8 @@ export const ProductCatalog = () => {
     setMaxPrice,
     searchQuery,
     selectedCategory,
-    setSelectedCategory
+    setSelectedCategory,
+    activeGender
   } = useStore();
 
   const [visibleCount, setVisibleCount] = useState(24);
@@ -32,7 +33,7 @@ export const ProductCatalog = () => {
   // Reset pagination on filter or search changes
   useEffect(() => {
     setVisibleCount(24);
-  }, [selectedCategory, searchQuery, inStockOnly, maxPrice, sortBy]);
+  }, [selectedCategory, searchQuery, inStockOnly, maxPrice, sortBy, activeGender]);
 
   const displayedProducts = filteredProducts.slice(0, visibleCount);
 
@@ -52,10 +53,10 @@ export const ProductCatalog = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                {selectedCategory === 'All Creations' ? 'Valenszo Fragrance Portfolio' : 'Valenszo Collection'}
+                {activeGender === 'Men' ? "Gentleman's Collection &bull; Pour Homme" : "Lady's Collection &bull; Pour Femme"}
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
-                {selectedCategory}
+                {selectedCategory.startsWith('All') ? (activeGender === 'Men' ? "Men's Fragrances (116 Creations)" : "Women's Fragrances (229 Creations)") : selectedCategory}
               </h2>
             </div>
 

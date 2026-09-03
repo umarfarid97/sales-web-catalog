@@ -3,6 +3,36 @@
 // Sourced from VALENSZO Portfolio Evaluation (116 Men + 229 Women, S/A/B/C Tiers)
 // ==========================================================================
 
+export const MEN_CLUSTERS = [
+  "All Men's Creations",
+  "★ Tier S (Launch Icons)",
+  "Fresh / Aquatic / Citrus",
+  "Blue / Aromatic / Fresh-Woody",
+  "Sweet / Amber / Gourmand",
+  "Spicy / Warm / Tobacco",
+  "Oud / Oriental / Resinous",
+  "Leather / Smoky / Dark",
+  "Woody / Vetiver / Green",
+  "Clean / Musk / Powdery",
+  "Floral / Fruity / Niche-Unisex",
+  "Classic / Fougere / Heritage"
+];
+
+export const WOMEN_CLUSTERS = [
+  "All Women's Creations",
+  "★ Tier S (Launch Icons)",
+  "Fruity-Floral / Mass Appeal",
+  "Sweet / Gourmand / Vanilla",
+  "Fruity / Juicy / Tropical",
+  "Floral / Bouquet",
+  "Fresh / Aquatic / Citrus / Green",
+  "Dark / Seductive / Night",
+  "Rose / Peony / Romantic Floral",
+  "Niche / Woody / Unisex",
+  "Clean / Musk / Powdery",
+  "Amber / Warm / Oriental"
+];
+
 export const OLFACTORY_FAMILIES = [
   'All Creations',
   'Tier S (Launch Icons)',

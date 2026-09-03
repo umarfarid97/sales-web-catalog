@@ -35,17 +35,38 @@ export const StoreProvider = ({ children }) => {
   // Customer View: 'catalog' | 'diagnostic'
   const [customerView, setCustomerView] = useState('catalog');
 
+  // Active Gender Collection: 'Men' | 'Women'
+  const [activeGender, setActiveGender] = useState(() => {
+    return localStorage.getItem('valenszo_active_gender') || 'Men';
+  });
+
+  const selectGenderCollection = (gender) => {
+    setRole('customer');
+    setActiveGender(gender);
+    localStorage.setItem('valenszo_active_gender', gender);
+    setSelectedCategory(gender === 'Men' ? "All Men's Creations" : "All Women's Creations");
+    setCustomerView('catalog');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const navigateToDiagnostic = () => {
     setRole('customer');
     setCustomerView('diagnostic');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigateToCatalog = (category = 'All Creations') => {
+  const navigateToCatalog = (category = null, gender = null) => {
     setRole('customer');
     setCustomerView('catalog');
+    if (gender) {
+      setActiveGender(gender);
+      localStorage.setItem('valenszo_active_gender', gender);
+    }
+    const currentG = gender || activeGender;
     if (category) {
       setSelectedCategory(category);
+    } else {
+      setSelectedCategory(currentG === 'Men' ? "All Men's Creations" : "All Women's Creations");
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -650,18 +671,25 @@ export const StoreProvider = ({ children }) => {
 
   // --- Computed Filtered Products for Customer Catalog ---
   const filteredProducts = products.filter((product) => {
-    const isAll = selectedCategory === 'All' || selectedCategory === 'All Creations' || selectedCategory === 'All Sauvage';
+    // 1. Gender Collection Filter
+    const isMen = product.id?.startsWith('vlz-men') || product.sku?.startsWith('VLZ-M') || product.category === 'Pour Homme';
+    const isWomen = product.id?.startsWith('vlz-women') || product.sku?.startsWith('VLZ-W') || product.category === 'Pour Femme';
+
+    if (activeGender === 'Men' && !isMen) return false;
+    if (activeGender === 'Women' && !isWomen) return false;
+
+    // 2. Category / Cluster Filter within that gender
+    const isAll = 
+      selectedCategory === 'All' || 
+      selectedCategory === 'All Creations' || 
+      selectedCategory === "All Men's Creations" || 
+      selectedCategory === "All Women's Creations";
+
     if (!isAll) {
-      if (selectedCategory === 'Tier S (Launch Icons)' || selectedCategory === 'Tier S' || selectedCategory === 'Tier S Icons') {
+      if (selectedCategory.includes('Tier S')) {
         if (product.tier !== 'S') return false;
-      } else if (selectedCategory === 'Tier A (Premium)' || selectedCategory === 'Tier A') {
+      } else if (selectedCategory.includes('Tier A')) {
         if (product.tier !== 'A') return false;
-      } else if (selectedCategory === 'Pour Homme' || selectedCategory === 'Men') {
-        if (product.gender !== 'Men') return false;
-      } else if (selectedCategory === 'Pour Femme' || selectedCategory === 'Women') {
-        if (product.gender !== 'Women') return false;
-      } else if (selectedCategory === 'Niche & Unisex' || selectedCategory === 'Unisex') {
-        if (product.gender !== 'Unisex' && product.category !== 'Niche & Unisex') return false;
       } else if (
         product.character !== selectedCategory &&
         product.olfactoryFamily !== selectedCategory &&
@@ -725,6 +753,9 @@ export const StoreProvider = ({ children }) => {
         setRole,
         customerView,
         setCustomerView,
+        activeGender,
+        setActiveGender,
+        selectGenderCollection,
         navigateToDiagnostic,
         navigateToCatalog,
         adminTab,

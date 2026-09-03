@@ -20,6 +20,8 @@ export const Navbar = () => {
     customerView,
     navigateToDiagnostic,
     navigateToCatalog,
+    activeGender,
+    selectGenderCollection,
     cartTotalItems, 
     setIsCartOpen, 
     searchQuery, 
@@ -84,35 +86,18 @@ export const Navbar = () => {
                   <span>Find Your Scent</span>
                 </button>
                 <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && (selectedCategory === 'All Creations' || selectedCategory === 'All') ? 'active' : ''}`}
-                  onClick={() => navigateToCatalog('All Creations')}
+                  className={`dior-nav-link ${customerView === 'catalog' && activeGender === 'Men' ? 'active' : ''}`}
+                  onClick={() => selectGenderCollection('Men')}
+                  style={{ fontWeight: activeGender === 'Men' ? 800 : 600 }}
                 >
-                  All (345)
+                  Men&apos;s Collection (116)
                 </button>
                 <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
-                  onClick={() => navigateToCatalog('Tier S (Launch Icons)')}
-                  style={{ color: selectedCategory === 'Tier S (Launch Icons)' ? '#000000' : '#926917', fontWeight: 700 }}
+                  className={`dior-nav-link ${customerView === 'catalog' && activeGender === 'Women' ? 'active' : ''}`}
+                  onClick={() => selectGenderCollection('Women')}
+                  style={{ fontWeight: activeGender === 'Women' ? 800 : 600 }}
                 >
-                  ★ Tier S (55)
-                </button>
-                <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Pour Homme' ? 'active' : ''}`}
-                  onClick={() => navigateToCatalog('Pour Homme')}
-                >
-                  Pour Homme
-                </button>
-                <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Pour Femme' ? 'active' : ''}`}
-                  onClick={() => navigateToCatalog('Pour Femme')}
-                >
-                  Pour Femme
-                </button>
-                <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
-                  onClick={() => navigateToCatalog('Niche & Unisex')}
-                >
-                  Unisex
+                  Women&apos;s Collection (229)
                 </button>
               </div>
             </div>
@@ -332,38 +317,53 @@ export const Navbar = () => {
                 </button>
               </div>
 
-              <div className="mobile-nav-section-title">Valenszo Portfolio (345 Fragrances)</div>
+              <div className="mobile-nav-section-title">Valenszo Collections</div>
               <div className="mobile-nav-links">
                 <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && (selectedCategory === 'All Creations' || selectedCategory === 'All') ? 'active' : ''}`}
-                  onClick={() => { navigateToCatalog('All Creations'); setIsMobileMenuOpen(false); }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && activeGender === 'Men' ? 'active' : ''}`}
+                  onClick={() => { 
+                    selectGenderCollection('Men'); 
+                    setIsMobileMenuOpen(false); 
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '16px 14px',
+                    borderLeft: activeGender === 'Men' ? '4px solid #000000' : '4px solid transparent',
+                    background: activeGender === 'Men' ? '#f3f4f6' : 'transparent',
+                    borderRadius: 'var(--radius-sm)'
+                  }}
                 >
-                  <span>All Creations (345 Portfolio)</span>
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Men&apos;s Collection</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>Pour Homme &bull; 116 Fragrances</div>
+                  </div>
+                  <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
                 </button>
+
                 <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Tier S (Launch Icons)' ? 'active' : ''}`}
-                  onClick={() => { navigateToCatalog('Tier S (Launch Icons)'); setIsMobileMenuOpen(false); }}
-                  style={{ borderLeft: '3px solid #d97706' }}
+                  className={`mobile-nav-item ${customerView === 'catalog' && activeGender === 'Women' ? 'active' : ''}`}
+                  onClick={() => { 
+                    selectGenderCollection('Women'); 
+                    setIsMobileMenuOpen(false); 
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '16px 14px',
+                    borderLeft: activeGender === 'Women' ? '4px solid #000000' : '4px solid transparent',
+                    background: activeGender === 'Women' ? '#f3f4f6' : 'transparent',
+                    borderRadius: 'var(--radius-sm)',
+                    marginTop: '6px'
+                  }}
                 >
-                  <span style={{ color: '#d97706', fontWeight: 800 }}>★ Tier S (55 Launch Icons)</span>
-                </button>
-                <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Pour Homme' ? 'active' : ''}`}
-                  onClick={() => { navigateToCatalog('Pour Homme'); setIsMobileMenuOpen(false); }}
-                >
-                  <span>Pour Homme (116 Men&apos;s Fragrances)</span>
-                </button>
-                <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Pour Femme' ? 'active' : ''}`}
-                  onClick={() => { navigateToCatalog('Pour Femme'); setIsMobileMenuOpen(false); }}
-                >
-                  <span>Pour Femme (229 Women&apos;s Fragrances)</span>
-                </button>
-                <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && selectedCategory === 'Niche & Unisex' ? 'active' : ''}`}
-                  onClick={() => { navigateToCatalog('Niche & Unisex'); setIsMobileMenuOpen(false); }}
-                >
-                  <span>Unisex &amp; Niche Extraits</span>
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Women&apos;s Collection</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>Pour Femme &bull; 229 Fragrances</div>
+                  </div>
+                  <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
                 </button>
               </div>
 

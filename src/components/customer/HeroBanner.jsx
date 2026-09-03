@@ -3,7 +3,7 @@ import { useStore } from '../../context/StoreContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const HeroBanner = () => {
-  const { setSelectedProductModal, products } = useStore();
+  const { setSelectedProductModal, products, activeGender, navigateToDiagnostic } = useStore();
 
   const handleDiscoverElixir = () => {
     const elixir = products.find((p) => p.sku === 'SVG-LX-001' || p.name.includes('Elixir')) || products[0];
@@ -27,7 +27,7 @@ export const HeroBanner = () => {
         <div className="dior-hero-content">
           
           <div className="dior-hero-eyebrow">
-            Maison Valenszo &bull; Fragrance Malaysia
+            Maison Valenszo &bull; {activeGender === 'Men' ? 'Pour Homme (116 Creations)' : 'Pour Femme (229 Creations)'}
           </div>
 
           <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '100vw' }}>
@@ -39,12 +39,14 @@ export const HeroBanner = () => {
               VALENSZO
             </h1>
             <div style={{ fontFamily: 'var(--font-couture)', fontSize: 'clamp(0.62rem, 1.8vw, 0.74rem)', letterSpacing: 'clamp(0.18em, 1.2vw, 0.44em)', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
-              FRAGRANCE MALAYSIA
+              {activeGender === 'Men' ? "GENTLEMAN'S COLLECTION" : "LADY'S COLLECTION"}
             </div>
           </div>
 
           <p className="dior-hero-tagline">
-            Raw, noble, and magnetic all at once. An act of olfactory creation dictated by rare essences and timeless elegance.
+            {activeGender === 'Men'
+              ? 'Raw, noble, and magnetic all at once. Discover 116 masterfully structured masculine creations dictated by rare essences.'
+              : 'Radiant, poetic, and captivating all at once. Discover 229 sublime feminine and romantic creations crafted for modern allure.'}
           </p>
 
           <div className="dior-hero-buttons">
@@ -59,10 +61,11 @@ export const HeroBanner = () => {
 
             <button
               className="btn btn-dior-outline"
-              onClick={handleDiscoverElixir}
-              style={{ padding: '14px 32px', borderColor: '#ffffff', color: '#ffffff' }}
+              onClick={navigateToDiagnostic}
+              style={{ padding: '14px 32px', borderColor: '#ffffff', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}
             >
-              <span>Discover Valenszo Elixir</span>
+              <Sparkles size={15} color="#f59e0b" />
+              <span>Find Your Scent</span>
             </button>
           </div>
 

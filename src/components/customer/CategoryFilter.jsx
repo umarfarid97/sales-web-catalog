@@ -1,16 +1,68 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
+import { MEN_CLUSTERS, WOMEN_CLUSTERS } from '../../data/initialProducts';
 
 export const CategoryFilter = () => {
-  const { selectedCategory, setSelectedCategory } = useStore();
+  const { 
+    activeGender, 
+    selectGenderCollection, 
+    selectedCategory, 
+    setSelectedCategory 
+  } = useStore();
+
+  const clusters = activeGender === 'Women' ? WOMEN_CLUSTERS : MEN_CLUSTERS;
 
   return (
     <div className="dior-lineup-tabs-section">
-      <div className="container" style={{ height: '100%' }}>
-        <div className="dior-lineup-scroll-wrap">
-          {OLFACTORY_FAMILIES.map((cat) => {
-            const isActive = selectedCategory === cat || (cat === 'All Creations' && (selectedCategory === 'All' || selectedCategory === 'All Sauvage'));
+      <div className="container" style={{ height: '100%', display: 'flex', alignItems: 'center', gap: '14px' }}>
+        
+        {/* Gender Collection Selector Pill */}
+        <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', flexShrink: 0 }}>
+          <button
+            onClick={() => selectGenderCollection('Men')}
+            style={{
+              padding: '6px 13px',
+              borderRadius: '3px',
+              border: 'none',
+              background: activeGender === 'Men' ? '#000000' : 'transparent',
+              color: activeGender === 'Men' ? '#ffffff' : '#4b5563',
+              fontFamily: 'var(--font-couture)',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            Pour Homme
+          </button>
+          <button
+            onClick={() => selectGenderCollection('Women')}
+            style={{
+              padding: '6px 13px',
+              borderRadius: '3px',
+              border: 'none',
+              background: activeGender === 'Women' ? '#000000' : 'transparent',
+              color: activeGender === 'Women' ? '#ffffff' : '#4b5563',
+              fontFamily: 'var(--font-couture)',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              letterSpacing: '0.08em',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            Pour Femme
+          </button>
+        </div>
+
+        {/* Dynamic Gender Olfactory Lineup Tabs */}
+        <div className="dior-lineup-scroll-wrap" style={{ flex: 1 }}>
+          {clusters.map((cat) => {
+            const isAll = cat.startsWith('All') && (selectedCategory.startsWith('All') || selectedCategory === 'All' || selectedCategory === 'All Creations');
+            const isActive = selectedCategory === cat || isAll;
             return (
               <button
                 key={cat}
