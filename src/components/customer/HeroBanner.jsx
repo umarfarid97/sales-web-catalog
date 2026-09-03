@@ -27,7 +27,7 @@ export const HeroBanner = () => {
         <div className="dior-hero-content">
           
           <div className="dior-hero-eyebrow">
-            Maison Valenszo &bull; {activeGender === 'Men' ? 'Pour Homme (116 Creations)' : 'Pour Femme (229 Creations)'}
+            Maison Valenszo &bull; {activeGender === 'Men' ? "Men's Collection (116 Creations)" : "Women's Collection (229 Creations)"}
           </div>
 
           <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '100vw' }}>
@@ -39,7 +39,7 @@ export const HeroBanner = () => {
               VALENSZO
             </h1>
             <div style={{ fontFamily: 'var(--font-couture)', fontSize: 'clamp(0.62rem, 1.8vw, 0.74rem)', letterSpacing: 'clamp(0.18em, 1.2vw, 0.44em)', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
-              {activeGender === 'Men' ? "GENTLEMAN'S COLLECTION" : "LADY'S COLLECTION"}
+              {activeGender === 'Men' ? "MEN'S COLLECTION" : "WOMEN'S COLLECTION"}
             </div>
           </div>
 

@@ -53,7 +53,7 @@ export const ProductCatalog = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
             <div>
               <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                {activeGender === 'Men' ? "Gentleman's Collection &bull; Pour Homme" : "Lady's Collection &bull; Pour Femme"}
+                {activeGender === 'Men' ? "Men's Fragrance Collection" : "Women's Fragrance Collection"}
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
                 {selectedCategory.startsWith('All') ? (activeGender === 'Men' ? "Men's Fragrances (116 Creations)" : "Women's Fragrances (229 Creations)") : selectedCategory}

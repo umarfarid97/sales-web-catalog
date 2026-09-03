@@ -21,40 +21,40 @@ export const CategoryFilter = () => {
           <button
             onClick={() => selectGenderCollection('Men')}
             style={{
-              padding: '6px 13px',
+              padding: '6px 14px',
               borderRadius: '3px',
               border: 'none',
               background: activeGender === 'Men' ? '#000000' : 'transparent',
               color: activeGender === 'Men' ? '#ffffff' : '#4b5563',
               fontFamily: 'var(--font-couture)',
-              fontSize: '0.72rem',
+              fontSize: '0.74rem',
               fontWeight: 800,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               whiteSpace: 'nowrap'
             }}
           >
-            Pour Homme
+            Men&apos;s
           </button>
           <button
             onClick={() => selectGenderCollection('Women')}
             style={{
-              padding: '6px 13px',
+              padding: '6px 14px',
               borderRadius: '3px',
               border: 'none',
               background: activeGender === 'Women' ? '#000000' : 'transparent',
               color: activeGender === 'Women' ? '#ffffff' : '#4b5563',
               fontFamily: 'var(--font-couture)',
-              fontSize: '0.72rem',
+              fontSize: '0.74rem',
               fontWeight: 800,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               whiteSpace: 'nowrap'
             }}
           >
-            Pour Femme
+            Women&apos;s
           </button>
         </div>
 

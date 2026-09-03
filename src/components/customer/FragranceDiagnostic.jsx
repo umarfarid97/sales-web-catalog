@@ -29,16 +29,16 @@ const QUESTIONS = [
     options: [
       {
         id: 'men',
-        label: 'A Gentleman (Pour Homme)',
+        label: 'Men (Lelaki)',
         desc: 'Magnetic, noble, and architecturally structured for men.',
-        tag: 'Pour Homme',
+        tag: 'Men',
         gender: 'Men'
       },
       {
         id: 'women',
-        label: 'A Lady (Pour Femme)',
+        label: 'Women (Wanita)',
         desc: 'Radiant, enchanting, and gracefully alluring for women.',
-        tag: 'Pour Femme',
+        tag: 'Women',
         gender: 'Women'
       },
       {

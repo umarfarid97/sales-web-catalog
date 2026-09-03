@@ -337,7 +337,7 @@ export const Navbar = () => {
                 >
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Men&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>Pour Homme &bull; 116 Fragrances</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>116 Fragrance Creations</div>
                   </div>
                   <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
                 </button>
@@ -361,7 +361,7 @@ export const Navbar = () => {
                 >
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Women&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>Pour Femme &bull; 229 Fragrances</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>229 Fragrance Creations</div>
                   </div>
                   <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
                 </button>
