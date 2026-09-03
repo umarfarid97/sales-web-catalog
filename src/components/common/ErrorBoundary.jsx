@@ -18,10 +18,11 @@ export class ErrorBoundary extends React.Component {
   handleReset = () => {
     try {
       localStorage.removeItem('lumina_cart');
+      localStorage.removeItem('valenszo_active_gender');
     } catch (e) {
       console.error(e);
     }
-    window.location.reload();
+    window.location.href = window.location.origin;
   };
 
   render() {

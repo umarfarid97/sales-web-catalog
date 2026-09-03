@@ -61,7 +61,8 @@ export const CategoryFilter = () => {
         {/* Dynamic Gender Olfactory Lineup Tabs */}
         <div className="dior-lineup-scroll-wrap" style={{ flex: 1 }}>
           {clusters.map((cat) => {
-            const isAll = cat.startsWith('All') && (selectedCategory.startsWith('All') || selectedCategory === 'All' || selectedCategory === 'All Creations');
+            const currentCat = selectedCategory || '';
+            const isAll = cat.startsWith('All') && (currentCat.startsWith('All') || currentCat === 'All' || currentCat === 'All Creations' || !currentCat);
             const isActive = selectedCategory === cat || isAll;
             return (
               <button

@@ -40,6 +40,13 @@ export const StoreProvider = ({ children }) => {
     return localStorage.getItem('valenszo_active_gender') || 'Men';
   });
 
+  // Search, Filter & Sort State
+  const [selectedCategory, setSelectedCategory] = useState("All Men's Creations");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('featured');
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [maxPrice, setMaxPrice] = useState(500);
+
   const selectGenderCollection = (gender) => {
     setRole('customer');
     setActiveGender(gender);
@@ -167,13 +174,6 @@ export const StoreProvider = ({ children }) => {
 
   // Promo Code
   const [appliedPromo, setAppliedPromo] = useState(null);
-
-  // Search, Filter & Sort State
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [sortBy, setSortBy] = useState('featured'); // 'featured', 'price-low', 'price-high', 'rating', 'name'
-  const [inStockOnly, setInStockOnly] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(500);
 
   // UI Modals & Drawers
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -679,22 +679,24 @@ export const StoreProvider = ({ children }) => {
     if (activeGender === 'Women' && !isWomen) return false;
 
     // 2. Category / Cluster Filter within that gender
+    const cat = selectedCategory || 'All';
     const isAll = 
-      selectedCategory === 'All' || 
-      selectedCategory === 'All Creations' || 
-      selectedCategory === "All Men's Creations" || 
-      selectedCategory === "All Women's Creations";
+      cat === 'All' || 
+      cat === 'All Creations' || 
+      cat === "All Men's Creations" || 
+      cat === "All Women's Creations" ||
+      (typeof cat === 'string' && cat.startsWith('All'));
 
-    if (!isAll) {
-      if (selectedCategory.includes('Tier S')) {
+    if (!isAll && typeof cat === 'string') {
+      if (cat.includes('Tier S')) {
         if (product.tier !== 'S') return false;
-      } else if (selectedCategory.includes('Tier A')) {
+      } else if (cat.includes('Tier A')) {
         if (product.tier !== 'A') return false;
       } else if (
-        product.character !== selectedCategory &&
-        product.olfactoryFamily !== selectedCategory &&
-        product.category !== selectedCategory &&
-        !product.traits?.some((t) => t.toLowerCase() === selectedCategory.toLowerCase())
+        product.character !== cat &&
+        product.olfactoryFamily !== cat &&
+        product.category !== cat &&
+        !product.traits?.some((t) => t?.toLowerCase() === cat.toLowerCase())
       ) {
         return false;
       }
