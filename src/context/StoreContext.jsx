@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { INITIAL_PRODUCTS, PROMO_CODES } from '../data/initialProducts';
 import { INITIAL_ORDERS } from '../data/initialOrders';
 import { isSupabaseConfigured } from '../lib/supabaseClient';
