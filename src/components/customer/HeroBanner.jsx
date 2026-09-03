@@ -3,7 +3,7 @@ import { useStore } from '../../context/StoreContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const HeroBanner = () => {
-  const { setSelectedProductModal, products, activeGender, navigateToDiagnostic } = useStore();
+  const { setSelectedProductModal, products, activeGender, menCount, womenCount, navigateToDiagnostic } = useStore();
 
   const handleDiscoverElixir = () => {
     const elixir = products.find((p) => p.sku === 'SVG-LX-001' || p.name.includes('Elixir')) || products[0];
@@ -19,6 +19,8 @@ export const HeroBanner = () => {
     }
   };
 
+  const currentCount = activeGender === 'Men' ? menCount : womenCount;
+
   return (
     <section className="dior-hero-campaign">
       <div className="dior-hero-media-bg" />
@@ -27,7 +29,7 @@ export const HeroBanner = () => {
         <div className="dior-hero-content">
           
           <div className="dior-hero-eyebrow">
-            Maison Valenszo &bull; {activeGender === 'Men' ? "Men's Collection (116 Creations)" : "Women's Collection (229 Creations)"}
+            Maison Valenszo &bull; {activeGender === 'Men' ? `Men's Collection (${menCount} Creations)` : `Women's Collection (${womenCount} Creations)`}
           </div>
 
           <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '100vw' }}>
@@ -45,8 +47,8 @@ export const HeroBanner = () => {
 
           <p className="dior-hero-tagline">
             {activeGender === 'Men'
-              ? 'Raw, noble, and magnetic all at once. Discover 116 masterfully structured masculine creations dictated by rare essences.'
-              : 'Radiant, poetic, and captivating all at once. Discover 229 sublime feminine and romantic creations crafted for modern allure.'}
+              ? `Raw, noble, and magnetic all at once. Discover ${menCount} masterfully structured masculine creations dictated by rare essences.`
+              : `Radiant, poetic, and captivating all at once. Discover ${womenCount} sublime feminine and romantic creations crafted for modern allure.`}
           </p>
 
           <div className="dior-hero-buttons">

@@ -745,6 +745,15 @@ export const StoreProvider = ({ children }) => {
   const outOfStockCount = products.filter((p) => p.stock === 0).length;
   const averageOrderValue = totalOrdersCount > 0 ? totalRevenue / totalOrdersCount : 0;
 
+  // --- Dynamic Live Category Counts ---
+  const menCount = useMemo(() => {
+    return products.filter((p) => p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme').length;
+  }, [products]);
+
+  const womenCount = useMemo(() => {
+    return products.filter((p) => p.id?.startsWith('vlz-women') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme').length;
+  }, [products]);
+
   return (
     <StoreContext.Provider
       value={{
@@ -756,6 +765,8 @@ export const StoreProvider = ({ children }) => {
         activeGender,
         setActiveGender,
         selectGenderCollection,
+        menCount,
+        womenCount,
         navigateToDiagnostic,
         navigateToCatalog,
         adminTab,

@@ -25,7 +25,9 @@ export const ProductCatalog = () => {
     searchQuery,
     selectedCategory,
     setSelectedCategory,
-    activeGender
+    activeGender,
+    menCount,
+    womenCount
   } = useStore();
 
   const [visibleCount, setVisibleCount] = useState(24);
@@ -56,7 +58,7 @@ export const ProductCatalog = () => {
                 {activeGender === 'Men' ? "Men's Fragrance Collection" : "Women's Fragrance Collection"}
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
-                {selectedCategory.startsWith('All') ? (activeGender === 'Men' ? "Men's Fragrances (116 Creations)" : "Women's Fragrances (229 Creations)") : selectedCategory}
+                {selectedCategory.startsWith('All') ? (activeGender === 'Men' ? `Men's Fragrances (${menCount} Creations)` : `Women's Fragrances (${womenCount} Creations)`) : selectedCategory}
               </h2>
             </div>
 

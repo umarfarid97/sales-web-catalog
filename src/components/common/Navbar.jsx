@@ -22,6 +22,8 @@ export const Navbar = () => {
     navigateToCatalog,
     activeGender,
     selectGenderCollection,
+    menCount,
+    womenCount,
     cartTotalItems, 
     setIsCartOpen, 
     searchQuery, 
@@ -90,14 +92,14 @@ export const Navbar = () => {
                   onClick={() => selectGenderCollection('Men')}
                   style={{ fontWeight: activeGender === 'Men' ? 800 : 600 }}
                 >
-                  Men&apos;s Collection (116)
+                  Men&apos;s Collection ({menCount})
                 </button>
                 <button 
                   className={`dior-nav-link ${customerView === 'catalog' && activeGender === 'Women' ? 'active' : ''}`}
                   onClick={() => selectGenderCollection('Women')}
                   style={{ fontWeight: activeGender === 'Women' ? 800 : 600 }}
                 >
-                  Women&apos;s Collection (229)
+                  Women&apos;s Collection ({womenCount})
                 </button>
               </div>
             </div>
@@ -337,7 +339,7 @@ export const Navbar = () => {
                 >
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Men&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>116 Fragrance Creations</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>{menCount} Fragrance Creations</div>
                   </div>
                   <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
                 </button>
@@ -361,7 +363,7 @@ export const Navbar = () => {
                 >
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Women&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>229 Fragrance Creations</div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>{womenCount} Fragrance Creations</div>
                   </div>
                   <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
                 </button>
