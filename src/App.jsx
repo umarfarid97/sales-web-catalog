@@ -3,6 +3,7 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { ToastContainer } from './components/common/ToastContainer';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Customer Components
 import { ProductCatalog } from './components/customer/ProductCatalog';
@@ -76,8 +77,10 @@ const MainLayout = () => {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <MainLayout />
-    </StoreProvider>
+    <ErrorBoundary>
+      <StoreProvider>
+        <MainLayout />
+      </StoreProvider>
+    </ErrorBoundary>
   );
 }

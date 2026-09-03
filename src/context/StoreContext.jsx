@@ -58,18 +58,35 @@ export const StoreProvider = ({ children }) => {
     return INITIAL_PRODUCTS;
   });
 
-  // Cart Items
+  // Cart Items with auto-sanitization for safe rendering
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem('lumina_cart');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Clear cart if it had old headphones
-        if (Array.isArray(parsed) && parsed.some((p) => p.category === 'Audio' || p.category === 'Wearables')) {
-          localStorage.removeItem('lumina_cart');
-          return [];
+        if (Array.isArray(parsed)) {
+          // Clear cart if it had old non-fragrance categories
+          if (parsed.some((p) => p.category === 'Audio' || p.category === 'Wearables')) {
+            localStorage.removeItem('lumina_cart');
+            return [];
+          }
+          // Sanitize every cart item: ensure numbers and image arrays exist
+          return parsed.map((item) => {
+            const firstImg = item.image || (Array.isArray(item.images) && item.images[0]) || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80';
+            const itemPrice = Number(item.price) || 150;
+            const itemQty = Math.max(1, Number(item.quantity) || 1);
+            return {
+              ...item,
+              price: itemPrice,
+              quantity: itemQty,
+              image: firstImg,
+              images: Array.isArray(item.images) && item.images.length > 0 ? item.images : [firstImg],
+              selectedSize: item.selectedSize || item.size || '100 ml',
+              cartItemId: item.cartItemId || `${item.id}-${item.selectedSize || 'std'}`
+            };
+          });
         }
-        return parsed;
+        return [];
       } catch (e) {
         console.error('Failed to parse saved cart', e);
       }
@@ -258,34 +275,61 @@ export const StoreProvider = ({ children }) => {
   }, [favorites]);
 
   // --- Cart Calculations ---
-  const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
+  const cartSubtotal = cart.reduce((sum, item) => {
+    const p = Number(item.price) || 0;
+    const q = Number(item.quantity) || 1;
+    return sum + (p * q);
+  }, 0);
+  const cartItemCount = cart.reduce((count, item) => count + (Number(item.quantity) || 1), 0);
+  const cartTotalItems = cartItemCount;
   const freeShippingThreshold = 150;
   const standardShippingFee = 15;
   const isFreeShipping = cartSubtotal >= freeShippingThreshold || cartSubtotal === 0;
   const cartShipping = isFreeShipping ? 0 : standardShippingFee;
   
-  const discountPercent = appliedPromo ? appliedPromo.discountPercent : 0;
+  const discountPercent = appliedPromo ? (Number(appliedPromo.discountPercent) || 0) : 0;
   const cartDiscountAmount = (cartSubtotal * discountPercent) / 100;
   const cartTotal = Math.max(0, cartSubtotal - cartDiscountAmount + cartShipping);
 
   // --- Cart Actions ---
-  const addToCart = (product, selectedColor = null, quantity = 1) => {
-    const colorToUse = selectedColor || (product.colors && product.colors[0]?.name) || 'Standard';
-    const cartItemId = `${product.id}-${colorToUse}`;
+  const addToCart = (product, arg2 = 1, arg3 = null, arg4 = null, arg5 = null) => {
+    if (!product) return false;
 
-    if (product.stock <= 0) {
+    let quantity = 1;
+    let selectedSize = '100 ml';
+    let engravingText = null;
+    let overridePrice = null;
+
+    if (typeof arg2 === 'number') {
+      quantity = Math.max(1, Math.round(arg2) || 1);
+      selectedSize = typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || '100 ml');
+      engravingText = typeof arg4 === 'string' ? arg4 : null;
+      overridePrice = typeof arg5 === 'number' ? arg5 : null;
+    } else if (typeof arg2 === 'string') {
+      selectedSize = arg2;
+      quantity = typeof arg3 === 'number' ? Math.max(1, arg3) : 1;
+      engravingText = typeof arg4 === 'string' ? arg4 : null;
+      overridePrice = typeof arg5 === 'number' ? arg5 : null;
+    }
+
+    const price = typeof overridePrice === 'number' ? overridePrice : (Number(product.price) || 0);
+    const cartItemId = `${product.id}-${selectedSize}-${engravingText || 'std'}`;
+    const firstImg = (Array.isArray(product.images) && product.images[0]) || product.image || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80';
+    const imagesList = Array.isArray(product.images) && product.images.length > 0 ? product.images : [firstImg];
+    const maxStock = typeof product.stock === 'number' ? product.stock : 99;
+
+    if (maxStock <= 0) {
       showToast(`${product.name} is currently out of stock!`, 'error');
       return false;
     }
 
     setCart((prevCart) => {
-      const existingIndex = prevCart.findIndex((item) => item.cartItemId === cartItemId);
+      const existingIndex = prevCart.findIndex((item) => item.cartItemId === cartItemId || (item.id === product.id && item.selectedSize === selectedSize));
       if (existingIndex > -1) {
-        const currentQty = prevCart[existingIndex].quantity;
-        const newQty = Math.min(product.stock, currentQty + quantity);
-        if (newQty === currentQty) {
-          showToast(`Maximum stock limit (${product.stock}) reached for this item`, 'info');
+        const currentQty = Number(prevCart[existingIndex].quantity) || 1;
+        const newQty = Math.min(maxStock, currentQty + quantity);
+        if (newQty === currentQty && maxStock > 0) {
+          showToast(`Maximum stock limit (${maxStock}) reached for this item`, 'info');
           return prevCart;
         }
         const updated = [...prevCart];
@@ -298,32 +342,38 @@ export const StoreProvider = ({ children }) => {
             cartItemId,
             id: product.id,
             name: product.name,
-            price: product.price,
-            originalPrice: product.originalPrice,
-            image: product.images[0],
-            color: colorToUse,
+            price: price,
+            originalPrice: product.originalPrice || price,
+            image: firstImg,
+            images: imagesList,
+            size: selectedSize,
+            selectedSize: selectedSize,
+            engravingText: engravingText,
             category: product.category,
-            quantity: Math.min(product.stock, quantity),
-            maxStock: product.stock
+            quantity: Math.min(maxStock, quantity),
+            maxStock: maxStock
           }
         ];
       }
     });
 
-    showToast(`Added ${quantity}x "${product.name}" to cart`, 'success');
+    showToast(`Added ${quantity}x "${product.name}" to bag`, 'success');
     return true;
   };
 
-  const updateCartQuantity = (cartItemId, newQty) => {
-    if (newQty <= 0) {
-      removeFromCart(cartItemId);
+  const updateCartQuantity = (idOrCartItemId, newQty, optionalSize = null) => {
+    const qty = Number(newQty);
+    if (isNaN(qty) || qty <= 0) {
+      removeFromCart(idOrCartItemId, optionalSize);
       return;
     }
 
     setCart((prevCart) =>
       prevCart.map((item) => {
-        if (item.cartItemId === cartItemId) {
-          const clampedQty = Math.min(item.maxStock || 99, newQty);
+        const isMatch = item.cartItemId === idOrCartItemId || 
+                        (item.id === idOrCartItemId && (!optionalSize || item.selectedSize === optionalSize));
+        if (isMatch) {
+          const clampedQty = Math.min(item.maxStock || 99, qty);
           return { ...item, quantity: clampedQty };
         }
         return item;
@@ -331,13 +381,19 @@ export const StoreProvider = ({ children }) => {
     );
   };
 
-  const removeFromCart = (cartItemId) => {
+  const removeFromCart = (idOrCartItemId, optionalSize = null) => {
     setCart((prevCart) => {
-      const item = prevCart.find((i) => i.cartItemId === cartItemId);
+      const item = prevCart.find((i) => 
+        i.cartItemId === idOrCartItemId || 
+        (i.id === idOrCartItemId && (!optionalSize || i.selectedSize === optionalSize))
+      );
       if (item) {
-        showToast(`Removed "${item.name}" from cart`, 'info');
+        showToast(`Removed "${item.name}" from bag`, 'info');
       }
-      return prevCart.filter((i) => i.cartItemId !== cartItemId);
+      return prevCart.filter((i) => 
+        !(i.cartItemId === idOrCartItemId || 
+          (i.id === idOrCartItemId && (!optionalSize || i.selectedSize === optionalSize)))
+      );
     });
   };
 
@@ -650,6 +706,7 @@ export const StoreProvider = ({ children }) => {
         cart,
         cartSubtotal,
         cartItemCount,
+        cartTotalItems,
         cartShipping,
         cartDiscountAmount,
         cartTotal,

@@ -39,8 +39,10 @@ export const CartDrawer = () => {
 
   if (!isCartOpen) return null;
 
-  const freeShippingProgress = Math.min(100, (cartSubtotal / freeShippingThreshold) * 100);
-  const amountToFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal);
+  const safeSubtotal = Number(cartSubtotal) || 0;
+  const safeThreshold = Number(freeShippingThreshold) || 150;
+  const freeShippingProgress = Math.min(100, Math.max(0, (safeSubtotal / safeThreshold) * 100));
+  const amountToFreeShipping = Math.max(0, safeThreshold - safeSubtotal);
 
   const handleApplyPromo = (e) => {
     e.preventDefault();
@@ -73,7 +75,7 @@ export const CartDrawer = () => {
             <ShoppingBag size={20} color="var(--accent-copper-light)" />
             <h3 className="couture-title" style={{ fontSize: '1.1rem' }}>Shopping Bag</h3>
             <span className="badge badge-copper">
-              {cartItemCount} {cartItemCount === 1 ? 'creation' : 'creations'}
+              {cartItemCount || 0} {cartItemCount === 1 ? 'creation' : 'creations'}
             </span>
           </div>
 
@@ -113,7 +115,7 @@ export const CartDrawer = () => {
 
         {/* Cart Items List */}
         <div className="cart-items-container">
-          {cart.length === 0 ? (
+          {(!cart || cart.length === 0) ? (
             <div className="cart-empty-state">
               <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--text-dim)' }}>
                 <ShoppingBag size={28} />
@@ -132,64 +134,72 @@ export const CartDrawer = () => {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {cart.map((item, idx) => (
-                <div 
-                  key={`${item.id}-${item.selectedSize || 'default'}-${idx}`} 
-                  className="cart-item-card"
-                  style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)' }}
-                >
-                  <img src={item.images[0]} alt={item.name} className="cart-item-img" />
-                  
-                  <div className="cart-item-info">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div>
-                        <h4 className="couture-title" style={{ fontSize: '0.92rem', marginBottom: '3px' }}>{item.name}</h4>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--accent-copper-light)', fontWeight: 600, marginBottom: '2px' }}>
-                          {item.selectedSize || '100 ml Grand Flacon'}
-                        </div>
-                        {item.engravingText && (
-                          <div style={{ fontSize: '0.74rem', color: '#6ee7b7', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Feather size={11} />
-                            <span>Engraved: &quot;{item.engravingText}&quot;</span>
+              {cart.map((item, idx) => {
+                const itemImg = item.image || (Array.isArray(item.images) && item.images[0]) || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80';
+                const itemQty = Math.max(1, Number(item.quantity) || 1);
+                const itemPrice = Number(item.price) || 0;
+                const itemTotal = (itemPrice * itemQty).toFixed(2);
+                const itemKey = item.cartItemId || `${item.id}-${item.selectedSize || 'std'}-${idx}`;
+
+                return (
+                  <div 
+                    key={itemKey} 
+                    className="cart-item-card"
+                    style={{ background: 'rgba(11, 17, 34, 0.75)', border: '1px solid var(--border-card)' }}
+                  >
+                    <img src={itemImg} alt={item.name || 'Creation'} className="cart-item-img" />
+                    
+                    <div className="cart-item-info">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div>
+                          <h4 className="couture-title" style={{ fontSize: '0.92rem', marginBottom: '3px' }}>{item.name}</h4>
+                          <div style={{ fontSize: '0.78rem', color: 'var(--accent-copper-light)', fontWeight: 600, marginBottom: '2px' }}>
+                            {item.selectedSize || item.size || '100 ml Grand Flacon'}
                           </div>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => removeFromCart(item.id, item.selectedSize)}
-                        className="cart-item-remove-btn"
-                        aria-label={`Remove ${item.name}`}
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                      <div className="qty-control-group">
+                          {item.engravingText && (
+                            <div style={{ fontSize: '0.74rem', color: '#6ee7b7', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                              <Feather size={11} />
+                              <span>Engraved: &quot;{item.engravingText}&quot;</span>
+                            </div>
+                          )}
+                        </div>
                         <button
-                          className="qty-btn"
-                          onClick={() => updateCartQuantity(item.id, item.quantity - 1, item.selectedSize)}
-                          aria-label="Decrease quantity"
+                          onClick={() => removeFromCart(item.cartItemId || item.id, item.selectedSize)}
+                          className="cart-item-remove-btn"
+                          aria-label={`Remove ${item.name}`}
                         >
-                          <Minus size={12} />
-                        </button>
-                        <span className="qty-value">{item.quantity}</span>
-                        <button
-                          className="qty-btn"
-                          onClick={() => updateCartQuantity(item.id, item.quantity + 1, item.selectedSize)}
-                          aria-label="Increase quantity"
-                        >
-                          <Plus size={12} />
+                          <Trash2 size={15} />
                         </button>
                       </div>
 
-                      <div className="cart-item-price" style={{ color: '#ffffff' }}>
-                        ${((item.price || item.unitPrice) * item.quantity).toFixed(2)}
-                      </div>
-                    </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
+                        <div className="qty-control-group">
+                          <button
+                            className="qty-btn"
+                            onClick={() => updateCartQuantity(item.cartItemId || item.id, itemQty - 1, item.selectedSize)}
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="qty-value">{itemQty}</span>
+                          <button
+                            className="qty-btn"
+                            onClick={() => updateCartQuantity(item.cartItemId || item.id, itemQty + 1, item.selectedSize)}
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
 
+                        <div className="cart-item-price" style={{ color: '#ffffff' }}>
+                          ${itemTotal}
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
