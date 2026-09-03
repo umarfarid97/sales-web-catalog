@@ -76,7 +76,7 @@ export const OrderTrackerModal = () => {
               <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
               <input
                 type="text"
-                placeholder="e.g. ORD-98421 or TRK-LUM-9482710"
+                placeholder="e.g. ORD-98421 or TRK-VAL-9482710"
                 value={searchId}
                 onChange={(e) => setSearchId(e.target.value)}
                 className="form-input"

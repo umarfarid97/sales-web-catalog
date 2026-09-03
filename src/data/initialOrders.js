@@ -51,7 +51,7 @@ export const INITIAL_ORDERS = [
     paymentMethod: 'apple-pay',
     placedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     deliveredAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    trackingNumber: 'TRK-LUM-9482710'
+    trackingNumber: 'TRK-VAL-9482710'
   },
   {
     id: 'ORD-98422',
@@ -93,7 +93,7 @@ export const INITIAL_ORDERS = [
     paymentMethod: 'credit-card',
     placedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
     deliveredAt: null,
-    trackingNumber: 'TRK-LUM-5839201'
+    trackingNumber: 'TRK-VAL-5839201'
   },
   {
     id: 'ORD-98423',
@@ -146,6 +146,6 @@ export const INITIAL_ORDERS = [
     paymentMethod: 'apple-pay',
     placedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     deliveredAt: null,
-    trackingNumber: 'TRK-LUM-2940182'
+    trackingNumber: 'TRK-VAL-2940182'
   }
 ];

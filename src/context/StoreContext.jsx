@@ -398,7 +398,7 @@ export const StoreProvider = ({ children }) => {
 
     const orderNumber = Math.floor(10000 + Math.random() * 90000);
     const orderId = `ORD-${orderNumber}`;
-    const trackingNumber = `TRK-LUM-${Math.floor(1000000 + Math.random() * 9000000)}`;
+    const trackingNumber = `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`;
 
     const newOrder = {
       id: orderId,
