@@ -4,13 +4,13 @@ import {
   ShoppingBag, 
   RotateCcw, 
   X, 
-  Cloud, 
   Compass,
   Menu,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  User,
+  Search
 } from 'lucide-react';
-import { ValenszoLogo } from './ValenszoLogo';
 
 export const Navbar = () => {
   const { 
@@ -25,18 +25,15 @@ export const Navbar = () => {
     womenCount,
     cartTotalItems, 
     setIsCartOpen, 
-    searchQuery, 
-    setSearchQuery,
     isCloudConnected,
     resetToDemoData,
     showToast,
-    setIsOrderTrackerOpen,
-    selectedCategory,
-    setSelectedCategory
+    setIsOrderTrackerOpen
   } = useStore();
 
   const [isResetting, setIsResetting] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showAnnouncement, setShowAnnouncement] = useState(true);
 
   const handleReset = async () => {
     if (window.confirm('Reset catalog to the official Valenszo fragrance collection?')) {
@@ -47,357 +44,552 @@ export const Navbar = () => {
     }
   };
 
+  const handleSearchClick = () => {
+    if (customerView !== 'catalog') {
+      navigateToCatalog();
+    }
+    setTimeout(() => {
+      const searchInput = document.querySelector('.catalog-search-bar input') || document.querySelector('#sauvage-catalog-grid input[type="text"]');
+      if (searchInput) {
+        searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        searchInput.focus();
+      } else {
+        const grid = document.getElementById('sauvage-catalog-grid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 120);
+  };
+
   return (
     <>
-      {/* Top Valenszo Announcement Banner */}
-      <div className="dior-announcement-bar">
-        COMPLIMENTARY VALENSZO ART OF GIFTING &bull; <span>2 DELUXE SAMPLES WITH EVERY ORDER</span> &bull; FREE DELIVERY
-      </div>
+      {/* 1. Sleek Announcement Banner (with dismissible 'X') */}
+      {showAnnouncement && (
+        <div style={{
+          background: '#000000',
+          color: '#ffffff',
+          fontSize: '0.72rem',
+          fontWeight: 600,
+          fontFamily: 'var(--font-couture, sans-serif)',
+          letterSpacing: '0.06em',
+          padding: '9px 42px 9px 24px',
+          textAlign: 'center',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          lineHeight: 1.4
+        }}>
+          <span>
+            Receive a Complimentary Maison Valenszo Deluxe Sample with any order over RM200 &bull; Free Express Delivery Across Malaysia
+          </span>
+          <button
+            onClick={() => setShowAnnouncement(false)}
+            style={{
+              position: 'absolute',
+              right: '14px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              color: 'rgba(255, 255, 255, 0.75)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '4px'
+            }}
+            aria-label="Dismiss announcement"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
-      <header className="site-header" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
-        <div className="container">
-          <div className="nav-container">
-            
-            {/* Left Column: Mobile Menu Trigger (on mobile) or Desktop Nav Links (on desktop) */}
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <button 
-                className="btn-icon show-mobile"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Toggle Navigation Menu"
-                style={{ width: '38px', height: '38px', border: 'none', background: 'transparent' }}
-              >
-                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-              </button>
-
-              <div className="dior-navbar-links hide-mobile">
-                <button 
-                  className={`dior-nav-link ${customerView === 'diagnostic' ? 'active' : ''}`}
-                  onClick={() => navigateToDiagnostic()}
-                  style={{ 
-                    color: customerView === 'diagnostic' ? '#000000' : '#b45309', 
-                    fontWeight: 800, 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '5px',
-                    borderBottom: customerView === 'diagnostic' ? '2px solid #000000' : 'none'
-                  }}
-                >
-                  <Sparkles size={13} color="#d97706" />
-                  <span>Find Your Scent</span>
-                </button>
-                <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && activeGender === 'Men' ? 'active' : ''}`}
-                  onClick={() => selectGenderCollection('Men')}
-                  style={{ fontWeight: activeGender === 'Men' ? 800 : 600 }}
-                >
-                  Men&apos;s Collection ({menCount})
-                </button>
-                <button 
-                  className={`dior-nav-link ${customerView === 'catalog' && activeGender === 'Women' ? 'active' : ''}`}
-                  onClick={() => selectGenderCollection('Women')}
-                  style={{ fontWeight: activeGender === 'Women' ? 800 : 600 }}
-                >
-                  Women&apos;s Collection ({womenCount})
-                </button>
-              </div>
-            </div>
-
-            {/* Center Column: Iconic Centered VALENSZO Logo with VL Monogram */}
-            <div 
-              style={{ textAlign: 'center', cursor: 'pointer', padding: '4px 6px', display: 'flex', justifyContent: 'center' }}
-              onClick={() => {
-                navigateToCatalog('All Creations');
-                setIsMobileMenuOpen(false);
+      {/* 2. Minimalist Parisian Luxury Top Bar (Matching Dior Boutique Header) */}
+      <header className="site-header" style={{ 
+        position: 'sticky', 
+        top: 0, 
+        zIndex: 100, 
+        background: '#ffffff', 
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)' 
+      }}>
+        <div style={{
+          maxWidth: '1440px',
+          margin: '0 auto',
+          padding: '0 clamp(16px, 3.5vw, 36px)',
+          height: '62px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          position: 'relative'
+        }}>
+          
+          {/* Left Column: Hamburger Menu & Search Icon */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Open Boutique Menu"
+              title="Boutique Menu"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                padding: '6px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000000',
+                transition: 'opacity 0.2s ease'
               }}
-              title="VALENSZO Fragrance Malaysia"
             >
-              <div className="hide-mobile">
-                <ValenszoLogo size="md" subtitle="FRAGRANCE MALAYSIA" />
-              </div>
-              <div className="show-mobile">
-                <ValenszoLogo size="sm" subtitle="FRAGRANCE MALAYSIA" />
-              </div>
-            </div>
+              {isMenuOpen ? <X size={22} strokeWidth={1.75} /> : <Menu size={22} strokeWidth={1.75} />}
+            </button>
 
-            {/* Right Column: Order Tracker, Status & Shopping Bag */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={handleSearchClick}
+              aria-label="Search Fragrance Catalog"
+              title="Search Fragrances"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                padding: '6px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000000',
+                transition: 'opacity 0.2s ease'
+              }}
+            >
+              <Search size={20} strokeWidth={1.75} />
+            </button>
+          </div>
 
-              {/* Order Tracker (Desktop only) */}
+          {/* Center Column: Iconic VALENSZO Luxury Wordmark (Mathematically Centered) */}
+          <div 
+            style={{ 
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              textAlign: 'center', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onClick={() => {
+              navigateToCatalog('All Creations');
+              setIsMenuOpen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            title="VALENSZO Haute Parfumerie"
+          >
+            <span style={{
+              fontFamily: 'var(--font-brand, "Bodoni Moda", serif)',
+              fontSize: 'clamp(1.45rem, 3.2vw, 1.95rem)',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              color: '#000000',
+              textTransform: 'uppercase',
+              userSelect: 'none',
+              lineHeight: 1
+            }}>
+              VALENSZO
+            </span>
+          </div>
+
+          {/* Right Column: Account / Order Tracker & Shopping Bag */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
+            
+            {/* Account / Order Tracker with Orange Status Indicator Dot */}
+            <button
+              onClick={() => setIsOrderTrackerOpen(true)}
+              aria-label="Track Orders & Account"
+              title="Track Delivery & Orders"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                padding: '6px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000000',
+                position: 'relative',
+                transition: 'opacity 0.2s ease'
+              }}
+            >
+              <User size={21} strokeWidth={1.75} />
+              {/* Dior-style orange status dot */}
+              <span style={{
+                position: 'absolute',
+                top: '4px',
+                right: '4px',
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: '#ea580c',
+                boxShadow: '0 0 0 1.5px #ffffff'
+              }} />
+            </button>
+
+            {/* Shopping Bag Button with Counter Badge */}
+            {role === 'customer' && (
               <button
-                className="btn-icon hide-mobile"
-                onClick={() => setIsOrderTrackerOpen(true)}
-                title="Delivery Tracker"
-                aria-label="Delivery Tracker"
-              >
-                <Compass size={17} />
-              </button>
-
-              {/* Cloud Sync Status (Desktop only) */}
-              <div 
-                className="hide-mobile"
-                title={isCloudConnected ? "Connected to Supabase PostgreSQL" : "Local Storage Mode"}
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '6px', 
-                  padding: '4px 8px', 
-                  borderRadius: 'var(--radius-sm)', 
-                  background: isCloudConnected ? '#ecfdf5' : '#f3f4f6',
-                  fontSize: '0.68rem',
-                  fontFamily: 'var(--font-couture)',
-                  letterSpacing: '0.1em',
-                  fontWeight: 700,
-                  color: isCloudConnected ? '#059669' : '#6b7280'
+                onClick={() => setIsCartOpen(true)}
+                aria-label={`Shopping Bag (${cartTotalItems} items)`}
+                title="Shopping Bag"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#000000',
+                  position: 'relative',
+                  transition: 'opacity 0.2s ease'
                 }}
               >
-                <Cloud size={12} />
-                <span>{isCloudConnected ? 'LIVE' : 'LOCAL'}</span>
-              </div>
-
-              {/* Reset Catalog Button (Desktop only) */}
-              <button
-                className="btn-icon hide-mobile"
-                onClick={handleReset}
-                disabled={isResetting}
-                title="Reset / Seed Valenszo Catalog"
-                aria-label="Reset Collection"
-              >
-                <RotateCcw size={15} className={isResetting ? 'spin' : ''} />
+                <ShoppingBag size={21} strokeWidth={1.75} />
+                {cartTotalItems > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '2px',
+                    right: '2px',
+                    background: '#000000',
+                    color: '#ffffff',
+                    borderRadius: '50%',
+                    width: '16px',
+                    height: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.62rem',
+                    fontWeight: 800,
+                    fontFamily: 'var(--font-couture)',
+                    lineHeight: 1
+                  }}>
+                    {cartTotalItems}
+                  </span>
+                )}
               </button>
-
-              {/* Role Toggle Switcher: Boutique vs Atelier Admin (Desktop only) */}
-              <div className="hide-mobile" style={{ display: 'flex', background: '#f3f4f6', borderRadius: 'var(--radius-sm)', padding: '3px', gap: '2px' }}>
-                <button
-                  onClick={() => setRole('customer')}
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: 'none',
-                    background: role === 'customer' ? '#000000' : 'transparent',
-                    color: role === 'customer' ? '#ffffff' : '#6b7280',
-                    fontFamily: 'var(--font-couture)',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Boutique
-                </button>
-                <button
-                  onClick={() => setRole('admin')}
-                  style={{
-                    padding: '4px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: 'none',
-                    background: role === 'admin' ? '#000000' : 'transparent',
-                    color: role === 'admin' ? '#ffffff' : '#6b7280',
-                    fontFamily: 'var(--font-couture)',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.08em',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Atelier
-                </button>
-              </div>
-
-              {/* Shopping Bag Button (Responsive: compact on phone, labeled on desktop) */}
-              {role === 'customer' && (
-                <button
-                  className="btn btn-dior-black"
-                  onClick={() => setIsCartOpen(true)}
-                  style={{ padding: '8px 14px', fontSize: '0.76rem', height: '36px' }}
-                  aria-label={`Shopping Bag (${cartTotalItems} items)`}
-                >
-                  <ShoppingBag size={16} />
-                  <span className="hide-mobile">Bag</span>
-                  {cartTotalItems > 0 && (
-                    <span 
-                      style={{
-                        background: '#ffffff',
-                        color: '#000000',
-                        borderRadius: '50%',
-                        width: '18px',
-                        height: '18px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.68rem',
-                        fontWeight: 900,
-                        marginLeft: '2px'
-                      }}
-                    >
-                      {cartTotalItems}
-                    </span>
-                  )}
-                </button>
-              )}
-
-            </div>
+            )}
 
           </div>
+
         </div>
 
-        {/* Luxury Mobile Navigation Drawer */}
-        {isMobileMenuOpen && (
-          <div className="mobile-nav-drawer">
-            <div className="mobile-nav-inner">
-              
-              {/* Featured Olfactory Diagnostic Menu Item */}
-              <div style={{ marginBottom: '20px' }}>
+        {/* 3. Luxury Boutique Slide-Over Drawer (Accessible on Desktop & Mobile) */}
+        {isMenuOpen && (
+          <>
+            {/* Backdrop Overlay */}
+            <div 
+              onClick={() => setIsMenuOpen(false)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0, 0, 0, 0.52)',
+                backdropFilter: 'blur(2px)',
+                zIndex: 998,
+                animation: 'fadeIn 0.2s ease-out'
+              }}
+            />
+
+            {/* Slide Drawer Panel */}
+            <div 
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                width: 'clamp(320px, 85vw, 400px)',
+                background: '#ffffff',
+                zIndex: 999,
+                boxShadow: '4px 0 28px rgba(0, 0, 0, 0.18)',
+                display: 'flex',
+                flexDirection: 'column',
+                animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                overflowY: 'auto'
+              }}
+            >
+              {/* Drawer Header */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '20px 24px',
+                borderBottom: '1px solid #f3f4f6'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                  <span style={{
+                    fontFamily: 'var(--font-brand, "Bodoni Moda", serif)',
+                    fontSize: '1.3rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.16em',
+                    color: '#000000'
+                  }}>
+                    VALENSZO
+                  </span>
+                  <span style={{
+                    fontSize: '0.64rem',
+                    fontFamily: 'var(--font-couture)',
+                    letterSpacing: '0.15em',
+                    color: '#9ca3af'
+                  }}>
+                    HAUTE PARFUMERIE
+                  </span>
+                </div>
                 <button
-                  className="mobile-nav-item"
-                  onClick={() => {
-                    navigateToDiagnostic();
-                    setIsMobileMenuOpen(false);
-                  }}
+                  onClick={() => setIsMenuOpen(false)}
                   style={{
-                    background: customerView === 'diagnostic' ? '#000000' : 'linear-gradient(135deg, #18181b 0%, #09090b 100%)',
-                    color: '#ffffff',
-                    border: '1px solid #d97706',
-                    padding: '14px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 14px rgba(217, 119, 6, 0.18)',
-                    width: '100%'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Sparkles size={16} color="#f59e0b" />
-                    </div>
-                    <div style={{ textAlign: 'left' }}>
-                      <div style={{ fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.04em', color: '#ffffff' }}>
-                        Find Your Scent
-                      </div>
-                      <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600 }}>
-                        10-Question Olfactory Diagnostic &rarr;
-                      </div>
-                    </div>
-                  </div>
-                  <ArrowRight size={16} color="#f59e0b" />
-                </button>
-              </div>
-
-              <div className="mobile-nav-section-title">Valenszo Collections</div>
-              <div className="mobile-nav-links">
-                <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && activeGender === 'Men' ? 'active' : ''}`}
-                  onClick={() => { 
-                    selectGenderCollection('Men'); 
-                    setIsMobileMenuOpen(false); 
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '16px 14px',
-                    borderLeft: activeGender === 'Men' ? '4px solid #000000' : '4px solid transparent',
-                    background: activeGender === 'Men' ? '#f3f4f6' : 'transparent',
-                    borderRadius: 'var(--radius-sm)'
-                  }}
-                >
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Men&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>{menCount} Fragrance Creations</div>
-                  </div>
-                  <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
-                </button>
-
-                <button 
-                  className={`mobile-nav-item ${customerView === 'catalog' && activeGender === 'Women' ? 'active' : ''}`}
-                  onClick={() => { 
-                    selectGenderCollection('Women'); 
-                    setIsMobileMenuOpen(false); 
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '16px 14px',
-                    borderLeft: activeGender === 'Women' ? '4px solid #000000' : '4px solid transparent',
-                    background: activeGender === 'Women' ? '#f3f4f6' : 'transparent',
-                    borderRadius: 'var(--radius-sm)',
-                    marginTop: '6px'
-                  }}
-                >
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: 800, fontSize: '0.96rem', color: '#111827' }}>Women&apos;s Collection</div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280' }}>{womenCount} Fragrance Creations</div>
-                  </div>
-                  <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
-                </button>
-              </div>
-
-              <div className="mobile-nav-divider" />
-
-              <div className="mobile-nav-section-title">Maison Services</div>
-              <div className="mobile-nav-actions">
-                <button 
-                  className="mobile-nav-action-btn"
-                  onClick={() => { setIsOrderTrackerOpen(true); setIsMobileMenuOpen(false); }}
-                >
-                  <Compass size={16} color="#926917" />
-                  <span>Track Fragrance Delivery</span>
-                </button>
-
-                <button 
-                  className="mobile-nav-action-btn"
-                  onClick={() => { handleReset(); setIsMobileMenuOpen(false); }}
-                >
-                  <RotateCcw size={16} className={isResetting ? 'spin' : ''} />
-                  <span>Reset Valenszo Catalog</span>
-                </button>
-              </div>
-
-              <div className="mobile-nav-divider" />
-
-              <div className="mobile-nav-section-title">Experience Mode</div>
-              <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
-                <button
-                  onClick={() => { setRole('customer'); setIsMobileMenuOpen(false); }}
-                  style={{
-                    flex: 1,
-                    padding: '9px 12px',
+                    background: 'none',
                     border: 'none',
-                    borderRadius: '3px',
-                    background: role === 'customer' ? '#000000' : 'transparent',
-                    color: role === 'customer' ? '#ffffff' : '#4b5563',
-                    fontWeight: 700,
-                    fontSize: '0.76rem',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    padding: '6px',
+                    color: '#4b5563',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '50%'
                   }}
+                  aria-label="Close menu"
                 >
-                  Boutique
-                </button>
-                <button
-                  onClick={() => { setRole('admin'); setIsMobileMenuOpen(false); }}
-                  style={{
-                    flex: 1,
-                    padding: '9px 12px',
-                    border: 'none',
-                    borderRadius: '3px',
-                    background: role === 'admin' ? '#000000' : 'transparent',
-                    color: role === 'admin' ? '#ffffff' : '#4b5563',
-                    fontWeight: 700,
-                    fontSize: '0.76rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Atelier Admin
+                  <X size={20} />
                 </button>
               </div>
 
-              <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
-                {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
-              </div>
+              {/* Drawer Body */}
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '22px', flex: 1 }}>
+                
+                {/* Featured Olfactory Diagnostic Menu Item */}
+                <div>
+                  <button
+                    onClick={() => {
+                      navigateToDiagnostic();
+                      setIsMenuOpen(false);
+                    }}
+                    style={{
+                      background: customerView === 'diagnostic' ? '#000000' : 'linear-gradient(135deg, #18181b 0%, #09090b 100%)',
+                      color: '#ffffff',
+                      border: '1px solid #d97706',
+                      padding: '14px 16px',
+                      borderRadius: '3px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 4px 14px rgba(217, 119, 6, 0.18)',
+                      width: '100%',
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Sparkles size={16} color="#f59e0b" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.04em', color: '#ffffff' }}>
+                          Find Your Scent
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600 }}>
+                          10-Question Olfactory Diagnostic &rarr;
+                        </div>
+                      </div>
+                    </div>
+                    <ArrowRight size={16} color="#f59e0b" />
+                  </button>
+                </div>
 
+                {/* Collections Section */}
+                <div>
+                  <div style={{
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: '#c5a059',
+                    marginBottom: '10px',
+                    fontFamily: 'var(--font-couture)'
+                  }}>
+                    Fragrance Collections
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <button 
+                      onClick={() => { 
+                        selectGenderCollection('Men'); 
+                        setIsMenuOpen(false); 
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 16px',
+                        borderLeft: activeGender === 'Men' ? '4px solid #000000' : '4px solid transparent',
+                        background: activeGender === 'Men' ? '#f3f4f6' : '#fafafa',
+                        borderTop: '1px solid #f3f4f6',
+                        borderRight: '1px solid #f3f4f6',
+                        borderBottom: '1px solid #f3f4f6',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Men&apos;s Collection</div>
+                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{menCount} Fragrance Creations</div>
+                      </div>
+                      <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
+                    </button>
+
+                    <button 
+                      onClick={() => { 
+                        selectGenderCollection('Women'); 
+                        setIsMenuOpen(false); 
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 16px',
+                        borderLeft: activeGender === 'Women' ? '4px solid #000000' : '4px solid transparent',
+                        background: activeGender === 'Women' ? '#f3f4f6' : '#fafafa',
+                        borderTop: '1px solid #f3f4f6',
+                        borderRight: '1px solid #f3f4f6',
+                        borderBottom: '1px solid #f3f4f6',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Women&apos;s Collection</div>
+                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{womenCount} Fragrance Creations</div>
+                      </div>
+                      <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Maison Services Section */}
+                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px' }}>
+                  <div style={{
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: '#c5a059',
+                    marginBottom: '10px',
+                    fontFamily: 'var(--font-couture)'
+                  }}>
+                    Maison Services
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <button 
+                      onClick={() => { setIsOrderTrackerOpen(true); setIsMenuOpen(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '11px 14px',
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        color: '#374151',
+                        fontSize: '0.84rem',
+                        fontWeight: 600
+                      }}
+                    >
+                      <Compass size={17} color="#926917" />
+                      <span>Track Fragrance Delivery</span>
+                    </button>
+
+                    <button 
+                      onClick={() => { handleReset(); setIsMenuOpen(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '11px 14px',
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        color: '#374151',
+                        fontSize: '0.84rem',
+                        fontWeight: 600
+                      }}
+                    >
+                      <RotateCcw size={17} className={isResetting ? 'spin' : ''} />
+                      <span>Reset Valenszo Catalog</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Experience Mode Switcher (Boutique vs Atelier Admin) */}
+                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px', marginTop: 'auto' }}>
+                  <div style={{
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: '#9ca3af',
+                    marginBottom: '8px',
+                    fontFamily: 'var(--font-couture)'
+                  }}>
+                    Experience Mode
+                  </div>
+                  <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
+                    <button
+                      onClick={() => { setRole('customer'); setIsMenuOpen(false); }}
+                      style={{
+                        flex: 1,
+                        padding: '9px 12px',
+                        border: 'none',
+                        borderRadius: '3px',
+                        background: role === 'customer' ? '#000000' : 'transparent',
+                        color: role === 'customer' ? '#ffffff' : '#4b5563',
+                        fontWeight: 700,
+                        fontSize: '0.76rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Boutique
+                    </button>
+                    <button
+                      onClick={() => { setRole('admin'); setIsMenuOpen(false); }}
+                      style={{
+                        flex: 1,
+                        padding: '9px 12px',
+                        border: 'none',
+                        borderRadius: '3px',
+                        background: role === 'admin' ? '#000000' : 'transparent',
+                        color: role === 'admin' ? '#ffffff' : '#4b5563',
+                        fontWeight: 700,
+                        fontSize: '0.76rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Atelier Admin
+                    </button>
+                  </div>
+
+                  <div style={{ marginTop: '14px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
+                    {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
+                  </div>
+                </div>
+
+              </div>
             </div>
-          </div>
+          </>
         )}
 
       </header>
