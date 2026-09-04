@@ -11,6 +11,7 @@ export const ValenszoLogo = ({
   size = 'md', 
   layout = 'stacked', 
   showMonogram = true, 
+  showBrandName = true,
   showSubtitle = true, 
   subtitle = 'FRAGRANCE MALAYSIA',
   inverted = false,
@@ -30,6 +31,13 @@ export const ValenszoLogo = ({
       brandSize: '1.45rem',
       subSize: '0.56rem',
       gap: '2px',
+      subTracking: '0.34em'
+    },
+    topbar: {
+      monogramSize: '2.1rem',
+      brandSize: '1.45rem',
+      subSize: '0.56rem',
+      gap: '0px',
       subTracking: '0.34em'
     },
     lg: {
@@ -81,30 +89,32 @@ export const ValenszoLogo = ({
       )}
 
       {/* 2. Text Container: VALENSZO & Subtitle */}
-      <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <span 
-          className="valenszo-brand-name" 
-          style={{ 
-            fontSize: cfg.brandSize,
-            color: textColor
-          }}
-        >
-          VALENSZO
-        </span>
-
-        {showSubtitle && (
+      {showBrandName && (
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <span 
-            className="valenszo-brand-sub"
+            className="valenszo-brand-name" 
             style={{ 
-              fontSize: cfg.subSize,
-              letterSpacing: cfg.subTracking,
-              color: subColor
+              fontSize: cfg.brandSize,
+              color: textColor
             }}
           >
-            {subtitle}
+            VALENSZO
           </span>
-        )}
-      </div>
+
+          {showSubtitle && (
+            <span 
+              className="valenszo-brand-sub"
+              style={{ 
+                fontSize: cfg.subSize,
+                letterSpacing: cfg.subTracking,
+                color: subColor
+              }}
+            >
+              {subtitle}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import {
   User,
   Search
 } from 'lucide-react';
+import { ValenszoLogo } from './ValenszoLogo';
 
 export const Navbar = () => {
   const { 
@@ -164,7 +165,7 @@ export const Navbar = () => {
             </button>
           </div>
 
-          {/* Center Column: Iconic VALENSZO Luxury Wordmark (Mathematically Centered) */}
+          {/* Center Column: Iconic VALENSZO Monogram Logo Emblem (Mathematically Centered) */}
           <div 
             style={{ 
               position: 'absolute',
@@ -174,7 +175,8 @@ export const Navbar = () => {
               cursor: 'pointer', 
               display: 'flex', 
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              padding: '4px'
             }}
             onClick={() => {
               navigateToCatalog('All Creations');
@@ -183,18 +185,12 @@ export const Navbar = () => {
             }}
             title="VALENSZO Haute Parfumerie"
           >
-            <span style={{
-              fontFamily: 'var(--font-brand, "Bodoni Moda", serif)',
-              fontSize: 'clamp(1.45rem, 3.2vw, 1.95rem)',
-              fontWeight: 700,
-              letterSpacing: '0.18em',
-              color: '#000000',
-              textTransform: 'uppercase',
-              userSelect: 'none',
-              lineHeight: 1
-            }}>
-              VALENSZO
-            </span>
+            <ValenszoLogo 
+              size="topbar" 
+              showMonogram={true} 
+              showBrandName={false} 
+              showSubtitle={false} 
+            />
           </div>
 
           {/* Right Column: Account / Order Tracker & Shopping Bag */}
