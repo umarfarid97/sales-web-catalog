@@ -10,7 +10,9 @@ import {
   Feather, 
   ShieldCheck,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Search,
+  X
 } from 'lucide-react';
 
 export const ProductCatalog = () => {
@@ -23,6 +25,7 @@ export const ProductCatalog = () => {
     maxPrice,
     setMaxPrice,
     searchQuery,
+    setSearchQuery,
     selectedCategory,
     setSelectedCategory,
     activeGender,
@@ -51,67 +54,156 @@ export const ProductCatalog = () => {
       <section id="sauvage-catalog-grid" className="dior-catalog-section">
         <div className="container">
           
-          {/* Header Row */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
-            <div>
-              <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                {activeGender === 'Men' ? "Men's Fragrance Collection" : "Women's Fragrance Collection"}
+          {/* Header & Filter Toolbar */}
+          <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            
+            {/* Top Row: Title on Left, Search Bar on Right */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <div className="couture-sub" style={{ marginBottom: '4px' }}>
+                  {activeGender === 'Men' ? "Men's Fragrance Collection" : "Women's Fragrance Collection"}
+                </div>
+                <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000', margin: 0 }}>
+                  {(!selectedCategory || String(selectedCategory).startsWith('All')) 
+                    ? (activeGender === 'Men' ? `Men's Fragrances (${menCount} Creations)` : `Women's Fragrances (${womenCount} Creations)`) 
+                    : selectedCategory}
+                </h2>
               </div>
-              <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000' }}>
-                {selectedCategory.startsWith('All') ? (activeGender === 'Men' ? `Men's Fragrances (${menCount} Creations)` : `Women's Fragrances (${womenCount} Creations)`) : selectedCategory}
-              </h2>
+
+              {/* Scent Search Bar */}
+              <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
+                <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280', pointerEvents: 'none' }} />
+                <input
+                  type="text"
+                  placeholder="Search by name, brand, notes or No..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    height: '40px',
+                    padding: '8px 36px 8px 38px',
+                    fontSize: '0.84rem',
+                    fontFamily: 'var(--font-couture)',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '2px',
+                    background: '#ffffff',
+                    color: '#000000',
+                    outline: 'none',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#000000';
+                    e.target.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.06)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                    e.target.style.boxShadow = '0 1px 2px rgba(0,0,0,0.03)';
+                  }}
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      position: 'absolute',
+                      right: '10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#9ca3af',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    title="Clear search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
             </div>
 
-            {/* Filter & Sort Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            {/* Bottom Row: Creation Count & Controls (Price Slider, In Stock, Sort) */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              flexWrap: 'wrap', 
+              gap: '16px',
+              paddingTop: '12px',
+              borderTop: '1px solid #f3f4f6'
+            }}>
               
-              <div style={{ fontSize: '0.82rem', color: '#000000', fontWeight: 700, fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
+              {/* Creation Count */}
+              <div style={{ fontSize: '0.82rem', color: '#000000', fontWeight: 800, fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'CREATION' : 'CREATIONS'}
+                {searchQuery.trim() && (
+                  <span style={{ fontWeight: 500, color: '#6b7280', marginLeft: '6px', fontSize: '0.78rem' }}>
+                    matching &ldquo;{searchQuery}&rdquo;
+                  </span>
+                )}
               </div>
 
-              {/* Price Filter */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Price:</span>
-                <input
-                  type="range"
-                  min="80"
-                  max="400"
-                  step="10"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  style={{ accentColor: '#000000', width: '90px', cursor: 'pointer' }}
-                />
-                <span style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                  &le; ${maxPrice}
-                </span>
+              {/* Controls Group */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                
+                {/* Price Filter */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase', fontWeight: 600 }}>Price:</span>
+                  <input
+                    type="range"
+                    min="80"
+                    max="400"
+                    step="10"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                    style={{ accentColor: '#000000', width: '90px', cursor: 'pointer' }}
+                  />
+                  <span style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+                    &le; RM {maxPrice}
+                  </span>
+                </div>
+
+                {/* In Stock */}
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.8rem', color: '#374151', fontWeight: 500 }}>
+                  <input
+                    type="checkbox"
+                    checked={inStockOnly}
+                    onChange={(e) => setInStockOnly(e.target.checked)}
+                    style={{ accentColor: '#000000', cursor: 'pointer' }}
+                  />
+                  <span>In Stock Only</span>
+                </label>
+
+                {/* Sort Dropdown */}
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="form-select"
+                  style={{
+                    width: 'auto',
+                    padding: '6px 12px',
+                    fontSize: '0.8rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '2px',
+                    background: '#ffffff',
+                    color: '#000000',
+                    fontFamily: 'var(--font-couture)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="featured">Tier S Icons First</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Top Rated</option>
+                  <option value="name">Name A-Z</option>
+                </select>
+
               </div>
-
-              {/* In Stock */}
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.8rem', color: '#374151' }}>
-                <input
-                  type="checkbox"
-                  checked={inStockOnly}
-                  onChange={(e) => setInStockOnly(e.target.checked)}
-                  style={{ accentColor: '#000000', cursor: 'pointer' }}
-                />
-                <span>In Stock Only</span>
-              </label>
-
-              {/* Sort */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="form-select"
-                style={{ width: 'auto', padding: '6px 10px', fontSize: '0.8rem', border: '1px solid #e5e7eb' }}
-              >
-                <option value="featured">Tier S Icons First</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Top Rated</option>
-                <option value="name">Name A-Z</option>
-              </select>
-
             </div>
+
           </div>
 
           {/* Products Grid */}

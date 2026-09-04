@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   ShoppingBag, 
-  Search, 
   RotateCcw, 
   X, 
   Cloud, 
@@ -37,7 +36,6 @@ export const Navbar = () => {
   } = useStore();
 
   const [isResetting, setIsResetting] = useState(false);
-  const [showSearchBox, setShowSearchBox] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleReset = async () => {
@@ -121,42 +119,8 @@ export const Navbar = () => {
               </div>
             </div>
 
-            {/* Right Column: Search, Secondary Actions & Shopping Bag */}
+            {/* Right Column: Order Tracker, Status & Shopping Bag */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              
-              {/* Scent Search Trigger / Input */}
-              {showSearchBox ? (
-                <div style={{ position: 'relative', width: 'clamp(140px, 30vw, 220px)' }}>
-                  <input
-                    type="text"
-                    autoFocus
-                    className="form-input"
-                    placeholder="Search..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{ padding: '6px 28px 6px 10px', fontSize: '0.8rem', height: '34px' }}
-                  />
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      setShowSearchBox(false);
-                    }}
-                    style={{ position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  className="btn-icon"
-                  onClick={() => setShowSearchBox(true)}
-                  title="Search Valenszo Fragrances"
-                  aria-label="Search"
-                  style={{ width: '36px', height: '36px' }}
-                >
-                  <Search size={17} />
-                </button>
-              )}
 
               {/* Order Tracker (Desktop only) */}
               <button
