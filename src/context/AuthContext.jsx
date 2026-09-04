@@ -68,10 +68,15 @@ export const AuthProvider = ({ children }) => {
   // Loading state
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  // Sync session changes to localStorage
+  // Sync session changes to localStorage and Supabase public.profiles
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem('valenszo_auth_user', JSON.stringify(currentUser));
+      if (isSupabaseConfigured) {
+        saveProfileToSupabase(currentUser).catch((err) => {
+          console.warn('Background Supabase profile sync warning:', err);
+        });
+      }
     } else {
       localStorage.removeItem('valenszo_auth_user');
     }
