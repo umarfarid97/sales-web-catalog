@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   ShoppingBag, 
@@ -35,6 +35,37 @@ export const Navbar = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
+
+  // Bulletproof body scroll lock when side drawer is open (prevents background scrolling and stutter on mobile phones)
+  useEffect(() => {
+    if (isMenuOpen) {
+      const scrollY = window.scrollY;
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalBodyPosition = document.body.style.position;
+      const originalBodyTop = document.body.style.top;
+      const originalBodyWidth = document.body.style.width;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.overscrollBehavior = 'none';
+      document.body.style.overflow = 'hidden';
+      document.body.style.overscrollBehavior = 'none';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+
+      return () => {
+        document.documentElement.style.overflow = originalHtmlOverflow;
+        document.documentElement.style.overscrollBehavior = '';
+        document.body.style.overflow = originalBodyOverflow;
+        document.body.style.overscrollBehavior = '';
+        document.body.style.position = originalBodyPosition;
+        document.body.style.top = originalBodyTop;
+        document.body.style.width = originalBodyWidth;
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isMenuOpen]);
 
   const handleReset = async () => {
     if (window.confirm('Reset catalog to the official Valenszo fragrance collection?')) {
@@ -279,65 +310,82 @@ export const Navbar = () => {
         {/* 3. Luxury Boutique Slide-Over Drawer (Accessible on Desktop & Mobile) */}
         {isMenuOpen && (
           <>
-            {/* Backdrop Overlay */}
+            {/* Backdrop Overlay (Blocks all background touches) */}
             <div 
               onClick={() => setIsMenuOpen(false)}
+              onTouchMove={(e) => e.preventDefault()}
               style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0,
+                height: '100dvh',
                 background: 'rgba(0, 0, 0, 0.52)',
                 backdropFilter: 'blur(2px)',
                 zIndex: 998,
-                animation: 'fadeIn 0.2s ease-out'
+                animation: 'fadeIn 0.2s ease-out',
+                touchAction: 'none'
               }}
             />
 
-            {/* Slide Drawer Panel */}
+            {/* Slide Drawer Panel (Pinned viewport height, no background overscroll) */}
             <div 
               style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 bottom: 0,
-                width: 'clamp(320px, 85vw, 400px)',
+                height: '100vh',
+                height: '100dvh',
+                maxHeight: '100dvh',
+                width: 'clamp(280px, 84vw, 380px)',
                 background: '#ffffff',
                 zIndex: 999,
                 boxShadow: '4px 0 28px rgba(0, 0, 0, 0.18)',
                 display: 'flex',
                 flexDirection: 'column',
+                overflow: 'hidden',
                 animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                overflowY: 'auto'
+                overscrollBehavior: 'contain',
+                touchAction: 'pan-y'
               }}
             >
-              {/* Drawer Header */}
+              {/* Drawer Header (Fixed at top of drawer, non-scrollable) */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '20px 24px',
-                borderBottom: '1px solid #f3f4f6'
+                padding: '18px 20px',
+                borderBottom: '1px solid #f3f4f6',
+                flexShrink: 0,
+                background: '#ffffff'
               }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{
-                    fontFamily: 'var(--font-brand, "Bodoni Moda", serif)',
-                    fontSize: '1.3rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.16em',
-                    color: '#000000'
-                  }}>
-                    VALENSZO
-                  </span>
-                  <span style={{
-                    fontSize: '0.64rem',
-                    fontFamily: 'var(--font-couture)',
-                    letterSpacing: '0.15em',
-                    color: '#9ca3af'
-                  }}>
-                    HAUTE PARFUMERIE
-                  </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ValenszoLogo size="sm" showMonogram={true} showBrandName={false} showSubtitle={false} />
+                  <div>
+                    <span style={{
+                      fontFamily: 'var(--font-brand, "Bodoni Moda", serif)',
+                      fontSize: '1.25rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.16em',
+                      color: '#000000',
+                      display: 'block',
+                      lineHeight: 1
+                    }}>
+                      VALENSZO
+                    </span>
+                    <span style={{
+                      fontSize: '0.62rem',
+                      fontFamily: 'var(--font-couture)',
+                      letterSpacing: '0.15em',
+                      color: '#9ca3af',
+                      marginTop: '3px',
+                      display: 'block'
+                    }}>
+                      HAUTE PARFUMERIE
+                    </span>
+                  </div>
                 </div>
                 <button
                   onClick={() => setIsMenuOpen(false)}
@@ -345,7 +393,7 @@ export const Navbar = () => {
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    padding: '6px',
+                    padding: '8px',
                     color: '#4b5563',
                     display: 'flex',
                     alignItems: 'center',
@@ -358,8 +406,20 @@ export const Navbar = () => {
                 </button>
               </div>
 
-              {/* Drawer Body */}
-              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '22px', flex: 1 }}>
+              {/* Drawer Body (Isolated scroll container with iOS momentum scrolling) */}
+              <div 
+                style={{ 
+                  padding: '20px 20px calc(36px + env(safe-area-inset-bottom, 16px))', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '20px', 
+                  flex: 1,
+                  overflowY: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  overscrollBehavior: 'contain',
+                  touchAction: 'pan-y'
+                }}
+              >
                 
                 {/* Featured Olfactory Diagnostic Menu Item */}
                 <div>
