@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
+import { 
+  saveProfileToSupabase, 
+  fetchProfileByEmail, 
+  fetchProfileById 
+} from '../services/supabaseService';
 
 const AuthContext = createContext();
 
@@ -106,6 +111,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // 1. Check Demo Admin Account
       if (cleanEmail === DEMO_ACCOUNTS.admin.email.toLowerCase() && password === 'MaisonValenszo2026!') {
+        saveProfileToSupabase(DEMO_ACCOUNTS.admin).catch(() => {});
         setCurrentUser(DEMO_ACCOUNTS.admin);
         setIsAuthModalOpen(false);
         if (authModalConfig.onComplete) authModalConfig.onComplete(DEMO_ACCOUNTS.admin);
@@ -114,13 +120,30 @@ export const AuthProvider = ({ children }) => {
 
       // 2. Check Demo Customer Account
       if (cleanEmail === DEMO_ACCOUNTS.customer.email.toLowerCase() && password === 'MaisonValenszo2026!') {
+        saveProfileToSupabase(DEMO_ACCOUNTS.customer).catch(() => {});
         setCurrentUser(DEMO_ACCOUNTS.customer);
         setIsAuthModalOpen(false);
         if (authModalConfig.onComplete) authModalConfig.onComplete(DEMO_ACCOUNTS.customer);
         return { success: true, user: DEMO_ACCOUNTS.customer };
       }
 
-      // 3. Attempt Supabase Auth if configured
+      // 3. Check Supabase public.profiles table
+      const dbProfile = await fetchProfileByEmail(cleanEmail);
+      const registered = getRegisteredUsers();
+      const matchedLocal = registered.find(u => u.email.toLowerCase() === cleanEmail);
+
+      if (dbProfile) {
+        if (!matchedLocal || matchedLocal.password === password) {
+          setCurrentUser(dbProfile);
+          setIsAuthModalOpen(false);
+          if (authModalConfig.onComplete) authModalConfig.onComplete(dbProfile);
+          return { success: true, user: dbProfile };
+        } else if (matchedLocal && matchedLocal.password !== password) {
+          return { success: false, error: 'Incorrect password for this Maison account.' };
+        }
+      }
+
+      // 4. Attempt Supabase Auth if configured
       if (isSupabaseConfigured && supabase) {
         try {
           const { data, error } = await supabase.auth.signInWithPassword({
@@ -142,6 +165,9 @@ export const AuthProvider = ({ children }) => {
               role: data.user.user_metadata?.role || (cleanEmail.includes('admin') ? 'admin' : 'customer')
             };
 
+            // Sync to profiles table
+            saveProfileToSupabase(userObj).catch(() => {});
+
             setCurrentUser(userObj);
             setIsAuthModalOpen(false);
             if (authModalConfig.onComplete) authModalConfig.onComplete(userObj);
@@ -152,21 +178,16 @@ export const AuthProvider = ({ children }) => {
         }
       }
 
-      // 4. Check Registered Local/Cloud Store Accounts
-      const registered = getRegisteredUsers();
-      const matched = registered.find(u => u.email.toLowerCase() === cleanEmail && u.password === password);
-
-      if (matched) {
-        const { password: _, ...safeUser } = matched;
-        setCurrentUser(safeUser);
-        setIsAuthModalOpen(false);
-        if (authModalConfig.onComplete) authModalConfig.onComplete(safeUser);
-        return { success: true, user: safeUser };
-      }
-
-      // Check if user exists with wrong password
-      const userExists = registered.some(u => u.email.toLowerCase() === cleanEmail);
-      if (userExists) {
+      // 5. Check Registered Local Store Accounts
+      if (matchedLocal) {
+        if (matchedLocal.password === password) {
+          const { password: _, ...safeUser } = matchedLocal;
+          saveProfileToSupabase(safeUser).catch(() => {});
+          setCurrentUser(safeUser);
+          setIsAuthModalOpen(false);
+          if (authModalConfig.onComplete) authModalConfig.onComplete(safeUser);
+          return { success: true, user: safeUser };
+        }
         return { success: false, error: 'Incorrect password for this Maison account.' };
       }
 
@@ -190,6 +211,12 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: 'An account with this email address already exists.' };
       }
 
+      // Check if already in Supabase profiles
+      const existingInDb = await fetchProfileByEmail(cleanEmail);
+      if (existingInDb) {
+        return { success: false, error: 'An account with this email address already exists in the database.' };
+      }
+
       const userId = 'usr_' + Math.random().toString(36).substring(2, 10);
       const newUser = {
         id: userId,
@@ -205,11 +232,14 @@ export const AuthProvider = ({ children }) => {
         createdAt: new Date().toISOString()
       };
 
-      // Save to registered list with password for subsequent logins
+      // 1. Save directly to Supabase public.profiles table
+      await saveProfileToSupabase(newUser);
+
+      // 2. Save to registered list with password for subsequent logins
       registered.push({ ...newUser, password: userData.password });
       localStorage.setItem('valenszo_registered_users', JSON.stringify(registered));
 
-      // Also fire background Supabase registration if possible
+      // 3. Also attempt background Supabase Auth registration
       if (isSupabaseConfigured && supabase) {
         supabase.auth.signUp({
           email: cleanEmail,
@@ -252,6 +282,8 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(prev => {
       if (!prev) return null;
       const updated = { ...prev, ...updatedFields };
+      // Save directly to Supabase profiles
+      saveProfileToSupabase(updated).catch(err => console.warn('Supabase profile update warning:', err));
       // Also update in registered list
       const registered = getRegisteredUsers();
       const idx = registered.findIndex(u => u.id === prev.id || u.email === prev.email);

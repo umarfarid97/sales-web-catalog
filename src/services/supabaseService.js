@@ -293,6 +293,115 @@ export const updateOrderStatusInSupabase = async (orderId, status, deliveredAt =
   }
 };
 
+// --- Profiles API ---
+
+export const formatProfileFromDb = (row) => {
+  if (!row) return null;
+  return {
+    id: row.id,
+    email: row.email,
+    name: row.name,
+    phone: row.phone || '',
+    address: row.address || '',
+    city: row.city || 'Kuala Lumpur',
+    state: row.state || 'Wilayah Persekutuan',
+    zip: row.zip || '',
+    country: row.country || 'Malaysia',
+    role: row.role || 'customer',
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
+};
+
+export const formatProfileToDb = (profile) => {
+  return {
+    id: profile.id,
+    email: profile.email?.toLowerCase(),
+    name: profile.name,
+    phone: profile.phone || '',
+    address: profile.address || '',
+    city: profile.city || 'Kuala Lumpur',
+    state: profile.state || 'Wilayah Persekutuan',
+    zip: profile.zip || '',
+    country: profile.country || 'Malaysia',
+    role: profile.role || 'customer',
+    updated_at: new Date().toISOString()
+  };
+};
+
+export const saveProfileToSupabase = async (profile) => {
+  if (!isSupabaseConfigured || !supabase) return false;
+  try {
+    const payload = formatProfileToDb(profile);
+    const { data, error } = await supabase
+      .from('profiles')
+      .upsert(payload, { onConflict: 'id' })
+      .select();
+
+    if (error) throw error;
+    return data && data[0] ? formatProfileFromDb(data[0]) : null;
+  } catch (err) {
+    console.error('Error saving profile to Supabase:', err);
+    return null;
+  }
+};
+
+export const fetchProfileByEmail = async (email) => {
+  if (!isSupabaseConfigured || !supabase || !email) return null;
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .ilike('email', email.trim())
+      .limit(1);
+
+    if (error) throw error;
+    if (data && data.length > 0) {
+      return formatProfileFromDb(data[0]);
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching profile by email from Supabase:', err);
+    return null;
+  }
+};
+
+export const fetchProfileById = async (id) => {
+  if (!isSupabaseConfigured || !supabase || !id) return null;
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .limit(1);
+
+    if (error) throw error;
+    if (data && data.length > 0) {
+      return formatProfileFromDb(data[0]);
+    }
+    return null;
+  } catch (err) {
+    console.error('Error fetching profile by id from Supabase:', err);
+    return null;
+  }
+};
+
+export const fetchAllProfilesFromSupabase = async () => {
+  if (!isSupabaseConfigured || !supabase) return [];
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data || []).map(formatProfileFromDb);
+  } catch (err) {
+    console.error('Error fetching all profiles from Supabase:', err);
+    return [];
+  }
+};
+
 // --- Realtime Subscriptions ---
 
 export const subscribeToStoreChanges = (onProductChange, onOrderChange) => {
