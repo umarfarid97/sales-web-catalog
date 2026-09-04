@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { useAuth } from './AuthContext';
 import { INITIAL_PRODUCTS, PROMO_CODES } from '../data/initialProducts';
 import { INITIAL_ORDERS } from '../data/initialOrders';
 import { isSupabaseConfigured } from '../lib/supabaseClient';
@@ -27,10 +28,33 @@ export const useStore = () => {
 };
 
 export const StoreProvider = ({ children }) => {
+  const { currentUser, isAuthenticated, isAdmin, openAuthModal } = useAuth();
+
   // Role Mode: 'customer' | 'admin'
-  const [role, setRole] = useState(() => {
+  const [role, setRoleState] = useState(() => {
     return localStorage.getItem('lumina_role') || 'customer';
   });
+
+  const setRole = useCallback((newRole) => {
+    if (newRole === 'admin' && !isAdmin) {
+      openAuthModal({
+        mode: 'signin',
+        title: 'Atelier Administrator Access',
+        subtitle: 'Please sign in with Maison Atelier administrator credentials to manage boutique operations.'
+      });
+      return;
+    }
+    setRoleState(newRole);
+    localStorage.setItem('lumina_role', newRole);
+  }, [isAdmin, openAuthModal]);
+
+  // Auto revert from admin if logged out or customer
+  useEffect(() => {
+    if (role === 'admin' && !isAdmin) {
+      setRoleState('customer');
+      localStorage.setItem('lumina_role', 'customer');
+    }
+  }, [isAdmin, role]);
 
   // Customer View: 'catalog' | 'diagnostic'
   const [customerView, setCustomerView] = useState('catalog');
@@ -141,23 +165,31 @@ export const StoreProvider = ({ children }) => {
     return [];
   });
 
-  // Orders Data
+  // Orders Data (Real Supabase / persistent database sync - no fake mock orders)
   const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem('lumina_orders');
+    const saved = localStorage.getItem('valenszo_real_orders');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.some((o) => o.items?.some((it) => it.category === 'Audio'))) {
-          localStorage.removeItem('lumina_orders');
-          return INITIAL_ORDERS;
-        }
-        return parsed;
+        if (Array.isArray(parsed)) return parsed;
       } catch (e) {
         console.error('Failed to parse saved orders', e);
       }
     }
-    return INITIAL_ORDERS;
+    return [];
   });
+
+  // Automatically filter orders belonging to the logged-in client
+  const userOrders = useMemo(() => {
+    if (!currentUser) return [];
+    const cleanEmail = currentUser.email?.toLowerCase();
+    const userId = currentUser.id;
+    return orders.filter((o) => {
+      const oEmail = (o.customer?.email || o.customer?.userEmail || '').toLowerCase();
+      const oUserId = o.customer?.userId;
+      return (cleanEmail && oEmail === cleanEmail) || (userId && oUserId === userId);
+    });
+  }, [orders, currentUser]);
 
   // Favorites (Wishlist)
   const [favorites, setFavorites] = useState(() => {
@@ -227,17 +259,13 @@ export const StoreProvider = ({ children }) => {
           setIsCloudConnected(true);
         }
 
-        // 2. Orders Sync
+        // 2. Orders Sync (Real database records only)
         const cloudOrders = await fetchOrdersFromSupabase();
         if (cloudOrders !== null && isMounted) {
-          const hasLegacyOrders = cloudOrders.some((o) => o.items?.some((it) => it.category === 'Audio'));
-          if (cloudOrders.length === 0 || hasLegacyOrders) {
-            // Seed initial perfume orders to Supabase
-            await seedOrdersToSupabase(INITIAL_ORDERS);
-            setOrders(INITIAL_ORDERS);
-          } else {
-            setOrders(cloudOrders);
-          }
+          // Filter out any legacy audio orders if present
+          const realOrders = cloudOrders.filter((o) => !o.items?.some((it) => it.category === 'Audio'));
+          setOrders(realOrders);
+          localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
         }
       } catch (err) {
         console.error('Supabase initial sync error:', err);
@@ -486,19 +514,33 @@ export const StoreProvider = ({ children }) => {
   const isFavorite = (productId) => favorites.includes(productId);
 
   // --- Orders Actions (Cloud + Local) ---
-  const placeOrder = async (customerData, paymentMethod) => {
+  const placeOrder = async (customerOrOrderData, paymentMethodParam) => {
     if (cart.length === 0) {
       showToast('Cannot checkout with an empty cart!', 'error');
       return null;
+    }
+
+    let customerData = customerOrOrderData;
+    let paymentMethod = paymentMethodParam || 'credit-card';
+
+    if (customerOrOrderData && customerOrOrderData.customer) {
+      customerData = customerOrOrderData.customer;
+      paymentMethod = customerOrOrderData.paymentMethod || paymentMethodParam || 'credit-card';
     }
 
     const orderNumber = Math.floor(10000 + Math.random() * 90000);
     const orderId = `ORD-${orderNumber}`;
     const trackingNumber = `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`;
 
+    const customerWithUser = {
+      ...customerData,
+      userId: currentUser?.id || 'guest',
+      userEmail: currentUser?.email || customerData.email || ''
+    };
+
     const newOrder = {
       id: orderId,
-      customer: customerData,
+      customer: customerWithUser,
       items: [...cart],
       subtotal: cartSubtotal,
       discount: cartDiscountAmount,
@@ -526,7 +568,11 @@ export const StoreProvider = ({ children }) => {
     });
 
     setProducts(updatedProducts);
-    setOrders((prev) => [newOrder, ...prev]);
+    setOrders((prev) => {
+      const updatedOrders = [newOrder, ...prev];
+      localStorage.setItem('valenszo_real_orders', JSON.stringify(updatedOrders));
+      return updatedOrders;
+    });
 
     // 2. Save order to Supabase
     saveOrderToSupabase(newOrder);
@@ -825,7 +871,9 @@ export const StoreProvider = ({ children }) => {
 
         // Orders
         orders,
+        userOrders,
         placeOrder,
+        createOrder: placeOrder,
         updateOrderStatus,
 
         // Admin KPIs

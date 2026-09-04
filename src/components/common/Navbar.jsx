@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { 
   ShoppingBag, 
   RotateCcw, 
@@ -9,7 +10,10 @@ import {
   Sparkles,
   ArrowRight,
   User,
-  Search
+  Search,
+  LogOut,
+  Shield,
+  UserCheck
 } from 'lucide-react';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -35,6 +39,17 @@ export const Navbar = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+
+  const { currentUser, isAuthenticated, isAdmin, openAuthModal, logout } = useAuth();
+
+  useEffect(() => {
+    const handleOutsideClick = () => setIsAccountMenuOpen(false);
+    if (isAccountMenuOpen) {
+      window.addEventListener('click', handleOutsideClick);
+      return () => window.removeEventListener('click', handleOutsideClick);
+    }
+  }, [isAccountMenuOpen]);
 
   // Bulletproof body scroll lock when side drawer is open (prevents background scrolling and stutter on mobile phones)
   useEffect(() => {
@@ -227,37 +242,162 @@ export const Navbar = () => {
           {/* Right Column: Account / Order Tracker & Shopping Bag */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
             
-            {/* Account / Order Tracker with Orange Status Indicator Dot */}
-            <button
-              onClick={() => setIsOrderTrackerOpen(true)}
-              aria-label="Track Orders & Account"
-              title="Track Delivery & Orders"
-              style={{
-                background: 'transparent',
-                border: 'none',
-                padding: '6px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#000000',
-                position: 'relative',
-                transition: 'opacity 0.2s ease'
-              }}
-            >
-              <User size={21} strokeWidth={1.75} />
-              {/* Dior-style orange status dot */}
-              <span style={{
-                position: 'absolute',
-                top: '4px',
-                right: '4px',
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: '#ea580c',
-                boxShadow: '0 0 0 1.5px #ffffff'
-              }} />
-            </button>
+            {/* Account / Order Tracker with Status Dot & Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!isAuthenticated) {
+                    openAuthModal({ mode: 'signin' });
+                  } else {
+                    setIsAccountMenuOpen(prev => !prev);
+                  }
+                }}
+                aria-label="Track Orders & Account"
+                title={isAuthenticated ? `Maison Account: ${currentUser.name}` : "Maison Client Sign In"}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#000000',
+                  position: 'relative',
+                  transition: 'opacity 0.2s ease'
+                }}
+              >
+                <User size={21} strokeWidth={1.75} />
+                {/* Status dot: Green when logged in, Orange when guest */}
+                <span style={{
+                  position: 'absolute',
+                  top: '4px',
+                  right: '4px',
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: isAuthenticated ? '#16a34a' : '#ea580c',
+                  boxShadow: '0 0 0 1.5px #ffffff'
+                }} />
+              </button>
+
+              {/* Account Dropdown Menu for Authenticated Users */}
+              {isAuthenticated && isAccountMenuOpen && (
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 12px)',
+                    right: 0,
+                    width: '260px',
+                    background: '#ffffff',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '6px',
+                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.15)',
+                    zIndex: 100,
+                    padding: '12px 0',
+                    color: '#000000'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div style={{ padding: '4px 16px 10px', borderBottom: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
+                      Maison Client
+                    </div>
+                    <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#000000', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {currentUser.name}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {currentUser.email}
+                    </div>
+                    {isAdmin && (
+                      <span style={{ display: 'inline-block', marginTop: '6px', padding: '2px 6px', background: '#fef3c7', color: '#92400e', borderRadius: '3px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Atelier Administrator
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ padding: '6px 0' }}>
+                    <button
+                      onClick={() => {
+                        setIsOrderTrackerOpen(true);
+                        setIsAccountMenuOpen(false);
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '9px 16px',
+                        background: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        color: '#374151',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <Compass size={15} color="#926917" />
+                      <span>My Orders & Tracker</span>
+                    </button>
+
+                    {isAdmin && (
+                      <button
+                        onClick={() => {
+                          setRole(role === 'admin' ? 'customer' : 'admin');
+                          setIsAccountMenuOpen(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          padding: '9px 16px',
+                          background: 'transparent',
+                          border: 'none',
+                          textAlign: 'left',
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          color: '#374151',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                      >
+                        <Shield size={15} color="#926917" />
+                        <span>{role === 'admin' ? 'Return to Boutique' : 'Atelier Portal'}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '6px' }}>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsAccountMenuOpen(false);
+                        showToast('Signed out of Maison Valenszo.', 'info');
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '9px 16px',
+                        background: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        color: '#dc2626',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <LogOut size={15} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Shopping Bag Button with Counter Badge */}
             {role === 'customer' && (
@@ -533,6 +673,72 @@ export const Navbar = () => {
 
                 {/* Maison Services Section */}
                 <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px' }}>
+                  
+                  {/* Member Authentication Status Card */}
+                  {isAuthenticated ? (
+                    <div style={{ padding: '12px 14px', background: '#f9fafb', borderRadius: '4px', border: '1px solid #e5e7eb', marginBottom: '14px' }}>
+                      <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
+                        {isAdmin ? '👑 Atelier Administrator' : '✨ Privilege Member'}
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#000000', marginTop: '2px' }}>
+                        {currentUser.name}
+                      </div>
+                      <div style={{ fontSize: '0.74rem', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {currentUser.email}
+                      </div>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsMenuOpen(false);
+                          showToast('Signed out of Maison Valenszo.', 'info');
+                        }}
+                        style={{
+                          marginTop: '8px',
+                          padding: '5px 10px',
+                          background: '#ffffff',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '3px',
+                          fontSize: '0.72rem',
+                          color: '#dc2626',
+                          fontWeight: 600,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ padding: '12px 14px', background: '#fafaf9', borderRadius: '4px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
+                      <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#000000', marginBottom: '2px' }}>
+                        Maison Valenszo Privilege
+                      </div>
+                      <div style={{ fontSize: '0.74rem', color: '#6b7280', marginBottom: '8px' }}>
+                        Sign in or register to track deliveries and access exclusive privileges.
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          openAuthModal({ mode: 'signin' });
+                        }}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          background: '#000000',
+                          color: '#ffffff',
+                          border: 'none',
+                          borderRadius: '3px',
+                          fontSize: '0.76rem',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Client Sign In / Register
+                      </button>
+                    </div>
+                  )}
+
                   <div style={{
                     fontSize: '0.68rem',
                     fontWeight: 800,

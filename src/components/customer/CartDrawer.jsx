@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { 
   X, 
   Trash2, 
@@ -69,8 +70,21 @@ export const CartDrawer = () => {
     }
   };
 
+  const { isAuthenticated, openAuthModal } = useAuth();
+
   const handleProceedCheckout = () => {
     setIsCartOpen(false);
+    if (!isAuthenticated) {
+      openAuthModal({
+        mode: 'signin',
+        title: 'Maison Client Checkout',
+        subtitle: 'Please sign in or create an account to finalize your order with Maison Atelier.',
+        onComplete: () => {
+          setIsCheckoutOpen(true);
+        }
+      });
+      return;
+    }
     setIsCheckoutOpen(true);
   };
 

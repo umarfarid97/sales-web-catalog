@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { useAuth } from '../../context/AuthContext';
 import { COMPLIMENTARY_SAMPLES } from '../../data/initialProducts';
 import { 
   X, 
@@ -29,6 +30,8 @@ export const CheckoutModal = () => {
     showToast
   } = useStore();
 
+  const { currentUser } = useAuth();
+
   const [step, setStep] = useState(1); // 1: Gifting & Samples, 2: Shipping & Payment, 3: Success Confirmation
   const [selectedSamples, setSelectedSamples] = useState(['smp-1', 'smp-2']);
   const [isGiftBoxSelected, setIsGiftBoxSelected] = useState(true);
@@ -36,21 +39,41 @@ export const CheckoutModal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
 
-  // Form State
-  const [formData, setFormData] = useState({
-    firstName: 'Alexandre',
-    lastName: 'de Saint-Germain',
-    email: 'alexandre.stgermain@couture.fr',
-    phone: '+33 6 12 34 56 78',
-    address: '30 Avenue Montaigne',
-    city: 'Paris',
-    postalCode: '75008',
-    country: 'France',
-    paymentMethod: 'credit-card',
-    cardNumber: '•••• •••• •••• 4242',
-    cardExp: '12/28',
-    cardCvc: '•••'
+  // Form State (Auto-populated with authenticated user profile)
+  const [formData, setFormData] = useState(() => {
+    const parts = (currentUser?.name || '').split(' ');
+    return {
+      firstName: parts[0] || '',
+      lastName: parts.slice(1).join(' ') || '',
+      email: currentUser?.email || '',
+      phone: currentUser?.phone || '+60 12-345 6789',
+      address: currentUser?.address || '18 Jalan Sultan Ismail',
+      city: currentUser?.city || 'Kuala Lumpur',
+      postalCode: currentUser?.zip || '50250',
+      country: 'Malaysia',
+      paymentMethod: 'credit-card',
+      cardNumber: '•••• •••• •••• 4242',
+      cardExp: '12/28',
+      cardCvc: '•••'
+    };
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      const parts = (currentUser.name || '').split(' ');
+      setFormData(prev => ({
+        ...prev,
+        firstName: parts[0] || prev.firstName,
+        lastName: parts.slice(1).join(' ') || prev.lastName,
+        email: currentUser.email || prev.email,
+        phone: currentUser.phone || prev.phone,
+        address: currentUser.address || prev.address,
+        city: currentUser.city || prev.city,
+        postalCode: currentUser.zip || prev.postalCode,
+        country: currentUser.country || 'Malaysia'
+      }));
+    }
+  }, [currentUser]);
 
   if (!isCheckoutOpen) return null;
 

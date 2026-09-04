@@ -189,6 +189,52 @@ export const deleteProductFromSupabase = async (productId) => {
 
 // --- Orders API ---
 
+export const fetchOrdersForUser = async (userEmail, userId) => {
+  if (!isSupabaseConfigured || !supabase) return [];
+  try {
+    let query = supabase
+      .from('orders')
+      .select('*')
+      .order('placed_at', { ascending: false });
+
+    if (userEmail && userId) {
+      query = query.or(`customer->>email.eq.${userEmail},customer->>userId.eq.${userId}`);
+    } else if (userEmail) {
+      query = query.eq('customer->>email', userEmail);
+    } else if (userId) {
+      query = query.eq('customer->>userId', userId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return (data || []).map(formatOrderFromDb);
+  } catch (err) {
+    console.error('Error fetching orders for user from Supabase:', err);
+    return [];
+  }
+};
+
+export const lookupOrderInSupabase = async (searchQuery) => {
+  if (!isSupabaseConfigured || !supabase || !searchQuery) return null;
+  const clean = searchQuery.trim();
+  try {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .or(`id.ilike.%${clean}%,tracking_number.ilike.%${clean}%`)
+      .limit(1);
+
+    if (error) throw error;
+    if (data && data.length > 0) {
+      return formatOrderFromDb(data[0]);
+    }
+    return null;
+  } catch (err) {
+    console.error('Error looking up order in Supabase:', err);
+    return null;
+  }
+};
+
 export const fetchOrdersFromSupabase = async () => {
   if (!isSupabaseConfigured || !supabase) return null;
   try {

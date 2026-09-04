@@ -1,9 +1,11 @@
 import React from 'react';
+import { AuthProvider } from './context/AuthContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { AuthModal } from './components/common/AuthModal';
 
 // Customer Components
 import { ProductCatalog } from './components/customer/ProductCatalog';
@@ -72,6 +74,7 @@ const MainLayout = () => {
       <CartDrawer />
       <CheckoutModal />
       <OrderTrackerModal />
+      <AuthModal />
       <ProductFormModal />
       <OrderDetailModal />
       <ToastContainer />
@@ -83,9 +86,11 @@ const MainLayout = () => {
 export default function App() {
   return (
     <ErrorBoundary>
-      <StoreProvider>
-        <MainLayout />
-      </StoreProvider>
+      <AuthProvider>
+        <StoreProvider>
+          <MainLayout />
+        </StoreProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
