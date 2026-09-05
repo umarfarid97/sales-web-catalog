@@ -1,16 +1,11 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 
 export const HeroBanner = () => {
-  const handleShopNow = () => {
-    window.location.href = '/collection.html';
-  };
-
   return (
     <section 
       style={{
         position: 'relative',
-        background: 'linear-gradient(135deg, #09090b 0%, #181512 50%, #0d0c0a 100%)',
+        background: 'linear-gradient(135deg, #09090b 0%, #141210 50%, #09090b 100%)',
         color: '#ffffff',
         overflow: 'hidden',
         borderBottom: '1px solid #27272a'
@@ -20,12 +15,12 @@ export const HeroBanner = () => {
       <div 
         style={{
           position: 'absolute',
-          top: '10%',
-          right: '15%',
-          width: '400px',
-          height: '400px',
+          top: '15%',
+          right: '12%',
+          width: '420px',
+          height: '420px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(217, 119, 6, 0.18) 0%, rgba(0,0,0,0) 70%)',
+          background: 'radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, rgba(0,0,0,0) 70%)',
           filter: 'blur(50px)',
           pointerEvents: 'none'
         }}
@@ -35,81 +30,67 @@ export const HeroBanner = () => {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: 'clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem)',
+          padding: 'clamp(2.5rem, 5vw, 4.5rem) clamp(1rem, 4vw, 3rem)',
           display: 'grid',
-          gridTemplateColumns: '1.1fr 0.9fr',
+          gridTemplateColumns: '1.15fr 0.85fr',
           alignItems: 'center',
-          gap: 'clamp(1rem, 3vw, 2.5rem)',
+          gap: 'clamp(1.5rem, 4vw, 3.5rem)',
           position: 'relative',
           zIndex: 2
         }}
       >
-        {/* Left Editorial Text Column (Matching Picture 1) */}
-        <div style={{ maxWidth: '520px' }}>
+        {/* Left Editorial Text Column (Balanced Luxury Typography) */}
+        <div style={{ maxWidth: '540px' }}>
+          <div 
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '0.74rem',
+              fontWeight: 800,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: '#c5a059',
+              marginBottom: '1rem'
+            }}
+          >
+            <span>Maison Valenszo</span>
+            <span style={{ opacity: 0.4 }}>•</span>
+            <span>Haute Parfumerie</span>
+          </div>
+
           <h1 
             style={{
               fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)',
-              fontSize: 'clamp(2.2rem, 5.5vw, 3.8rem)',
+              fontSize: 'clamp(2.4rem, 5.5vw, 4rem)',
               fontWeight: 700,
-              lineHeight: 1.15,
+              lineHeight: 1.12,
               color: '#ffffff',
-              margin: '0 0 1rem',
-              letterSpacing: '-0.02em',
+              margin: '0 0 1.25rem',
+              letterSpacing: '-0.015em',
               textShadow: '0 2px 14px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.95)'
             }}
           >
-            More<br />
-            Than a Scent<br />
+            More Than a Scent,
+            <br />
             A Better You
           </h1>
 
           <p 
             style={{
-              fontSize: 'clamp(0.92rem, 2vw, 1.15rem)',
+              fontSize: 'clamp(0.95rem, 2vw, 1.18rem)',
               color: '#f4f4f5',
-              fontWeight: 500,
-              lineHeight: 1.55,
-              margin: '0 0 1.75rem',
-              maxWidth: '420px',
+              fontWeight: 400,
+              lineHeight: 1.6,
+              margin: 0,
+              maxWidth: '460px',
               fontFamily: 'var(--font-couture, sans-serif)',
               letterSpacing: '0.02em',
               textShadow: '0 1px 8px rgba(0, 0, 0, 0.95)'
             }}
           >
-            Premium inspired fragrances for every moment.
+            Premium inspired fragrances crafted for confidence, elegance, and every defining moment.
           </p>
-
-          <a
-            href="/collection.html"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '14px 34px',
-              borderRadius: '4px',
-              background: '#ffffff',
-              color: '#000000',
-              fontWeight: 800,
-              fontSize: '0.86rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f3f4f6';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#ffffff';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            Shop Now
-          </a>
         </div>
 
         {/* Right Visual: Two luxury perfume bottles matching Picture 1 */}
