@@ -92,19 +92,17 @@ export const Navbar = () => {
   };
 
   const handleSearchClick = () => {
-    if (customerView !== 'catalog') {
-      navigateToCatalog();
-    }
-    setTimeout(() => {
-      const searchInput = document.querySelector('.catalog-search-bar input') || document.querySelector('#sauvage-catalog-grid input[type="text"]');
+    if (typeof window !== 'undefined') {
+      if (!window.location.pathname.includes('collection.html')) {
+        window.location.href = '/collection.html';
+        return;
+      }
+      const searchInput = document.querySelector('input[type="text"]');
       if (searchInput) {
         searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
         searchInput.focus();
-      } else {
-        const grid = document.getElementById('sauvage-catalog-grid');
-        if (grid) grid.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 120);
+    }
   };
 
   return (
