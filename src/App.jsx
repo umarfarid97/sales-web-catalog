@@ -18,6 +18,12 @@ import { CartDrawer } from './components/customer/CartDrawer';
 import { CheckoutModal } from './components/customer/CheckoutModal';
 import { OrderTrackerModal } from './components/customer/OrderTrackerModal';
 
+// Dedicated Layouts for Route-Aware Rendering
+import { MenCollectionContent } from './MenApp';
+import { WomenCollectionContent } from './WomenApp';
+import { CollectionPageContent } from './CollectionApp';
+import { BundleBuilderContent } from './BundleApp';
+
 // Admin Components
 import { AdminHeader } from './components/admin/AdminHeader';
 import { AnalyticsDashboard } from './components/admin/AnalyticsDashboard';
@@ -35,7 +41,27 @@ import './styles/pdp.css';
 import './styles/admin.css';
 
 const MainLayout = () => {
-  const { role, adminTab, customerView } = useStore();
+  const { role, adminTab, customerView, activeGender } = useStore();
+
+  const pathname = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
+  const search = typeof window !== 'undefined' ? window.location.search : '';
+  const params = new URLSearchParams(search);
+  const genderQuery = params.get('gender');
+  const viewQuery = params.get('view');
+  const productQuery = params.get('product');
+
+  // Men collection condition
+  const isMen = pathname.includes('men') || genderQuery === 'Men';
+  // Women collection condition
+  const isWomen = pathname.includes('women') || genderQuery === 'Women';
+  // All collections condition
+  const isCollection = pathname.includes('collection') || customerView === 'collection';
+  // Bundle condition
+  const isBundle = pathname.includes('bundle') || customerView === 'bundle';
+  // Diagnostic quiz condition
+  const isDiagnostic = pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic';
+  // Product detail condition
+  const isProduct = pathname.includes('product') || Boolean(productQuery) || customerView === 'product';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -48,9 +74,17 @@ const MainLayout = () => {
         {role === 'customer' ? (
           /* ================= CUSTOMER STOREFRONT ================= */
           <div className="customer-store-view">
-            {customerView === 'diagnostic' ? (
+            {isMen ? (
+              <MenCollectionContent />
+            ) : isWomen ? (
+              <WomenCollectionContent />
+            ) : isCollection ? (
+              <CollectionPageContent />
+            ) : isBundle ? (
+              <BundleBuilderContent />
+            ) : isDiagnostic ? (
               <FragranceDiagnostic />
-            ) : customerView === 'product' ? (
+            ) : isProduct ? (
               <ProductDetailPage />
             ) : (
               <ProductCatalog />

@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
@@ -33,7 +33,7 @@ const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Aquatic', 'Sweet'];
 const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
 const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
 
-const MenCollectionLayout = () => {
+export const MenCollectionContent = () => {
   const { products, favorites, toggleFavorite, showToast } = useStore();
 
   const [selectedChip, setSelectedChip] = useState('All');
@@ -111,9 +111,7 @@ const MenCollectionLayout = () => {
   const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
-      <Navbar />
-
+    <>
       <main style={{ flex: 1, paddingBottom: '5rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
@@ -631,7 +629,15 @@ const MenCollectionLayout = () => {
           </div>
         </div>
       )}
+    </>
+  );
+};
 
+export const MenCollectionLayout = () => {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
+      <Navbar />
+      <MenCollectionContent />
       <BrandValuesFooter />
       <Footer />
       <MobileBottomNav />

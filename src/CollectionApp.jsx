@@ -34,7 +34,7 @@ const ACCORD_OPTIONS = ['Fresh', 'Woody', 'Spicy', 'Leather', 'Citrus', 'Amber',
 const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
 const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
 
-const CollectionPageLayout = () => {
+export const CollectionPageContent = () => {
   const { products, favorites, toggleFavorite, addToCart, showToast } = useStore();
 
   // Read URL query params on mount
@@ -146,9 +146,7 @@ const CollectionPageLayout = () => {
   const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Floral', 'Sweet', 'Aquatic'];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
-      <Navbar />
-
+    <>
       <main style={{ flex: 1, paddingBottom: '5rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
@@ -677,16 +675,19 @@ const CollectionPageLayout = () => {
           </div>
         </div>
       )}
+    </>
+  );
+};
 
-      {/* Brand Values 5 Icons Banner */}
+export const CollectionPageLayout = () => {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
+      <Navbar />
+      <CollectionPageContent />
       <BrandValuesFooter />
-
       <Footer />
-
-      {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
 
-      {/* Modals */}
       <CartDrawer />
       <CheckoutModal />
       <OrderTrackerModal />

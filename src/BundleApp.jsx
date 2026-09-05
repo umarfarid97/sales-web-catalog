@@ -71,7 +71,7 @@ const BUNDLE_TIERS = {
 
 const ACCORD_FILTERS = ['All', 'Fresh', 'Woody', 'Spicy', 'Amber', 'Citrus', 'Floral', 'Leather', 'Sweet'];
 
-const BundleBuilderLayout = () => {
+export const BundleBuilderContent = () => {
   const { products, addToCart, setIsCartOpen, showToast } = useStore();
 
   const [selectedTierKey, setSelectedTierKey] = useState('3-bottle');
@@ -208,9 +208,7 @@ const BundleBuilderLayout = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#faf9f6', color: '#111827' }}>
-      <Navbar />
-
+    <>
       <main style={{ flex: 1, paddingBottom: '6rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
@@ -791,16 +789,19 @@ const BundleBuilderLayout = () => {
 
         </div>
       </main>
+    </>
+  );
+};
 
-      {/* Brand Values 5 Icons Banner */}
+export const BundleBuilderLayout = () => {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#faf9f6', color: '#111827' }}>
+      <Navbar />
+      <BundleBuilderContent />
       <BrandValuesFooter />
-
       <Footer />
-
-      {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
 
-      {/* Modals */}
       <CartDrawer />
       <CheckoutModal />
       <OrderTrackerModal />

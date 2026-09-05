@@ -83,89 +83,39 @@ export const StoreProvider = ({ children }) => {
   const [maxPrice, setMaxPrice] = useState(500);
 
   const selectGenderCollection = (gender) => {
-    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
-    if (isProductPage) {
-      localStorage.setItem('valenszo_active_gender', gender);
-      window.location.href = `/?gender=${encodeURIComponent(gender)}`;
-      return;
-    }
-    setRole('customer');
-    setActiveGender(gender);
+    const isMen = gender === 'Men';
     localStorage.setItem('valenszo_active_gender', gender);
-    setSelectedCategory(gender === 'Men' ? "All Men's Creations" : "All Women's Creations");
-    setCustomerView('catalog');
-    setActiveProduct(null);
-    try {
-      const url = new URL(window.location);
-      if (url.searchParams.has('product')) {
-        url.searchParams.delete('product');
-        window.history.pushState({}, '', url.toString());
-      }
-    } catch (e) {}
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.location.href = isMen ? '/men.html' : '/women.html';
+    }
   };
 
   const navigateToDiagnostic = () => {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/diagnostic.html';
+      return;
+    }
     setRole('customer');
     setCustomerView('diagnostic');
     setActiveProduct(null);
-
-    if (typeof window !== 'undefined') {
-      const isOtherPage = window.location.pathname.includes('product.html') || 
-                          window.location.pathname.includes('admin.html') || 
-                          window.location.pathname.includes('checkout.html');
-      if (isOtherPage) {
-        window.location.href = '/?view=diagnostic';
-        return;
-      }
-      try {
-        const url = new URL(window.location);
-        url.searchParams.set('view', 'diagnostic');
-        url.searchParams.delete('product');
-        window.history.pushState({ view: 'diagnostic' }, '', url.toString());
-      } catch (e) {}
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToCatalog = (category = null, gender = null) => {
-    const isOtherPage = typeof window !== 'undefined' && 
-      (window.location.pathname.includes('product.html') || 
-       window.location.pathname.includes('admin.html') || 
-       window.location.pathname.includes('checkout.html') ||
-       window.location.pathname.includes('diagnostic.html'));
-
-    const params = new URLSearchParams();
-    if (gender) params.set('gender', gender);
-    if (category) params.set('category', category);
-    const qs = params.toString();
-    const targetUrl = `/${qs ? `?${qs}` : ''}`;
-
-    if (isOtherPage) {
-      window.location.href = targetUrl;
+    const targetGender = gender || activeGender;
+    if (typeof window !== 'undefined') {
+      if (targetGender === 'Men') {
+        window.location.href = category ? `/men.html?category=${encodeURIComponent(category)}` : '/men.html';
+        return;
+      }
+      if (targetGender === 'Women') {
+        window.location.href = category ? `/women.html?category=${encodeURIComponent(category)}` : '/women.html';
+        return;
+      }
+      window.location.href = '/collection.html';
       return;
     }
-
     setRole('customer');
     setCustomerView('catalog');
-    setActiveProduct(null);
-    try {
-      const url = new URL(window.location);
-      url.searchParams.delete('product');
-      url.searchParams.delete('view');
-      window.history.pushState({}, '', url.toString());
-    } catch (e) {}
-    if (gender) {
-      setActiveGender(gender);
-      localStorage.setItem('valenszo_active_gender', gender);
-    }
-    const currentG = gender || activeGender;
-    if (category) {
-      setSelectedCategory(category);
-    } else {
-      setSelectedCategory(currentG === 'Men' ? "All Men's Creations" : "All Women's Creations");
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Admin Active Tab: 'analytics' | 'products' | 'orders' | 'inventory'
