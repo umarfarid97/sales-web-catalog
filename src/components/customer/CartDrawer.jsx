@@ -74,18 +74,7 @@ export const CartDrawer = () => {
 
   const handleProceedCheckout = () => {
     setIsCartOpen(false);
-    if (!isAuthenticated) {
-      openAuthModal({
-        mode: 'signin',
-        title: 'Maison Client Checkout',
-        subtitle: 'Please sign in or create an account to finalize your order with Maison Atelier.',
-        onComplete: () => {
-          setIsCheckoutOpen(true);
-        }
-      });
-      return;
-    }
-    setIsCheckoutOpen(true);
+    window.location.href = '/checkout.html';
   };
 
   return (

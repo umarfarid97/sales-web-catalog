@@ -36,16 +36,27 @@ export const StoreProvider = ({ children }) => {
   });
 
   const setRole = useCallback((newRole) => {
-    if (newRole === 'admin' && !isAdmin) {
-      openAuthModal({
-        mode: 'signin',
-        title: 'Atelier Administrator Access',
-        subtitle: 'Please sign in with Maison Atelier administrator credentials to manage boutique operations.'
-      });
+    if (newRole === 'admin') {
+      if (!isAdmin) {
+        openAuthModal({
+          mode: 'signin',
+          title: 'Atelier Administrator Access',
+          subtitle: 'Please sign in with Maison Atelier administrator credentials to manage boutique operations.'
+        });
+        return;
+      }
+      setRoleState('admin');
+      localStorage.setItem('lumina_role', 'admin');
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('admin.html')) {
+        window.location.href = '/admin.html';
+      }
       return;
     }
-    setRoleState(newRole);
-    localStorage.setItem('lumina_role', newRole);
+    setRoleState('customer');
+    localStorage.setItem('lumina_role', 'customer');
+    if (typeof window !== 'undefined' && window.location.pathname.includes('admin.html')) {
+      window.location.href = '/';
+    }
   }, [isAdmin, openAuthModal]);
 
   // Auto revert from admin if logged out or customer
@@ -95,33 +106,21 @@ export const StoreProvider = ({ children }) => {
   };
 
   const navigateToDiagnostic = () => {
-    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
-    if (isProductPage) {
-      window.location.href = '/?view=diagnostic';
-      return;
+    if (typeof window !== 'undefined') {
+      window.location.href = '/diagnostic.html';
     }
-    setRole('customer');
-    setCustomerView('diagnostic');
-    setActiveProduct(null);
-    try {
-      const url = new URL(window.location);
-      if (url.searchParams.has('product')) {
-        url.searchParams.delete('product');
-        window.history.pushState({}, '', url.toString());
-      }
-    } catch (e) {}
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToCatalog = (category = null, gender = null) => {
-    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+    const isOtherPage = typeof window !== 'undefined' && 
+      (window.location.pathname.includes('.html') || window.location.pathname.length > 1);
     const params = new URLSearchParams();
     if (gender) params.set('gender', gender);
     if (category) params.set('category', category);
     const qs = params.toString();
     const targetUrl = `/${qs ? `?${qs}` : ''}`;
 
-    if (isProductPage) {
+    if (isOtherPage) {
       window.location.href = targetUrl;
       return;
     }

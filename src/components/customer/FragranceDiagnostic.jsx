@@ -347,7 +347,7 @@ const QUESTIONS = [
 ];
 
 export const FragranceDiagnostic = () => {
-  const { products, addToCart, setSelectedProductModal, navigateToCatalog } = useStore();
+  const { products, addToCart, openProductDetail, setSelectedProductModal, navigateToCatalog } = useStore();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -836,7 +836,7 @@ export const FragranceDiagnostic = () => {
 
                       <button
                         className="btn btn-dior-white"
-                        onClick={() => setSelectedProductModal(topMatch.product)}
+                        onClick={() => openProductDetail ? openProductDetail(topMatch.product) : setSelectedProductModal(topMatch.product)}
                         style={{ padding: '13px 18px', fontSize: '0.84rem' }}
                       >
                         <Eye size={15} />

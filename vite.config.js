@@ -14,6 +14,9 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         product: resolve(__dirname, 'product.html'),
+        diagnostic: resolve(__dirname, 'diagnostic.html'),
+        admin: resolve(__dirname, 'admin.html'),
+        checkout: resolve(__dirname, 'checkout.html'),
       },
     },
   },
