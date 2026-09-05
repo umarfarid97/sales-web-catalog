@@ -41,7 +41,7 @@ import './styles/pdp.css';
 import './styles/admin.css';
 
 const MainLayout = () => {
-  const { role, adminTab, customerView, activeGender } = useStore();
+  const { role, adminTab, customerView } = useStore();
 
   const pathname = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
   const search = typeof window !== 'undefined' ? window.location.search : '';
@@ -50,10 +50,9 @@ const MainLayout = () => {
   const viewQuery = params.get('view');
   const productQuery = params.get('product');
 
-  // Men collection condition
-  const isMen = pathname.includes('men') || genderQuery === 'Men';
-  // Women collection condition
-  const isWomen = pathname.includes('women') || genderQuery === 'Women';
+  // CRITICAL: "women" contains the substring "men". Must check women first with precedence!
+  const isWomen = pathname.includes('women') || genderQuery?.toLowerCase() === 'women';
+  const isMen = !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || genderQuery?.toLowerCase() === 'men');
   // All collections condition
   const isCollection = pathname.includes('collection') || customerView === 'collection';
   // Bundle condition
@@ -74,10 +73,10 @@ const MainLayout = () => {
         {role === 'customer' ? (
           /* ================= CUSTOMER STOREFRONT ================= */
           <div className="customer-store-view">
-            {isMen ? (
-              <MenCollectionContent />
-            ) : isWomen ? (
+            {isWomen ? (
               <WomenCollectionContent />
+            ) : isMen ? (
+              <MenCollectionContent />
             ) : isCollection ? (
               <CollectionPageContent />
             ) : isBundle ? (

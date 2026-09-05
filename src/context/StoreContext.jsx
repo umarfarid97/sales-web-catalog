@@ -72,7 +72,15 @@ export const StoreProvider = ({ children }) => {
 
   // Active Gender Collection: 'Men' | 'Women'
   const [activeGender, setActiveGender] = useState(() => {
-    return localStorage.getItem('valenszo_active_gender') || 'Men';
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('women')) return 'Women';
+      if (path.includes('men.html') || path.endsWith('/men') || path === '/men') return 'Men';
+      const params = new URLSearchParams(window.location.search);
+      const g = params.get('gender');
+      if (g) return g;
+    }
+    return localStorage.getItem('valenszo_active_gender') || 'Women';
   });
 
   // Search, Filter & Sort State
@@ -183,11 +191,14 @@ export const StoreProvider = ({ children }) => {
     const viewParam = params.get('view');
     const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
 
-    if (genderParam) {
-      setActiveGender(genderParam);
-      localStorage.setItem('valenszo_active_gender', genderParam);
+    const path = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
+    const detectedGender = genderParam || (path.includes('women') ? 'Women' : (path.includes('men.html') || path.endsWith('/men') || path === '/men') ? 'Men' : null);
+
+    if (detectedGender) {
+      setActiveGender(detectedGender);
+      localStorage.setItem('valenszo_active_gender', detectedGender);
       if (!categoryParam) {
-        setSelectedCategory(genderParam === 'Men' ? "All Men's Creations" : "All Women's Creations");
+        setSelectedCategory(detectedGender === 'Men' ? "All Men's Creations" : "All Women's Creations");
       }
     }
 
