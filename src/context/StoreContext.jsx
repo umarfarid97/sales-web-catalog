@@ -106,14 +106,35 @@ export const StoreProvider = ({ children }) => {
   };
 
   const navigateToDiagnostic = () => {
+    setRole('customer');
+    setCustomerView('diagnostic');
+    setActiveProduct(null);
+
     if (typeof window !== 'undefined') {
-      window.location.href = '/diagnostic.html';
+      const isOtherPage = window.location.pathname.includes('product.html') || 
+                          window.location.pathname.includes('admin.html') || 
+                          window.location.pathname.includes('checkout.html');
+      if (isOtherPage) {
+        window.location.href = '/?view=diagnostic';
+        return;
+      }
+      try {
+        const url = new URL(window.location);
+        url.searchParams.set('view', 'diagnostic');
+        url.searchParams.delete('product');
+        window.history.pushState({ view: 'diagnostic' }, '', url.toString());
+      } catch (e) {}
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToCatalog = (category = null, gender = null) => {
     const isOtherPage = typeof window !== 'undefined' && 
-      (window.location.pathname.includes('.html') || window.location.pathname.length > 1);
+      (window.location.pathname.includes('product.html') || 
+       window.location.pathname.includes('admin.html') || 
+       window.location.pathname.includes('checkout.html') ||
+       window.location.pathname.includes('diagnostic.html'));
+
     const params = new URLSearchParams();
     if (gender) params.set('gender', gender);
     if (category) params.set('category', category);
@@ -130,10 +151,9 @@ export const StoreProvider = ({ children }) => {
     setActiveProduct(null);
     try {
       const url = new URL(window.location);
-      if (url.searchParams.has('product')) {
-        url.searchParams.delete('product');
-        window.history.pushState({}, '', url.toString());
-      }
+      url.searchParams.delete('product');
+      url.searchParams.delete('view');
+      window.history.pushState({}, '', url.toString());
     } catch (e) {}
     if (gender) {
       setActiveGender(gender);
@@ -247,6 +267,7 @@ export const StoreProvider = ({ children }) => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
       const productId = params.get('product');
+      const viewParam = params.get('view');
       if (productId && products.length > 0) {
         const found = products.find(p => p.id === productId || String(p.catalogNo) === productId);
         if (found) {
@@ -254,6 +275,11 @@ export const StoreProvider = ({ children }) => {
           setCustomerView('product');
           return;
         }
+      }
+      if (viewParam === 'diagnostic') {
+        setActiveProduct(null);
+        setCustomerView('diagnostic');
+        return;
       }
       setActiveProduct(null);
       setCustomerView('catalog');
