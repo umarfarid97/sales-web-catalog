@@ -66,6 +66,9 @@ export const ProductDetailPage = () => {
     addToCart,
     favorites,
     toggleFavorite,
+    cartSubtotal,
+    cartTotalItems,
+    setIsCartOpen,
     showToast
   } = useStore();
 
@@ -80,6 +83,7 @@ export const ProductDetailPage = () => {
   const [showAllAccords, setShowAllAccords] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isUpsellDrawerOpen, setIsUpsellDrawerOpen] = useState(false);
 
   if (!product) {
     return (
@@ -185,6 +189,7 @@ export const ProductDetailPage = () => {
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, null, currentUnitPrice);
+    setIsUpsellDrawerOpen(true);
     showToast(`Added ${quantity}x ${product.displayName || product.name} (${selectedSize}) to your Bag!`, 'success');
   };
 
@@ -882,6 +887,239 @@ export const ProductDetailPage = () => {
             >
               Close Presentation
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ================= 8. POST-ADD UPSELL DRAWER (SCENT WARDROBE) ================= */}
+      {isUpsellDrawerOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            animation: 'fadeIn 0.2s ease-out'
+          }}
+          onClick={() => setIsUpsellDrawerOpen(false)}
+        >
+          <div 
+            style={{
+              width: '100%',
+              maxWidth: '420px',
+              height: '100%',
+              background: '#ffffff',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '-4px 0 30px rgba(0,0,0,0.15)',
+              overflowY: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Drawer Header */}
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Check size={14} strokeWidth={3} />
+                </div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: '#111827' }}>
+                  Added to Cart!
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsUpsellDrawerOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              
+              {/* Recently Added Item Card */}
+              <div style={{ display: 'flex', gap: '14px', background: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
+                <img
+                  src={galleryItems[0].url}
+                  alt={product.displayName || product.name}
+                  style={{ width: '64px', height: '74px', objectFit: 'contain', background: '#ffffff', borderRadius: '4px', padding: '4px', border: '1px solid #e5e7eb' }}
+                />
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', margin: 0 }}>
+                    {product.displayName || product.name}
+                  </h4>
+                  <div style={{ fontSize: '0.74rem', color: '#6b7280', margin: '2px 0 6px' }}>
+                    {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem' }}>
+                    <span style={{ color: '#4b5563' }}>Size: {selectedSize} &bull; Qty: {quantity}</span>
+                    <span style={{ fontWeight: 800, color: '#111827' }}>RM{totalPrice}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Complete Your Scent Wardrobe (Frequently Bought Together) */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                  <Sparkles size={14} color="#c5a059" />
+                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Complete Your Scent Wardrobe
+                  </h4>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '0 0 12px' }}>
+                  Frequently layered together for unforgettable presence and 16+ hours longevity:
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {layeringSuggestions.slice(0, 2).map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '10px 12px',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        background: '#ffffff'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          style={{ width: '42px', height: '50px', objectFit: 'contain' }}
+                        />
+                        <div>
+                          <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#111827', lineHeight: 1.2 }}>
+                            {item.name}
+                          </div>
+                          <div style={{ fontSize: '0.72rem', color: '#6b7280', marginTop: '2px' }}>
+                            {item.facets}
+                          </div>
+                          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#c5a059', marginTop: '2px' }}>
+                            +RM45
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleQuickAddLayer(e, item)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: '4px',
+                          border: '1px solid #000000',
+                          background: '#ffffff',
+                          color: '#000000',
+                          fontSize: '0.74rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        + Add
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Upgrade to Bundle Callout Banner */}
+              <div style={{ background: 'linear-gradient(135deg, #18181b 0%, #09090b 100%)', color: '#ffffff', borderRadius: '8px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#c5a059', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    Bundle Privilege
+                  </span>
+                  <span style={{ fontSize: '0.7rem', background: 'rgba(197, 160, 89, 0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                    SAVE UP TO 25%
+                  </span>
+                </div>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700 }}>
+                  Curate a 3 or 5-Bottle Scent Wardrobe
+                </div>
+                <p style={{ fontSize: '0.74rem', color: '#9ca3af', margin: 0 }}>
+                  Pick your favorite fragrances, save up to 25%, and receive free luxury discovery coffret packaging.
+                </p>
+                <a
+                  href="/bundle.html"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    marginTop: '4px',
+                    padding: '8px 14px',
+                    borderRadius: '4px',
+                    background: '#c5a059',
+                    color: '#000000',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em'
+                  }}
+                >
+                  <span>Build Custom Bundle (From RM115)</span>
+                  <ChevronRight size={14} />
+                </a>
+              </div>
+
+            </div>
+
+            {/* Drawer Sticky Bottom Actions */}
+            <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #f3f4f6', background: '#fafafa' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Estimated Subtotal</span>
+                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#111827' }}>
+                  RM{cartSubtotal > 0 ? cartSubtotal : totalPrice}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <a
+                  href="/checkout.html"
+                  style={{
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '4px',
+                    background: '#000000',
+                    color: '#ffffff',
+                    fontWeight: 700,
+                    fontSize: '0.84rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    display: 'block',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }}
+                >
+                  Proceed to Checkout
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setIsUpsellDrawerOpen(false)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    borderRadius: '4px',
+                    background: 'transparent',
+                    border: '1px solid #d1d5db',
+                    color: '#374151',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Continue Shopping
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       )}

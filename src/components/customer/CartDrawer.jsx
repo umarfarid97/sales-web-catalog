@@ -262,7 +262,7 @@ export const CartDrawer = () => {
                         </div>
 
                         <div style={{ color: '#000000', fontWeight: 800, fontSize: '1.05rem', fontFamily: 'var(--font-mono)' }}>
-                          ${itemTotal}
+                          RM{itemTotal}
                         </div>
                       </div>
 
@@ -316,23 +316,23 @@ export const CartDrawer = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '18px', fontSize: '0.88rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#4b5563' }}>
                 <span>Subtotal</span>
-                <span style={{ color: '#000000', fontWeight: 600 }}>${safeSubtotal.toFixed(2)}</span>
+                <span style={{ color: '#000000', fontWeight: 600 }}>RM{safeSubtotal.toFixed(2)}</span>
               </div>
               {cartDiscountAmount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#926917' }}>
                   <span>Privilege Discount</span>
-                  <span style={{ fontWeight: 700 }}>-${cartDiscountAmount.toFixed(2)}</span>
+                  <span style={{ fontWeight: 700 }}>-RM{cartDiscountAmount.toFixed(2)}</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#4b5563' }}>
                 <span>White-Glove Climate Shipping</span>
                 <span style={{ color: cartShipping === 0 ? '#059669' : '#000000', fontWeight: 600 }}>
-                  {cartShipping === 0 ? 'COMPLIMENTARY' : `$${cartShipping.toFixed(2)}`}
+                  {cartShipping === 0 ? 'COMPLIMENTARY' : `RM${cartShipping.toFixed(2)}`}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#000000', paddingTop: '10px', borderTop: '1px solid #e5e7eb' }}>
                 <span>Total</span>
-                <span style={{ fontFamily: 'var(--font-mono)' }}>${cartTotal.toFixed(2)}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>RM{cartTotal.toFixed(2)}</span>
               </div>
             </div>
 

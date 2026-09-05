@@ -16,11 +16,12 @@ export const HeroBanner = () => {
     }
   };
 
-  const handleScrollToCatalog = () => {
-    const el = document.getElementById('sauvage-catalog-grid');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleShopNow = () => {
+    window.location.href = activeGender === 'Women' ? '/collection.html?gender=Women' : '/collection.html?gender=Men';
+  };
+
+  const handleTakeQuiz = () => {
+    window.location.href = '/diagnostic.html';
   };
 
   const currentCount = activeGender === 'Men' ? menCount : womenCount;
@@ -58,16 +59,16 @@ export const HeroBanner = () => {
           <div className="dior-hero-buttons">
             <button
               className="btn btn-dior-white"
-              onClick={handleScrollToCatalog}
+              onClick={handleShopNow}
               style={{ padding: '14px 32px' }}
             >
-              <span>Explore The Line</span>
+              <span>Explore Creations</span>
               <ArrowRight size={15} />
             </button>
 
             <button
               className="btn btn-dior-outline"
-              onClick={navigateToDiagnostic}
+              onClick={handleTakeQuiz}
               style={{ padding: '14px 32px', borderColor: '#ffffff', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}
             >
               <Sparkles size={15} color="#f59e0b" />

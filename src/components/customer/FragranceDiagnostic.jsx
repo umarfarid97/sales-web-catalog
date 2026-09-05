@@ -814,7 +814,7 @@ export const FragranceDiagnostic = () => {
                               cursor: 'pointer'
                             }}
                           >
-                            {size.label} &bull; ${(topMatch.product.price * size.priceMultiplier).toFixed(2)}
+                            {size.label} &bull; RM{(topMatch.product.price * size.priceMultiplier).toFixed(0)}
                           </button>
                         ))}
                       </div>
@@ -918,7 +918,7 @@ export const FragranceDiagnostic = () => {
 
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #f3f4f6' }}>
                         <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#000000' }}>
-                          ${item.product.price.toFixed(2)}
+                          RM{item.product.price.toFixed(0)}
                         </div>
 
                         <button
@@ -949,7 +949,7 @@ export const FragranceDiagnostic = () => {
 
               <button
                 className="btn btn-dior-black"
-                onClick={() => navigateToCatalog('All Creations')}
+                onClick={() => { window.location.href = '/collection.html'; }}
                 style={{ padding: '12px 28px', fontSize: '0.82rem' }}
               >
                 <span>Browse Full 345 Portfolio</span>

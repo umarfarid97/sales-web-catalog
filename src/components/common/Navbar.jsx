@@ -209,6 +209,23 @@ export const Navbar = () => {
             >
               <Search size={20} strokeWidth={1.75} />
             </button>
+
+            {/* Desktop Navigation Links */}
+            <nav className="desktop-nav-links" style={{ alignItems: 'center', gap: '22px', marginLeft: '8px' }}>
+              <a href="/collection.html?gender=Men" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Men
+              </a>
+              <a href="/collection.html?gender=Women" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Women
+              </a>
+              <a href="/bundle.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Bundles
+              </a>
+              <a href="/diagnostic.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Sparkles size={12} color="#c5a059" />
+                <span>Quiz</span>
+              </a>
+            </nav>
           </div>
 
           {/* Center Column: Iconic VALENSZO Monogram Logo Emblem (Mathematically Centered) */}
@@ -225,9 +242,7 @@ export const Navbar = () => {
               padding: '4px'
             }}
             onClick={() => {
-              navigateToCatalog('All Creations');
-              setIsMenuOpen(false);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.location.href = '/';
             }}
             title="VALENSZO Haute Parfumerie"
           >
@@ -565,7 +580,7 @@ export const Navbar = () => {
                 <div>
                   <button
                     onClick={() => {
-                      navigateToDiagnostic();
+                      window.location.href = '/diagnostic.html';
                       setIsMenuOpen(false);
                     }}
                     style={{
@@ -592,7 +607,7 @@ export const Navbar = () => {
                           Find Your Scent
                         </div>
                         <div style={{ fontSize: '0.72rem', color: '#f59e0b', fontWeight: 600 }}>
-                          10-Question Olfactory Diagnostic &rarr;
+                          4-Step Olfactory Diagnostic &rarr;
                         </div>
                       </div>
                     </div>
@@ -617,7 +632,7 @@ export const Navbar = () => {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <button 
                       onClick={() => { 
-                        selectGenderCollection('Men'); 
+                        window.location.href = '/collection.html?gender=Men'; 
                         setIsMenuOpen(false); 
                       }}
                       style={{
@@ -644,7 +659,7 @@ export const Navbar = () => {
 
                     <button 
                       onClick={() => { 
-                        selectGenderCollection('Women'); 
+                        window.location.href = '/collection.html?gender=Women'; 
                         setIsMenuOpen(false); 
                       }}
                       style={{
@@ -667,6 +682,33 @@ export const Navbar = () => {
                         <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{womenCount} Fragrance Creations</div>
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
+                    </button>
+
+                    <button 
+                      onClick={() => { 
+                        window.location.href = '/bundle.html'; 
+                        setIsMenuOpen(false); 
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 16px',
+                        borderLeft: '4px solid transparent',
+                        background: '#fafafa',
+                        borderTop: '1px solid #f3f4f6',
+                        borderRight: '1px solid #f3f4f6',
+                        borderBottom: '1px solid #f3f4f6',
+                        borderRadius: '3px',
+                        cursor: 'pointer',
+                        textAlign: 'left'
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Signature Bundles</div>
+                        <div style={{ fontSize: '0.74rem', color: '#c5a059', marginTop: '2px', fontWeight: 600 }}>Save up to 25% on 3 or 5 Bottles</div>
+                      </div>
+                      <ArrowRight size={16} color="#9ca3af" />
                     </button>
                   </div>
                 </div>

@@ -141,7 +141,7 @@ export const ProductCard = ({ product }) => {
         {/* Price & Add to Bag */}
         <div className="dior-card-price-row">
           <div className="dior-card-price">
-            ${product.price.toFixed(2)}
+            RM{Number(product.price || 45).toFixed(0)}
           </div>
 
           <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
