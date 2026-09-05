@@ -72,6 +72,12 @@ export const StoreProvider = ({ children }) => {
   const [maxPrice, setMaxPrice] = useState(500);
 
   const selectGenderCollection = (gender) => {
+    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+    if (isProductPage) {
+      localStorage.setItem('valenszo_active_gender', gender);
+      window.location.href = `/?gender=${encodeURIComponent(gender)}`;
+      return;
+    }
     setRole('customer');
     setActiveGender(gender);
     localStorage.setItem('valenszo_active_gender', gender);
@@ -89,6 +95,11 @@ export const StoreProvider = ({ children }) => {
   };
 
   const navigateToDiagnostic = () => {
+    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+    if (isProductPage) {
+      window.location.href = '/?view=diagnostic';
+      return;
+    }
     setRole('customer');
     setCustomerView('diagnostic');
     setActiveProduct(null);
@@ -103,6 +114,18 @@ export const StoreProvider = ({ children }) => {
   };
 
   const navigateToCatalog = (category = null, gender = null) => {
+    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+    const params = new URLSearchParams();
+    if (gender) params.set('gender', gender);
+    if (category) params.set('category', category);
+    const qs = params.toString();
+    const targetUrl = `/${qs ? `?${qs}` : ''}`;
+
+    if (isProductPage) {
+      window.location.href = targetUrl;
+      return;
+    }
+
     setRole('customer');
     setCustomerView('catalog');
     setActiveProduct(null);
@@ -158,22 +181,17 @@ export const StoreProvider = ({ children }) => {
 
   const openProductDetail = useCallback((product) => {
     if (!product) return;
-    setActiveProduct(product);
-    setRole('customer');
-    setCustomerView('product');
-
-    // SPA history update without page reload
-    try {
-      const url = new URL(window.location);
-      url.searchParams.set('product', product.id);
-      window.history.pushState({ productId: product.id }, '', url.toString());
-    } catch (e) {
-      console.warn('History pushState skipped', e);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [setRole]);
+    const targetId = typeof product === 'string' ? product : product.id;
+    // Multi-Page Application (MPA) full browser page navigation
+    window.location.href = `/product.html?product=${encodeURIComponent(targetId)}`;
+  }, []);
 
   const closeProductDetail = useCallback(() => {
+    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+    if (isProductPage) {
+      window.location.href = '/';
+      return;
+    }
     setActiveProduct(null);
     setCustomerView('catalog');
     try {
@@ -186,11 +204,32 @@ export const StoreProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Restore active product from URL on direct link or initial load
+  // Restore active product or URL parameters on page load
   useEffect(() => {
     if (!products || products.length === 0) return;
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('product');
+    const genderParam = params.get('gender');
+    const categoryParam = params.get('category');
+    const viewParam = params.get('view');
+    const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
+
+    if (genderParam) {
+      setActiveGender(genderParam);
+      localStorage.setItem('valenszo_active_gender', genderParam);
+      if (!categoryParam) {
+        setSelectedCategory(genderParam === 'Men' ? "All Men's Creations" : "All Women's Creations");
+      }
+    }
+
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+
+    if (viewParam === 'diagnostic') {
+      setCustomerView('diagnostic');
+    }
+
     if (productId) {
       const found = products.find(p => p.id === productId || String(p.catalogNo) === productId);
       if (found) {
@@ -198,10 +237,13 @@ export const StoreProvider = ({ children }) => {
         setCustomerView('product');
         setRoleState('customer');
       }
+    } else if (isProductPage && products.length > 0) {
+      // Default to flagship creation if on product.html without parameter
+      setActiveProduct(products[0]);
     }
   }, [products]);
 
-  // Handle browser Back / Forward buttons seamlessly (100% SPA navigation)
+  // Handle browser Back / Forward buttons
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
