@@ -77,18 +77,42 @@ export const StoreProvider = ({ children }) => {
     localStorage.setItem('valenszo_active_gender', gender);
     setSelectedCategory(gender === 'Men' ? "All Men's Creations" : "All Women's Creations");
     setCustomerView('catalog');
+    setActiveProduct(null);
+    try {
+      const url = new URL(window.location);
+      if (url.searchParams.has('product')) {
+        url.searchParams.delete('product');
+        window.history.pushState({}, '', url.toString());
+      }
+    } catch (e) {}
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToDiagnostic = () => {
     setRole('customer');
     setCustomerView('diagnostic');
+    setActiveProduct(null);
+    try {
+      const url = new URL(window.location);
+      if (url.searchParams.has('product')) {
+        url.searchParams.delete('product');
+        window.history.pushState({}, '', url.toString());
+      }
+    } catch (e) {}
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToCatalog = (category = null, gender = null) => {
     setRole('customer');
     setCustomerView('catalog');
+    setActiveProduct(null);
+    try {
+      const url = new URL(window.location);
+      if (url.searchParams.has('product')) {
+        url.searchParams.delete('product');
+        window.history.pushState({}, '', url.toString());
+      }
+    } catch (e) {}
     if (gender) {
       setActiveGender(gender);
       localStorage.setItem('valenszo_active_gender', gender);
@@ -128,6 +152,75 @@ export const StoreProvider = ({ children }) => {
     localStorage.setItem('lumina_products', JSON.stringify(INITIAL_PRODUCTS));
     return INITIAL_PRODUCTS;
   });
+
+  // Active Selected Product for Luxury Detail Page (PDP)
+  const [activeProduct, setActiveProduct] = useState(null);
+
+  const openProductDetail = useCallback((product) => {
+    if (!product) return;
+    setActiveProduct(product);
+    setRole('customer');
+    setCustomerView('product');
+
+    // SPA history update without page reload
+    try {
+      const url = new URL(window.location);
+      url.searchParams.set('product', product.id);
+      window.history.pushState({ productId: product.id }, '', url.toString());
+    } catch (e) {
+      console.warn('History pushState skipped', e);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [setRole]);
+
+  const closeProductDetail = useCallback(() => {
+    setActiveProduct(null);
+    setCustomerView('catalog');
+    try {
+      const url = new URL(window.location);
+      url.searchParams.delete('product');
+      window.history.pushState({}, '', url.toString());
+    } catch (e) {
+      console.warn('History pushState skipped', e);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Restore active product from URL on direct link or initial load
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('product');
+    if (productId) {
+      const found = products.find(p => p.id === productId || String(p.catalogNo) === productId);
+      if (found) {
+        setActiveProduct(found);
+        setCustomerView('product');
+        setRoleState('customer');
+      }
+    }
+  }, [products]);
+
+  // Handle browser Back / Forward buttons seamlessly (100% SPA navigation)
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('product');
+      if (productId && products.length > 0) {
+        const found = products.find(p => p.id === productId || String(p.catalogNo) === productId);
+        if (found) {
+          setActiveProduct(found);
+          setCustomerView('product');
+          return;
+        }
+      }
+      setActiveProduct(null);
+      setCustomerView('catalog');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [products]);
 
   // Cart Items with auto-sanitization for safe rendering
   const [cart, setCart] = useState(() => {
@@ -810,6 +903,10 @@ export const StoreProvider = ({ children }) => {
         setRole,
         customerView,
         setCustomerView,
+        activeProduct,
+        setActiveProduct,
+        openProductDetail,
+        closeProductDetail,
         activeGender,
         setActiveGender,
         selectGenderCollection,

@@ -3,12 +3,16 @@ import { useStore } from '../../context/StoreContext';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const HeroBanner = () => {
-  const { setSelectedProductModal, products, activeGender, menCount, womenCount, navigateToDiagnostic } = useStore();
+  const { openProductDetail, setSelectedProductModal, products, activeGender, menCount, womenCount, navigateToDiagnostic } = useStore();
 
   const handleDiscoverElixir = () => {
     const elixir = products.find((p) => p.sku === 'SVG-LX-001' || p.name.includes('Elixir')) || products[0];
     if (elixir) {
-      setSelectedProductModal(elixir);
+      if (openProductDetail) {
+        openProductDetail(elixir);
+      } else {
+        setSelectedProductModal(elixir);
+      }
     }
   };
 

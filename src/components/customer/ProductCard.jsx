@@ -4,6 +4,7 @@ import { Heart, ShoppingBag, RefreshCw } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
+    openProductDetail,
     setSelectedProductModal, 
     addToCart, 
     favorites, 
@@ -12,6 +13,14 @@ export const ProductCard = ({ product }) => {
   } = useStore();
 
   const isFav = favorites.includes(product.id);
+
+  const handleOpen = () => {
+    if (openProductDetail) {
+      openProductDetail(product);
+    } else {
+      setSelectedProductModal(product);
+    }
+  };
 
   const handleQuickAdd = (e) => {
     e.stopPropagation();
@@ -25,14 +34,14 @@ export const ProductCard = ({ product }) => {
   return (
     <div 
       className="dior-product-card"
-      onClick={() => setSelectedProductModal(product)}
+      onClick={handleOpen}
       tabIndex={0}
       role="button"
       aria-label={`View ${product.name} details`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          setSelectedProductModal(product);
+          handleOpen();
         }
       }}
     >

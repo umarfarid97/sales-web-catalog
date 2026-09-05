@@ -10,6 +10,7 @@ import { AuthModal } from './components/common/AuthModal';
 // Customer Components
 import { ProductCatalog } from './components/customer/ProductCatalog';
 import { FragranceDiagnostic } from './components/customer/FragranceDiagnostic';
+import { ProductDetailPage } from './components/customer/ProductDetailPage';
 import { ProductDetailModal } from './components/customer/ProductDetailModal';
 import { CartDrawer } from './components/customer/CartDrawer';
 import { CheckoutModal } from './components/customer/CheckoutModal';
@@ -28,6 +29,7 @@ import { InventoryAlerts } from './components/admin/InventoryAlerts';
 import './index.css';
 import './styles/components.css';
 import './styles/customer.css';
+import './styles/pdp.css';
 import './styles/admin.css';
 
 const MainLayout = () => {
@@ -46,6 +48,8 @@ const MainLayout = () => {
           <div className="customer-store-view">
             {customerView === 'diagnostic' ? (
               <FragranceDiagnostic />
+            ) : customerView === 'product' ? (
+              <ProductDetailPage />
             ) : (
               <ProductCatalog />
             )}
