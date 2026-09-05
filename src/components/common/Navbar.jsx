@@ -207,23 +207,6 @@ export const Navbar = () => {
             >
               <Search size={20} strokeWidth={1.75} />
             </button>
-
-            {/* Desktop Navigation Links */}
-            <nav className="desktop-nav-links" style={{ alignItems: 'center', gap: '22px', marginLeft: '8px' }}>
-              <a href="/men.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Men
-              </a>
-              <a href="/women.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Women
-              </a>
-              <a href="/bundle.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Bundles
-              </a>
-              <a href="/diagnostic.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Sparkles size={12} color="#c5a059" />
-                <span>Quiz</span>
-              </a>
-            </nav>
           </div>
 
           {/* Center Column: Iconic VALENSZO Monogram Logo Emblem (Mathematically Centered) */}
