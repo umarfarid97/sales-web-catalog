@@ -47,127 +47,117 @@ export const ProductCatalog = () => {
       {/* 1. Cinematic Campaign Hero */}
       <HeroBanner />
 
-      {/* 2. DUAL COLLECTION SPLIT CARDS (MEN & WOMEN) */}
-      <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '2rem clamp(16px, 3.5vw, 36px) 1.5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+      {/* 2. DUAL COLLECTION SPLIT CARDS (MEN & WOMEN - MATCHING PICTURE 1) */}
+      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.5rem clamp(12px, 3.5vw, 24px) 2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(10px, 2.5vw, 24px)' }}>
           
-          {/* Men's Atelier Card */}
+          {/* SHOP MEN CARD */}
           <div 
             onClick={() => { window.location.href = '/collection.html?gender=Men'; }}
             style={{
               position: 'relative',
               borderRadius: '8px',
               overflow: 'hidden',
-              minHeight: '260px',
+              minHeight: 'clamp(260px, 46vw, 440px)',
               background: '#09090b',
               cursor: 'pointer',
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              padding: 'clamp(1rem, 3.5vw, 2rem)',
               boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
               transition: 'transform 0.25s ease'
             }}
           >
+            {/* Dark gradient overlay protecting bottom text */}
             <div 
               style={{
                 position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: '55%',
-                backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&auto=format&fit=crop&q=80)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center top',
-                maskImage: 'linear-gradient(to right, transparent, black 40%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 40%)'
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0) 75%)',
+                pointerEvents: 'none'
               }}
             />
-            <div style={{ position: 'relative', zIndex: 2, padding: '2.5rem 2rem', maxWidth: '340px', color: '#ffffff' }}>
-              <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c5a059', fontWeight: 800 }}>
-                Pour Homme &bull; Atelier
-              </span>
-              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', fontWeight: 800, margin: '6px 0 8px', letterSpacing: '0.02em' }}>
+
+            <div style={{ position: 'relative', zIndex: 2, color: '#ffffff' }}>
+              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.15rem, 3vw, 1.6rem)', fontWeight: 800, margin: '0 0 4px', letterSpacing: '0.02em' }}>
                 SHOP MEN
               </h3>
-              <p style={{ fontSize: '0.85rem', color: '#d1d5db', lineHeight: 1.5, margin: '0 0 1.25rem' }}>
-                Bold. Refined. Confident. Smoked woods, wild bergamot & rare ambers.
+              <p style={{ fontSize: 'clamp(0.72rem, 1.8vw, 0.86rem)', color: '#d1d5db', lineHeight: 1.4, margin: '0 0 12px' }}>
+                Bold. Refined. Confident.
               </p>
-              <span 
+              <div 
                 style={{
-                  display: 'inline-flex',
+                  width: 'clamp(36px, 5vw, 44px)',
+                  height: 'clamp(36px, 5vw, 44px)',
+                  borderRadius: '50%',
+                  background: '#edd9c0',
+                  display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: '#ffffff',
-                  borderBottom: '2px solid #c5a059',
-                  paddingBottom: '4px'
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
                 }}
               >
-                <span>Discover Men&apos;s Collection</span>
-                <ArrowRight size={14} color="#c5a059" />
-              </span>
+                <ArrowRight size={18} color="#111827" strokeWidth={2.4} />
+              </div>
             </div>
           </div>
 
-          {/* Women's Atelier Card */}
+          {/* SHOP WOMEN CARD */}
           <div 
             onClick={() => { window.location.href = '/collection.html?gender=Women'; }}
             style={{
               position: 'relative',
               borderRadius: '8px',
               overflow: 'hidden',
-              minHeight: '260px',
+              minHeight: 'clamp(260px, 46vw, 440px)',
               background: '#18181b',
               cursor: 'pointer',
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              padding: 'clamp(1rem, 3.5vw, 2rem)',
               boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
               transition: 'transform 0.25s ease'
             }}
           >
+            {/* Dark gradient overlay protecting bottom text */}
             <div 
               style={{
                 position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: '55%',
-                backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&auto=format&fit=crop&q=80)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center top',
-                maskImage: 'linear-gradient(to right, transparent, black 40%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 40%)'
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0) 75%)',
+                pointerEvents: 'none'
               }}
             />
-            <div style={{ position: 'relative', zIndex: 2, padding: '2.5rem 2rem', maxWidth: '340px', color: '#ffffff' }}>
-              <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#c5a059', fontWeight: 800 }}>
-                Pour Femme &bull; Atelier
-              </span>
-              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', fontWeight: 800, margin: '6px 0 8px', letterSpacing: '0.02em' }}>
+
+            <div style={{ position: 'relative', zIndex: 2, color: '#ffffff' }}>
+              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.15rem, 3vw, 1.6rem)', fontWeight: 800, margin: '0 0 4px', letterSpacing: '0.02em' }}>
                 SHOP WOMEN
               </h3>
-              <p style={{ fontSize: '0.85rem', color: '#d1d5db', lineHeight: 1.5, margin: '0 0 1.25rem' }}>
-                Elegant. Feminine. Unique. Velvet bourbon vanilla, Turkish rose & white musk.
+              <p style={{ fontSize: 'clamp(0.72rem, 1.8vw, 0.86rem)', color: '#d1d5db', lineHeight: 1.4, margin: '0 0 12px' }}>
+                Elegant. Feminine. Unique.
               </p>
-              <span 
+              <div 
                 style={{
-                  display: 'inline-flex',
+                  width: 'clamp(36px, 5vw, 44px)',
+                  height: 'clamp(36px, 5vw, 44px)',
+                  borderRadius: '50%',
+                  background: '#edd9c0',
+                  display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: '#ffffff',
-                  borderBottom: '2px solid #c5a059',
-                  paddingBottom: '4px'
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
                 }}
               >
-                <span>Discover Women&apos;s Collection</span>
-                <ArrowRight size={14} color="#c5a059" />
-              </span>
+                <ArrowRight size={18} color="#111827" strokeWidth={2.4} />
+              </div>
             </div>
           </div>
 

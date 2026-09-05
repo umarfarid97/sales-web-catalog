@@ -212,14 +212,14 @@ export const ProductDetailPage = () => {
       
       {/* ================= 1. BREADCRUMBS ================= */}
       <nav className="pdp-breadcrumb" aria-label="Breadcrumb">
-        <button className="pdp-breadcrumb-item" onClick={() => navigateToCatalog()}>
+        <button className="pdp-breadcrumb-item" onClick={() => { window.location.href = '/'; }}>
           Home
         </button>
         <span className="pdp-breadcrumb-separator"><ChevronRight size={12} /></span>
         
         <button 
           className="pdp-breadcrumb-item" 
-          onClick={() => selectGenderCollection(product.gender || 'Men')}
+          onClick={() => { window.location.href = `/collection.html?gender=${encodeURIComponent(product.gender || 'Men')}`; }}
         >
           {product.gender === 'Women' ? 'Women' : 'Men'}
         </button>
@@ -227,7 +227,10 @@ export const ProductDetailPage = () => {
 
         <button 
           className="pdp-breadcrumb-item"
-          onClick={() => navigateToCatalog(product.olfactoryFamily || "All Men's Creations", product.gender)}
+          onClick={() => { 
+            const fam = product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody';
+            window.location.href = `/collection.html?gender=${encodeURIComponent(product.gender || 'Men')}&category=${encodeURIComponent(fam)}`; 
+          }}
         >
           {product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody'}
         </button>

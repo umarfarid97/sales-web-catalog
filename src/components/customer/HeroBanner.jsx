@@ -1,82 +1,169 @@
 import React from 'react';
-import { useStore } from '../../context/StoreContext';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export const HeroBanner = () => {
-  const { openProductDetail, setSelectedProductModal, products, activeGender, menCount, womenCount, navigateToDiagnostic } = useStore();
-
-  const handleDiscoverElixir = () => {
-    const elixir = products.find((p) => p.sku === 'SVG-LX-001' || p.name.includes('Elixir')) || products[0];
-    if (elixir) {
-      if (openProductDetail) {
-        openProductDetail(elixir);
-      } else {
-        setSelectedProductModal(elixir);
-      }
-    }
-  };
-
   const handleShopNow = () => {
-    window.location.href = activeGender === 'Women' ? '/collection.html?gender=Women' : '/collection.html?gender=Men';
+    window.location.href = '/collection.html';
   };
-
-  const handleTakeQuiz = () => {
-    window.location.href = '/diagnostic.html';
-  };
-
-  const currentCount = activeGender === 'Men' ? menCount : womenCount;
 
   return (
-    <section className="dior-hero-campaign">
-      <div className="dior-hero-media-bg" />
+    <section 
+      style={{
+        position: 'relative',
+        background: 'linear-gradient(135deg, #09090b 0%, #181512 50%, #0d0c0a 100%)',
+        color: '#ffffff',
+        overflow: 'hidden',
+        borderBottom: '1px solid #27272a'
+      }}
+    >
+      {/* Ambient warm gold backlight highlight behind bottles */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: '10%',
+          right: '15%',
+          width: '400px',
+          height: '400px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(217, 119, 6, 0.18) 0%, rgba(0,0,0,0) 70%)',
+          filter: 'blur(50px)',
+          pointerEvents: 'none'
+        }}
+      />
 
-      <div className="container">
-        <div className="dior-hero-content">
-          
-          <div className="dior-hero-eyebrow">
-            Maison Valenszo &bull; {activeGender === 'Men' ? `Men's Collection (${menCount} Creations)` : `Women's Collection (${womenCount} Creations)`}
-          </div>
+      <div 
+        style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: 'clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem)',
+          display: 'grid',
+          gridTemplateColumns: '1.1fr 0.9fr',
+          alignItems: 'center',
+          gap: 'clamp(1rem, 3vw, 2.5rem)',
+          position: 'relative',
+          zIndex: 2
+        }}
+      >
+        {/* Left Editorial Text Column (Matching Picture 1) */}
+        <div style={{ maxWidth: '480px' }}>
+          <h1 
+            style={{
+              fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)',
+              fontSize: 'clamp(2.1rem, 5.5vw, 3.8rem)',
+              fontWeight: 700,
+              lineHeight: 1.15,
+              color: '#fdfbf7',
+              margin: '0 0 1rem',
+              letterSpacing: '-0.02em'
+            }}
+          >
+            More<br />
+            Than a Scent<br />
+            A Better You
+          </h1>
 
-          <div style={{ margin: '8px 0 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '100vw' }}>
-            <div className="valenszo-monogram-mark" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.2rem)', color: '#ffffff', marginBottom: '-4px' }} aria-hidden="true">
-              <span className="vl-v">V</span>
-              <span className="vl-l">L</span>
-            </div>
-            <h1 className="dior-hero-title" style={{ fontFamily: 'var(--font-brand)', margin: '0' }}>
-              VALENSZO
-            </h1>
-            <div style={{ fontFamily: 'var(--font-couture)', fontSize: 'clamp(0.62rem, 1.8vw, 0.74rem)', letterSpacing: 'clamp(0.18em, 1.2vw, 0.44em)', color: 'rgba(255, 255, 255, 0.8)', fontWeight: 700, textTransform: 'uppercase', marginTop: '6px' }}>
-              {activeGender === 'Men' ? "MEN'S COLLECTION" : "WOMEN'S COLLECTION"}
-            </div>
-          </div>
-
-          <p className="dior-hero-tagline">
-            {activeGender === 'Men'
-              ? `Raw, noble, and magnetic all at once. Discover ${menCount} masterfully structured masculine creations dictated by rare essences.`
-              : `Radiant, poetic, and captivating all at once. Discover ${womenCount} sublime feminine and romantic creations crafted for modern allure.`}
+          <p 
+            style={{
+              fontSize: 'clamp(0.88rem, 2vw, 1.1rem)',
+              color: '#c9baa9',
+              lineHeight: 1.5,
+              margin: '0 0 1.75rem',
+              maxWidth: '380px',
+              fontFamily: 'var(--font-couture, sans-serif)'
+            }}
+          >
+            Premium inspired fragrances for every moment.
           </p>
 
-          <div className="dior-hero-buttons">
-            <button
-              className="btn btn-dior-white"
-              onClick={handleShopNow}
-              style={{ padding: '14px 32px' }}
-            >
-              <span>Explore Creations</span>
-              <ArrowRight size={15} />
-            </button>
+          <button
+            type="button"
+            onClick={handleShopNow}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '13px 32px',
+              borderRadius: '6px',
+              background: '#edd9c0',
+              color: '#1a1816',
+              fontWeight: 800,
+              fontSize: '0.86rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.35)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#dfc6a6';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#edd9c0';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Shop Now
+          </button>
+        </div>
 
-            <button
-              className="btn btn-dior-outline"
-              onClick={handleTakeQuiz}
-              style={{ padding: '14px 32px', borderColor: '#ffffff', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}
-            >
-              <Sparkles size={15} color="#f59e0b" />
-              <span>Find Your Scent</span>
-            </button>
+        {/* Right Visual: Two luxury perfume bottles matching Picture 1 */}
+        <div 
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            gap: 'clamp(8px, 2.5vw, 20px)',
+            position: 'relative'
+          }}
+        >
+          {/* Bottle 1: Noir Flacon */}
+          <div 
+            style={{
+              width: 'clamp(115px, 20vw, 210px)',
+              filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.85))',
+              position: 'relative',
+              borderRadius: '8px',
+              overflow: 'hidden'
+            }}
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80" 
+              alt="Valenszo Noir Absolu"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: '8px'
+              }}
+            />
           </div>
 
+          {/* Bottle 2: Champagne Amber Flacon */}
+          <div 
+            style={{
+              width: 'clamp(110px, 19vw, 200px)',
+              filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.85))',
+              position: 'relative',
+              marginBottom: '-6px',
+              borderRadius: '8px',
+              overflow: 'hidden'
+            }}
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=700&auto=format&fit=crop&q=80" 
+              alt="Valenszo Amber Royale"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: '8px'
+              }}
+            />
+          </div>
         </div>
+
       </div>
     </section>
   );

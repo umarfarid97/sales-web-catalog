@@ -212,30 +212,99 @@ const BundleBuilderLayout = () => {
       <Navbar />
 
       <main style={{ flex: 1, paddingBottom: '6rem' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.5rem 1.25rem' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
           {/* Breadcrumbs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
             <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
             <ChevronRight size={12} />
-            <span style={{ color: '#111827', fontWeight: 600 }}>Signature Bundle Builder</span>
+            <span style={{ color: '#111827', fontWeight: 600 }}>Bundles</span>
           </div>
 
-          {/* Page Hero Header */}
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 2.5rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 14px', borderRadius: '999px', background: '#eef2f6', color: '#111827', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-              <Sparkles size={13} color="#c5a059" />
-              <span>The Maison Scent Wardrobe</span>
-            </div>
-            <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2.4rem', fontWeight: 900, margin: '0 0 0.75rem', letterSpacing: '-0.02em' }}>
-              BUILD YOUR SIGNATURE BUNDLE
-            </h1>
-            <p style={{ fontSize: '0.98rem', color: '#4b5563', lineHeight: 1.6, margin: 0 }}>
-              Layer fragrances to create your unique, magnetic scent aura. Curate your personal collection and save up to <strong>25%</strong> with complimentary luxury gift presentation.
-            </p>
+          {/* Bundle Hero Banner */}
+          <div 
+            style={{
+              position: 'relative',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              background: '#09090b',
+              minHeight: 'clamp(200px, 26vw, 280px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 'clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem)',
+              color: '#ffffff',
+              marginBottom: '2rem',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.14)'
+            }}
+          >
+            {/* Subtle warm ambient glow */}
+            <div 
+              style={{
+                position: 'absolute',
+                left: '5%',
+                top: '20%',
+                width: '240px',
+                height: '240px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.14) 0%, rgba(0,0,0,0) 70%)',
+                filter: 'blur(40px)',
+                pointerEvents: 'none'
+              }}
+            />
 
-            {/* Tier Selector Buttons */}
-            <div style={{ display: 'inline-flex', background: '#ffffff', padding: '6px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb', marginTop: '1.75rem', gap: '8px' }}>
+            {/* Left Editorial Text */}
+            <div style={{ position: 'relative', zIndex: 2, maxWidth: '480px' }}>
+              <h1 
+                style={{ 
+                  fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)', 
+                  fontSize: 'clamp(2.1rem, 5.5vw, 3.6rem)', 
+                  fontWeight: 700, 
+                  lineHeight: 1.08, 
+                  margin: 0, 
+                  letterSpacing: '-0.01em',
+                  color: '#ffffff'
+                }}
+              >
+                Signature
+                <br />
+                Bundles
+              </h1>
+              <p 
+                style={{ 
+                  fontSize: 'clamp(0.85rem, 2vw, 1.05rem)', 
+                  color: '#d1d5db', 
+                  marginTop: '0.65rem', 
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-couture, sans-serif)',
+                  letterSpacing: '0.02em'
+                }}
+              >
+                Curate your bespoke scent wardrobe • Save up to 25% with luxury gift presentation
+              </p>
+            </div>
+
+            {/* Right Visual: Coffret bottles with smooth left fade */}
+            <div 
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: 'clamp(240px, 48%, 560px)',
+                backgroundImage: 'url(https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&auto=format&fit=crop&q=80)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center 30%',
+                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+
+          {/* Tier Selector Navigation Bar */}
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'inline-flex', background: '#ffffff', padding: '6px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb', gap: '8px' }}>
               <button
                 type="button"
                 onClick={() => handleTierChange('3-bottle')}

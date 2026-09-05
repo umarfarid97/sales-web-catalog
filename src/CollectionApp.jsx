@@ -130,120 +130,252 @@ const CollectionPageLayout = () => {
   const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
 
   const bannerData = activeGender === 'Women' ? {
-    title: "Women's Collection",
+    title1: "Women's",
+    title2: "Collection",
     subtitle: "Elegant. Feminine. Unique.",
     bgImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80"
   } : {
-    title: "Men's Collection",
+    title1: "Men's",
+    title2: "Collection",
     subtitle: "Bold. Refined. Confident.",
     bgImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80"
   };
+
+  const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);
+  const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
+  const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Floral', 'Sweet', 'Aquatic'];
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
       <Navbar />
 
       <main style={{ flex: 1, paddingBottom: '5rem' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem 1.5rem' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
-          {/* Breadcrumbs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.5rem' }}>
+          {/* Breadcrumbs (Matching Picture 2) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
             <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
             <ChevronRight size={12} />
             <span style={{ color: '#111827', fontWeight: 600 }}>{activeGender}</span>
           </div>
 
-          {/* Collection Hero Banner */}
+          {/* Collection Hero Banner (Matching Picture 2) */}
           <div 
             style={{
               position: 'relative',
               borderRadius: '8px',
               overflow: 'hidden',
-              background: '#111827',
-              minHeight: '200px',
+              background: '#09090b',
+              minHeight: 'clamp(200px, 26vw, 280px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '2.5rem 2rem',
+              padding: 'clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem)',
               color: '#ffffff',
               marginBottom: '2rem',
-              boxShadow: '0 8px 25px rgba(0,0,0,0.12)'
+              boxShadow: '0 8px 30px rgba(0,0,0,0.14)'
             }}
           >
+            {/* Subtle warm ambient glow */}
+            <div 
+              style={{
+                position: 'absolute',
+                left: '5%',
+                top: '20%',
+                width: '240px',
+                height: '240px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.14) 0%, rgba(0,0,0,0) 70%)',
+                filter: 'blur(40px)',
+                pointerEvents: 'none'
+              }}
+            />
+
+            {/* Left Editorial Text Column (Matching Picture 2) */}
             <div style={{ position: 'relative', zIndex: 2, maxWidth: '440px' }}>
-              <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2.2rem', fontWeight: 800, margin: 0, letterSpacing: '0.02em' }}>
-                {bannerData.title}
+              <h1 
+                style={{ 
+                  fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)', 
+                  fontSize: 'clamp(2.1rem, 5.5vw, 3.6rem)', 
+                  fontWeight: 700, 
+                  lineHeight: 1.08, 
+                  margin: 0, 
+                  letterSpacing: '-0.01em',
+                  color: '#ffffff'
+                }}
+              >
+                {bannerData.title1}
+                <br />
+                {bannerData.title2}
               </h1>
-              <p style={{ fontSize: '0.95rem', color: '#c5a059', marginTop: '0.5rem', fontWeight: 500 }}>
+              <p 
+                style={{ 
+                  fontSize: 'clamp(0.85rem, 2vw, 1.05rem)', 
+                  color: '#d1d5db', 
+                  marginTop: '0.65rem', 
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-couture, sans-serif)',
+                  letterSpacing: '0.02em'
+                }}
+              >
                 {bannerData.subtitle}
               </p>
             </div>
 
+            {/* Right Visual: Model with smooth left fade (Matching Picture 2) */}
             <div 
               style={{
                 position: 'absolute',
                 right: 0,
                 top: 0,
                 bottom: 0,
-                width: '45%',
+                width: 'clamp(240px, 48%, 560px)',
                 backgroundImage: `url(${bannerData.bgImage})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center top',
-                maskImage: 'linear-gradient(to right, transparent, black 40%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent, black 40%)'
+                backgroundPosition: 'center 15%',
+                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                pointerEvents: 'none'
               }}
             />
           </div>
 
-          {/* Quick Accord Pill Filter Chips */}
-          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '1.5rem', scrollbarWidth: 'none' }}>
-            <button
-              type="button"
-              onClick={() => setSelectedChip('All')}
-              style={{
-                padding: '7px 18px',
-                borderRadius: '999px',
-                border: '1.5px solid',
-                borderColor: selectedChip === 'All' ? '#000' : '#e5e7eb',
-                background: selectedChip === 'All' ? '#000' : '#fff',
-                color: selectedChip === 'All' ? '#fff' : '#111',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'all 0.2s'
-              }}
-            >
-              All
-            </button>
-            {ACCORD_OPTIONS.map((accord) => {
-              const isActive = selectedChip === accord;
-              return (
+          {/* Quick Accord Pill Filter Chips (Matching Picture 2: All, Fresh, Woody, Spicy, Leather, More v) */}
+          <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
+              {/* All Chip */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedChip('All');
+                  setIsMoreAccordsOpen(false);
+                }}
+                style={{
+                  padding: '7px 20px',
+                  borderRadius: '999px',
+                  border: '1.5px solid',
+                  borderColor: selectedChip === 'All' ? '#000000' : '#e5e7eb',
+                  background: selectedChip === 'All' ? '#000000' : '#ffffff',
+                  color: selectedChip === 'All' ? '#ffffff' : '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: selectedChip === 'All' ? 700 : 600,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.2s'
+                }}
+              >
+                All
+              </button>
+
+              {/* Primary Accords (Fresh, Woody, Spicy, Leather) */}
+              {PRIMARY_ACCORDS.map((accord) => {
+                const isActive = selectedChip === accord;
+                return (
+                  <button
+                    key={accord}
+                    type="button"
+                    onClick={() => {
+                      setSelectedChip(accord);
+                      setIsMoreAccordsOpen(false);
+                    }}
+                    style={{
+                      padding: '7px 20px',
+                      borderRadius: '999px',
+                      border: '1.5px solid',
+                      borderColor: isActive ? '#000000' : '#e5e7eb',
+                      background: isActive ? '#000000' : '#ffffff',
+                      color: isActive ? '#ffffff' : '#374151',
+                      fontSize: '0.82rem',
+                      fontWeight: isActive ? 700 : 600,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {accord}
+                  </button>
+                );
+              })}
+
+              {/* More v Dropdown Chip */}
+              <div style={{ position: 'relative' }}>
                 <button
-                  key={accord}
                   type="button"
-                  onClick={() => setSelectedChip(accord)}
+                  onClick={() => setIsMoreAccordsOpen(prev => !prev)}
                   style={{
                     padding: '7px 18px',
                     borderRadius: '999px',
                     border: '1.5px solid',
-                    borderColor: isActive ? '#000' : '#e5e7eb',
-                    background: isActive ? '#000' : '#fff',
-                    color: isActive ? '#fff' : '#374151',
+                    borderColor: MORE_ACCORDS.includes(selectedChip) ? '#000000' : '#e5e7eb',
+                    background: MORE_ACCORDS.includes(selectedChip) ? '#000000' : '#ffffff',
+                    color: MORE_ACCORDS.includes(selectedChip) ? '#ffffff' : '#374151',
                     fontSize: '0.82rem',
                     fontWeight: 600,
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
                     transition: 'all 0.2s'
                   }}
                 >
-                  {accord}
+                  <span>{MORE_ACCORDS.includes(selectedChip) ? selectedChip : 'More'}</span>
+                  <ChevronDown size={14} style={{ transform: isMoreAccordsOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                 </button>
-              );
-            })}
+
+                {/* Dropdown Menu for Additional Accords */}
+                {isMoreAccordsOpen && (
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 6px)',
+                      left: 0,
+                      background: '#ffffff',
+                      borderRadius: '8px',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.14)',
+                      border: '1px solid #e5e7eb',
+                      padding: '6px',
+                      zIndex: 50,
+                      minWidth: '150px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px'
+                    }}
+                  >
+                    {MORE_ACCORDS.map((acc) => (
+                      <button
+                        key={acc}
+                        type="button"
+                        onClick={() => {
+                          setSelectedChip(acc);
+                          setIsMoreAccordsOpen(false);
+                        }}
+                        style={{
+                          padding: '8px 14px',
+                          border: 'none',
+                          borderRadius: '4px',
+                          background: selectedChip === acc ? '#f3f4f6' : 'transparent',
+                          color: selectedChip === acc ? '#000000' : '#374151',
+                          fontWeight: selectedChip === acc ? 700 : 500,
+                          fontSize: '0.82rem',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                      >
+                        <span>{acc}</span>
+                        {selectedChip === acc && <Check size={14} color="#000000" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Controls Bar: Sort & Filter Toggle */}
+          {/* Controls Bar: Sort & Filter Toggle (Matching Picture 2) */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>Sort by:</span>
@@ -298,8 +430,8 @@ const CollectionPageLayout = () => {
           <div 
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-              gap: '1.75rem 1.25rem'
+              gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(145px, 22vw, 260px), 1fr))',
+              gap: 'clamp(0.85rem, 2.5vw, 1.75rem)'
             }}
           >
             {filteredProducts.map((product) => {
