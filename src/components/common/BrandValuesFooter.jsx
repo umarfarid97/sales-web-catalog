@@ -37,7 +37,7 @@ export const BrandValuesFooter = () => {
             </div>
           </div>
 
-          <div style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.95rem', fontFamily: 'var(--font-brand, serif)', fontStyle: 'italic', maxWidth: '480px' }}>
+          <div style={{ color: '#f3f4f6', fontSize: '0.96rem', fontFamily: 'var(--font-brand, serif)', fontStyle: 'italic', maxWidth: '480px', letterSpacing: '0.02em', textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>
             Find your scent. Create your signature. Layer what defines you.
           </div>
         </div>
@@ -59,7 +59,7 @@ export const BrandValuesFooter = () => {
               <div style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff' }}>
                 FINE INGREDIENTS
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.6)', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.72rem', color: '#e5e7eb', marginTop: '2px', fontWeight: 500 }}>
                 Expertly Crafted
               </div>
             </div>
@@ -73,7 +73,7 @@ export const BrandValuesFooter = () => {
               <div style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff' }}>
                 LONG-LASTING
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.6)', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.72rem', color: '#e5e7eb', marginTop: '2px', fontWeight: 500 }}>
                 Premium Performance
               </div>
             </div>
@@ -87,7 +87,7 @@ export const BrandValuesFooter = () => {
               <div style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff' }}>
                 LAYER & PERSONALIZE
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.6)', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.72rem', color: '#e5e7eb', marginTop: '2px', fontWeight: 500 }}>
                 Make It Uniquely Yours
               </div>
             </div>
@@ -101,7 +101,7 @@ export const BrandValuesFooter = () => {
               <div style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff' }}>
                 LUXURY EXPERIENCE
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.6)', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.72rem', color: '#e5e7eb', marginTop: '2px', fontWeight: 500 }}>
                 From Start to Finish
               </div>
             </div>
@@ -115,7 +115,7 @@ export const BrandValuesFooter = () => {
               <div style={{ fontSize: '0.76rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff' }}>
                 TRUSTED QUALITY
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.6)', marginTop: '2px' }}>
+              <div style={{ fontSize: '0.72rem', color: '#e5e7eb', marginTop: '2px', fontWeight: 500 }}>
                 100% Authentic
               </div>
             </div>

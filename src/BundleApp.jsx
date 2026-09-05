@@ -220,23 +220,11 @@ export const BundleBuilderContent = () => {
           </div>
 
           {/* Bundle Hero Banner */}
-          <div 
-            style={{
-              position: 'relative',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              background: '#09090b',
-              minHeight: 'clamp(200px, 26vw, 280px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: 'clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem)',
-              color: '#ffffff',
-              marginBottom: '2rem',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.14)'
-            }}
-          >
-            {/* Subtle warm ambient glow */}
+          <div className="editorial-hero-banner">
+            {/* Deep dark protective scrim preventing any camouflage with photo */}
+            <div className="editorial-hero-scrim" />
+
+            {/* Ambient warm glow */}
             <div 
               style={{
                 position: 'absolute',
@@ -245,57 +233,31 @@ export const BundleBuilderContent = () => {
                 width: '240px',
                 height: '240px',
                 borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.14) 0%, rgba(0,0,0,0) 70%)',
+                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, rgba(0,0,0,0) 70%)',
                 filter: 'blur(40px)',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                zIndex: 2
               }}
             />
 
             {/* Left Editorial Text */}
-            <div style={{ position: 'relative', zIndex: 2, maxWidth: '480px' }}>
-              <h1 
-                style={{ 
-                  fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)', 
-                  fontSize: 'clamp(2.1rem, 5.5vw, 3.6rem)', 
-                  fontWeight: 700, 
-                  lineHeight: 1.08, 
-                  margin: 0, 
-                  letterSpacing: '-0.01em',
-                  color: '#ffffff'
-                }}
-              >
+            <div className="editorial-hero-text">
+              <h1 className="editorial-hero-title">
                 Signature
                 <br />
                 Bundles
               </h1>
-              <p 
-                style={{ 
-                  fontSize: 'clamp(0.85rem, 2vw, 1.05rem)', 
-                  color: '#d1d5db', 
-                  marginTop: '0.65rem', 
-                  fontWeight: 500,
-                  fontFamily: 'var(--font-couture, sans-serif)',
-                  letterSpacing: '0.02em'
-                }}
-              >
+              <p className="editorial-hero-subtitle">
                 Curate your bespoke scent wardrobe • Save up to 25% with luxury gift presentation
               </p>
             </div>
 
             {/* Right Visual: Coffret bottles with smooth left fade */}
             <div 
+              className="editorial-hero-media"
               style={{
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: 'clamp(240px, 48%, 560px)',
                 backgroundImage: 'url(https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&auto=format&fit=crop&q=80)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center 30%',
-                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
-                pointerEvents: 'none'
+                backgroundPosition: 'center 30%'
               }}
             />
           </div>

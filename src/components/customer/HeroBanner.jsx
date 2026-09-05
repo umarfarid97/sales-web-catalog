@@ -45,16 +45,17 @@ export const HeroBanner = () => {
         }}
       >
         {/* Left Editorial Text Column (Matching Picture 1) */}
-        <div style={{ maxWidth: '480px' }}>
+        <div style={{ maxWidth: '520px' }}>
           <h1 
             style={{
               fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)',
-              fontSize: 'clamp(2.1rem, 5.5vw, 3.8rem)',
+              fontSize: 'clamp(2.2rem, 5.5vw, 3.8rem)',
               fontWeight: 700,
               lineHeight: 1.15,
-              color: '#fdfbf7',
+              color: '#ffffff',
               margin: '0 0 1rem',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.02em',
+              textShadow: '0 2px 14px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.95)'
             }}
           >
             More<br />
@@ -64,12 +65,15 @@ export const HeroBanner = () => {
 
           <p 
             style={{
-              fontSize: 'clamp(0.88rem, 2vw, 1.1rem)',
-              color: '#c9baa9',
-              lineHeight: 1.5,
+              fontSize: 'clamp(0.92rem, 2vw, 1.15rem)',
+              color: '#f4f4f5',
+              fontWeight: 500,
+              lineHeight: 1.55,
               margin: '0 0 1.75rem',
-              maxWidth: '380px',
-              fontFamily: 'var(--font-couture, sans-serif)'
+              maxWidth: '420px',
+              fontFamily: 'var(--font-couture, sans-serif)',
+              letterSpacing: '0.02em',
+              textShadow: '0 1px 8px rgba(0, 0, 0, 0.95)'
             }}
           >
             Premium inspired fragrances for every moment.
@@ -81,10 +85,10 @@ export const HeroBanner = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '13px 32px',
-              borderRadius: '6px',
-              background: '#edd9c0',
-              color: '#1a1816',
+              padding: '14px 34px',
+              borderRadius: '4px',
+              background: '#ffffff',
+              color: '#000000',
               fontWeight: 800,
               fontSize: '0.86rem',
               letterSpacing: '0.1em',
@@ -92,15 +96,15 @@ export const HeroBanner = () => {
               textDecoration: 'none',
               border: 'none',
               cursor: 'pointer',
-              boxShadow: '0 4px 18px rgba(0,0,0,0.35)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
               transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#dfc6a6';
+              e.currentTarget.style.background = '#f3f4f6';
               e.currentTarget.style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#edd9c0';
+              e.currentTarget.style.background = '#ffffff';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
