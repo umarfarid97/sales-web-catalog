@@ -75,9 +75,8 @@ export const HeroBanner = () => {
             Premium inspired fragrances for every moment.
           </p>
 
-          <button
-            type="button"
-            onClick={handleShopNow}
+          <a
+            href="/collection.html"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -90,6 +89,7 @@ export const HeroBanner = () => {
               fontSize: '0.86rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
+              textDecoration: 'none',
               border: 'none',
               cursor: 'pointer',
               boxShadow: '0 4px 18px rgba(0,0,0,0.35)',
@@ -105,7 +105,7 @@ export const HeroBanner = () => {
             }}
           >
             Shop Now
-          </button>
+          </a>
         </div>
 
         {/* Right Visual: Two luxury perfume bottles matching Picture 1 */}

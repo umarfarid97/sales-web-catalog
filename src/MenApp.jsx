@@ -1,0 +1,658 @@
+﻿import React, { useState, useMemo } from 'react';
+import { AuthProvider } from './context/AuthContext';
+import { StoreProvider, useStore } from './context/StoreContext';
+import { Navbar } from './components/common/Navbar';
+import { Footer } from './components/common/Footer';
+import { BrandValuesFooter } from './components/common/BrandValuesFooter';
+import { MobileBottomNav } from './components/common/MobileBottomNav';
+import { CartDrawer } from './components/customer/CartDrawer';
+import { CheckoutModal } from './components/customer/CheckoutModal';
+import { OrderTrackerModal } from './components/customer/OrderTrackerModal';
+import { AuthModal } from './components/common/AuthModal';
+import { ToastContainer } from './components/common/ToastContainer';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { 
+  SlidersHorizontal, 
+  ChevronRight, 
+  Heart, 
+  Star, 
+  X, 
+  Check, 
+  ChevronDown
+} from 'lucide-react';
+
+// Styles
+import './index.css';
+import './styles/components.css';
+import './styles/customer.css';
+import './styles/pdp.css';
+import './styles/admin.css';
+
+const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
+const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Aquatic', 'Sweet'];
+const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
+const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
+
+const MenCollectionLayout = () => {
+  const { products, favorites, toggleFavorite, showToast } = useStore();
+
+  const [selectedChip, setSelectedChip] = useState('All');
+  const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('best-sellers');
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+
+  // Filter Drawer States
+  const [priceMax, setPriceMax] = useState(250);
+  const [selectedAccords, setSelectedAccords] = useState([]);
+  const [selectedOccasions, setSelectedOccasions] = useState([]);
+  const [selectedIntensities, setSelectedIntensities] = useState([]);
+
+  // STRICT MEN'S FILTERING
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
+
+    return products.filter((p) => {
+      // Exclusively Men's Fragrances
+      const isMen = p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
+      if (!isMen) return false;
+
+      // Quick chip accord filter
+      if (selectedChip !== 'All') {
+        const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
+        const family = (p.olfactoryFamily || '').toLowerCase();
+        const chipLower = selectedChip.toLowerCase();
+        if (!traits.includes(chipLower) && !family.includes(chipLower)) {
+          return false;
+        }
+      }
+
+      // Drawer Accord Filters
+      if (selectedAccords.length > 0) {
+        const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
+        const family = (p.olfactoryFamily || '').toLowerCase();
+        const matchesAny = selectedAccords.some((acc) => {
+          const accLower = acc.toLowerCase();
+          return traits.includes(accLower) || family.includes(accLower);
+        });
+        if (!matchesAny) return false;
+      }
+
+      // Price filter
+      const pPrice = Number(p.price) || 45;
+      if (pPrice > priceMax) return false;
+
+      return true;
+    }).sort((a, b) => {
+      if (sortBy === 'price-low') return (a.price || 45) - (b.price || 45);
+      if (sortBy === 'price-high') return (b.price || 45) - (a.price || 45);
+      if (sortBy === 'rating') return (b.rating || 4.8) - (a.rating || 4.8);
+      // Default: best sellers (Tier S first)
+      const tierRank = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
+      const rankDiff = (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
+      if (rankDiff !== 0) return rankDiff;
+      return (b.reviewsCount || 0) - (a.reviewsCount || 0);
+    });
+  }, [products, selectedChip, selectedAccords, priceMax, sortBy]);
+
+  const toggleAccord = (accord) => {
+    setSelectedAccords((prev) => 
+      prev.includes(accord) ? prev.filter((a) => a !== accord) : [...prev, accord]
+    );
+  };
+
+  const handleClearFilters = () => {
+    setSelectedAccords([]);
+    setSelectedOccasions([]);
+    setSelectedIntensities([]);
+    setPriceMax(250);
+    setSelectedChip('All');
+  };
+
+  const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
+
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
+      <Navbar />
+
+      <main style={{ flex: 1, paddingBottom: '5rem' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
+          
+          {/* Breadcrumbs (Matching Picture 2) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
+            <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
+            <ChevronRight size={12} />
+            <span style={{ color: '#111827', fontWeight: 600 }}>Men</span>
+          </div>
+
+          {/* Men's Collection Hero Banner (Matching Picture 2) */}
+          <div 
+            style={{
+              position: 'relative',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              background: '#09090b',
+              minHeight: 'clamp(200px, 26vw, 280px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 'clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem)',
+              color: '#ffffff',
+              marginBottom: '2rem',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.14)'
+            }}
+          >
+            {/* Subtle warm ambient glow */}
+            <div 
+              style={{
+                position: 'absolute',
+                left: '5%',
+                top: '20%',
+                width: '240px',
+                height: '240px',
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.14) 0%, rgba(0,0,0,0) 70%)',
+                filter: 'blur(40px)',
+                pointerEvents: 'none'
+              }}
+            />
+
+            {/* Left Editorial Text Column (Matching Picture 2) */}
+            <div style={{ position: 'relative', zIndex: 2, maxWidth: '440px' }}>
+              <h1 
+                style={{ 
+                  fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)', 
+                  fontSize: 'clamp(2.1rem, 5.5vw, 3.6rem)', 
+                  fontWeight: 700, 
+                  lineHeight: 1.08, 
+                  margin: 0, 
+                  letterSpacing: '-0.01em',
+                  color: '#ffffff'
+                }}
+              >
+                Men&apos;s
+                <br />
+                Collection
+              </h1>
+              <p 
+                style={{ 
+                  fontSize: 'clamp(0.85rem, 2vw, 1.05rem)', 
+                  color: '#d1d5db', 
+                  marginTop: '0.65rem', 
+                  fontWeight: 500,
+                  fontFamily: 'var(--font-couture, sans-serif)',
+                  letterSpacing: '0.02em'
+                }}
+              >
+                Bold. Refined. Confident.
+              </p>
+            </div>
+
+            {/* Right Visual: Male Model with smooth left fade (Matching Picture 2) */}
+            <div 
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: 'clamp(240px, 48%, 560px)',
+                backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center 15%',
+                maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 22%, black 65%)',
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+
+          {/* Quick Accord Pill Filter Chips (Matching Picture 2: All, Fresh, Woody, Spicy, Leather, More v) */}
+          <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
+              {/* All Chip */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedChip('All');
+                  setIsMoreAccordsOpen(false);
+                }}
+                style={{
+                  padding: '7px 20px',
+                  borderRadius: '999px',
+                  border: '1.5px solid',
+                  borderColor: selectedChip === 'All' ? '#000000' : '#e5e7eb',
+                  background: selectedChip === 'All' ? '#000000' : '#ffffff',
+                  color: selectedChip === 'All' ? '#ffffff' : '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: selectedChip === 'All' ? 700 : 600,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.2s'
+                }}
+              >
+                All
+              </button>
+
+              {/* Primary Accords */}
+              {PRIMARY_ACCORDS.map((accord) => {
+                const isActive = selectedChip === accord;
+                return (
+                  <button
+                    key={accord}
+                    type="button"
+                    onClick={() => {
+                      setSelectedChip(accord);
+                      setIsMoreAccordsOpen(false);
+                    }}
+                    style={{
+                      padding: '7px 20px',
+                      borderRadius: '999px',
+                      border: '1.5px solid',
+                      borderColor: isActive ? '#000000' : '#e5e7eb',
+                      background: isActive ? '#000000' : '#ffffff',
+                      color: isActive ? '#ffffff' : '#374151',
+                      fontSize: '0.82rem',
+                      fontWeight: isActive ? 700 : 600,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {accord}
+                  </button>
+                );
+              })}
+
+              {/* More v Dropdown Chip */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsMoreAccordsOpen(prev => !prev)}
+                  style={{
+                    padding: '7px 18px',
+                    borderRadius: '999px',
+                    border: '1.5px solid',
+                    borderColor: MORE_ACCORDS.includes(selectedChip) ? '#000000' : '#e5e7eb',
+                    background: MORE_ACCORDS.includes(selectedChip) ? '#000000' : '#ffffff',
+                    color: MORE_ACCORDS.includes(selectedChip) ? '#ffffff' : '#374151',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <span>{MORE_ACCORDS.includes(selectedChip) ? selectedChip : 'More'}</span>
+                  <ChevronDown size={14} style={{ transform: isMoreAccordsOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {isMoreAccordsOpen && (
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 6px)',
+                      left: 0,
+                      background: '#ffffff',
+                      borderRadius: '8px',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.14)',
+                      border: '1px solid #e5e7eb',
+                      padding: '6px',
+                      zIndex: 50,
+                      minWidth: '150px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px'
+                    }}
+                  >
+                    {MORE_ACCORDS.map((acc) => (
+                      <button
+                        key={acc}
+                        type="button"
+                        onClick={() => {
+                          setSelectedChip(acc);
+                          setIsMoreAccordsOpen(false);
+                        }}
+                        style={{
+                          padding: '8px 14px',
+                          border: 'none',
+                          borderRadius: '4px',
+                          background: selectedChip === acc ? '#f3f4f6' : 'transparent',
+                          color: selectedChip === acc ? '#000000' : '#374151',
+                          fontWeight: selectedChip === acc ? 700 : 500,
+                          fontSize: '0.82rem',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                      >
+                        <span>{acc}</span>
+                        {selectedChip === acc && <Check size={14} color="#000000" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Controls Bar: Sort & Filter Toggle (Matching Picture 2) */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>Sort by:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{
+                  border: '1px solid #d1d5db',
+                  borderRadius: '4px',
+                  padding: '6px 12px',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  background: '#fff',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="best-sellers">Best Sellers</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsFilterDrawerOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 16px',
+                borderRadius: '4px',
+                border: '1px solid #d1d5db',
+                background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
+                color: '#111827',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              <SlidersHorizontal size={14} />
+              <span>Filter</span>
+              {activeFiltersCount > 0 && (
+                <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Product Grid (Matching Picture 2: 2 columns mobile, 4 columns desktop) */}
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(145px, 22vw, 260px), 1fr))',
+              gap: 'clamp(0.85rem, 2.5vw, 1.75rem)'
+            }}
+          >
+            {filteredProducts.map((product) => {
+              const isFav = favorites.includes(product.id);
+              const price = product.price || 45;
+
+              return (
+                <div
+                  key={product.id}
+                  onClick={() => {
+                    window.location.href = `/product.html?product=${encodeURIComponent(product.id)}`;
+                  }}
+                  style={{
+                    background: '#ffffff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'transform 0.2s',
+                    position: 'relative'
+                  }}
+                >
+                  {/* Flacon Container */}
+                  <div 
+                    style={{
+                      position: 'relative',
+                      borderRadius: '6px',
+                      overflow: 'hidden',
+                      background: '#f8f9fa',
+                      aspectRatio: '1 / 1.15',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '0.75rem',
+                      border: '1px solid #f0f0f0'
+                    }}
+                  >
+                    <img 
+                      src={product.images?.[0] || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
+                      alt={product.name}
+                      loading="lazy"
+                      style={{ maxWidth: '80%', maxHeight: '80%', objectFit: 'contain' }}
+                    />
+
+                    {/* Wishlist Heart */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(product.id);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: isFav ? '#000000' : '#6b7280'
+                      }}
+                    >
+                      <Heart size={16} fill={isFav ? '#000000' : 'none'} />
+                    </button>
+                  </div>
+
+                  {/* Product Details */}
+                  <div>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.01em' }}>
+                      {product.displayName || product.name}
+                    </h3>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', margin: '3px 0 6px' }}>
+                      {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}
+                    </div>
+                    <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#111827' }}>
+                      RM{price}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '4px' }}>
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={11} fill="#f59e0b" color="#f59e0b" />
+                      ))}
+                      <span style={{ fontSize: '0.7rem', color: '#6b7280', marginLeft: '4px' }}>
+                        ({product.reviewsCount || 124})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {filteredProducts.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
+              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No creations match your selected filters.</p>
+              <button
+                type="button"
+                className="dior-btn"
+                onClick={handleClearFilters}
+                style={{ marginTop: '1rem', background: '#000', color: '#fff', padding: '10px 20px', borderRadius: '4px' }}
+              >
+                Clear All Filters
+              </button>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* FILTER DRAWER / SLIDE-OVER */}
+      {isFilterDrawerOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'flex-end'
+          }}
+          onClick={() => setIsFilterDrawerOpen(false)}
+        >
+          <div 
+            style={{
+              width: '100%',
+              maxWidth: '380px',
+              height: '100%',
+              background: '#ffffff',
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '1.5rem',
+              overflowY: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Drawer Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid #e5e7eb' }}>
+              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>Filters</h2>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.78rem', color: '#6b7280', textDecoration: 'underline' }}
+                >
+                  Clear All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsFilterDrawerOpen(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#111827' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* Price Filter */}
+            <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #e5e7eb' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: 700 }}>Max Price</span>
+                <span style={{ fontSize: '0.88rem', fontWeight: 800 }}>RM{priceMax}</span>
+              </div>
+              <input
+                type="range"
+                min="45"
+                max="250"
+                step="5"
+                value={priceMax}
+                onChange={(e) => setPriceMax(Number(e.target.value))}
+                style={{ width: '100%', accentColor: '#000000' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#6b7280', marginTop: '4px' }}>
+                <span>RM45</span>
+                <span>RM250</span>
+              </div>
+            </div>
+
+            {/* Accords Filter */}
+            <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #e5e7eb' }}>
+              <h3 style={{ fontSize: '0.88rem', fontWeight: 700, margin: '0 0 10px' }}>Olfactory Accords</h3>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {[...PRIMARY_ACCORDS, ...MORE_ACCORDS].map((acc) => {
+                  const isChecked = selectedAccords.includes(acc);
+                  return (
+                    <button
+                      key={acc}
+                      type="button"
+                      onClick={() => toggleAccord(acc)}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '4px',
+                        border: '1px solid',
+                        borderColor: isChecked ? '#000' : '#d1d5db',
+                        background: isChecked ? '#000' : '#fff',
+                        color: isChecked ? '#fff' : '#374151',
+                        fontSize: '0.78rem',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {acc}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Apply Button */}
+            <div style={{ marginTop: 'auto', paddingTop: '1.5rem' }}>
+              <button
+                type="button"
+                onClick={() => setIsFilterDrawerOpen(false)}
+                style={{
+                  width: '100%',
+                  padding: '13px',
+                  background: '#000000',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontWeight: 800,
+                  fontSize: '0.88rem',
+                  letterSpacing: '0.04em',
+                  cursor: 'pointer'
+                }}
+              >
+                View {filteredProducts.length} Results
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <BrandValuesFooter />
+      <Footer />
+      <MobileBottomNav />
+
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderTrackerModal />
+      <AuthModal />
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default function MenApp() {
+  return (
+    <ErrorBoundary>
+      <AuthProvider>
+        <StoreProvider>
+          <MenCollectionLayout />
+        </StoreProvider>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
+}

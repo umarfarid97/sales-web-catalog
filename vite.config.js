@@ -14,6 +14,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         collection: resolve(__dirname, 'collection.html'),
+        men: resolve(__dirname, 'men.html'),
+        women: resolve(__dirname, 'women.html'),
         bundle: resolve(__dirname, 'bundle.html'),
         product: resolve(__dirname, 'product.html'),
         diagnostic: resolve(__dirname, 'diagnostic.html'),

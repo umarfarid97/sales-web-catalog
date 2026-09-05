@@ -210,10 +210,10 @@ export const Navbar = () => {
 
             {/* Desktop Navigation Links */}
             <nav className="desktop-nav-links" style={{ alignItems: 'center', gap: '22px', marginLeft: '8px' }}>
-              <a href="/collection.html?gender=Men" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <a href="/men.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                 Men
               </a>
-              <a href="/collection.html?gender=Women" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <a href="/women.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                 Women
               </a>
               <a href="/bundle.html" style={{ textDecoration: 'none', color: '#111827', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
@@ -628,11 +628,8 @@ export const Navbar = () => {
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <button 
-                      onClick={() => { 
-                        window.location.href = '/collection.html?gender=Men'; 
-                        setIsMenuOpen(false); 
-                      }}
+                    <a 
+                      href="/men.html"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -645,7 +642,9 @@ export const Navbar = () => {
                         borderBottom: '1px solid #f3f4f6',
                         borderRadius: '3px',
                         cursor: 'pointer',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        textDecoration: 'none',
+                        color: 'inherit'
                       }}
                     >
                       <div>
@@ -653,13 +652,10 @@ export const Navbar = () => {
                         <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{menCount} Fragrance Creations</div>
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
-                    </button>
+                    </a>
 
-                    <button 
-                      onClick={() => { 
-                        window.location.href = '/collection.html?gender=Women'; 
-                        setIsMenuOpen(false); 
-                      }}
+                    <a 
+                      href="/women.html"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -672,7 +668,9 @@ export const Navbar = () => {
                         borderBottom: '1px solid #f3f4f6',
                         borderRadius: '3px',
                         cursor: 'pointer',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        textDecoration: 'none',
+                        color: 'inherit'
                       }}
                     >
                       <div>
@@ -680,7 +678,7 @@ export const Navbar = () => {
                         <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{womenCount} Fragrance Creations</div>
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
-                    </button>
+                    </a>
 
                     <button 
                       onClick={() => { 

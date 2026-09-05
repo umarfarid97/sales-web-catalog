@@ -20,8 +20,8 @@ export const ProductCatalog = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(10px, 2.5vw, 24px)' }}>
           
           {/* SHOP MEN CARD */}
-          <div 
-            onClick={() => { window.location.href = '/collection.html?gender=Men'; }}
+          <a 
+            href="/men.html"
             style={{
               position: 'relative',
               borderRadius: '8px',
@@ -37,6 +37,7 @@ export const ProductCatalog = () => {
               backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
+              textDecoration: 'none',
               transition: 'transform 0.25s ease'
             }}
           >
@@ -72,11 +73,11 @@ export const ProductCatalog = () => {
                 <ArrowRight size={18} color="#111827" strokeWidth={2.4} />
               </div>
             </div>
-          </div>
+          </a>
 
           {/* SHOP WOMEN CARD */}
-          <div 
-            onClick={() => { window.location.href = '/collection.html?gender=Women'; }}
+          <a 
+            href="/women.html"
             style={{
               position: 'relative',
               borderRadius: '8px',
@@ -92,6 +93,7 @@ export const ProductCatalog = () => {
               backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
+              textDecoration: 'none',
               transition: 'transform 0.25s ease'
             }}
           >
@@ -127,7 +129,7 @@ export const ProductCatalog = () => {
                 <ArrowRight size={18} color="#111827" strokeWidth={2.4} />
               </div>
             </div>
-          </div>
+          </a>
 
         </div>
       </section>
