@@ -1,16 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from './AuthContext';
-import { INITIAL_PRODUCTS, PROMO_CODES } from '../data/initialProducts';
-import { INITIAL_ORDERS } from '../data/initialOrders';
+import { PROMO_CODES } from '../data/initialProducts';
 import { isSupabaseConfigured } from '../lib/supabaseClient';
 import {
   fetchProductsFromSupabase,
-  seedProductsToSupabase,
   saveProductToSupabase,
   deleteProductFromSupabase,
   fetchOrdersFromSupabase,
-  seedOrdersToSupabase,
-  saveOrderToSupabase,
+  createAtomicOrderInSupabase,
   updateOrderStatusInSupabase,
   subscribeToStoreChanges,
   formatProductFromDb,
@@ -133,24 +130,20 @@ export const StoreProvider = ({ children }) => {
   const [isCloudConnected, setIsCloudConnected] = useState(isSupabaseConfigured);
   const [isLoadingFromCloud, setIsLoadingFromCloud] = useState(isSupabaseConfigured);
 
-  // Products Data (Auto-purges old cache to load the full 345 VALENSZO portfolio)
+  // Products Data (Loaded dynamically from Supabase PostgreSQL public.products)
   const [products, setProducts] = useState(() => {
-    const version = localStorage.getItem('valenszo_catalog_version');
-    const saved = localStorage.getItem('lumina_products');
-    if (saved && version === 'v4_portfolio_345_authentic_images') {
-      try {
+    try {
+      const saved = localStorage.getItem('valenszo_products_cache') || localStorage.getItem('lumina_products');
+      if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length >= 300) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
-      } catch (e) {
-        console.error('Failed to parse saved products', e);
       }
+    } catch (e) {
+      console.error('Failed to parse cached products', e);
     }
-    // Upgrade to 345 real fragrances with authentic individual bottle imagery
-    localStorage.setItem('valenszo_catalog_version', 'v4_portfolio_345_authentic_images');
-    localStorage.setItem('lumina_products', JSON.stringify(INITIAL_PRODUCTS));
-    return INITIAL_PRODUCTS;
+    return [];
   });
 
   // Active Selected Product for Luxury Detail Page (PDP)
@@ -366,17 +359,11 @@ export const StoreProvider = ({ children }) => {
     const syncCloudData = async () => {
       setIsLoadingFromCloud(true);
       try {
-        // 1. Products Sync
+        // 1. Products Sync directly from Supabase PostgreSQL
         const cloudProducts = await fetchProductsFromSupabase();
-        if (cloudProducts !== null && isMounted) {
-          const hasLegacy = cloudProducts.some((p) => p.sku?.startsWith('LUM-AUD') || p.category === 'Audio' || p.category === 'Wearables');
-          if (cloudProducts.length === 0 || hasLegacy) {
-            // Seed luxury perfume catalog to Supabase
-            await seedProductsToSupabase(INITIAL_PRODUCTS);
-            setProducts(INITIAL_PRODUCTS);
-          } else {
-            setProducts(cloudProducts);
-          }
+        if (cloudProducts !== null && isMounted && cloudProducts.length > 0) {
+          setProducts(cloudProducts);
+          localStorage.setItem('valenszo_products_cache', JSON.stringify(cloudProducts));
           setIsCloudConnected(true);
         }
 
@@ -674,16 +661,19 @@ export const StoreProvider = ({ children }) => {
       trackingNumber
     };
 
-    // 1. Deduct stock in memory and Supabase
+    // 1. Save order atomically to Supabase with row locking and stock deduction
+    createAtomicOrderInSupabase(newOrder).catch((err) => {
+      console.warn('Atomic order placement fallback:', err);
+    });
+
+    // 2. Optimistic local stock update
     const updatedProducts = products.map((prod) => {
       const orderedItem = cart.find((item) => item.id === prod.id);
       if (orderedItem) {
-        const updated = {
+        return {
           ...prod,
           stock: Math.max(0, prod.stock - orderedItem.quantity)
         };
-        saveProductToSupabase(updated);
-        return updated;
       }
       return prod;
     });
@@ -694,9 +684,6 @@ export const StoreProvider = ({ children }) => {
       localStorage.setItem('valenszo_real_orders', JSON.stringify(updatedOrders));
       return updatedOrders;
     });
-
-    // 2. Save order to Supabase
-    saveOrderToSupabase(newOrder);
 
     // 3. Clear cart & promo
     clearCart();
@@ -816,24 +803,28 @@ export const StoreProvider = ({ children }) => {
     showToast(`Restocked +${amount} units`, 'success');
   };
 
-  // --- Reset to Demo Data ---
+  // --- Refresh Database Sync ---
   const resetToDemoData = async () => {
-    setProducts(INITIAL_PRODUCTS);
-    setOrders(INITIAL_ORDERS);
     setCart([]);
     setFavorites(['prod-1', 'prod-3']);
     setAppliedPromo(null);
-    localStorage.removeItem('lumina_products');
-    localStorage.removeItem('lumina_orders');
     localStorage.removeItem('lumina_cart');
     localStorage.removeItem('lumina_favorites');
 
     if (isSupabaseConfigured) {
-      await seedProductsToSupabase(INITIAL_PRODUCTS);
-      await seedOrdersToSupabase(INITIAL_ORDERS);
+      const freshProducts = await fetchProductsFromSupabase();
+      if (freshProducts && freshProducts.length > 0) {
+        setProducts(freshProducts);
+        localStorage.setItem('valenszo_products_cache', JSON.stringify(freshProducts));
+      }
+      const freshOrders = await fetchOrdersFromSupabase();
+      if (freshOrders) {
+        setOrders(freshOrders);
+        localStorage.setItem('valenszo_real_orders', JSON.stringify(freshOrders));
+      }
     }
 
-    showToast('Reset store to default factory demo data', 'info');
+    showToast('Catalog and orders synchronized with live database', 'info');
   };
 
   // --- Computed Filtered Products for Customer Catalog ---

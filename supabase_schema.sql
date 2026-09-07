@@ -1,13 +1,45 @@
 -- ============================================================================
--- VALENSZO HAUTE PARFUMERIE - SUPABASE DATABASE SCHEMA
--- Compatible with PostgreSQL 15+ / Supabase
+-- VALENSZO HAUTE PARFUMERIE - PRODUCTION SUPABASE DATABASE SCHEMA
+-- PostgreSQL 15+ / Supabase Row-Level Security (RLS) Hardened Architecture
 -- ============================================================================
 
 -- Enable UUID extension if not already enabled
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ----------------------------------------------------------------------------
--- 1. PRODUCTS TABLE (345 Fragrance Creations)
+-- 1. PROFILES TABLE (Linked with Supabase Auth auth.users)
+-- ----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL DEFAULT 'Maison Client',
+  phone TEXT DEFAULT '',
+  address TEXT DEFAULT '',
+  city TEXT DEFAULT 'Kuala Lumpur',
+  state TEXT DEFAULT 'Wilayah Persekutuan',
+  zip TEXT DEFAULT '50250',
+  country TEXT DEFAULT 'Malaysia',
+  role TEXT NOT NULL DEFAULT 'customer' CHECK (role IN ('customer', 'admin')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_profiles_email ON public.profiles(email);
+CREATE INDEX IF NOT EXISTS idx_profiles_role ON public.profiles(role);
+
+-- Helper function: Check if current user is an admin
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ----------------------------------------------------------------------------
+-- 2. PRODUCTS TABLE (345 Fragrance Creations)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.products (
   id TEXT PRIMARY KEY,
@@ -31,14 +63,14 @@ CREATE TABLE IF NOT EXISTS public.products (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Index for speedy searching and catalog filtering
+-- Indices for catalog searching and filtering
 CREATE INDEX IF NOT EXISTS idx_products_category ON public.products(category);
 CREATE INDEX IF NOT EXISTS idx_products_sku ON public.products(sku);
 CREATE INDEX IF NOT EXISTS idx_products_price ON public.products(price);
 CREATE INDEX IF NOT EXISTS idx_products_specs ON public.products USING GIN (specs);
 
 -- ----------------------------------------------------------------------------
--- 2. ORDERS TABLE
+-- 3. ORDERS TABLE
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.orders (
   id TEXT PRIMARY KEY,
@@ -49,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.orders (
   discount_code TEXT,
   shipping NUMERIC(10, 2) DEFAULT 0.00,
   total NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
-  status TEXT NOT NULL DEFAULT 'Pending',
+  status TEXT NOT NULL DEFAULT 'Pending' CHECK (status IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled')),
   payment_method TEXT DEFAULT 'credit-card',
   tracking_number TEXT,
   placed_at TIMESTAMPTZ DEFAULT NOW(),
@@ -60,35 +92,141 @@ CREATE TABLE IF NOT EXISTS public.orders (
 
 CREATE INDEX IF NOT EXISTS idx_orders_status ON public.orders(status);
 CREATE INDEX IF NOT EXISTS idx_orders_placed_at ON public.orders(placed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_orders_customer_email ON public.orders ((customer->>'email'));
+CREATE INDEX IF NOT EXISTS idx_orders_customer_userid ON public.orders ((customer->>'userId'));
 
 -- ----------------------------------------------------------------------------
--- 3. ROW-LEVEL SECURITY (RLS) POLICIES
+-- 4. ATOMIC ORDER CREATION & STOCK DEDUCTION (Eliminates Race Conditions)
 -- ----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.create_order_with_stock_deduction(order_payload JSONB)
+RETURNS JSONB AS $$
+DECLARE
+  v_item RECORD;
+  v_order_id TEXT;
+  v_current_stock INT;
+BEGIN
+  v_order_id := order_payload->>'id';
+
+  -- Verify each item stock with row-level locks
+  FOR v_item IN SELECT * FROM jsonb_to_recordset(order_payload->'items') AS (
+    "productId" TEXT,
+    id TEXT,
+    quantity INT
+  ) LOOP
+    SELECT stock INTO v_current_stock
+    FROM public.products
+    WHERE id = COALESCE(v_item."productId", v_item.id)
+    FOR UPDATE;
+
+    IF v_current_stock IS NOT NULL AND v_current_stock < v_item.quantity THEN
+      RAISE EXCEPTION 'Insufficient stock for product id % (Available: %, Requested: %)', 
+        COALESCE(v_item."productId", v_item.id), v_current_stock, v_item.quantity;
+    END IF;
+
+    -- Deduct stock atomically
+    UPDATE public.products
+    SET stock = GREATEST(0, stock - v_item.quantity),
+        updated_at = NOW()
+    WHERE id = COALESCE(v_item."productId", v_item.id);
+  END LOOP;
+
+  -- Insert Order
+  INSERT INTO public.orders (
+    id,
+    customer,
+    items,
+    subtotal,
+    discount,
+    discount_code,
+    shipping,
+    total,
+    status,
+    payment_method,
+    tracking_number,
+    placed_at
+  ) VALUES (
+    v_order_id,
+    order_payload->'customer',
+    order_payload->'items',
+    (order_payload->>'subtotal')::NUMERIC,
+    COALESCE((order_payload->>'discount')::NUMERIC, 0.00),
+    order_payload->>'discountCode',
+    COALESCE((order_payload->>'shipping')::NUMERIC, 0.00),
+    (order_payload->>'total')::NUMERIC,
+    COALESCE(order_payload->>'status', 'Pending'),
+    COALESCE(order_payload->>'paymentMethod', 'credit-card'),
+    order_payload->>'trackingNumber',
+    COALESCE((order_payload->>'placedAt')::TIMESTAMPTZ, NOW())
+  );
+
+  RETURN jsonb_build_object('success', true, 'orderId', v_order_id);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ----------------------------------------------------------------------------
+-- 5. HARDENED ROW-LEVEL SECURITY (RLS) POLICIES
+-- ----------------------------------------------------------------------------
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
--- Allow public read access to products
+-- --- Profiles Security ---
+DROP POLICY IF EXISTS "Users can read own profile" ON public.profiles;
+CREATE POLICY "Users can read own profile"
+  ON public.profiles FOR SELECT
+  USING (auth.uid() = id OR public.is_admin());
+
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+CREATE POLICY "Users can update own profile"
+  ON public.profiles FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Public profile creation" ON public.profiles;
+CREATE POLICY "Public profile creation"
+  ON public.profiles FOR INSERT
+  WITH CHECK (auth.uid() = id OR auth.uid() IS NULL);
+
+-- --- Products Security ---
+DROP POLICY IF EXISTS "Public Read Products" ON public.products;
 CREATE POLICY "Public Read Products" 
-  ON public.products 
-  FOR SELECT 
+  ON public.products FOR SELECT 
   USING (true);
 
--- Allow anonymous users to insert and update products (for boutique atelier operations)
-CREATE POLICY "Public Insert/Update Products" 
-  ON public.products 
-  FOR ALL 
-  USING (true) 
+DROP POLICY IF EXISTS "Admin Full Products Access" ON public.products;
+CREATE POLICY "Admin Full Products Access" 
+  ON public.products FOR ALL 
+  USING (public.is_admin()) 
+  WITH CHECK (public.is_admin());
+
+-- --- Orders Security ---
+DROP POLICY IF EXISTS "Public Can Place Orders" ON public.orders;
+CREATE POLICY "Public Can Place Orders" 
+  ON public.orders FOR INSERT 
   WITH CHECK (true);
 
--- Allow public read and write access to orders
-CREATE POLICY "Public Orders Full Access" 
-  ON public.orders 
-  FOR ALL 
-  USING (true) 
-  WITH CHECK (true);
+DROP POLICY IF EXISTS "Users Read Own Orders" ON public.orders;
+CREATE POLICY "Users Read Own Orders" 
+  ON public.orders FOR SELECT 
+  USING (
+    public.is_admin() OR 
+    (auth.uid() IS NOT NULL AND (customer->>'userId') = auth.uid()::text) OR
+    (auth.email() IS NOT NULL AND (customer->>'email') ILIKE auth.email())
+  );
+
+DROP POLICY IF EXISTS "Admin Manage Orders" ON public.orders;
+CREATE POLICY "Admin Manage Orders" 
+  ON public.orders FOR UPDATE 
+  USING (public.is_admin()) 
+  WITH CHECK (public.is_admin());
+
+DROP POLICY IF EXISTS "Admin Delete Orders" ON public.orders;
+CREATE POLICY "Admin Delete Orders" 
+  ON public.orders FOR DELETE 
+  USING (public.is_admin());
 
 -- ----------------------------------------------------------------------------
--- 4. REALTIME REPLICATION (For live sync between admin and customer devices)
+-- 6. REALTIME REPLICATION (For live sync between admin and customer devices)
 -- ----------------------------------------------------------------------------
 DO $$
 BEGIN

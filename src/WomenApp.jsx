@@ -30,11 +30,9 @@ import './styles/admin.css';
 
 const PRIMARY_ACCORDS = ['Floral', 'Fresh', 'Sweet', 'Woody'];
 const MORE_ACCORDS = ['Amber', 'Citrus', 'Spicy', 'Gourmand', 'Musky', 'Rose'];
-const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
-const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
 
 export const WomenCollectionContent = () => {
-  const { products, favorites, toggleFavorite, showToast } = useStore();
+  const { products, favorites, toggleFavorite } = useStore();
 
   const [selectedChip, setSelectedChip] = useState('All');
   const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);

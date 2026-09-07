@@ -30,11 +30,9 @@ import './styles/admin.css';
 
 const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
 const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Aquatic', 'Sweet'];
-const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
-const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
 
 export const MenCollectionContent = () => {
-  const { products, favorites, toggleFavorite, showToast } = useStore();
+  const { products, favorites, toggleFavorite } = useStore();
 
   const [selectedChip, setSelectedChip] = useState('All');
   const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);

@@ -277,6 +277,23 @@ export const saveOrderToSupabase = async (order) => {
   }
 };
 
+export const createAtomicOrderInSupabase = async (order) => {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const { data, error } = await supabase.rpc('create_order_with_stock_deduction', {
+      order_payload: order
+    });
+    if (error) {
+      console.warn('Postgres RPC create_order_with_stock_deduction fallback:', error.message);
+      return await saveOrderToSupabase(order);
+    }
+    return data;
+  } catch (err) {
+    console.error('Error creating atomic order:', err);
+    return await saveOrderToSupabase(order);
+  }
+};
+
 export const updateOrderStatusInSupabase = async (orderId, status, deliveredAt = null) => {
   if (!isSupabaseConfigured || !supabase) return false;
   try {

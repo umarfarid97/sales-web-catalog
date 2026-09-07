@@ -16,42 +16,13 @@ export const useAuth = () => {
   return context;
 };
 
-// Default pre-configured demo credentials for frictionless evaluation
-export const DEMO_ACCOUNTS = {
-  admin: {
-    id: 'usr_valenszo_admin_001',
-    email: 'admin@valenszo.my',
-    name: "Directeur de l'Atelier",
-    role: 'admin',
-    phone: '+60 12-888 2026',
-    address: 'Maison Valenszo Boutique, Pavilion Kuala Lumpur',
-    city: 'Kuala Lumpur',
-    state: 'Wilayah Persekutuan',
-    zip: '55100',
-    country: 'Malaysia'
-  },
-  customer: {
-    id: 'usr_valenszo_cust_001',
-    email: 'adrien.laurent@valenszo.my',
-    name: 'Adrien Laurent',
-    role: 'customer',
-    phone: '+60 12-345 6789',
-    address: '18 Jalan Sultan Ismail, Penthouse Suite 22A',
-    city: 'Kuala Lumpur',
-    state: 'Wilayah Persekutuan',
-    zip: '50250',
-    country: 'Malaysia'
-  }
-};
-
 export const AuthProvider = ({ children }) => {
   // Current active user (null = Guest mode)
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('valenszo_auth_user');
       return saved ? JSON.parse(saved) : null;
-    } catch (e) {
-      console.error('Failed to parse cached auth user', e);
+    } catch {
       return null;
     }
   });
@@ -68,19 +39,60 @@ export const AuthProvider = ({ children }) => {
   // Loading state
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  // Sync session changes to localStorage and Supabase public.profiles
+  // Sync Supabase Auth Session
   useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('valenszo_auth_user', JSON.stringify(currentUser));
-      if (isSupabaseConfigured) {
-        saveProfileToSupabase(currentUser).catch((err) => {
-          console.warn('Background Supabase profile sync warning:', err);
-        });
+    if (!isSupabaseConfigured || !supabase) return;
+
+    // 1. Initial Session Check
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const profile = await fetchProfileById(session.user.id);
+        if (profile) {
+          setCurrentUser(profile);
+          localStorage.setItem('valenszo_auth_user', JSON.stringify(profile));
+        } else {
+          // Construct user from metadata
+          const fallbackUser = {
+            id: session.user.id,
+            email: session.user.email,
+            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
+            phone: session.user.user_metadata?.phone || '',
+            address: session.user.user_metadata?.address || '',
+            city: session.user.user_metadata?.city || 'Kuala Lumpur',
+            state: session.user.user_metadata?.state || 'Wilayah Persekutuan',
+            zip: session.user.user_metadata?.zip || '50250',
+            country: 'Malaysia',
+            role: session.user.user_metadata?.role || 'customer'
+          };
+          setCurrentUser(fallbackUser);
+          localStorage.setItem('valenszo_auth_user', JSON.stringify(fallbackUser));
+          saveProfileToSupabase(fallbackUser).catch(() => {});
+        }
       }
-    } else {
-      localStorage.removeItem('valenszo_auth_user');
-    }
-  }, [currentUser]);
+    });
+
+    // 2. Auth State Change Listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        const profile = await fetchProfileById(session.user.id);
+        const resolved = profile || {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
+          role: session.user.user_metadata?.role || 'customer'
+        };
+        setCurrentUser(resolved);
+        localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentUser(null);
+        localStorage.removeItem('valenszo_auth_user');
+      }
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
 
   // Open Auth Dialog with optional custom messaging and callback
   const openAuthModal = useCallback(({ mode = 'signin', onComplete = null, title = null, subtitle = null } = {}) => {
@@ -98,206 +110,144 @@ export const AuthProvider = ({ children }) => {
     setAuthModalConfig({ title: null, subtitle: null, onComplete: null });
   }, []);
 
-  // Helper: Retrieve registered users list from storage
-  const getRegisteredUsers = () => {
-    try {
-      const stored = localStorage.getItem('valenszo_registered_users');
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  };
-
-  // Sign In Handler
+  // Secure Sign In Handler
   const login = async (email, password) => {
     setIsAuthenticating(true);
     const cleanEmail = email.trim().toLowerCase();
 
     try {
-      // 1. Check Demo Admin Account
-      if (cleanEmail === DEMO_ACCOUNTS.admin.email.toLowerCase() && password === 'MaisonValenszo2026!') {
-        saveProfileToSupabase(DEMO_ACCOUNTS.admin).catch(() => {});
-        setCurrentUser(DEMO_ACCOUNTS.admin);
+      if (!isSupabaseConfigured || !supabase) {
+        return {
+          success: false,
+          error: 'Authentication database is currently offline. Please check your network connection.'
+        };
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password
+      });
+
+      if (error) {
+        return { success: false, error: error.message || 'Invalid email or password.' };
+      }
+
+      if (data?.user) {
+        const profile = await fetchProfileById(data.user.id);
+        const userObj = profile || {
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.user_metadata?.full_name || cleanEmail.split('@')[0],
+          phone: data.user.user_metadata?.phone || '',
+          address: data.user.user_metadata?.address || '',
+          city: data.user.user_metadata?.city || 'Kuala Lumpur',
+          state: data.user.user_metadata?.state || 'Wilayah Persekutuan',
+          zip: data.user.user_metadata?.zip || '50250',
+          country: 'Malaysia',
+          role: data.user.user_metadata?.role || 'customer'
+        };
+
+        setCurrentUser(userObj);
+        localStorage.setItem('valenszo_auth_user', JSON.stringify(userObj));
         setIsAuthModalOpen(false);
-        if (authModalConfig.onComplete) authModalConfig.onComplete(DEMO_ACCOUNTS.admin);
-        return { success: true, user: DEMO_ACCOUNTS.admin };
+        if (authModalConfig.onComplete) authModalConfig.onComplete(userObj);
+        return { success: true, user: userObj };
       }
 
-      // 2. Check Demo Customer Account
-      if (cleanEmail === DEMO_ACCOUNTS.customer.email.toLowerCase() && password === 'MaisonValenszo2026!') {
-        saveProfileToSupabase(DEMO_ACCOUNTS.customer).catch(() => {});
-        setCurrentUser(DEMO_ACCOUNTS.customer);
-        setIsAuthModalOpen(false);
-        if (authModalConfig.onComplete) authModalConfig.onComplete(DEMO_ACCOUNTS.customer);
-        return { success: true, user: DEMO_ACCOUNTS.customer };
-      }
-
-      // 3. Check Supabase public.profiles table
-      const dbProfile = await fetchProfileByEmail(cleanEmail);
-      const registered = getRegisteredUsers();
-      const matchedLocal = registered.find(u => u.email.toLowerCase() === cleanEmail);
-
-      if (dbProfile) {
-        if (!matchedLocal || matchedLocal.password === password) {
-          setCurrentUser(dbProfile);
-          setIsAuthModalOpen(false);
-          if (authModalConfig.onComplete) authModalConfig.onComplete(dbProfile);
-          return { success: true, user: dbProfile };
-        } else if (matchedLocal && matchedLocal.password !== password) {
-          return { success: false, error: 'Incorrect password for this Maison account.' };
-        }
-      }
-
-      // 4. Attempt Supabase Auth if configured
-      if (isSupabaseConfigured && supabase) {
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: cleanEmail,
-            password
-          });
-
-          if (data?.user && !error) {
-            const userObj = {
-              id: data.user.id,
-              email: data.user.email,
-              name: data.user.user_metadata?.full_name || cleanEmail.split('@')[0],
-              phone: data.user.user_metadata?.phone || '',
-              address: data.user.user_metadata?.address || '',
-              city: data.user.user_metadata?.city || 'Kuala Lumpur',
-              state: data.user.user_metadata?.state || 'Wilayah Persekutuan',
-              zip: data.user.user_metadata?.zip || '',
-              country: data.user.user_metadata?.country || 'Malaysia',
-              role: data.user.user_metadata?.role || (cleanEmail.includes('admin') ? 'admin' : 'customer')
-            };
-
-            // Sync to profiles table
-            saveProfileToSupabase(userObj).catch(() => {});
-
-            setCurrentUser(userObj);
-            setIsAuthModalOpen(false);
-            if (authModalConfig.onComplete) authModalConfig.onComplete(userObj);
-            return { success: true, user: userObj };
-          }
-        } catch (supaErr) {
-          console.warn('Supabase auth sign-in warning:', supaErr.message);
-        }
-      }
-
-      // 5. Check Registered Local Store Accounts
-      if (matchedLocal) {
-        if (matchedLocal.password === password) {
-          const { password: _, ...safeUser } = matchedLocal;
-          saveProfileToSupabase(safeUser).catch(() => {});
-          setCurrentUser(safeUser);
-          setIsAuthModalOpen(false);
-          if (authModalConfig.onComplete) authModalConfig.onComplete(safeUser);
-          return { success: true, user: safeUser };
-        }
-        return { success: false, error: 'Incorrect password for this Maison account.' };
-      }
-
-      return { 
-        success: false, 
-        error: 'No account found with this email. Please verify your email or click "Create Account".' 
-      };
+      return { success: false, error: 'Failed to authenticate with Maison Atelier.' };
+    } catch (err) {
+      console.error('Login error:', err);
+      return { success: false, error: err.message || 'An unexpected error occurred during sign in.' };
     } finally {
       setIsAuthenticating(false);
     }
   };
 
-  // Register Handler
+  // Secure Register Handler
   const register = async (userData) => {
     setIsAuthenticating(true);
     const cleanEmail = userData.email.trim().toLowerCase();
 
     try {
-      const registered = getRegisteredUsers();
-      if (registered.some(u => u.email.toLowerCase() === cleanEmail)) {
-        return { success: false, error: 'An account with this email address already exists.' };
+      if (!isSupabaseConfigured || !supabase) {
+        return {
+          success: false,
+          error: 'Authentication database is currently offline. Please check your network connection.'
+        };
       }
 
-      // Check if already in Supabase profiles
-      const existingInDb = await fetchProfileByEmail(cleanEmail);
-      if (existingInDb) {
-        return { success: false, error: 'An account with this email address already exists in the database.' };
-      }
-
-      const userId = 'usr_' + Math.random().toString(36).substring(2, 10);
-      const newUser = {
-        id: userId,
+      const { data, error } = await supabase.auth.signUp({
         email: cleanEmail,
-        name: userData.name?.trim() || 'Maison Client',
-        phone: userData.phone?.trim() || '',
-        address: userData.address?.trim() || '',
-        city: userData.city?.trim() || 'Kuala Lumpur',
-        state: userData.state?.trim() || 'Wilayah Persekutuan',
-        zip: userData.zip?.trim() || '',
-        country: 'Malaysia',
-        role: cleanEmail.includes('admin') ? 'admin' : 'customer',
-        createdAt: new Date().toISOString()
-      };
-
-      // 1. Save directly to Supabase public.profiles table
-      await saveProfileToSupabase(newUser);
-
-      // 2. Save to registered list with password for subsequent logins
-      registered.push({ ...newUser, password: userData.password });
-      localStorage.setItem('valenszo_registered_users', JSON.stringify(registered));
-
-      // 3. Also attempt background Supabase Auth registration
-      if (isSupabaseConfigured && supabase) {
-        supabase.auth.signUp({
-          email: cleanEmail,
-          password: userData.password,
-          options: {
-            data: {
-              full_name: newUser.name,
-              phone: newUser.phone,
-              address: newUser.address,
-              city: newUser.city,
-              state: newUser.state,
-              zip: newUser.zip,
-              role: newUser.role
-            }
+        password: userData.password,
+        options: {
+          data: {
+            full_name: userData.name?.trim() || 'Maison Client',
+            phone: userData.phone?.trim() || '',
+            address: userData.address?.trim() || '',
+            city: userData.city?.trim() || 'Kuala Lumpur',
+            state: userData.state?.trim() || 'Wilayah Persekutuan',
+            zip: userData.zip?.trim() || '50250',
+            role: 'customer' // All self-registered users are strictly customers
           }
-        }).catch(err => console.warn('Supabase background signup notice:', err.message));
+        }
+      });
+
+      if (error) {
+        return { success: false, error: error.message };
       }
 
-      setCurrentUser(newUser);
-      setIsAuthModalOpen(false);
-      if (authModalConfig.onComplete) authModalConfig.onComplete(newUser);
+      if (data?.user) {
+        const newUser = {
+          id: data.user.id,
+          email: cleanEmail,
+          name: userData.name?.trim() || 'Maison Client',
+          phone: userData.phone?.trim() || '',
+          address: userData.address?.trim() || '',
+          city: userData.city?.trim() || 'Kuala Lumpur',
+          state: userData.state?.trim() || 'Wilayah Persekutuan',
+          zip: userData.zip?.trim() || '50250',
+          country: 'Malaysia',
+          role: 'customer',
+          createdAt: new Date().toISOString()
+        };
 
-      return { success: true, user: newUser };
+        // Create profile in public.profiles table
+        await saveProfileToSupabase(newUser);
+
+        setCurrentUser(newUser);
+        localStorage.setItem('valenszo_auth_user', JSON.stringify(newUser));
+        setIsAuthModalOpen(false);
+        if (authModalConfig.onComplete) authModalConfig.onComplete(newUser);
+
+        return { success: true, user: newUser };
+      }
+
+      return { success: false, error: 'Registration could not be completed. Please try again.' };
+    } catch (err) {
+      console.error('Registration error:', err);
+      return { success: false, error: err.message || 'An unexpected error occurred during registration.' };
     } finally {
       setIsAuthenticating(false);
     }
   };
 
   // Sign Out Handler
-  const logout = () => {
+  const logout = async () => {
     if (isSupabaseConfigured && supabase) {
-      supabase.auth.signOut().catch(() => {});
+      await supabase.auth.signOut().catch(() => {});
     }
     setCurrentUser(null);
     localStorage.removeItem('valenszo_auth_user');
+    localStorage.removeItem('lumina_role');
   };
 
   // Update Profile
-  const updateProfile = (updatedFields) => {
-    setCurrentUser(prev => {
-      if (!prev) return null;
-      const updated = { ...prev, ...updatedFields };
-      // Save directly to Supabase profiles
-      saveProfileToSupabase(updated).catch(err => console.warn('Supabase profile update warning:', err));
-      // Also update in registered list
-      const registered = getRegisteredUsers();
-      const idx = registered.findIndex(u => u.id === prev.id || u.email === prev.email);
-      if (idx !== -1) {
-        registered[idx] = { ...registered[idx], ...updatedFields };
-        localStorage.setItem('valenszo_registered_users', JSON.stringify(registered));
-      }
-      return updated;
-    });
+  const updateProfile = async (updatedFields) => {
+    if (!currentUser) return;
+    const updated = { ...currentUser, ...updatedFields };
+    setCurrentUser(updated);
+    localStorage.setItem('valenszo_auth_user', JSON.stringify(updated));
+    await saveProfileToSupabase(updated).catch(err => console.warn('Profile update warning:', err));
   };
 
   return (

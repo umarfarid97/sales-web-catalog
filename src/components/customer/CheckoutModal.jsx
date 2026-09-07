@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { COMPLIMENTARY_SAMPLES } from '../../data/initialProducts';
+import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment } from '../../services/paymentService';
 import { 
   X, 
   Check, 
-  CreditCard, 
-  Truck, 
   ShieldCheck, 
   Gift, 
-  Feather, 
   Sparkles,
-  ArrowRight,
   CheckCircle2,
-  Lock
+  Landmark
 } from 'lucide-react';
 
 export const CheckoutModal = () => {
@@ -51,10 +48,7 @@ export const CheckoutModal = () => {
       city: currentUser?.city || 'Kuala Lumpur',
       postalCode: currentUser?.zip || '50250',
       country: 'Malaysia',
-      paymentMethod: 'credit-card',
-      cardNumber: '•••• •••• •••• 4242',
-      cardExp: '12/28',
-      cardCvc: '•••'
+      paymentMethod: 'fpx'
     };
   });
 
@@ -95,12 +89,18 @@ export const CheckoutModal = () => {
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
+    if (cart.length === 0) {
+      showToast('Your bag is empty.', 'error');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const orderData = {
         customer: {
           ...formData,
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
           selectedSamples: selectedSamples.map((id) => COMPLIMENTARY_SAMPLES.find((s) => s.id === id)?.name),
           isGiftBox: isGiftBoxSelected,
           giftNote: isGiftBoxSelected ? giftNote : null
@@ -111,9 +111,9 @@ export const CheckoutModal = () => {
           sku: item.sku,
           size: item.selectedSize || '100 ml Grand Flacon',
           engraving: item.engravingText || null,
-          price: item.price || item.unitPrice,
-          quantity: item.quantity,
-          image: item.images[0]
+          price: Number(item.price) || 150,
+          quantity: Number(item.quantity) || 1,
+          image: item.image || item.images?.[0]
         })),
         subtotal: cartSubtotal,
         discount: cartDiscountAmount,
@@ -124,6 +124,20 @@ export const CheckoutModal = () => {
       };
 
       const newOrder = await createOrder(orderData);
+      
+      // Initialize payment gateway if applicable
+      const payResult = await initiatePayment({
+        orderId: newOrder.id,
+        amount: cartTotal,
+        customer: orderData.customer,
+        paymentMethod: formData.paymentMethod
+      });
+
+      if (payResult.redirectUrl) {
+        window.location.href = payResult.redirectUrl;
+        return;
+      }
+
       setPlacedOrder(newOrder);
       setStep(3);
       showToast('Votre commande est confirmée! Order placed with Maison Atelier.', 'success');
@@ -147,7 +161,6 @@ export const CheckoutModal = () => {
           background: '#ffffff',
           color: '#000000',
           border: '1px solid #e5e7eb',
-          maxHeight: '90vh',
           maxHeight: '90dvh',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
@@ -162,139 +175,152 @@ export const CheckoutModal = () => {
           <X size={18} />
         </button>
 
-        <div style={{ padding: '36px' }}>
+        {/* Modal Header */}
+        <div style={{ padding: '24px 28px', borderBottom: '1px solid #e5e7eb', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#926917', fontWeight: 700 }}>
+            Maison Valenszo &bull; Atelier Checkout
+          </span>
+          <h3 className="couture-title" style={{ fontSize: '1.4rem', margin: '4px 0 0', color: '#000000', fontWeight: 800 }}>
+            {step === 1 && 'The Art of Gifting & Samples'}
+            {step === 2 && 'Delivery Details & Secure Payment'}
+            {step === 3 && 'Order Confirmed'}
+          </h3>
           
-          {/* Checkout Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '4px', background: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
-              <Sparkles size={22} />
-            </div>
-            <div>
-              <h3 className="couture-title" style={{ fontSize: '1.3rem', color: '#000000', fontWeight: 800 }}>Maison White-Glove Checkout</h3>
-              <p style={{ fontSize: '0.85rem', color: '#6b7280' }}>The Valenszo Art of Gifting &bull; Atelier Fulfillment</p>
-            </div>
+          {/* Stepper Dots */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '12px' }}>
+            {[1, 2, 3].map((s) => (
+              <div
+                key={s}
+                style={{
+                  width: '28px',
+                  height: '3px',
+                  background: step >= s ? '#000000' : '#e5e7eb',
+                  transition: 'background 0.3s ease'
+                }}
+              />
+            ))}
           </div>
+        </div>
 
-          {/* STEP 1: The Art of Gifting & 2x Complimentary Samples */}
+        <div style={{ padding: '28px' }}>
+
+          {/* STEP 1: Gifting & Deluxe Samples */}
           {step === 1 && (
             <div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-                
-                {/* Left: Art of Gifting Presentation Box */}
-                <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '22px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                    <Gift size={20} color="#926917" />
-                    <h4 className="couture-title" style={{ fontSize: '1rem', color: '#000000', fontWeight: 700 }}>The Art of Gifting</h4>
-                  </div>
-
-                  <p style={{ fontSize: '0.85rem', color: '#4b5563', lineHeight: '1.6', marginBottom: '16px' }}>
-                    Each flacon is cradled in iconic Valenszo gift packaging, sealed with a gold-embossed ribbon.
-                  </p>
-
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '14px' }}>
-                    <input
-                      type="checkbox"
-                      checked={isGiftBoxSelected}
-                      onChange={(e) => setIsGiftBoxSelected(e.target.checked)}
-                      style={{ accentColor: '#000000', width: '16px', height: '16px' }}
-                    />
-                    <span style={{ fontSize: '0.88rem', fontWeight: 600, color: '#000000' }}>
-                      Complimentary Valenszo Signature Gift Packaging
-                    </span>
-                  </label>
-
-                  {isGiftBoxSelected && (
-                    <div>
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Personalized Calligraphy Card Message</label>
-                      <textarea
-                        rows={3}
-                        placeholder="Write a personal note (e.g. 'To Alexandre, with timeless elegance...')"
-                        value={giftNote}
-                        onChange={(e) => setGiftNote(e.target.value)}
-                        className="form-textarea"
-                        style={{ fontSize: '0.85rem', background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }}
-                      />
-                    </div>
-                  )}
+              {/* Complimentary Samples */}
+              <div style={{ marginBottom: '28px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <Sparkles size={16} color="#926917" />
+                  <h4 className="couture-sub" style={{ color: '#000000', margin: 0, fontWeight: 700 }}>
+                    Select 2 Complimentary Deluxe Samples
+                  </h4>
                 </div>
+                <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0 0 16px' }}>
+                  Each Maison Valenszo creation order includes two complimentary 2ml extrait sprays of your choice.
+                </p>
 
-                {/* Right: 2 Complimentary Samples Selection */}
-                <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '22px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Feather size={18} color="#926917" />
-                      <h4 className="couture-title" style={{ fontSize: '1rem', color: '#000000', fontWeight: 700 }}>2 Deluxe Samples</h4>
-                    </div>
-                    <span style={{ background: '#000000', color: '#ffffff', padding: '3px 8px', borderRadius: '2px', fontSize: '0.68rem', fontWeight: 700 }}>
-                      {selectedSamples.length}/2 Selected
-                    </span>
-                  </div>
-
-                  <p style={{ fontSize: '0.82rem', color: '#4b5563', marginBottom: '14px' }}>
-                    Select 2 complimentary 2ml deluxe spray vials to accompany your parcel:
-                  </p>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    {COMPLIMENTARY_SAMPLES.map((sample) => {
-                      const isSelected = selectedSamples.includes(sample.id);
-                      return (
-                        <div
-                          key={sample.id}
-                          onClick={() => toggleSample(sample.id)}
-                          style={{
-                            padding: '10px 14px',
-                            borderRadius: '4px',
-                            background: isSelected ? '#fdf8eb' : '#ffffff',
-                            border: isSelected ? '1px solid #c5a059' : '1px solid #e5e7eb',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                            transition: 'all var(--transition-fast)'
-                          }}
-                        >
-                          <div>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#000000' }}>
-                              {sample.name}
-                            </div>
-                            <div style={{ fontSize: '0.72rem', color: '#926917', fontWeight: 600 }}>
-                              {sample.concentration}
-                            </div>
-                          </div>
-                          <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: isSelected ? 'none' : '1px solid #d1d5db', background: isSelected ? '#000000' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
-                            {isSelected && <Check size={12} strokeWidth={3} />}
-                          </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                  {COMPLIMENTARY_SAMPLES.map((sample) => {
+                    const isSelected = selectedSamples.includes(sample.id);
+                    return (
+                      <div
+                        key={sample.id}
+                        onClick={() => toggleSample(sample.id)}
+                        style={{
+                          padding: '14px',
+                          border: isSelected ? '1.5px solid #000000' : '1px solid #e5e7eb',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          background: isSelected ? '#fafafa' : '#ffffff',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#000000' }}>{sample.name}</div>
+                          <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>{sample.concentration}</div>
                         </div>
-                      );
-                    })}
-                  </div>
+                        <div style={{
+                          width: '18px',
+                          height: '18px',
+                          borderRadius: '50%',
+                          border: isSelected ? 'none' : '1.5px solid #d1d5db',
+                          background: isSelected ? '#000000' : 'transparent',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#ffffff'
+                        }}>
+                          {isSelected && <Check size={11} strokeWidth={3} />}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-
               </div>
 
-              {/* Action Button */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '28px' }}>
+              {/* Gift Presentation Box */}
+              <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '24px', marginBottom: '28px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <Gift size={16} color="#926917" />
+                      <span style={{ fontWeight: 700, fontSize: '0.92rem', color: '#000000' }}>
+                        Signature Maison Valenszo Gift Box
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.82rem', color: '#6b7280', margin: 0 }}>
+                      Hand-wrapped in black textured linen with gold foil embossing and grossgrain ribbon.
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={isGiftBoxSelected}
+                    onChange={(e) => setIsGiftBoxSelected(e.target.checked)}
+                    style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#000000' }}
+                  />
+                </div>
+
+                {isGiftBoxSelected && (
+                  <div style={{ marginTop: '12px' }}>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#374151', marginBottom: '6px', textTransform: 'uppercase' }}>
+                      Personal Handwritten Gift Note (Optional)
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Enter your personal message for the recipient..."
+                      value={giftNote}
+                      onChange={(e) => setGiftNote(e.target.value)}
+                      className="form-input"
+                      style={{ width: '100%', fontSize: '0.85rem', padding: '10px', background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button
+                  type="button"
                   className="btn btn-dior-solid"
                   onClick={() => setStep(2)}
-                  style={{ padding: '12px 30px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  style={{ padding: '12px 32px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}
                 >
-                  <span>Continue to Delivery &amp; Payment</span>
-                  <ArrowRight size={16} />
+                  Proceed to Delivery & Payment &rarr;
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 2: Delivery & Payment Details */}
+          {/* STEP 2: Shipping & Realistic Payment Method */}
           {step === 2 && (
             <form onSubmit={handleSubmitOrder}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
                 
-                {/* Delivery Form */}
+                {/* Shipping Details */}
                 <div>
                   <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '14px', fontWeight: 700 }}>1. Delivery Address</h4>
-                  
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     <div className="form-group">
                       <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>First Name</label>
@@ -307,77 +333,95 @@ export const CheckoutModal = () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Email</label>
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Email Address (for tracking)</label>
                     <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Address</label>
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Phone (for express courier)</label>
+                    <input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Delivery Street Address</label>
                     <input type="text" name="address" required value={formData.address} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
                     <div className="form-group">
                       <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>City</label>
                       <input type="text" name="city" required value={formData.city} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Postal Code</label>
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Postcode</label>
                       <input type="text" name="postalCode" required value={formData.postalCode} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                   </div>
                 </div>
 
-                {/* Payment Simulation */}
+                {/* Realistic Payment Method Selector */}
                 <div>
-                  <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '14px', fontWeight: 700 }}>2. Secure Payment</h4>
+                  <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '14px', fontWeight: 700 }}>2. Payment Method</h4>
 
-                  <div style={{ padding: '16px', background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                      <Lock size={15} color="#059669" />
-                      <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 700, textTransform: 'uppercase' }}>
-                        256-Bit Encrypted Transaction
-                      </span>
-                    </div>
-
-                    <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Card Number</label>
-                      <input type="text" name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      <div className="form-group">
-                        <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Expires</label>
-                        <input type="text" name="cardExp" value={formData.cardExp} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>CVC</label>
-                        <input type="text" name="cardCvc" value={formData.cardCvc} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
-                      </div>
-                    </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                    {PAYMENT_METHODS.map((pm) => {
+                      const isSelected = formData.paymentMethod === pm.id;
+                      return (
+                        <div
+                          key={pm.id}
+                          onClick={() => setFormData({ ...formData, paymentMethod: pm.id })}
+                          style={{
+                            padding: '14px 16px',
+                            borderRadius: '6px',
+                            border: isSelected ? '1.5px solid #000000' : '1px solid #e5e7eb',
+                            background: isSelected ? '#fafafa' : '#ffffff',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <div style={{
+                                width: '16px',
+                                height: '16px',
+                                borderRadius: '50%',
+                                border: isSelected ? '5px solid #000000' : '1.5px solid #d1d5db'
+                              }} />
+                              <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#000000' }}>{pm.name}</span>
+                            </div>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#926917', background: '#fefce8', padding: '2px 8px', borderRadius: '4px' }}>
+                              {pm.badge}
+                            </span>
+                          </div>
+                          <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '4px 0 0 26px', lineHeight: 1.4 }}>
+                            {pm.description}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Summary */}
                   <div style={{ padding: '16px', background: '#f3f4f6', borderRadius: '4px', border: '1px solid #e5e7eb' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#4b5563', marginBottom: '6px' }}>
                       <span>Subtotal ({cart.length} flacons)</span>
-                      <span style={{ color: '#000000', fontWeight: 600 }}>${cartSubtotal.toFixed(2)}</span>
+                      <span style={{ color: '#000000', fontWeight: 600 }}>RM {cartSubtotal.toFixed(2)}</span>
                     </div>
                     {cartDiscountAmount > 0 && (
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#926917', marginBottom: '6px' }}>
-                        <span>Privilege Discount</span>
-                        <span style={{ fontWeight: 700 }}>-${cartDiscountAmount.toFixed(2)}</span>
+                        <span>Privilege Discount ({appliedPromo?.code})</span>
+                        <span style={{ fontWeight: 700 }}>-RM {cartDiscountAmount.toFixed(2)}</span>
                       </div>
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#4b5563', marginBottom: '8px' }}>
-                      <span>Climate Shipping</span>
+                      <span>Express Shipping</span>
                       <span style={{ color: cartShipping === 0 ? '#059669' : '#000000', fontWeight: 600 }}>
-                        {cartShipping === 0 ? 'COMPLIMENTARY' : `$${cartShipping.toFixed(2)}`}
+                        {cartShipping === 0 ? 'COMPLIMENTARY' : `RM ${cartShipping.toFixed(2)}`}
                       </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#000000', paddingTop: '8px', borderTop: '1px solid #e5e7eb' }}>
                       <span>Total</span>
-                      <span style={{ fontFamily: 'var(--font-mono)' }}>${cartTotal.toFixed(2)}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)' }}>RM {cartTotal.toFixed(2)}</span>
                     </div>
                   </div>
 
@@ -389,9 +433,8 @@ export const CheckoutModal = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '28px' }}>
                 <button
                   type="button"
-                  className="btn btn-dior-outline"
                   onClick={() => setStep(1)}
-                  style={{ padding: '12px 24px', fontSize: '0.85rem', background: '#ffffff', color: '#000000', border: '1px solid #000000', cursor: 'pointer' }}
+                  style={{ padding: '12px 24px', fontSize: '0.85rem', background: '#ffffff', color: '#000000', border: '1px solid #000000', cursor: 'pointer', borderRadius: '4px' }}
                 >
                   &larr; Back to Gifting
                 </button>
@@ -399,10 +442,9 @@ export const CheckoutModal = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn btn-dior-solid"
-                  style={{ padding: '12px 34px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}
+                  style={{ padding: '12px 34px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer', borderRadius: '4px', fontWeight: 700 }}
                 >
-                  {isSubmitting ? 'Placing Order...' : `Confirm & Authorize $${cartTotal.toFixed(2)}`}
+                  {isSubmitting ? 'Securing Order...' : `Confirm & Pay RM ${cartTotal.toFixed(2)}`}
                 </button>
               </div>
             </form>
@@ -422,11 +464,11 @@ export const CheckoutModal = () => {
                 Thank You, {formData.firstName}
               </h2>
               <p style={{ color: '#4b5563', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
-                Your Valenszo fragrance order has been transmitted to our Atelier. Your parcel is being carefully prepared in our signature luxury gift presentation box.
+                Your Valenszo fragrance order has been transmitted to our Atelier. Your parcel is being carefully prepared in our signature luxury presentation box.
               </p>
 
               {/* Order Tracking Card */}
-              <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '20px', maxWidth: '500px', margin: '0 auto 30px', textAlign: 'left' }}>
+              <div style={{ background: '#fafafa', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '20px', maxWidth: '520px', margin: '0 auto 24px', textAlign: 'left' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Order Number</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#000000' }}>{placedOrder.id}</span>
@@ -435,22 +477,60 @@ export const CheckoutModal = () => {
                   <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Tracking Code</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#926917' }}>{placedOrder.trackingNumber}</span>
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Payment Method</span>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#000000', textTransform: 'capitalize' }}>{placedOrder.paymentMethod}</span>
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Complimentary Samples</span>
                   <span style={{ fontSize: '0.82rem', color: '#059669', fontWeight: 600 }}>2x Deluxe Vials Included</span>
                 </div>
               </div>
 
+              {/* Bank Transfer Instructions if chosen */}
+              {placedOrder.paymentMethod === 'bank-transfer' && (
+                <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: '6px', padding: '18px', maxWidth: '520px', margin: '0 auto 28px', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: '#854d0e', fontWeight: 700, fontSize: '0.85rem' }}>
+                    <Landmark size={18} />
+                    <span>Maison Valenszo Bank Transfer Details</span>
+                  </div>
+                  <div style={{ fontSize: '0.82rem', color: '#713f12', lineHeight: 1.6 }}>
+                    <div><strong>Bank:</strong> {MAISON_BANK_DETAILS.bankName}</div>
+                    <div><strong>Account Name:</strong> {MAISON_BANK_DETAILS.accountName}</div>
+                    <div><strong>Account Number:</strong> {MAISON_BANK_DETAILS.accountNumber}</div>
+                    <div><strong>DuitNow Business ID:</strong> {MAISON_BANK_DETAILS.duitNowId}</div>
+                    <div style={{ marginTop: '8px', padding: '6px 10px', background: '#fffbeb', borderRadius: '4px', border: '1px dashed #fde047' }}>
+                      <strong>Payment Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{placedOrder.id}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <button
-                className="btn btn-dior-solid"
                 onClick={() => setIsCheckoutOpen(false)}
-                style={{ padding: '12px 32px', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer' }}
+                style={{ padding: '12px 32px', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer', borderRadius: '4px', fontWeight: 700 }}
               >
                 Return To Collection
               </button>
             </div>
           )}
 
+        </div>
+
+        {/* Security Footer */}
+        <div style={{
+          background: '#f9fafb',
+          borderTop: '1px solid #f3f4f6',
+          padding: '14px 28px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          fontSize: '0.72rem',
+          color: '#6b7280'
+        }}>
+          <ShieldCheck size={14} color="#16a34a" />
+          <span>256-Bit SSL Encrypted &bull; Official Malaysian Gateway &bull; Valenszo Authenticity Guaranteed</span>
         </div>
       </div>
     </div>

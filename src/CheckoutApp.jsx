@@ -9,6 +9,7 @@ import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AuthModal } from './components/common/AuthModal';
 import { COMPLIMENTARY_SAMPLES } from './data/initialProducts';
+import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment } from './services/paymentService';
 import { 
   Check, 
   CreditCard, 
@@ -21,7 +22,8 @@ import {
   CheckCircle2,
   Lock,
   ArrowLeft,
-  ShoppingBag
+  ShoppingBag,
+  Landmark
 } from 'lucide-react';
 
 // Styles
@@ -63,10 +65,7 @@ const CheckoutPageLayout = () => {
       city: currentUser?.city || 'Kuala Lumpur',
       postalCode: currentUser?.zip || '50250',
       country: 'Malaysia',
-      paymentMethod: 'credit-card',
-      cardNumber: '•••• •••• •••• 4242',
-      cardExp: '12/28',
-      cardCvc: '•••'
+      paymentMethod: 'fpx'
     };
   });
 
@@ -98,14 +97,25 @@ const CheckoutPageLayout = () => {
         name: `${formData.firstName} ${formData.lastName}`.trim(),
         email: formData.email,
         phone: formData.phone,
-        address: `${formData.address}, ${formData.city} ${formData.postalCode}, ${formData.country}`
+        address: `${formData.address}, ${formData.city} ${formData.postalCode}, ${formData.country}`,
+        paymentMethod: formData.paymentMethod
       },
-      items: cart,
+      items: cart.map((item) => ({
+        productId: item.id,
+        name: item.name,
+        sku: item.sku,
+        size: item.selectedSize || '100 ml Grand Flacon',
+        engraving: item.engravingText || null,
+        price: Number(item.price) || 150,
+        quantity: Number(item.quantity) || 1,
+        image: item.image || item.images?.[0]
+      })),
       subtotal: cartSubtotal,
       discount: cartDiscountAmount,
       shipping: cartShipping,
       total: cartTotal,
-      promoCode: appliedPromo?.code || null,
+      discountCode: appliedPromo?.code || null,
+      paymentMethod: formData.paymentMethod,
       gifting: {
         giftBox: isGiftBoxSelected,
         giftNote: giftNote
@@ -115,6 +125,20 @@ const CheckoutPageLayout = () => {
 
     try {
       const order = await createOrder(orderData);
+
+      // Initialize payment gateway if configured
+      const payResult = await initiatePayment({
+        orderId: order.id,
+        amount: cartTotal,
+        customer: orderData.customer,
+        paymentMethod: formData.paymentMethod
+      });
+
+      if (payResult.redirectUrl) {
+        window.location.href = payResult.redirectUrl;
+        return;
+      }
+
       setPlacedOrder(order);
       setStep(3);
       showToast('Order confirmed! An invitation & tracking details have been generated.', 'success');
@@ -142,56 +166,62 @@ const CheckoutPageLayout = () => {
             <a
               href="/"
               className="dior-btn"
-              style={{ display: 'inline-block', background: '#000000', color: '#ffffff', padding: '14px 28px', textDecoration: 'none', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
+              style={{ display: 'inline-block', background: '#000', color: '#fff', padding: '14px 28px', textDecoration: 'none', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}
             >
-              Explore Fragrance Portfolio
+              Discover Fragrances
             </a>
           </div>
         </main>
         <Footer />
+        <ToastContainer />
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
       <Navbar />
 
-      <main style={{ flex: 1, padding: '2.5rem 1.5rem 5rem' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+      <main style={{ flex: 1, padding: '2.5rem 0 5rem' }}>
+        <div className="container" style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 1.5rem' }}>
           
-          {/* Header Title & Steps */}
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#926917' }}>
+          {/* Header Title */}
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#d97706', fontWeight: 700 }}>
               Maison Valenszo Haute Parfumerie
             </span>
-            <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2.4rem', margin: '0.4rem 0 1.25rem' }}>
-              White-Glove Luxury Checkout
+            <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2.4rem', marginTop: '0.4rem', fontWeight: 800 }}>
+              {step === 1 && 'The Art of Gifting & Samples'}
+              {step === 2 && 'Delivery Details & Secure Payment'}
+              {step === 3 && 'Order Confirmed'}
             </h1>
-
-            {step < 3 && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1.5rem', borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem' }}>
-                <span style={{ fontWeight: step === 1 ? 700 : 500, color: step === 1 ? '#000' : '#9ca3af', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step === 1 ? '#000' : '#e5e7eb', color: step === 1 ? '#fff' : '#6b7280', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
-                  Complimentary Gifting
-                </span>
-                <span style={{ color: '#d1d5db' }}>—</span>
-                <span style={{ fontWeight: step === 2 ? 700 : 500, color: step === 2 ? '#000' : '#9ca3af', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: step === 2 ? '#000' : '#e5e7eb', color: step === 2 ? '#fff' : '#6b7280', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
-                  Delivery & Payment
-                </span>
-              </div>
-            )}
+            
+            {/* Step Indicators */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.5rem' }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: step === 1 ? 800 : 500, color: step === 1 ? '#000' : '#9ca3af', borderBottom: step === 1 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
+                1. Gifting & Samples
+              </span>
+              <span style={{ fontSize: '0.85rem', fontWeight: step === 2 ? 800 : 500, color: step === 2 ? '#000' : '#9ca3af', borderBottom: step === 2 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
+                2. Delivery & Payment
+              </span>
+              <span style={{ fontSize: '0.85rem', fontWeight: step === 3 ? 800 : 500, color: step === 3 ? '#000' : '#9ca3af', borderBottom: step === 3 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
+                3. Confirmation
+              </span>
+            </div>
           </div>
 
           {/* STEP 1: GIFTING & SAMPLES */}
           {step === 1 && (
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem', alignItems: 'start' }}>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem' }}>
-                  Select 2 Complimentary Deluxe Spray Samples (2ml)
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                  Complimentary Atelier Discovery Sprays
                 </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+                <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+                  Select up to 2 complimentary 2ml deluxe extrait vials with your order.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
                   {COMPLIMENTARY_SAMPLES.map((sample) => {
                     const isSelected = selectedSamples.includes(sample.id);
                     return (
@@ -199,53 +229,58 @@ const CheckoutPageLayout = () => {
                         key={sample.id}
                         onClick={() => toggleSample(sample.id)}
                         style={{
-                          padding: '14px 18px',
-                          border: isSelected ? '2px solid #000000' : '1px solid #e5e7eb',
-                          borderRadius: '6px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
+                          padding: '14px 18px',
+                          border: isSelected ? '1.5px solid #000' : '1px solid #e5e7eb',
+                          borderRadius: '6px',
                           cursor: 'pointer',
-                          background: isSelected ? '#faf9f6' : '#ffffff'
+                          background: isSelected ? '#faf9f6' : '#fff',
+                          transition: 'all 0.2s ease'
                         }}
                       >
                         <div>
-                          <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>{sample.name}</div>
+                          <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{sample.name}</div>
                           <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{sample.concentration}</div>
                         </div>
-                        <div style={{ width: '22px', height: '22px', borderRadius: '50%', border: isSelected ? 'none' : '1.5px solid #d1d5db', background: isSelected ? '#000' : 'transparent', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {isSelected && <Check size={14} />}
+                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: isSelected ? 'none' : '1.5px solid #d1d5db', background: isSelected ? '#000' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                          {isSelected && <Check size={12} strokeWidth={3} />}
                         </div>
                       </div>
                     );
                   })}
                 </div>
 
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem' }}>
-                  Complimentary Haute Parfumerie Gift Packaging
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                  The Maison Valenszo Gift Experience
                 </h3>
-                <div style={{ border: '1px solid #e5e7eb', borderRadius: '6px', padding: '1.25rem', background: '#fafafa' }}>
-                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+                <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
+                  All orders arrive in our signature midnight packaging with ribbon and wax seal.
+                </p>
+
+                <div style={{ border: '1px solid #e5e7eb', borderRadius: '6px', padding: '1.25rem', background: '#faf9f6' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
                     <input
                       type="checkbox"
                       checked={isGiftBoxSelected}
                       onChange={(e) => setIsGiftBoxSelected(e.target.checked)}
-                      style={{ marginTop: '4px' }}
+                      style={{ width: '16px', height: '16px' }}
                     />
-                    <div>
-                      <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>Dior-style Collector Box & Signature Ribbon</span>
-                      <p style={{ fontSize: '0.82rem', color: '#6b7280', margin: '4px 0 0' }}>Each creation is nestled in raw obsidian cardstock with gold hot-stamped embossing.</p>
-                    </div>
+                    Include Personalized Hand-Written Card
                   </label>
+
                   {isGiftBoxSelected && (
-                    <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Personalized Atelier Gift Card Message</label>
+                    <div style={{ marginTop: '1rem' }}>
+                      <label style={{ fontSize: '0.8rem', color: '#6b7280', display: 'block', marginBottom: '4px' }}>
+                        Your Message (up to 200 characters):
+                      </label>
                       <textarea
                         value={giftNote}
                         onChange={(e) => setGiftNote(e.target.value)}
-                        placeholder="Write a bespoke handwritten message to accompany your gift..."
-                        rows={2}
-                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '0.88rem' }}
+                        placeholder="Wishing you unforgettable olfactory memories..."
+                        rows={3}
+                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '0.85rem' }}
                       />
                     </div>
                   )}
@@ -296,7 +331,7 @@ const CheckoutPageLayout = () => {
             </div>
           )}
 
-          {/* STEP 2: DELIVERY & PAYMENT FORM */}
+          {/* STEP 2: DELIVERY & REALISTIC PAYMENT FORM */}
           {step === 2 && (
             <form onSubmit={handleSubmitOrder} style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem', alignItems: 'start' }}>
               <div>
@@ -353,15 +388,40 @@ const CheckoutPageLayout = () => {
                   Secure Payment Method
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-                  <label style={{ padding: '12px 16px', border: '1.5px solid #000', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', background: '#faf9f6' }}>
-                    <input type="radio" name="paymentMethod" value="credit-card" checked={formData.paymentMethod === 'credit-card'} onChange={handleInputChange} />
-                    <CreditCard size={18} />
-                    <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>Credit / Debit Card (Visa, Mastercard, Amex)</span>
-                  </label>
-                  <label style={{ padding: '12px 16px', border: '1px solid #e5e7eb', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-                    <input type="radio" name="paymentMethod" value="fpx" checked={formData.paymentMethod === 'fpx'} onChange={handleInputChange} />
-                    <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>FPX Online Banking (Maybank2u, CIMB Clicks)</span>
-                  </label>
+                  {PAYMENT_METHODS.map((pm) => {
+                    const isSelected = formData.paymentMethod === pm.id;
+                    return (
+                      <label
+                        key={pm.id}
+                        style={{
+                          padding: '14px 16px',
+                          border: isSelected ? '1.5px solid #000' : '1px solid #e5e7eb',
+                          borderRadius: '6px',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '12px',
+                          cursor: 'pointer',
+                          background: isSelected ? '#faf9f6' : '#ffffff'
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value={pm.id}
+                          checked={isSelected}
+                          onChange={handleInputChange}
+                          style={{ marginTop: '3px' }}
+                        />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>{pm.name}</span>
+                            <span style={{ fontSize: '0.7rem', color: '#926917', background: '#fefce8', padding: '2px 8px', borderRadius: '4px' }}>{pm.badge}</span>
+                          </div>
+                          <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: '4px 0 0' }}>{pm.description}</p>
+                        </div>
+                      </label>
+                    );
+                  })}
                 </div>
 
                 <button
@@ -411,9 +471,37 @@ const CheckoutPageLayout = () => {
               <p style={{ color: '#6b7280', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
                 Thank you for your patronage. Your atelier creation has entered bespoke cold-maceration inspection.
               </p>
-              <div style={{ background: '#faf9f6', padding: '1rem', borderRadius: '6px', marginBottom: '2rem', border: '1px solid #f0ede6' }}>
-                <strong>Order Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)' }}>{placedOrder.id}</span>
+              
+              <div style={{ background: '#faf9f6', padding: '1.25rem', borderRadius: '6px', marginBottom: '1.5rem', border: '1px solid #f0ede6', textAlign: 'left' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <strong>Order Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)' }}>{placedOrder.id}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <strong>Tracking Number:</strong> <span style={{ fontFamily: 'var(--font-mono)', color: '#926917' }}>{placedOrder.trackingNumber}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <strong>Payment Method:</strong> <span style={{ textTransform: 'capitalize' }}>{placedOrder.paymentMethod}</span>
+                </div>
               </div>
+
+              {placedOrder.paymentMethod === 'bank-transfer' && (
+                <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: '6px', padding: '1.25rem', marginBottom: '2rem', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: '#854d0e', fontWeight: 700 }}>
+                    <Landmark size={18} />
+                    <span>Maison Valenszo Bank Transfer Information</span>
+                  </div>
+                  <div style={{ fontSize: '0.85rem', color: '#713f12', lineHeight: 1.6 }}>
+                    <div><strong>Bank:</strong> {MAISON_BANK_DETAILS.bankName}</div>
+                    <div><strong>Account Name:</strong> {MAISON_BANK_DETAILS.accountName}</div>
+                    <div><strong>Account Number:</strong> {MAISON_BANK_DETAILS.accountNumber}</div>
+                    <div><strong>DuitNow Business ID:</strong> {MAISON_BANK_DETAILS.duitNowId}</div>
+                    <div style={{ marginTop: '8px', padding: '6px 10px', background: '#fffbeb', borderRadius: '4px', border: '1px dashed #fde047' }}>
+                      <strong>Payment Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{placedOrder.id}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <a
                 href="/"
                 className="dior-btn"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth, DEMO_ACCOUNTS } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
 import { X, Lock, Mail, User, Phone, MapPin, Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
 
@@ -82,17 +82,6 @@ export const AuthModal = () => {
     }
   };
 
-  // Quick fill helper for testing
-  const fillDemo = (type) => {
-    setErrorMessage('');
-    if (type === 'admin') {
-      setSignInEmail(DEMO_ACCOUNTS.admin.email);
-      setSignInPassword('MaisonValenszo2026!');
-    } else {
-      setSignInEmail(DEMO_ACCOUNTS.customer.email);
-      setSignInPassword('MaisonValenszo2026!');
-    }
-  };
 
   return (
     <div className="modal-overlay" onClick={closeAuthModal}>
@@ -328,51 +317,6 @@ export const AuthModal = () => {
                 {isAuthenticating ? 'Authenticating...' : 'Sign In to Account'}
                 {!isAuthenticating && <ArrowRight size={16} />}
               </button>
-
-              {/* Quick Testing Helper */}
-              <div style={{
-                marginTop: '24px',
-                paddingTop: '20px',
-                borderTop: '1px dashed #e5e7eb',
-                textAlign: 'center'
-              }}>
-                <span style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '10px' }}>
-                  Quick Fill Test Accounts:
-                </span>
-                <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                  <button
-                    type="button"
-                    onClick={() => fillDemo('customer')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '0.75rem',
-                      background: '#f9fafb',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      color: '#374151'
-                    }}
-                  >
-                    👤 Customer Demo
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillDemo('admin')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '0.75rem',
-                      background: '#fefce8',
-                      border: '1px solid #fef08a',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      color: '#854d0e',
-                      fontWeight: 600
-                    }}
-                  >
-                    👑 Atelier Admin
-                  </button>
-                </div>
-              </div>
             </form>
           ) : (
             /* ================= MODE 2: REGISTER ================= */
