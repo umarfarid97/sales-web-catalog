@@ -4,11 +4,8 @@ import {
   DollarSign, 
   ShoppingCart, 
   TrendingUp, 
-  Package, 
   ArrowUpRight, 
-  Sparkles,
-  Flame,
-  Gift
+  Sparkles
 } from 'lucide-react';
 
 export const AnalyticsDashboard = () => {
@@ -18,7 +15,6 @@ export const AnalyticsDashboard = () => {
     averageOrderValue, 
     pendingOrdersCount,
     products, 
-    orders,
     setAdminTab
   } = useStore();
 
@@ -59,7 +55,7 @@ export const AnalyticsDashboard = () => {
               <DollarSign size={20} />
             </div>
           </div>
-          <div className="kpi-value">${totalRevenue.toFixed(2)}</div>
+          <div className="kpi-value">RM {totalRevenue.toFixed(2)}</div>
           <div className="kpi-trend trend-up">
             <ArrowUpRight size={14} />
             <span>+32.4% vs last month</span>
@@ -89,7 +85,7 @@ export const AnalyticsDashboard = () => {
               <TrendingUp size={20} />
             </div>
           </div>
-          <div className="kpi-value">${averageOrderValue.toFixed(2)}</div>
+          <div className="kpi-value">RM {averageOrderValue.toFixed(2)}</div>
           <div className="kpi-trend trend-up">
             <ArrowUpRight size={14} />
             <span>High luxury flacon basket size</span>
@@ -130,7 +126,7 @@ export const AnalyticsDashboard = () => {
             {weeklyData.map((d, i) => (
               <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
                 <div style={{ fontSize: '0.72rem', color: '#fce08b', marginBottom: '6px', fontFamily: 'var(--font-mono)' }}>
-                  ${d.revenue}
+                  RM {d.revenue}
                 </div>
                 <div 
                   style={{ 
@@ -199,7 +195,7 @@ export const AnalyticsDashboard = () => {
               <img src={prod.images[0]} alt={prod.name} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(212, 175, 55, 0.25)' }} />
               <div>
                 <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.88rem' }}>{prod.name}</div>
-                <div style={{ fontSize: '0.78rem', color: '#fce08b', fontFamily: 'var(--font-mono)' }}>${prod.price.toFixed(2)}</div>
+                <div style={{ fontSize: '0.78rem', color: '#fce08b', fontFamily: 'var(--font-mono)' }}>RM {prod.price.toFixed(2)}</div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>★ {prod.rating} ({prod.reviewsCount} reviews)</div>
               </div>
             </div>

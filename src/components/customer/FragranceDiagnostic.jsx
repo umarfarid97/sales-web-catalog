@@ -21,8 +21,7 @@ import {
   Moon, 
   Feather, 
   Compass,
-  ArrowRight,
-  Star
+  ArrowRight
 } from 'lucide-react';
 
 export const QUESTIONS = [

@@ -4,13 +4,11 @@ import {
   AlertTriangle, 
   RefreshCw, 
   CheckCircle2, 
-  Plus, 
-  Flame, 
-  Sparkles
+  Plus
 } from 'lucide-react';
 
 export const InventoryAlerts = () => {
-  const { products, restockProduct, showToast, setAdminTab } = useStore();
+  const { products, restockProduct, showToast } = useStore();
 
   const lowStockItems = products.filter((p) => p.stock < 5);
   const outOfStockItems = products.filter((p) => p.stock === 0);

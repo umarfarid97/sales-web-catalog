@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   Heart, 
-  ShoppingBag, 
   Star, 
   Truck, 
   ShieldCheck, 
@@ -60,15 +59,11 @@ export const ProductDetailPage = () => {
     activeProduct,
     products,
     openProductDetail,
-    closeProductDetail,
     navigateToCatalog,
-    selectGenderCollection,
     addToCart,
     favorites,
     toggleFavorite,
     cartSubtotal,
-    cartTotalItems,
-    setIsCartOpen,
     showToast
   } = useStore();
 
@@ -94,7 +89,7 @@ export const ProductDetailPage = () => {
       '50ml': Math.round(base * 0.82),
       '100ml': base
     };
-  }, [product?.price]);
+  }, [product]);
 
   const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
   const totalPrice = currentUnitPrice * quantity;

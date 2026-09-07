@@ -7,11 +7,7 @@ import {
   Edit, 
   Trash2, 
   RefreshCw, 
-  AlertTriangle,
-  CheckCircle2,
-  X,
-  Flame,
-  Feather
+  X
 } from 'lucide-react';
 
 export const ProductManager = () => {
@@ -20,8 +16,7 @@ export const ProductManager = () => {
     deleteProduct, 
     restockProduct, 
     setIsProductFormOpen, 
-    setEditingProduct,
-    showToast
+    setEditingProduct
   } = useStore();
 
   const [searchTable, setSearchTable] = useState('');

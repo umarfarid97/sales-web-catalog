@@ -7,12 +7,8 @@ import {
   Search, 
   Truck, 
   CheckCircle2, 
-  Clock, 
-  Gift, 
   Package, 
   MapPin, 
-  Calendar, 
-  ArrowRight,
   UserCheck
 } from 'lucide-react';
 
@@ -23,7 +19,6 @@ export const OrderTrackerModal = () => {
   const [searchId, setSearchId] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isSearchingDb, setIsSearchingDb] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
   const [searchError, setSearchError] = useState('');
 
   // When modal opens or userOrders changes, default to the user's latest real order
@@ -34,7 +29,6 @@ export const OrderTrackerModal = () => {
       } else {
         setSelectedOrder(null);
       }
-      setHasSearched(false);
       setSearchError('');
       setSearchId('');
     }
@@ -48,7 +42,6 @@ export const OrderTrackerModal = () => {
 
     setIsSearchingDb(true);
     setSearchError('');
-    setHasSearched(true);
 
     const clean = searchId.trim().toUpperCase();
 
@@ -104,7 +97,6 @@ export const OrderTrackerModal = () => {
           border: '1px solid #e5e7eb',
           background: '#ffffff',
           color: '#000000',
-          maxHeight: '90vh',
           maxHeight: '90dvh',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
@@ -202,7 +194,6 @@ export const OrderTrackerModal = () => {
                     type="button"
                     onClick={() => {
                       setSelectedOrder(ord);
-                      setHasSearched(false);
                       setSearchError('');
                     }}
                     style={{

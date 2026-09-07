@@ -12,8 +12,7 @@ import {
   User,
   Search,
   LogOut,
-  Shield,
-  UserCheck
+  Shield
 } from 'lucide-react';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -22,10 +21,7 @@ export const Navbar = () => {
     role, 
     setRole, 
     customerView,
-    navigateToDiagnostic,
-    navigateToCatalog,
     activeGender,
-    selectGenderCollection,
     menCount,
     womenCount,
     cartTotalItems, 
@@ -472,7 +468,6 @@ export const Navbar = () => {
                 top: 0,
                 left: 0,
                 bottom: 0,
-                height: '100vh',
                 height: '100dvh',
                 maxHeight: '100dvh',
                 width: 'clamp(280px, 84vw, 380px)',

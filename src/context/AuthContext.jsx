@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { 
   saveProfileToSupabase, 
-  fetchProfileByEmail, 
   fetchProfileById 
 } from '../services/supabaseService';
 
@@ -238,6 +237,7 @@ export const AuthProvider = ({ children }) => {
     }
     setCurrentUser(null);
     localStorage.removeItem('valenszo_auth_user');
+    localStorage.removeItem('valenszo_role');
     localStorage.removeItem('lumina_role');
   };
 

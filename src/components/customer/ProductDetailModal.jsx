@@ -4,13 +4,8 @@ import {
   X, 
   ShoppingBag, 
   Heart, 
-  Sparkles, 
-  Clock, 
-  Wind, 
   RefreshCw, 
-  Feather, 
-  Gift, 
-  ShieldCheck
+  Feather
 } from 'lucide-react';
 
 export const ProductDetailModal = () => {
@@ -19,14 +14,14 @@ export const ProductDetailModal = () => {
     setSelectedProductModal, 
     addToCart, 
     favorites, 
-    toggleFavorite,
+    toggleFavorite, 
     showToast 
   } = useStore();
 
   const product = selectedProductModal;
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(1);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [engravingText, setEngravingText] = useState('');
   const [showEngraving, setShowEngraving] = useState(false);
@@ -70,7 +65,6 @@ export const ProductDetailModal = () => {
         className="modal-content modal-content-lg"
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxHeight: '90vh',
           maxHeight: '90dvh',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
@@ -274,7 +268,7 @@ export const ProductDetailModal = () => {
                   >
                     <span>{s.label}</span>
                     <span style={{ fontSize: '0.72rem', opacity: selectedSizeIndex === idx ? 0.9 : 0.6 }}>
-                      ${Math.round(product.price * s.priceMultiplier).toFixed(2)}
+                      RM {Math.round(product.price * s.priceMultiplier).toFixed(2)}
                     </span>
                   </button>
                 ))}
@@ -317,7 +311,7 @@ export const ProductDetailModal = () => {
               <div>
                 <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase' }}>Price</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.7rem', fontWeight: 800, color: '#000000' }}>
-                  ${(dynamicPrice * quantity).toFixed(2)}
+                  RM {(dynamicPrice * quantity).toFixed(2)}
                 </div>
               </div>
 

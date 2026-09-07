@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Heart, ShoppingBag, RefreshCw } from 'lucide-react';
+import { Heart, ShoppingBag } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 

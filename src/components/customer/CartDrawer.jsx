@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
-import { useAuth } from '../../context/AuthContext';
 import { 
   X, 
   Trash2, 
@@ -8,11 +7,9 @@ import {
   Minus, 
   ShoppingBag, 
   ArrowRight, 
-  Tag, 
   Gift, 
   Truck, 
-  Feather, 
-  Sparkles 
+  Feather 
 } from 'lucide-react';
 
 export const CartDrawer = () => {
@@ -29,11 +26,9 @@ export const CartDrawer = () => {
     isFreeShipping,
     updateCartQuantity,
     removeFromCart,
-    clearCart,
     appliedPromo,
     applyPromoCode,
-    removePromoCode,
-    setIsCheckoutOpen
+    removePromoCode
   } = useStore();
 
   const [promoInput, setPromoInput] = useState('');
@@ -70,8 +65,6 @@ export const CartDrawer = () => {
     }
   };
 
-  const { isAuthenticated, openAuthModal } = useAuth();
-
   const handleProceedCheckout = () => {
     setIsCartOpen(false);
     window.location.href = '/checkout.html';
@@ -97,9 +90,7 @@ export const CartDrawer = () => {
           background: '#ffffff',
           color: '#000000',
           boxShadow: '-10px 0 50px rgba(0, 0, 0, 0.18)',
-          height: '100vh',
           height: '100dvh',
-          maxHeight: '100vh',
           maxHeight: '100dvh',
           display: 'flex',
           flexDirection: 'column',

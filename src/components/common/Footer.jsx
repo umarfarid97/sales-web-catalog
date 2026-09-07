@@ -4,7 +4,6 @@ import {
   Gift, 
   RefreshCw, 
   Feather, 
-  Sparkles, 
   ArrowRight
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
@@ -62,7 +61,7 @@ export const Footer = () => {
               <ShieldCheck size={20} />
             </div>
             <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Free Climate Delivery</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>White-glove delivery on all orders over $150.</p>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>White-glove delivery on all orders over RM150.</p>
           </div>
         </div>
 

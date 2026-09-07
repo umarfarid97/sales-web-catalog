@@ -6,12 +6,10 @@ import {
   MapPin, 
   CreditCard, 
   CheckCircle2, 
-  Clock, 
   Copy, 
   Check,
   Gift,
-  Feather,
-  Sparkles
+  Feather
 } from 'lucide-react';
 
 export const OrderDetailModal = () => {
@@ -217,9 +215,9 @@ export const OrderDetailModal = () => {
                       )}
                     </td>
                     <td>{item.quantity}</td>
-                    <td>${item.price.toFixed(2)}</td>
+                    <td>RM {item.price.toFixed(2)}</td>
                     <td style={{ textAlign: 'right', fontWeight: 700, color: '#fce08b' }}>
-                      ${(item.price * item.quantity).toFixed(2)}
+                      RM {(item.price * item.quantity).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -232,21 +230,21 @@ export const OrderDetailModal = () => {
             <div style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.9rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Subtotal:</span>
-                <span>${order.subtotal.toFixed(2)}</span>
+                <span>RM {order.subtotal.toFixed(2)}</span>
               </div>
               {order.discount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6ee7b7' }}>
                   <span>Discount ({order.discountCode}):</span>
-                  <span>-${order.discount.toFixed(2)}</span>
+                  <span>-RM {order.discount.toFixed(2)}</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                 <span>Shipping:</span>
-                <span>{order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</span>
+                <span>{order.shipping === 0 ? 'FREE' : `RM ${order.shipping.toFixed(2)}`}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1.2rem', color: '#fce08b', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
                 <span>Total:</span>
-                <span style={{ fontFamily: 'var(--font-mono)' }}>${order.total.toFixed(2)}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>RM {order.total.toFixed(2)}</span>
               </div>
             </div>
           </div>

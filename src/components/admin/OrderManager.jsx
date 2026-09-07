@@ -2,20 +2,14 @@ import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   Search, 
-  ShoppingCart, 
   Eye, 
-  Clock, 
-  Truck, 
-  CheckCircle2, 
-  AlertCircle,
   X,
-  CreditCard,
   Gift,
   Feather
 } from 'lucide-react';
 
 export const OrderManager = () => {
-  const { orders, updateOrderStatus, setViewingOrder } = useStore();
+  const { orders, setViewingOrder } = useStore();
   const [selectedStatusTab, setSelectedStatusTab] = useState('All');
   const [orderSearch, setOrderSearch] = useState('');
 
@@ -185,7 +179,7 @@ export const OrderManager = () => {
                     {/* Total */}
                     <td>
                       <span style={{ fontWeight: 700, color: '#fce08b', fontFamily: 'var(--font-mono)' }}>
-                        ${ord.total.toFixed(2)}
+                        RM {ord.total.toFixed(2)}
                       </span>
                     </td>
 

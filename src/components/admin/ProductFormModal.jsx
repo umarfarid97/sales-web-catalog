@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
-import { X, Save, Sparkles, Flame, Image as ImageIcon } from 'lucide-react';
+import { X, Save } from 'lucide-react';
 
 export const ProductFormModal = () => {
   const { 
     isProductFormOpen, 
     setIsProductFormOpen, 
     editingProduct, 
-    setEditingProduct, 
     addProduct, 
     updateProduct 
   } = useStore();
@@ -61,11 +60,11 @@ export const ProductFormModal = () => {
     } else {
       setFormData({
         name: '',
-        sku: `LUM-PAR-${Math.floor(100 + Math.random() * 900)}`,
+        sku: `VAL-PAR-${Math.floor(100 + Math.random() * 900)}`,
         category: 'Woody & Smoky',
         concentration: 'Extrait de Parfum (32% Concentration)',
-        price: '290.00',
-        originalPrice: '330.00',
+        price: '45.00',
+        originalPrice: '55.00',
         stock: '15',
         rating: '4.95',
         reviewsCount: '18',

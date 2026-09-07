@@ -18,9 +18,7 @@ import {
   Star, 
   X, 
   Check, 
-  ChevronDown,
-  ShoppingBag,
-  RotateCcw
+  ChevronDown
 } from 'lucide-react';
 
 // Styles
@@ -32,10 +30,9 @@ import './styles/admin.css';
 
 const ACCORD_OPTIONS = ['Fresh', 'Woody', 'Spicy', 'Leather', 'Citrus', 'Amber', 'Aromatic', 'Oud'];
 const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
-const INTENSITY_OPTIONS = ['Light', 'Moderate', 'Strong'];
 
 export const CollectionPageContent = () => {
-  const { products, favorites, toggleFavorite, addToCart, showToast } = useStore();
+  const { products, favorites, toggleFavorite } = useStore();
 
   // Read URL query params on mount
   const [activeGender, setActiveGender] = useState(() => {

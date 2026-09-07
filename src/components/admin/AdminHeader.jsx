@@ -7,8 +7,7 @@ import {
   AlertTriangle, 
   Plus, 
   Download,
-  ShieldCheck,
-  Store
+  ShieldCheck
 } from 'lucide-react';
 
 export const AdminHeader = () => {
@@ -19,7 +18,6 @@ export const AdminHeader = () => {
     setEditingProduct,
     lowStockCount,
     pendingOrdersCount,
-    setRole,
     showToast,
     orders,
     isCloudConnected
@@ -37,7 +35,7 @@ export const AdminHeader = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `lumina_orders_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `valenszo_orders_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     showToast('Exported order records to CSV', 'success');
   };

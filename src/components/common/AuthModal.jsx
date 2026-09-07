@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
-import { X, Lock, Mail, User, Phone, MapPin, Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
+import { X, Lock, Mail, User, Phone, MapPin, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
 
 export const AuthModal = () => {
   const { 
@@ -9,13 +9,12 @@ export const AuthModal = () => {
     closeAuthModal, 
     authModalMode, 
     setAuthModalMode, 
-    authModalConfig,
     login, 
     register, 
     isAuthenticating 
   } = useAuth();
 
-  const { cart, cartCount } = useStore();
+  const { cartCount } = useStore();
 
   // Form states
   const [signInEmail, setSignInEmail] = useState('');
@@ -31,14 +30,12 @@ export const AuthModal = () => {
   const [regZip, setRegZip] = useState('50250');
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
 
   if (!isAuthModalOpen) return null;
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-    setSuccessMessage('');
 
     if (!signInEmail || !signInPassword) {
       setErrorMessage('Please enter both email and password.');
@@ -54,7 +51,6 @@ export const AuthModal = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-    setSuccessMessage('');
 
     if (!regName || !regEmail || !regPassword) {
       setErrorMessage('Please fill in your name, email, and password.');
@@ -94,7 +90,6 @@ export const AuthModal = () => {
           color: '#000000',
           border: '1px solid #e5e7eb',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          maxHeight: '92vh',
           maxHeight: '92dvh',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',

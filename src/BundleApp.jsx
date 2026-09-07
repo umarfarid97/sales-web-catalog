@@ -12,7 +12,6 @@ import { AuthModal } from './components/common/AuthModal';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { 
-  Sparkles, 
   Check, 
   Plus, 
   X, 
@@ -22,9 +21,6 @@ import {
   Gift, 
   ShieldCheck, 
   Truck, 
-  ArrowRight,
-  SlidersHorizontal,
-  Flame,
   Star
 } from 'lucide-react';
 

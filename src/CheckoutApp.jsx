@@ -12,18 +12,10 @@ import { COMPLIMENTARY_SAMPLES } from './data/initialProducts';
 import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment } from './services/paymentService';
 import { 
   Check, 
-  CreditCard, 
-  Truck, 
-  ShieldCheck, 
-  Gift, 
-  Feather, 
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Lock,
-  ArrowLeft,
-  ShoppingBag,
-  Landmark
+  CheckCircle2, 
+  ArrowLeft, 
+  ShoppingBag, 
+  Landmark 
 } from 'lucide-react';
 
 // Styles

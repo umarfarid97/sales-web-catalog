@@ -1,6 +1,6 @@
 import React from 'react';
 import { SAVOIR_FAIRE_RAW_MATERIALS } from '../../data/initialProducts';
-import { MapPin, Sparkles } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 export const SavoirFaireSection = () => {
   return (

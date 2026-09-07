@@ -25,11 +25,11 @@ export const useStore = () => {
 };
 
 export const StoreProvider = ({ children }) => {
-  const { currentUser, isAuthenticated, isAdmin, openAuthModal } = useAuth();
+  const { currentUser, isAdmin, openAuthModal } = useAuth();
 
   // Role Mode: 'customer' | 'admin'
   const [role, setRoleState] = useState(() => {
-    return localStorage.getItem('lumina_role') || 'customer';
+    return localStorage.getItem('valenszo_role') || localStorage.getItem('lumina_role') || 'customer';
   });
 
   const setRole = useCallback((newRole) => {
@@ -43,14 +43,14 @@ export const StoreProvider = ({ children }) => {
         return;
       }
       setRoleState('admin');
-      localStorage.setItem('lumina_role', 'admin');
+      localStorage.setItem('valenszo_role', 'admin');
       if (typeof window !== 'undefined' && !window.location.pathname.includes('admin.html')) {
         window.location.href = '/admin.html';
       }
       return;
     }
     setRoleState('customer');
-    localStorage.setItem('lumina_role', 'customer');
+    localStorage.setItem('valenszo_role', 'customer');
     if (typeof window !== 'undefined' && window.location.pathname.includes('admin.html')) {
       window.location.href = '/';
     }
@@ -60,7 +60,7 @@ export const StoreProvider = ({ children }) => {
   useEffect(() => {
     if (role === 'admin' && !isAdmin) {
       setRoleState('customer');
-      localStorage.setItem('lumina_role', 'customer');
+      localStorage.setItem('valenszo_role', 'customer');
     }
   }, [isAdmin, role]);
 
@@ -245,13 +245,14 @@ export const StoreProvider = ({ children }) => {
 
   // Cart Items with auto-sanitization for safe rendering
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('lumina_cart');
+    const saved = localStorage.getItem('valenszo_cart') || localStorage.getItem('lumina_cart');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
           // Clear cart if it had old non-fragrance categories
           if (parsed.some((p) => p.category === 'Audio' || p.category === 'Wearables')) {
+            localStorage.removeItem('valenszo_cart');
             localStorage.removeItem('lumina_cart');
             return [];
           }
@@ -281,7 +282,7 @@ export const StoreProvider = ({ children }) => {
 
   // Orders Data (Real Supabase / persistent database sync - no fake mock orders)
   const [orders, setOrders] = useState(() => {
-    const saved = localStorage.getItem('valenszo_real_orders');
+    const saved = localStorage.getItem('valenszo_real_orders') || localStorage.getItem('valenszo_orders');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -307,7 +308,7 @@ export const StoreProvider = ({ children }) => {
 
   // Favorites (Wishlist)
   const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('lumina_favorites');
+    const saved = localStorage.getItem('valenszo_favorites') || localStorage.getItem('lumina_favorites');
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -315,7 +316,7 @@ export const StoreProvider = ({ children }) => {
         console.error('Failed to parse saved favorites', e);
       }
     }
-    return ['prod-1', 'prod-3'];
+    return ['vlz-men-01', 'vlz-wom-01'];
   });
 
   // Promo Code
@@ -431,23 +432,23 @@ export const StoreProvider = ({ children }) => {
 
   // --- Local Storage Backup Persistence Effects ---
   useEffect(() => {
-    localStorage.setItem('lumina_role', role);
+    localStorage.setItem('valenszo_role', role);
   }, [role]);
 
   useEffect(() => {
-    localStorage.setItem('lumina_products', JSON.stringify(products));
+    localStorage.setItem('valenszo_products_cache', JSON.stringify(products));
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('lumina_cart', JSON.stringify(cart));
+    localStorage.setItem('valenszo_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('lumina_orders', JSON.stringify(orders));
+    localStorage.setItem('valenszo_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('lumina_favorites', JSON.stringify(favorites));
+    localStorage.setItem('valenszo_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   // --- Cart Calculations ---
@@ -716,28 +717,39 @@ export const StoreProvider = ({ children }) => {
 
   // --- Product CRUD (Admin Operations Cloud + Local) ---
   const addProduct = async (productData) => {
-    const id = `prod-${Date.now()}`;
+    const id = `vlz-custom-${Date.now()}`;
     const newProduct = {
       id,
-      sku: productData.sku || `LUM-${Date.now().toString().slice(-4)}`,
+      sku: productData.sku || `VAL-C-${Date.now().toString().slice(-4)}`,
       name: productData.name,
-      category: productData.category || 'Accessories',
+      displayName: productData.displayName || productData.name,
+      category: productData.category || 'Woody & Smoky',
       tagline: productData.tagline || '',
       description: productData.description || '',
-      price: parseFloat(productData.price) || 0,
-      originalPrice: parseFloat(productData.originalPrice) || parseFloat(productData.price) || 0,
+      price: parseFloat(productData.price) || 45,
+      originalPrice: parseFloat(productData.originalPrice) || parseFloat(productData.price) || 55,
       discountPercent: productData.discountPercent || 0,
-      stock: parseInt(productData.stock, 10) || 0,
-      rating: parseFloat(productData.rating) || 5.0,
-      reviewsCount: parseInt(productData.reviewsCount, 10) || 0,
-      badge: productData.badge || '',
+      stock: parseInt(productData.stock, 10) || 15,
+      rating: parseFloat(productData.rating) || 4.95,
+      reviewsCount: parseInt(productData.reviewsCount, 10) || 12,
+      badge: productData.badge || 'New Release',
       isFeatured: !!productData.isFeatured,
-      colors: productData.colors && productData.colors.length > 0 ? productData.colors : [{ name: 'Standard', hex: '#6366f1' }],
-      features: productData.features || ['Premium Aerospace Materials', '1-Year Manufacturer Warranty'],
-      specs: productData.specs || { 'Standard Warranty': '1 Year' },
+      concentration: productData.concentration || 'Extrait de Parfum (30%)',
+      pyramid: productData.pyramid || {
+        topNotes: ['Calabrian Bergamot', 'Spiced Saffron'],
+        heartNotes: ['Damascena Rose', 'French Lavender'],
+        baseNotes: ['Royal Woods', 'Bourbon Vanilla']
+      },
+      sizes: productData.sizes || [
+        { label: '30 ml Travel Spray', ml: 30, priceMultiplier: 0.55 },
+        { label: '50 ml Signature Flacon', ml: 50, priceMultiplier: 0.78 },
+        { label: '100 ml Collector Flacon', ml: 100, priceMultiplier: 1.0 }
+      ],
+      features: productData.features || ['Maison Valenszo Haute Parfumerie', 'Infinite Refillable Flacon'],
+      specs: productData.specs || { concentration: 'Extrait de Parfum (30%)', longevity: '14+ Hours' },
       images: productData.images && productData.images.length > 0
         ? productData.images
-        : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=80']
+        : ['https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80']
     };
 
     setProducts((prev) => [newProduct, ...prev]);
@@ -806,8 +818,10 @@ export const StoreProvider = ({ children }) => {
   // --- Refresh Database Sync ---
   const resetToDemoData = async () => {
     setCart([]);
-    setFavorites(['prod-1', 'prod-3']);
+    setFavorites(['vlz-men-01', 'vlz-wom-01']);
     setAppliedPromo(null);
+    localStorage.removeItem('valenszo_cart');
+    localStorage.removeItem('valenszo_favorites');
     localStorage.removeItem('lumina_cart');
     localStorage.removeItem('lumina_favorites');
 

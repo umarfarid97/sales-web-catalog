@@ -15,7 +15,7 @@ import { ProductFormModal } from './components/admin/ProductFormModal';
 import { OrderManager } from './components/admin/OrderManager';
 import { OrderDetailModal } from './components/admin/OrderDetailModal';
 import { InventoryAlerts } from './components/admin/InventoryAlerts';
-import { Shield, Lock, ArrowLeft } from 'lucide-react';
+import { Shield, ArrowLeft } from 'lucide-react';
 
 // Styles
 import './index.css';
