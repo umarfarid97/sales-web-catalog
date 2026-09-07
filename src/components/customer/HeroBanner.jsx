@@ -3,7 +3,8 @@ import { useStore } from '../../context/StoreContext';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  ArrowUpRight 
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
 // Default flagship creations curated for the Steam-inspired showcase
@@ -130,27 +131,38 @@ export const HeroBanner = () => {
 
   // Merge live Supabase products if available
   const slides = useMemo(() => {
-    if (!products || products.length === 0) return CURATED_FEATURED_SLIDES;
+    const FALLBACK_HERO_IMAGES = [
+      'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=1400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=1400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=1400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1400&auto=format&fit=crop&q=80'
+    ];
+
+    if (!products || products.length === 0) {
+      return CURATED_FEATURED_SLIDES.map((s, idx) => ({
+        ...s,
+        image: s.images?.[0] || FALLBACK_HERO_IMAGES[idx % FALLBACK_HERO_IMAGES.length],
+        fallbackImage: FALLBACK_HERO_IMAGES[idx % FALLBACK_HERO_IMAGES.length]
+      }));
+    }
 
     // Pick featured or Tier S products
     const liveFeatured = products.filter(
       (p) => p.isFeatured || p.tier === 'S' || p.badge?.includes('Tier S')
     );
 
-    if (liveFeatured.length === 0) return CURATED_FEATURED_SLIDES;
+    const sourceList = liveFeatured.length > 0 ? liveFeatured : products.slice(0, 6);
 
-    // Format top 5-6 live products into slide data
-    return liveFeatured.slice(0, 6).map((p, idx) => {
+    return sourceList.slice(0, 6).map((p, idx) => {
       const fallback = CURATED_FEATURED_SLIDES[idx % CURATED_FEATURED_SLIDES.length];
-      const pImages = Array.isArray(p.images) && p.images.length > 0 
-        ? p.images 
-        : (p.image ? [p.image, ...fallback.images.slice(1)] : fallback.images);
-
-      // Ensure at least 4 preview images for the 2x2 grid
-      const filledImages = [...pImages];
-      while (filledImages.length < 4) {
-        filledImages.push(fallback.images[filledImages.length % fallback.images.length]);
-      }
+      const fallbackImg = FALLBACK_HERO_IMAGES[idx % FALLBACK_HERO_IMAGES.length];
+      
+      const pFirstImg = Array.isArray(p.images) && p.images[0] ? p.images[0] : p.image;
+      const validImg = (typeof pFirstImg === 'string' && pFirstImg.startsWith('http')) 
+        ? pFirstImg 
+        : fallbackImg;
 
       return {
         id: p.id || fallback.id,
@@ -161,31 +173,26 @@ export const HeroBanner = () => {
         tier: p.tier === 'S' ? 'Tier S Launch Icon' : (p.tier || fallback.tier),
         category: p.category || fallback.category,
         concentration: p.concentration || fallback.concentration,
-        olfactoryFamily: p.olfactoryFamily || p.character || fallback.olfactoryFamily,
         price: p.price || fallback.price,
         originalPrice: p.originalPrice || fallback.originalPrice,
-        status: p.stock > 0 ? 'Now Available' : 'Limited Allocation',
         badge: p.badge || fallback.badge,
-        tagline: p.tagline || p.description?.slice(0, 90) || fallback.tagline,
-        images: filledImages.slice(0, 4),
-        imageLabels: fallback.imageLabels
+        image: validImg,
+        fallbackImage: fallbackImg
       };
     });
   }, [products]);
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [activeThumbIndex, setActiveThumbIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const activeSlide = slides[currentSlideIndex] || CURATED_FEATURED_SLIDES[0];
+  const activeSlide = slides[currentSlideIndex] || slides[0] || CURATED_FEATURED_SLIDES[0];
 
-  // Auto-advance slider every 5.5s, pausing when hovered
+  // Auto-advance slider every 5s, pausing when hovered
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || slides.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
-      setActiveThumbIndex(0);
-    }, 5500);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isHovered, slides.length]);
@@ -193,18 +200,15 @@ export const HeroBanner = () => {
   const handlePrev = (e) => {
     e.stopPropagation();
     setCurrentSlideIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    setActiveThumbIndex(0);
   };
 
   const handleNext = (e) => {
     e.stopPropagation();
     setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
-    setActiveThumbIndex(0);
   };
 
   const handleSelectSlide = (idx) => {
     setCurrentSlideIndex(idx);
-    setActiveThumbIndex(0);
   };
 
   const handleProductNavigate = () => {
@@ -214,9 +218,6 @@ export const HeroBanner = () => {
       openProductDetail(activeSlide.id);
     }
   };
-
-  // Main displayed spotlight picture (swaps smoothly on thumbnail hover!)
-  const spotlightImage = activeSlide.images[activeThumbIndex] || activeSlide.images[0];
 
   return (
     <section 
@@ -296,6 +297,7 @@ export const HeroBanner = () => {
             type="button"
             onClick={handlePrev}
             aria-label="Previous Featured Creation"
+            className="hero-nav-arrow hero-nav-arrow-left"
             style={{
               position: 'absolute',
               left: '-20px',
@@ -331,6 +333,7 @@ export const HeroBanner = () => {
             type="button"
             onClick={handleNext}
             aria-label="Next Featured Creation"
+            className="hero-nav-arrow hero-nav-arrow-right"
             style={{
               position: 'absolute',
               right: '-20px',
@@ -361,325 +364,201 @@ export const HeroBanner = () => {
             <ChevronRight size={24} strokeWidth={2.2} />
           </button>
 
-          {/* The Showcase Card (Divided: Left 62% Spotlight / Right 38% Details & Thumbnails) */}
+          {/* THE SINGLE IMMERSIVE SHOWCASE CARD (One Card, One Picture, 100% Clickable) */}
           <div 
+            onClick={handleProductNavigate}
             style={{
               width: '100%',
-              background: '#0c0e14',
-              borderRadius: '8px',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              boxShadow: '0 16px 40px rgba(0, 0, 0, 0.65)',
+              borderRadius: '10px',
               overflow: 'hidden',
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1.6fr) minmax(0, 1fr)'
+              position: 'relative',
+              cursor: 'pointer',
+              minHeight: 'clamp(340px, 46vw, 520px)',
+              background: '#090b10',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease'
             }}
-            className="steam-hero-card"
+            title={`View ${activeSlide.title}`}
           >
-            {/* LEFT PANEL: Massive Spotlight Artwork (Clickable to PDP) */}
+            {/* The Main High-Res Picture */}
+            <img
+              src={activeSlide.image}
+              alt={activeSlide.title}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = activeSlide.fallbackImage || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1400&auto=format&fit=crop&q=80';
+              }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                display: 'block',
+                transition: 'opacity 0.3s ease'
+              }}
+            />
+
+            {/* Cinematic Multi-Stop Dark Gradient Overlay */}
+            <div 
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to top, rgba(7,9,13,0.98) 0%, rgba(7,9,13,0.72) 42%, rgba(7,9,13,0.2) 72%, transparent 100%)',
+                pointerEvents: 'none'
+              }}
+            />
+
+            {/* Top Right Click to View Pill */}
             <div
-              onClick={handleProductNavigate}
+              style={{
+                position: 'absolute',
+                top: 'clamp(12px, 2.5vw, 20px)',
+                right: 'clamp(12px, 2.5vw, 20px)',
+                zIndex: 3,
+                background: 'rgba(0, 0, 0, 0.65)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: '#ffffff',
+                pointerEvents: 'none',
+                boxShadow: '0 4px 14px rgba(0,0,0,0.4)'
+              }}
+            >
+              <Sparkles size={13} color="var(--dior-gold, #c5a059)" />
+              <span>CLICK TO VIEW PRODUCT</span>
+            </div>
+
+            {/* Overlaid Product Details & Direct Action */}
+            <div 
               style={{
                 position: 'relative',
-                minHeight: 'clamp(320px, 42vw, 470px)',
-                cursor: 'pointer',
-                overflow: 'hidden',
-                background: '#05070b'
+                zIndex: 2,
+                padding: 'clamp(1.25rem, 3.5vw, 2.5rem)',
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '18px'
               }}
-              title={`View ${activeSlide.title}`}
             >
-              <img
-                src={spotlightImage}
-                alt={activeSlide.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  display: 'block',
-                  transition: 'transform 0.4s ease, opacity 0.25s ease'
-                }}
-              />
-
-              {/* Cinematic Vignette Gradient Overlay */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(5,7,11,0.95) 0%, rgba(5,7,11,0.4) 35%, transparent 65%), linear-gradient(to right, rgba(5,7,11,0.6) 0%, transparent 40%)',
-                  pointerEvents: 'none'
-                }}
-              />
-
-              {/* Bottom Spotlight Info Badge */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  bottom: 'clamp(14px, 3vw, 24px)',
-                  left: 'clamp(16px, 3vw, 28px)',
-                  right: 'clamp(16px, 3vw, 28px)',
-                  zIndex: 3,
-                  pointerEvents: 'none'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              {/* Product Info */}
+              <div style={{ maxWidth: '680px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
                   <span style={{ 
                     fontSize: '0.68rem', 
                     fontWeight: 800, 
                     letterSpacing: '0.12em', 
                     textTransform: 'uppercase', 
                     color: 'var(--dior-gold, #c5a059)',
-                    background: 'rgba(0,0,0,0.65)',
-                    padding: '2px 8px',
-                    borderRadius: '2px',
+                    background: 'rgba(0,0,0,0.75)',
+                    padding: '3px 10px',
+                    borderRadius: '3px',
                     border: '1px solid rgba(197, 160, 89, 0.4)'
                   }}>
                     {activeSlide.tier}
                   </span>
-                  <span style={{ fontSize: '0.72rem', color: '#e5e7eb', fontWeight: 600 }}>
+                  <span style={{ 
+                    fontSize: '0.72rem', 
+                    color: '#e5e7eb', 
+                    fontWeight: 700,
+                    background: 'rgba(255, 255, 255, 0.14)',
+                    padding: '3px 10px',
+                    borderRadius: '3px'
+                  }}>
                     {activeSlide.category}
                   </span>
+                  {activeSlide.badge && (
+                    <span style={{ 
+                      fontSize: '0.7rem', 
+                      color: 'var(--dior-gold, #c5a059)', 
+                      fontWeight: 700,
+                      background: 'rgba(197, 160, 89, 0.18)',
+                      padding: '3px 8px',
+                      borderRadius: '3px'
+                    }}>
+                      {activeSlide.badge}
+                    </span>
+                  )}
                 </div>
 
-                <h2 
-                  style={{
-                    fontFamily: 'var(--font-brand, serif)',
-                    fontSize: 'clamp(1.25rem, 2.8vw, 1.85rem)',
-                    fontWeight: 800,
-                    margin: 0,
-                    letterSpacing: '0.02em',
-                    color: '#ffffff',
-                    textShadow: '0 2px 10px rgba(0,0,0,0.95)'
-                  }}
-                >
+                <h2 style={{ 
+                  fontFamily: 'var(--font-brand, serif)', 
+                  fontSize: 'clamp(1.5rem, 3.8vw, 2.6rem)', 
+                  fontWeight: 800, 
+                  margin: '0 0 6px', 
+                  letterSpacing: '0.02em', 
+                  color: '#ffffff', 
+                  textShadow: '0 2px 14px rgba(0,0,0,0.95)',
+                  lineHeight: 1.15
+                }}>
                   {activeSlide.title}
                 </h2>
 
-                <p style={{
-                  fontSize: 'clamp(0.78rem, 1.5vw, 0.88rem)',
-                  color: '#d1d5db',
-                  margin: '4px 0 0',
-                  fontWeight: 500,
-                  textShadow: '0 1px 6px rgba(0,0,0,0.95)'
+                <p style={{ 
+                  fontSize: 'clamp(0.85rem, 1.8vw, 1.05rem)', 
+                  color: '#f3f4f6', 
+                  fontWeight: 600, 
+                  margin: 0, 
+                  textShadow: '0 1px 8px rgba(0,0,0,0.95)' 
                 }}>
-                  {activeSlide.inspiration}
+                  {activeSlide.inspiration} &bull; {activeSlide.concentration}
                 </p>
               </div>
 
-              {/* Click indicator icon on top right */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  background: 'rgba(0,0,0,0.6)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  borderRadius: '50%',
-                  width: '34px',
-                  height: '34px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff'
-                }}
-              >
-                <ArrowUpRight size={16} />
-              </div>
-            </div>
+              {/* Price & Shop CTA */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', justifyContent: 'flex-end' }}>
+                    <span style={{ fontSize: 'clamp(1.35rem, 2.6vw, 1.85rem)', fontWeight: 800, color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}>
+                      RM {Number(activeSlide.price).toFixed(2)}
+                    </span>
+                    {activeSlide.originalPrice > activeSlide.price && (
+                      <span style={{ fontSize: '0.88rem', color: '#9ca3af', textDecoration: 'line-through' }}>
+                        RM {Number(activeSlide.originalPrice).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                    Extrait de Parfum (30%)
+                  </div>
+                </div>
 
-            {/* RIGHT PANEL: Details, 2x2 Interactive Thumbnails, Status & Price */}
-            <div 
-              style={{
-                padding: 'clamp(16px, 2.5vw, 24px)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                background: '#0d1017',
-                borderLeft: '1px solid rgba(255, 255, 255, 0.08)'
-              }}
-            >
-              {/* Top Title & Tagline */}
-              <div>
-                <h3 
-                  onClick={handleProductNavigate}
+                <div 
                   style={{
-                    fontFamily: 'var(--font-brand, serif)',
-                    fontSize: 'clamp(1.15rem, 2vw, 1.45rem)',
+                    background: '#ffffff',
+                    color: '#000000',
+                    padding: 'clamp(10px, 2vw, 14px) clamp(16px, 2.5vw, 22px)',
+                    borderRadius: '4px',
+                    fontFamily: 'var(--font-couture, sans-serif)',
+                    fontSize: '0.84rem',
                     fontWeight: 800,
-                    color: '#ffffff',
-                    margin: '0 0 4px',
-                    letterSpacing: '0.01em',
-                    cursor: 'pointer',
-                    lineHeight: 1.25
+                    letterSpacing: '0.04em',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
+                    transition: 'transform 0.15s ease, background 0.15s ease'
                   }}
                 >
-                  {activeSlide.title}
-                </h3>
-
-                <div style={{ fontSize: '0.78rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 600, marginBottom: '14px' }}>
-                  {activeSlide.inspiration}
-                </div>
-
-                {/* 2x2 PREVIEW THUMBNAIL GRID (Hover swaps the main picture!) */}
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ 
-                    fontSize: '0.68rem', 
-                    color: '#9ca3af', 
-                    letterSpacing: '0.08em', 
-                    textTransform: 'uppercase', 
-                    fontWeight: 700,
-                    marginBottom: '8px' 
-                  }}>
-                    Visual Showcase & Accords:
-                  </div>
-
-                  <div 
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(2, 1fr)',
-                      gap: '8px'
-                    }}
-                  >
-                    {activeSlide.images.map((imgUrl, thumbIdx) => {
-                      const isSelected = activeThumbIndex === thumbIdx;
-                      return (
-                        <div
-                          key={thumbIdx}
-                          onMouseEnter={() => setActiveThumbIndex(thumbIdx)}
-                          onClick={handleProductNavigate}
-                          style={{
-                            position: 'relative',
-                            borderRadius: '4px',
-                            overflow: 'hidden',
-                            aspectRatio: '16 / 10',
-                            background: '#05070a',
-                            cursor: 'pointer',
-                            border: isSelected ? '2px solid var(--dior-gold, #c5a059)' : '1px solid rgba(255, 255, 255, 0.1)',
-                            boxShadow: isSelected ? '0 0 10px rgba(197, 160, 89, 0.4)' : 'none',
-                            transition: 'all 0.15s ease'
-                          }}
-                          title={`Preview ${activeSlide.imageLabels?.[thumbIdx] || 'angle'}`}
-                        >
-                          <img
-                            src={imgUrl}
-                            alt=""
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              opacity: isSelected ? 1 : 0.72,
-                              transition: 'opacity 0.2s ease, transform 0.2s ease'
-                            }}
-                          />
-                          <div 
-                            style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              background: 'rgba(0,0,0,0.7)',
-                              fontSize: '0.62rem',
-                              fontWeight: 600,
-                              padding: '2px 4px',
-                              textAlign: 'center',
-                              color: isSelected ? '#ffffff' : '#9ca3af',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis'
-                            }}
-                          >
-                            {activeSlide.imageLabels?.[thumbIdx] || `Photo ${thumbIdx + 1}`}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Scent Accords & Tagline */}
-                <div style={{
-                  fontSize: '0.76rem',
-                  color: '#9ca3af',
-                  lineHeight: 1.4,
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  padding: '8px 10px',
-                  borderRadius: '4px',
-                  border: '1px solid rgba(255, 255, 255, 0.05)',
-                  marginBottom: '14px'
-                }}>
-                  <div style={{ color: '#d1d5db', fontWeight: 600, marginBottom: '2px' }}>
-                    {activeSlide.olfactoryFamily}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#9ca3af' }}>
-                    {activeSlide.tagline}
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom: Status, Price & Quick Action */}
-              <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <div style={{ fontSize: '0.76rem', color: '#9ca3af' }}>
-                    {activeSlide.status}
-                  </div>
-                  <span style={{
-                    fontSize: '0.68rem',
-                    fontWeight: 700,
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    color: '#f3f4f6',
-                    padding: '2px 6px',
-                    borderRadius: '2px'
-                  }}>
-                    {activeSlide.badge}
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                      <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>
-                        RM {Number(activeSlide.price).toFixed(2)}
-                      </span>
-                      {activeSlide.originalPrice > activeSlide.price && (
-                        <span style={{ fontSize: '0.8rem', color: '#6b7280', textDecoration: 'line-through' }}>
-                          RM {Number(activeSlide.originalPrice).toFixed(2)}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 600 }}>
-                      {activeSlide.concentration}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleProductNavigate}
-                    style={{
-                      background: '#ffffff',
-                      color: '#000000',
-                      border: 'none',
-                      padding: '8px 16px',
-                      borderRadius: '4px',
-                      fontFamily: 'var(--font-couture, sans-serif)',
-                      fontSize: '0.78rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      transition: 'background 0.2s ease, transform 0.1s ease'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#e5e7eb'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = '#ffffff'}
-                  >
-                    <span>Discover</span>
-                    <ArrowUpRight size={14} />
-                  </button>
+                  <span>Shop Creation</span>
+                  <ArrowRight size={16} strokeWidth={2.4} />
                 </div>
               </div>
 
             </div>
-
           </div>
 
         </div>
@@ -707,7 +586,7 @@ export const HeroBanner = () => {
                   height: '8px',
                   borderRadius: '4px',
                   border: 'none',
-                  background: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.2)',
+                  background: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.25)',
                   cursor: 'pointer',
                   padding: 0,
                   transition: 'all 0.25s ease'
@@ -719,11 +598,18 @@ export const HeroBanner = () => {
 
       </div>
 
-      {/* Responsive Stacking CSS for mobile */}
+      {/* Responsive Arrow & Layout Styling */}
       <style>{`
         @media (max-width: 860px) {
-          .steam-hero-card {
-            grid-template-columns: 1fr !important;
+          .hero-nav-arrow-left {
+            left: 8px !important;
+            width: 36px !important;
+            height: 52px !important;
+          }
+          .hero-nav-arrow-right {
+            right: 8px !important;
+            width: 36px !important;
+            height: 52px !important;
           }
         }
       `}</style>
