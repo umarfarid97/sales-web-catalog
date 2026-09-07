@@ -29,6 +29,9 @@ export const StoreProvider = ({ children }) => {
 
   // Role Mode: 'customer' | 'admin'
   const [role, setRoleState] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('admin')) {
+      return 'admin';
+    }
     return localStorage.getItem('valenszo_role') || localStorage.getItem('lumina_role') || 'customer';
   });
 
@@ -44,26 +47,23 @@ export const StoreProvider = ({ children }) => {
       }
       setRoleState('admin');
       localStorage.setItem('valenszo_role', 'admin');
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('admin.html')) {
+      if (typeof window !== 'undefined' && !window.location.pathname.toLowerCase().includes('admin')) {
         window.location.href = '/admin.html';
       }
       return;
     }
     setRoleState('customer');
     localStorage.setItem('valenszo_role', 'customer');
-    if (typeof window !== 'undefined' && window.location.pathname.includes('admin.html')) {
+    if (typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('admin')) {
       window.location.href = '/';
     }
   }, [isAdmin, openAuthModal]);
 
-  // Auto revert from admin if logged out or browsing customer storefront pages
+  // Auto revert from admin if logged out or unauthorized
   useEffect(() => {
-    if (role === 'admin') {
-      const isStorefrontPage = typeof window !== 'undefined' && !window.location.pathname.includes('admin.html');
-      if (!isAdmin || isStorefrontPage) {
-        setRoleState('customer');
-        localStorage.setItem('valenszo_role', 'customer');
-      }
+    if (role === 'admin' && !isAdmin) {
+      setRoleState('customer');
+      localStorage.setItem('valenszo_role', 'customer');
     }
   }, [isAdmin, role]);
 
