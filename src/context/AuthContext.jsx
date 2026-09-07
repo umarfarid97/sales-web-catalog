@@ -199,7 +199,13 @@ export const AuthProvider = ({ children }) => {
 
       if (error) {
         if (error.message?.includes('already registered')) {
-          return { success: false, error: 'An account with this email already exists. Please sign in.' };
+          return { success: false, error: 'An account with this email already exists. Please switch to the Sign In tab.' };
+        }
+        if (error.message?.toLowerCase().includes('rate limit')) {
+          return { 
+            success: false, 
+            error: 'Authentication email limit reached (Supabase restricts unverified email dispatch to ~3/hour). If you already registered, please click "Sign In". If this is your project, turn OFF "Confirm email" in Supabase to allow instant account creation.' 
+          };
         }
         return { success: false, error: error.message || 'Registration failed.' };
       }
