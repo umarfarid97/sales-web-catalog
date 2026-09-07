@@ -2,8 +2,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import { 
   saveProfileToSupabase, 
-  fetchProfileById 
+  fetchProfileById,
+  fetchProfileByEmail
 } from '../services/supabaseService';
+
+const ADMIN_EMAILS = [
+  'umarfarid90@gmail.com',
+  'admin@valenszo.my',
+  'atelier@valenszo.my'
+];
 
 const AuthContext = createContext();
 
@@ -20,7 +27,14 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('valenszo_auth_user');
-      return saved ? JSON.parse(saved) : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase().trim())) {
+          parsed.role = 'admin';
+        }
+        return parsed;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -38,6 +52,37 @@ export const AuthProvider = ({ children }) => {
   // Loading state
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
+  // Helper to fetch and resolve user profile with admin privileges
+  const resolveUserProfile = useCallback(async (authUser) => {
+    if (!authUser) return null;
+    const cleanEmail = authUser.email?.toLowerCase().trim();
+    const isWhitelisted = cleanEmail && ADMIN_EMAILS.includes(cleanEmail);
+
+    let profile = await fetchProfileById(authUser.id);
+    if (!profile && cleanEmail) {
+      profile = await fetchProfileByEmail(cleanEmail);
+    }
+
+    const resolved = {
+      id: authUser.id,
+      email: authUser.email,
+      name: profile?.name || authUser.user_metadata?.full_name || cleanEmail.split('@')[0],
+      phone: profile?.phone || authUser.user_metadata?.phone || '',
+      address: profile?.address || authUser.user_metadata?.address || '',
+      city: profile?.city || authUser.user_metadata?.city || 'Kuala Lumpur',
+      state: profile?.state || authUser.user_metadata?.state || 'Wilayah Persekutuan',
+      zip: profile?.zip || authUser.user_metadata?.zip || '50250',
+      country: profile?.country || 'Malaysia',
+      role: (isWhitelisted || profile?.role === 'admin') ? 'admin' : (profile?.role || authUser.user_metadata?.role || 'customer')
+    };
+
+    if (isWhitelisted && profile?.role !== 'admin') {
+      saveProfileToSupabase(resolved).catch(() => {});
+    }
+
+    return resolved;
+  }, []);
+
   // Sync Supabase Auth Session
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return;
@@ -45,27 +90,10 @@ export const AuthProvider = ({ children }) => {
     // 1. Initial Session Check
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
-        const profile = await fetchProfileById(session.user.id);
-        if (profile) {
-          setCurrentUser(profile);
-          localStorage.setItem('valenszo_auth_user', JSON.stringify(profile));
-        } else {
-          // Construct user from metadata
-          const fallbackUser = {
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
-            phone: session.user.user_metadata?.phone || '',
-            address: session.user.user_metadata?.address || '',
-            city: session.user.user_metadata?.city || 'Kuala Lumpur',
-            state: session.user.user_metadata?.state || 'Wilayah Persekutuan',
-            zip: session.user.user_metadata?.zip || '50250',
-            country: 'Malaysia',
-            role: session.user.user_metadata?.role || 'customer'
-          };
-          setCurrentUser(fallbackUser);
-          localStorage.setItem('valenszo_auth_user', JSON.stringify(fallbackUser));
-          saveProfileToSupabase(fallbackUser).catch(() => {});
+        const resolved = await resolveUserProfile(session.user);
+        if (resolved) {
+          setCurrentUser(resolved);
+          localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
         }
       }
     });
@@ -73,15 +101,11 @@ export const AuthProvider = ({ children }) => {
     // 2. Auth State Change Listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        const profile = await fetchProfileById(session.user.id);
-        const resolved = profile || {
-          id: session.user.id,
-          email: session.user.email,
-          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0],
-          role: session.user.user_metadata?.role || 'customer'
-        };
-        setCurrentUser(resolved);
-        localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
+        const resolved = await resolveUserProfile(session.user);
+        if (resolved) {
+          setCurrentUser(resolved);
+          localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
+        }
       } else if (event === 'SIGNED_OUT') {
         setCurrentUser(null);
         localStorage.removeItem('valenszo_auth_user');
@@ -91,7 +115,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       subscription?.unsubscribe();
     };
-  }, []);
+  }, [resolveUserProfile]);
 
   // Open Auth Dialog with optional custom messaging and callback
   const openAuthModal = useCallback(({ mode = 'signin', onComplete = null, title = null, subtitle = null } = {}) => {
@@ -138,19 +162,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (data?.user) {
-        const profile = await fetchProfileById(data.user.id);
-        const userObj = profile || {
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.full_name || cleanEmail.split('@')[0],
-          phone: data.user.user_metadata?.phone || '',
-          address: data.user.user_metadata?.address || '',
-          city: data.user.user_metadata?.city || 'Kuala Lumpur',
-          state: data.user.user_metadata?.state || 'Wilayah Persekutuan',
-          zip: data.user.user_metadata?.zip || '50250',
-          country: 'Malaysia',
-          role: data.user.user_metadata?.role || 'customer'
-        };
+        const userObj = await resolveUserProfile(data.user);
 
         setCurrentUser(userObj);
         localStorage.setItem('valenszo_auth_user', JSON.stringify(userObj));
@@ -274,12 +286,16 @@ export const AuthProvider = ({ children }) => {
     await saveProfileToSupabase(updated).catch(err => console.warn('Profile update warning:', err));
   };
 
+  const userEmail = currentUser?.email?.toLowerCase().trim() || '';
+  const isWhitelistedAdmin = ADMIN_EMAILS.includes(userEmail);
+  const isAdmin = currentUser?.role === 'admin' || isWhitelistedAdmin;
+
   return (
     <AuthContext.Provider
       value={{
         currentUser,
         isAuthenticated: Boolean(currentUser),
-        isAdmin: currentUser?.role === 'admin',
+        isAdmin,
         isAuthenticating,
         isAuthModalOpen,
         authModalMode,

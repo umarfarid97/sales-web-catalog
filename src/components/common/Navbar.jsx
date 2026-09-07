@@ -789,81 +789,85 @@ export const Navbar = () => {
                       <span>Track Fragrance Delivery</span>
                     </button>
 
-                    <button 
-                      onClick={() => { handleReset(); setIsMenuOpen(false); }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '11px 14px',
-                        background: 'transparent',
-                        border: 'none',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        color: '#374151',
-                        fontSize: '0.84rem',
-                        fontWeight: 600
-                      }}
-                    >
-                      <RotateCcw size={17} className={isResetting ? 'spin' : ''} />
-                      <span>Reset Valenszo Catalog</span>
-                    </button>
+                    {isAdmin && (
+                      <button 
+                        onClick={() => { handleReset(); setIsMenuOpen(false); }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          padding: '11px 14px',
+                          background: 'transparent',
+                          border: 'none',
+                          borderRadius: '3px',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          color: '#374151',
+                          fontSize: '0.84rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        <RotateCcw size={17} className={isResetting ? 'spin' : ''} />
+                        <span>Reset Valenszo Catalog</span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {/* Experience Mode Switcher (Boutique vs Atelier Admin) */}
-                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px', marginTop: 'auto' }}>
-                  <div style={{
-                    fontSize: '0.68rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: '#9ca3af',
-                    marginBottom: '8px',
-                    fontFamily: 'var(--font-couture)'
-                  }}>
-                    Experience Mode
-                  </div>
-                  <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
-                    <button
-                      onClick={() => { setRole('customer'); setIsMenuOpen(false); }}
-                      style={{
-                        flex: 1,
-                        padding: '9px 12px',
-                        border: 'none',
-                        borderRadius: '3px',
-                        background: role === 'customer' ? '#000000' : 'transparent',
-                        color: role === 'customer' ? '#ffffff' : '#4b5563',
-                        fontWeight: 700,
-                        fontSize: '0.76rem',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Boutique
-                    </button>
-                    <button
-                      onClick={() => { setRole('admin'); setIsMenuOpen(false); }}
-                      style={{
-                        flex: 1,
-                        padding: '9px 12px',
-                        border: 'none',
-                        borderRadius: '3px',
-                        background: role === 'admin' ? '#000000' : 'transparent',
-                        color: role === 'admin' ? '#ffffff' : '#4b5563',
-                        fontWeight: 700,
-                        fontSize: '0.76rem',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Atelier Admin
-                    </button>
-                  </div>
+                {/* Experience Mode Switcher (Visible strictly to Atelier Admin) */}
+                {isAdmin && (
+                  <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px', marginTop: 'auto' }}>
+                    <div style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: '#9ca3af',
+                      marginBottom: '8px',
+                      fontFamily: 'var(--font-couture)'
+                    }}>
+                      Experience Mode
+                    </div>
+                    <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
+                      <button
+                        onClick={() => { setRole('customer'); setIsMenuOpen(false); }}
+                        style={{
+                          flex: 1,
+                          padding: '9px 12px',
+                          border: 'none',
+                          borderRadius: '3px',
+                          background: role === 'customer' ? '#000000' : 'transparent',
+                          color: role === 'customer' ? '#ffffff' : '#4b5563',
+                          fontWeight: 700,
+                          fontSize: '0.76rem',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Boutique
+                      </button>
+                      <button
+                        onClick={() => { setRole('admin'); setIsMenuOpen(false); }}
+                        style={{
+                          flex: 1,
+                          padding: '9px 12px',
+                          border: 'none',
+                          borderRadius: '3px',
+                          background: role === 'admin' ? '#000000' : 'transparent',
+                          color: role === 'admin' ? '#ffffff' : '#4b5563',
+                          fontWeight: 700,
+                          fontSize: '0.76rem',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Atelier Admin
+                      </button>
+                    </div>
 
-                  <div style={{ marginTop: '14px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
-                    {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
+                    <div style={{ marginTop: '14px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
+                      {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
+                    </div>
                   </div>
-                </div>
+                )}
 
               </div>
             </div>
