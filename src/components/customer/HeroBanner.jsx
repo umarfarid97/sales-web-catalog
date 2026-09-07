@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   ChevronLeft, 
@@ -184,26 +184,33 @@ export const HeroBanner = () => {
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const activeSlide = slides[currentSlideIndex] || slides[0] || CURATED_FEATURED_SLIDES[0];
+  // Gesture tracking refs
+  const touchStartXRef = useRef(null);
+  const touchStartYRef = useRef(null);
+  const mouseStartXRef = useRef(null);
+  const hasDraggedRef = useRef(false);
+  const SWIPE_THRESHOLD = 40;
 
-  // Auto-advance slider every 5s, pausing when hovered
+  // Auto-advance slider every 5s, pausing when hovered or dragging
   useEffect(() => {
-    if (isHovered || slides.length <= 1) return;
+    if (isHovered || isDragging || slides.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isHovered, slides.length]);
+  }, [isHovered, isDragging, slides.length]);
 
   const handlePrev = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     setCurrentSlideIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
   const handleNext = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
   };
 
@@ -211,11 +218,102 @@ export const HeroBanner = () => {
     setCurrentSlideIndex(idx);
   };
 
-  const handleProductNavigate = () => {
+  // Touch Swipe handlers (Mobile & Tablets)
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    setIsDragging(true);
+    setDragOffset(0);
+    hasDraggedRef.current = false;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartXRef.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - touchStartXRef.current;
+    const diffY = currentY - touchStartYRef.current;
+
+    // Only drag horizontally if motion is more horizontal than vertical
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // Elastic rubber-band resistance at the ends
+      let damped = diffX;
+      if (
+        (currentSlideIndex === 0 && diffX > 0) ||
+        (currentSlideIndex === slides.length - 1 && diffX < 0)
+      ) {
+        damped = diffX * 0.3;
+      }
+      setDragOffset(damped);
+      if (Math.abs(diffX) > 10) {
+        hasDraggedRef.current = true;
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    if (dragOffset < -SWIPE_THRESHOLD) {
+      handleNext();
+    } else if (dragOffset > SWIPE_THRESHOLD) {
+      handlePrev();
+    }
+    setDragOffset(0);
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    setTimeout(() => {
+      hasDraggedRef.current = false;
+    }, 80);
+  };
+
+  // Mouse Drag handlers (Desktop)
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return; // Left click only
+    mouseStartXRef.current = e.clientX;
+    setIsDragging(true);
+    setDragOffset(0);
+    hasDraggedRef.current = false;
+  };
+
+  const handleMouseMove = (e) => {
+    if (mouseStartXRef.current === null) return;
+    const diffX = e.clientX - mouseStartXRef.current;
+    let damped = diffX;
+    if (
+      (currentSlideIndex === 0 && diffX > 0) ||
+      (currentSlideIndex === slides.length - 1 && diffX < 0)
+    ) {
+      damped = diffX * 0.3;
+    }
+    setDragOffset(damped);
+    if (Math.abs(diffX) > 8) {
+      hasDraggedRef.current = true;
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (mouseStartXRef.current === null) return;
+    setIsDragging(false);
+    if (dragOffset < -SWIPE_THRESHOLD) {
+      handleNext();
+    } else if (dragOffset > SWIPE_THRESHOLD) {
+      handlePrev();
+    }
+    setDragOffset(0);
+    mouseStartXRef.current = null;
+    setTimeout(() => {
+      hasDraggedRef.current = false;
+    }, 80);
+  };
+
+  const handleProductNavigate = (slideId) => {
+    if (hasDraggedRef.current) {
+      return; // Ignore click navigation if user was swiping or dragging
+    }
     if (typeof window !== 'undefined') {
-      window.location.href = `/product.html?product=${encodeURIComponent(activeSlide.id)}`;
+      window.location.assign(`/product.html?product=${encodeURIComponent(slideId)}`);
     } else if (openProductDetail) {
-      openProductDetail(activeSlide.id);
+      openProductDetail(slideId);
     }
   };
 
@@ -364,64 +462,36 @@ export const HeroBanner = () => {
             <ChevronRight size={24} strokeWidth={2.2} />
           </button>
 
-          {/* THE SINGLE IMMERSIVE SHOWCASE CARD (One Card, One Picture, 100% Clickable) */}
+          {/* THE IMMERSIVE SHOWCASE CAROUSEL (Full Swipe Transition Track) */}
           <div 
-            onClick={handleProductNavigate}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
             style={{
               width: '100%',
               borderRadius: '10px',
               overflow: 'hidden',
               position: 'relative',
-              cursor: 'pointer',
-              minHeight: 'clamp(340px, 46vw, 520px)',
               background: '#090b10',
               border: '1px solid rgba(255, 255, 255, 0.14)',
               boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              transition: 'transform 0.25s ease, box-shadow 0.25s ease'
+              userSelect: 'none',
+              touchAction: 'pan-y',
+              cursor: isDragging ? 'grabbing' : 'pointer'
             }}
-            title={`View ${activeSlide.title}`}
           >
-            {/* The Main High-Res Picture */}
-            <img
-              src={activeSlide.image}
-              alt={activeSlide.title}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = activeSlide.fallbackImage || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1400&auto=format&fit=crop&q=80';
-              }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                display: 'block',
-                transition: 'opacity 0.3s ease'
-              }}
-            />
-
-            {/* Cinematic Multi-Stop Dark Gradient Overlay */}
-            <div 
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(to top, rgba(7,9,13,0.98) 0%, rgba(7,9,13,0.72) 42%, rgba(7,9,13,0.2) 72%, transparent 100%)',
-                pointerEvents: 'none'
-              }}
-            />
-
-            {/* Top Right Click to View Pill */}
+            {/* Top Right Click to View Pill (Anchored over sliding track) */}
             <div
               style={{
                 position: 'absolute',
                 top: 'clamp(12px, 2.5vw, 20px)',
                 right: 'clamp(12px, 2.5vw, 20px)',
-                zIndex: 3,
-                background: 'rgba(0, 0, 0, 0.65)',
+                zIndex: 6,
+                background: 'rgba(0, 0, 0, 0.7)',
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255, 255, 255, 0.18)',
                 padding: '6px 14px',
@@ -441,123 +511,185 @@ export const HeroBanner = () => {
               <span>CLICK TO VIEW PRODUCT</span>
             </div>
 
-            {/* Overlaid Product Details & Direct Action */}
+            {/* HORIZONTAL SWIPE TRANSITION TRACK */}
             <div 
               style={{
-                position: 'relative',
-                zIndex: 2,
-                padding: 'clamp(1.25rem, 3.5vw, 2.5rem)',
                 display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '18px'
+                width: '100%',
+                transform: `translateX(calc(-${currentSlideIndex * 100}% + ${dragOffset}px))`,
+                transition: isDragging ? 'none' : 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
+                willChange: 'transform'
               }}
             >
-              {/* Product Info */}
-              <div style={{ maxWidth: '680px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                  <span style={{ 
-                    fontSize: '0.68rem', 
-                    fontWeight: 800, 
-                    letterSpacing: '0.12em', 
-                    textTransform: 'uppercase', 
-                    color: 'var(--dior-gold, #c5a059)',
-                    background: 'rgba(0,0,0,0.75)',
-                    padding: '3px 10px',
-                    borderRadius: '3px',
-                    border: '1px solid rgba(197, 160, 89, 0.4)'
-                  }}>
-                    {activeSlide.tier}
-                  </span>
-                  <span style={{ 
-                    fontSize: '0.72rem', 
-                    color: '#e5e7eb', 
-                    fontWeight: 700,
-                    background: 'rgba(255, 255, 255, 0.14)',
-                    padding: '3px 10px',
-                    borderRadius: '3px'
-                  }}>
-                    {activeSlide.category}
-                  </span>
-                  {activeSlide.badge && (
-                    <span style={{ 
-                      fontSize: '0.7rem', 
-                      color: 'var(--dior-gold, #c5a059)', 
-                      fontWeight: 700,
-                      background: 'rgba(197, 160, 89, 0.18)',
-                      padding: '3px 8px',
-                      borderRadius: '3px'
-                    }}>
-                      {activeSlide.badge}
-                    </span>
-                  )}
-                </div>
-
-                <h2 style={{ 
-                  fontFamily: 'var(--font-brand, serif)', 
-                  fontSize: 'clamp(1.5rem, 3.8vw, 2.6rem)', 
-                  fontWeight: 800, 
-                  margin: '0 0 6px', 
-                  letterSpacing: '0.02em', 
-                  color: '#ffffff', 
-                  textShadow: '0 2px 14px rgba(0,0,0,0.95)',
-                  lineHeight: 1.15
-                }}>
-                  {activeSlide.title}
-                </h2>
-
-                <p style={{ 
-                  fontSize: 'clamp(0.85rem, 1.8vw, 1.05rem)', 
-                  color: '#f3f4f6', 
-                  fontWeight: 600, 
-                  margin: 0, 
-                  textShadow: '0 1px 8px rgba(0,0,0,0.95)' 
-                }}>
-                  {activeSlide.inspiration} &bull; {activeSlide.concentration}
-                </p>
-              </div>
-
-              {/* Price & Shop CTA */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', justifyContent: 'flex-end' }}>
-                    <span style={{ fontSize: 'clamp(1.35rem, 2.6vw, 1.85rem)', fontWeight: 800, color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}>
-                      RM {Number(activeSlide.price).toFixed(2)}
-                    </span>
-                    {activeSlide.originalPrice > activeSlide.price && (
-                      <span style={{ fontSize: '0.88rem', color: '#9ca3af', textDecoration: 'line-through' }}>
-                        RM {Number(activeSlide.originalPrice).toFixed(2)}
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 700, letterSpacing: '0.04em' }}>
-                    Extrait de Parfum (30%)
-                  </div>
-                </div>
-
-                <div 
+              {slides.map((slide, idx) => (
+                <div
+                  key={slide.id || idx}
+                  onClick={() => handleProductNavigate(slide.id)}
                   style={{
-                    background: '#ffffff',
-                    color: '#000000',
-                    padding: 'clamp(10px, 2vw, 14px) clamp(16px, 2.5vw, 22px)',
-                    borderRadius: '4px',
-                    fontFamily: 'var(--font-couture, sans-serif)',
-                    fontSize: '0.84rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.04em',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
-                    transition: 'transform 0.15s ease, background 0.15s ease'
+                    width: '100%',
+                    minWidth: '100%',
+                    flexShrink: 0,
+                    position: 'relative',
+                    cursor: isDragging ? 'grabbing' : 'pointer',
+                    minHeight: 'clamp(340px, 46vw, 520px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    overflow: 'hidden'
                   }}
+                  title={`View ${slide.title}`}
                 >
-                  <span>Shop Creation</span>
-                  <ArrowRight size={16} strokeWidth={2.4} />
-                </div>
-              </div>
+                  {/* The Main High-Res Picture */}
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    draggable={false}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = slide.fallbackImage || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1400&auto=format&fit=crop&q=80';
+                    }}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center',
+                      display: 'block',
+                      pointerEvents: 'none'
+                    }}
+                  />
 
+                  {/* Cinematic Multi-Stop Dark Gradient Overlay */}
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(7,9,13,0.98) 0%, rgba(7,9,13,0.72) 42%, rgba(7,9,13,0.2) 72%, transparent 100%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
+
+                  {/* Overlaid Product Details & Direct Action */}
+                  <div 
+                    style={{
+                      position: 'relative',
+                      zIndex: 2,
+                      padding: 'clamp(1.25rem, 3.5vw, 2.5rem)',
+                      display: 'flex',
+                      alignItems: 'flex-end',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '18px'
+                    }}
+                  >
+                    {/* Product Info */}
+                    <div style={{ maxWidth: '680px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                        <span style={{ 
+                          fontSize: '0.68rem', 
+                          fontWeight: 800, 
+                          letterSpacing: '0.12em', 
+                          textTransform: 'uppercase', 
+                          color: 'var(--dior-gold, #c5a059)',
+                          background: 'rgba(0,0,0,0.75)',
+                          padding: '3px 10px',
+                          borderRadius: '3px',
+                          border: '1px solid rgba(197, 160, 89, 0.4)'
+                        }}>
+                          {slide.tier}
+                        </span>
+                        <span style={{ 
+                          fontSize: '0.72rem', 
+                          color: '#e5e7eb', 
+                          fontWeight: 700,
+                          background: 'rgba(255, 255, 255, 0.14)',
+                          padding: '3px 10px',
+                          borderRadius: '3px'
+                        }}>
+                          {slide.category}
+                        </span>
+                        {slide.badge && (
+                          <span style={{ 
+                            fontSize: '0.7rem', 
+                            color: 'var(--dior-gold, #c5a059)', 
+                            fontWeight: 700,
+                            background: 'rgba(197, 160, 89, 0.18)',
+                            padding: '3px 8px',
+                            borderRadius: '3px'
+                          }}>
+                            {slide.badge}
+                          </span>
+                        )}
+                      </div>
+
+                      <h2 style={{ 
+                        fontFamily: 'var(--font-brand, serif)', 
+                        fontSize: 'clamp(1.5rem, 3.8vw, 2.6rem)', 
+                        fontWeight: 800, 
+                        margin: '0 0 6px', 
+                        letterSpacing: '0.02em', 
+                        color: '#ffffff', 
+                        textShadow: '0 2px 14px rgba(0,0,0,0.95)',
+                        lineHeight: 1.15
+                      }}>
+                        {slide.title}
+                      </h2>
+
+                      <p style={{ 
+                        fontSize: 'clamp(0.85rem, 1.8vw, 1.05rem)', 
+                        color: '#f3f4f6', 
+                        fontWeight: 600, 
+                        margin: 0, 
+                        textShadow: '0 1px 8px rgba(0,0,0,0.95)' 
+                      }}>
+                        {slide.inspiration} &bull; {slide.concentration}
+                      </p>
+                    </div>
+
+                    {/* Price & Shop CTA */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', justifyContent: 'flex-end' }}>
+                          <span style={{ fontSize: 'clamp(1.35rem, 2.6vw, 1.85rem)', fontWeight: 800, color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}>
+                            RM {Number(slide.price).toFixed(2)}
+                          </span>
+                          {slide.originalPrice > slide.price && (
+                            <span style={{ fontSize: '0.88rem', color: '#9ca3af', textDecoration: 'line-through' }}>
+                              RM {Number(slide.originalPrice).toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                          Extrait de Parfum (30%)
+                        </div>
+                      </div>
+
+                      <div 
+                        style={{
+                          background: '#ffffff',
+                          color: '#000000',
+                          padding: 'clamp(10px, 2vw, 14px) clamp(16px, 2.5vw, 22px)',
+                          borderRadius: '4px',
+                          fontFamily: 'var(--font-couture, sans-serif)',
+                          fontSize: '0.84rem',
+                          fontWeight: 800,
+                          letterSpacing: '0.04em',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
+                          transition: 'transform 0.15s ease, background 0.15s ease'
+                        }}
+                      >
+                        <span>Shop Creation</span>
+                        <ArrowRight size={16} strokeWidth={2.4} />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
