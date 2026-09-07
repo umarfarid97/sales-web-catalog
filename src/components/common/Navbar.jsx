@@ -219,6 +219,9 @@ export const Navbar = () => {
               padding: '4px'
             }}
             onClick={() => {
+              if (role === 'admin') {
+                setRole('customer');
+              }
               window.location.href = '/';
             }}
             title="VALENSZO Haute Parfumerie"
@@ -492,7 +495,16 @@ export const Navbar = () => {
                 flexShrink: 0,
                 background: '#ffffff'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div 
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+                  onClick={() => {
+                    if (role === 'admin') {
+                      setRole('customer');
+                    }
+                    setIsMenuOpen(false);
+                    window.location.href = '/';
+                  }}
+                >
                   <ValenszoLogo size="sm" showMonogram={true} showBrandName={false} showSubtitle={false} />
                   <div>
                     <span style={{

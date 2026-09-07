@@ -7,11 +7,13 @@ import {
   AlertTriangle, 
   Plus, 
   Download,
-  ShieldCheck
+  ShieldCheck,
+  ArrowLeft
 } from 'lucide-react';
 
 export const AdminHeader = () => {
   const { 
+    setRole,
     adminTab, 
     setAdminTab, 
     setIsProductFormOpen, 
@@ -128,6 +130,19 @@ export const AdminHeader = () => {
         >
           <Download size={16} />
           <span>Export CSV</span>
+        </button>
+
+        <button
+          className="admin-btn-secondary"
+          onClick={() => {
+            setRole('customer');
+            window.location.href = '/';
+          }}
+          title="Return to Customer Boutique Storefront"
+          style={{ background: '#f9fafb', color: '#111827' }}
+        >
+          <ArrowLeft size={16} />
+          <span>Boutique Storefront</span>
         </button>
 
       </div>

@@ -56,11 +56,14 @@ export const StoreProvider = ({ children }) => {
     }
   }, [isAdmin, openAuthModal]);
 
-  // Auto revert from admin if logged out or customer
+  // Auto revert from admin if logged out or browsing customer storefront pages
   useEffect(() => {
-    if (role === 'admin' && !isAdmin) {
-      setRoleState('customer');
-      localStorage.setItem('valenszo_role', 'customer');
+    if (role === 'admin') {
+      const isStorefrontPage = typeof window !== 'undefined' && !window.location.pathname.includes('admin.html');
+      if (!isAdmin || isStorefrontPage) {
+        setRoleState('customer');
+        localStorage.setItem('valenszo_role', 'customer');
+      }
     }
   }, [isAdmin, role]);
 
