@@ -1,369 +1,286 @@
 import React, { useState, useMemo } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
-  Sparkles, 
-  ArrowRight, 
   ArrowLeft, 
   RotateCcw, 
+  Check, 
+  Sparkles, 
   ShoppingBag, 
   CheckCircle2, 
+  User, 
+  Droplets, 
+  Trees, 
   Flame, 
-  Droplet, 
-  Wind, 
-  Sun, 
-  Moon, 
+  Flower2, 
   Heart, 
-  ShieldCheck, 
-  Eye, 
-  Award,
-  Crown,
-  Compass
+  Leaf, 
+  Sun, 
+  Shield, 
+  Briefcase, 
+  Crown, 
+  Moon, 
+  Feather, 
+  Compass,
+  ArrowRight,
+  Star
 } from 'lucide-react';
 
-const QUESTIONS = [
+export const QUESTIONS = [
   {
     id: 'gender',
-    title: 'Who is this fragrance crafted for?',
-    subtitle: 'Select the intended wearer profile to narrow down our 345 creations.',
-    icon: Compass,
+    title: 'Who is this fragrance for?',
+    subtitle: 'Select the collection that best matches the wearer.',
+    teaser: 'Next, what kind of scent character do you love most?',
+    isMulti: false,
+    gridCols: 'repeat(auto-fit, minmax(220px, 1fr))',
     options: [
       {
         id: 'men',
-        label: 'Men (Lelaki)',
-        desc: 'Magnetic, noble, and architecturally structured for men.',
-        tag: 'Men',
+        label: "Men's Collection",
+        desc: 'Bold, refined, and confident masculine creations',
+        icon: User,
         gender: 'Men'
       },
       {
         id: 'women',
-        label: 'Women (Wanita)',
-        desc: 'Radiant, enchanting, and gracefully alluring for women.',
-        tag: 'Women',
+        label: "Women's Collection",
+        desc: 'Elegant, radiant, and feminine floral bouquets',
+        icon: Sparkles,
         gender: 'Women'
       },
       {
         id: 'unisex',
-        label: 'Gender-Neutral & Niche (Unisex)',
-        desc: 'Artistic, borderless, and boundary-defying Haute Parfumerie.',
-        tag: 'Niche & Unisex',
+        label: 'Shared & Unisex',
+        desc: 'Artisanal, borderless, and niche Haute Parfumerie',
+        icon: Compass,
         gender: 'Unisex'
       }
     ]
   },
   {
-    id: 'atmosphere',
-    title: 'What olfactory universe resonates with you most?',
-    subtitle: 'The primary character aura that defines your scent mood.',
-    icon: Wind,
+    id: 'character',
+    title: 'What kind of scent character do you love most?',
+    subtitle: 'Choose one or more that you feel drawn to.',
+    teaser: 'Next, where will you wear it?',
+    isMulti: true,
+    gridCols: 'repeat(auto-fit, minmax(160px, 1fr))',
     options: [
       {
-        id: 'fresh_citrus',
-        label: 'Crisp Oceanic & Sparkling Citrus',
-        desc: 'Reggio bergamot, sea spray, iced mandarin, and vibrant solar energy.',
-        clusters: ['Fresh / Aquatic / Citrus', 'Fresh / Aquatic / Citrus / Green'],
-        traits: ['Fresh', 'Aquatic', 'Citrus']
+        id: 'fresh',
+        label: 'Fresh',
+        desc: 'Citrus, Aquatic, Clean',
+        icon: Droplets,
+        traits: ['Fresh', 'Citrus', 'Aquatic', 'Clean', 'Marine', 'Bergamot']
       },
       {
-        id: 'blue_woody',
-        label: 'Modern Blue, Aromatic & Woody',
-        desc: 'Crisp lavender, ambroxan, cedar, and magnetic crowd-stopping appeal.',
-        clusters: ['Blue / Aromatic / Fresh-Woody'],
-        traits: ['Blue', 'Aromatic', 'Fresh-Woody']
+        id: 'woody',
+        label: 'Woody',
+        desc: 'Earthy, Warm, Sophisticated',
+        icon: Trees,
+        traits: ['Woody', 'Cedar', 'Sandalwood', 'Vetiver', 'Earthy', 'Patchouli']
       },
       {
-        id: 'gourmand_vanilla',
-        label: 'Decadent Gourmand, Amber & Warm Vanilla',
-        desc: 'Rich bourbon vanilla, praline, roasted tonka, caramelized sugar, and warm amber.',
-        clusters: ['Sweet / Amber / Gourmand', 'Sweet / Gourmand / Vanilla'],
-        traits: ['Sweet', 'Gourmand', 'Vanilla', 'Amber']
+        id: 'oriental',
+        label: 'Oriental',
+        desc: 'Rich, Spicy, Exotic',
+        icon: Flame,
+        traits: ['Oriental', 'Spicy', 'Exotic', 'Warm', 'Resinous', 'Oud', 'Incense']
       },
       {
-        id: 'romantic_floral',
-        label: 'Romantic Rose, Peony & Floral Bouquets',
-        desc: 'Damascena rose, pink peonies, blooming jasmine, and poetic floral elegance.',
-        clusters: ['Rose / Peony / Romantic Floral', 'Floral / Bouquet'],
-        traits: ['Rose', 'Peony', 'Floral', 'Romantic Floral']
+        id: 'floral',
+        label: 'Floral',
+        desc: 'Soft, Romantic, Feminine',
+        icon: Flower2,
+        traits: ['Floral', 'Rose', 'Jasmine', 'Peony', 'White Floral', 'Romantic Floral']
       },
       {
-        id: 'dark_seductive',
-        label: 'Dark, Seductive & Nocturnal Mystery',
-        desc: 'Black coffee, smoky leather, intoxicating plum, and magnetic midnight allure.',
-        clusters: ['Dark / Seductive / Night', 'Leather / Smoky / Dark'],
-        traits: ['Dark', 'Seductive', 'Night', 'Leather', 'Smoky']
+        id: 'sweet',
+        label: 'Sweet',
+        desc: 'Vanilla, Gourmand, Cozy',
+        icon: Heart,
+        traits: ['Sweet', 'Vanilla', 'Gourmand', 'Tonka', 'Caramel', 'Praline']
       },
       {
-        id: 'oud_resinous',
-        label: 'Royal Oud, Spices & Oriental Opulence',
-        desc: 'Precious agarwood, smoky incense, golden amber, and Middle Eastern prestige.',
-        clusters: ['Oud / Oriental / Resinous', 'Spicy / Warm / Tobacco'],
-        traits: ['Oud', 'Oriental', 'Resinous', 'Tobacco', 'Spicy']
+        id: 'aromatic',
+        label: 'Aromatic',
+        desc: 'Herbal, Green, Refined',
+        icon: Leaf,
+        traits: ['Aromatic', 'Lavender', 'Herbal', 'Green', 'Mint', 'Sage']
       },
       {
-        id: 'fruity_tropical',
-        label: 'Juicy Tropical Fruits & Sun-Drenched Nectar',
-        desc: 'Sweet mango, wild berries, juicy peach, passionfruit, and cheerful radiance.',
-        clusters: ['Fruity / Juicy / Tropical', 'Fruity-Floral / Mass Appeal'],
-        traits: ['Fruity', 'Tropical', 'Juicy']
+        id: 'amber',
+        label: 'Amber',
+        desc: 'Warm, Resinous, Sensual',
+        icon: Sun,
+        traits: ['Amber', 'Warm', 'Sensual', 'Resinous', 'Golden', 'Amberwood']
       },
       {
-        id: 'clean_musk',
-        label: 'Clean Cotton, Silky Musk & Powdery Iris',
-        desc: 'Freshly pressed linen, white musk, powdery iris, and pure skin warmth.',
-        clusters: ['Clean / Musk / Powdery'],
-        traits: ['Clean', 'Musk', 'Powdery']
+        id: 'leather',
+        label: 'Leather',
+        desc: 'Bold, Smoky, Powerful',
+        icon: Shield,
+        traits: ['Leather', 'Smoky', 'Tobacco', 'Bold', 'Dark', 'Suede']
       }
     ]
   },
   {
     id: 'occasion',
-    title: 'Where do you envision wearing this creation?',
-    subtitle: 'Match the scenario where you want to leave an unforgettable impression.',
-    icon: Sun,
+    title: 'Where will you wear your signature scent?',
+    subtitle: 'Select the primary scenario or setting.',
+    teaser: 'Next, how strong do you want your fragrance to project?',
+    isMulti: false,
+    gridCols: 'repeat(auto-fit, minmax(200px, 1fr))',
     options: [
       {
-        id: 'daily_signature',
-        label: 'Everyday Signature & Professional',
-        desc: 'Effortless luxury for the workplace, executive meetings, and daily wear.',
-        occasionTag: 'Everyday Signature',
-        preferredIntensity: [3, 4]
+        id: 'daily',
+        label: 'Daily & Office',
+        desc: 'Clean, professional, and effortless for everyday wear',
+        icon: Briefcase,
+        occasionTag: 'Daily'
       },
       {
-        id: 'romantic_date',
-        label: 'Intimate Dates & Romantic Encounters',
-        desc: 'Close-quarters magnetism designed to linger intimately on the skin.',
-        occasionTag: 'Intimate & Romantic',
-        preferredIntensity: [4, 4.5]
+        id: 'date_night',
+        label: 'Date Night & Romance',
+        desc: 'Intimate, magnetic, and seductive close-range appeal',
+        icon: Heart,
+        occasionTag: 'Romantic'
       },
       {
-        id: 'night_out',
-        label: 'VIP Galas, Nightlife & Grand Events',
-        desc: 'High-impact projection that cuts through the crowd with commanding elegance.',
-        occasionTag: 'Grand Night Out',
-        preferredIntensity: [4.5, 5]
+        id: 'evening',
+        label: 'Evening & Grand Events',
+        desc: 'High-impact, opulent, and commanding presence',
+        icon: Crown,
+        occasionTag: 'Evening'
       },
       {
-        id: 'casual_outdoor',
-        label: 'Tropical Sun, Weekend Leisure & Sport',
-        desc: 'Invigorating, active, and refreshing under warm outdoor conditions.',
-        occasionTag: 'Outdoor & Leisure',
-        preferredIntensity: [3, 4]
+        id: 'versatile',
+        label: 'Everywhere & Anytime',
+        desc: 'A versatile chameleon that shines in any setting',
+        icon: Sparkles,
+        occasionTag: 'Versatile'
       }
     ]
   },
   {
     id: 'sillage',
-    title: 'What projection and trail intensity do you desire?',
-    subtitle: 'How far should your fragrance project into the room?',
-    icon: Flame,
+    title: 'How do you want your fragrance to project?',
+    subtitle: 'Choose your preferred presence and sillage trail.',
+    teaser: 'Next, what impression do you want to project?',
+    isMulti: false,
+    gridCols: 'repeat(auto-fit, minmax(220px, 1fr))',
     options: [
       {
-        id: 'intimate',
-        label: 'Intimate Skin Scent (Subtle Aura)',
-        desc: 'Discreet and private. Noticeable only within an intimate whisper or embrace.',
+        id: 'subtle',
+        label: 'Subtle & Intimate',
+        desc: 'Skin-close aura. Discreet, private, and whisper-close.',
+        icon: Feather,
         intensityScore: 3
       },
       {
         id: 'radiant',
-        label: 'Radiant & Elegant (Arm’s Length)',
-        desc: 'The golden classic. Noticeable within normal conversational distance (2–3 feet).',
+        label: 'Radiant & Elegant',
+        desc: "Arm's length projection. Noticeable conversational distance.",
+        icon: Sun,
         intensityScore: 4
       },
       {
-        id: 'beast_mode',
-        label: 'Room-Filling & Monumental (Beast Mode)',
-        desc: 'Maximum sillage and intoxicating trail. Turns heads the moment you enter.',
+        id: 'bold',
+        label: 'Bold & Room-Filling',
+        desc: 'Monumental beast-mode trail. Turns heads the moment you enter.',
+        icon: Flame,
         intensityScore: 5
       }
     ]
   },
   {
-    id: 'sweetness',
-    title: 'What is your preference regarding sweetness?',
-    subtitle: 'From bone-dry mineral freshness to rich caramelized indulgence.',
-    icon: Heart,
+    id: 'vibe',
+    title: 'What impression do you want to leave behind?',
+    subtitle: 'The defining mood that completes your personal aura.',
+    teaser: 'Ready to reveal your bespoke recommendations!',
+    isMulti: false,
+    gridCols: 'repeat(auto-fit, minmax(200px, 1fr))',
     options: [
       {
-        id: 'dry',
-        label: 'Crisp & Dry (Zero Sugar)',
-        desc: 'Strictly mineral, ocean breeze, woods, or citrus rind without sweetness.',
-        sweetnessType: 'dry'
-      },
-      {
-        id: 'balanced',
-        label: 'Balanced Warmth (Subtle & Natural)',
-        desc: 'Delicately balanced with natural spice, amber warmth, or light floral nectar.',
-        sweetnessType: 'balanced'
-      },
-      {
-        id: 'rich',
-        label: 'Rich & Decadent (Sweet Gourmand)',
-        desc: 'Heavy bourbon vanilla, toasted tonka bean, caramel, melted honey, or praline.',
-        sweetnessType: 'sweet'
-      }
-    ]
-  },
-  {
-    id: 'woods_spices',
-    title: 'How do you feel about woody, smoky, and spicy accords?',
-    subtitle: 'The foundational base notes that anchor the perfume on your skin.',
-    icon: Award,
-    options: [
-      {
-        id: 'bold_woods',
-        label: 'I love deep smokiness, rich leather, dark oud & tobacco',
-        desc: 'Profound, opulent, and authoritative resinous depth.',
-        woodPreference: 'bold'
-      },
-      {
-        id: 'clean_woods',
-        label: 'I prefer clean, refined cedarwood, sandalwood & vetiver',
-        desc: 'Structured, polished, and contemporary gentlemanly woods.',
-        woodPreference: 'clean'
-      },
-      {
-        id: 'minimal_woods',
-        label: 'Keep woods minimal; prioritize freshness, flowers or fruits',
-        desc: 'Light, airy base without heavy timber or incense.',
-        woodPreference: 'minimal'
-      }
-    ]
-  },
-  {
-    id: 'florals_fruits',
-    title: 'What role should florals or fruit accents play?',
-    subtitle: 'The blooming heart and uplifting facets of your scent profile.',
-    icon: Droplet,
-    options: [
-      {
-        id: 'regal_floral',
-        label: 'Lush & Regal Florals (Rose, Jasmine, Tuberose, Violet)',
-        desc: 'A magnificent bouquet that takes center stage.',
-        floralPreference: 'regal'
-      },
-      {
-        id: 'juicy_fruits',
-        label: 'Succulent Fruits (Peach, Berries, Apple, Pineapple)',
-        desc: 'Mouthwatering fruit nectar that adds juicy, lively vibrance.',
-        floralPreference: 'juicy'
-      },
-      {
-        id: 'no_florals',
-        label: 'Strictly Minimal (Aromatic Herbs, Woods or Clean Citrus)',
-        desc: 'A dry, crisp profile without sweet petals or fruits.',
-        floralPreference: 'none'
-      }
-    ]
-  },
-  {
-    id: 'climate',
-    title: 'In what climate will you wear this fragrance most?',
-    subtitle: 'Ensures optimal diffusion and longevity under your daily conditions.',
-    icon: Sun,
-    options: [
-      {
-        id: 'tropical_heat',
-        label: 'Tropical Heat & Humidity (Malaysia Daytime)',
-        desc: 'Formulated to cut through warmth without becoming cloying or heavy.',
-        climateType: 'tropical'
-      },
-      {
-        id: 'air_conditioned',
-        label: 'Air-Conditioned Lounges & Cool Evenings',
-        desc: 'Allows warm spices, amber, and heavier extracts to unfold luxuriously.',
-        climateType: 'cool'
-      },
-      {
-        id: 'all_weather',
-        label: 'All-Year All-Weather Versatility',
-        desc: 'A versatile chameleon that adapts seamlessly across all environments.',
-        climateType: 'all'
-      }
-    ]
-  },
-  {
-    id: 'personality',
-    title: 'What personal statement should your scent express?',
-    subtitle: 'The psychological aura and impression you project onto others.',
-    icon: Crown,
-    options: [
-      {
-        id: 'commanding',
-        label: 'Commanding, Mysterious & Unforgettable',
-        desc: 'A powerful presence that exudes authority, prestige, and intrigue.',
-        vibe: 'commanding'
-      },
-      {
-        id: 'sophisticated',
-        label: 'Refined, Impeccable & Sophisticated',
-        desc: 'Subtle high luxury, cultured poise, and effortless elegance.',
-        vibe: 'sophisticated'
-      },
-      {
-        id: 'magnetic',
-        label: 'Magnetic, Seductive & Irresistibly Addictive',
-        desc: 'A sensual siren-call that draws people in and leaves a memorable trail.',
-        vibe: 'magnetic'
-      },
-      {
-        id: 'invigorating',
-        label: 'Vibrant, Fresh, Approachable & Uplifting',
-        desc: 'Radiant optimism, clean confidence, and breezy vitality.',
+        id: 'confident',
+        label: 'Clean & Confident',
+        desc: 'Crisp bergamot, fresh woods, and magnetic approachable charm',
+        icon: Sun,
         vibe: 'fresh'
-      }
-    ]
-  },
-  {
-    id: 'tier',
-    title: 'What category of our collection do you wish to explore?',
-    subtitle: 'Select between globally celebrated icons or rare artisanal extraits.',
-    icon: Sparkles,
-    options: [
-      {
-        id: 'tier_s',
-        label: '★ Tier S · Global Launch Icons (Recommended)',
-        desc: 'The top 55 most legendary, universally celebrated masterpieces.',
-        tierTarget: 'S'
       },
       {
-        id: 'tier_a',
-        label: 'Tier A · Premium Haute Extraits',
-        desc: 'Distinctive, elevated connoisseur scents for sophisticated collectors.',
-        tierTarget: 'A'
+        id: 'seductive',
+        label: 'Mysterious & Seductive',
+        desc: 'Dark amber, roasted tonka, and intoxicating midnight allure',
+        icon: Moon,
+        vibe: 'seductive'
       },
       {
-        id: 'niche',
-        label: 'Artisanal & Niche Rarities',
-        desc: 'Avant-garde, rare formulations designed for the discerning nose.',
-        tierTarget: 'Niche'
+        id: 'prestigious',
+        label: 'Royal & Prestigious',
+        desc: 'Precious oud, rare saffron, noble cedar, and timeless authority',
+        icon: Crown,
+        vibe: 'prestigious'
       },
       {
-        id: 'open',
-        label: 'Surprise Me (Pure Scent Chemistry)',
-        desc: 'Scan the entire 345-fragrance catalog with zero bias.',
-        tierTarget: 'All'
+        id: 'cozy',
+        label: 'Warm & Comforting',
+        desc: 'Bourbon vanilla, golden caramel, and soft cocooning luxury',
+        icon: Heart,
+        vibe: 'cozy'
       }
     ]
   }
 ];
 
 export const FragranceDiagnostic = () => {
-  const { products, addToCart, openProductDetail, setSelectedProductModal, navigateToCatalog } = useStore();
+  const { products, addToCart, showToast } = useStore();
 
   const [currentStep, setCurrentStep] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState({
+    gender: null,
+    character: ['woody'], // default highlight matching picture
+    occasion: null,
+    sillage: null,
+    vibe: null
+  });
   const [isCalculated, setIsCalculated] = useState(false);
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(1); // Default to 50ml or 100ml
+  const [selectedAnchorFormat, setSelectedAnchorFormat] = useState('30ml');
 
   const currentQuestion = QUESTIONS[currentStep];
 
-  const handleSelectOption = (option) => {
-    const updatedAnswers = { ...answers, [currentQuestion.id]: option };
-    setAnswers(updatedAnswers);
+  // Handle option selection / toggling
+  const handleToggleOption = (optId) => {
+    if (currentQuestion.isMulti) {
+      setAnswers((prev) => {
+        const existing = prev[currentQuestion.id] || [];
+        const next = existing.includes(optId)
+          ? existing.filter((id) => id !== optId)
+          : [...existing, optId];
+        return { ...prev, [currentQuestion.id]: next };
+      });
+    } else {
+      setAnswers((prev) => ({
+        ...prev,
+        [currentQuestion.id]: optId
+      }));
+    }
+  };
 
+  // Check if current step can advance
+  const canContinue = useMemo(() => {
+    const val = answers[currentQuestion.id];
+    if (currentQuestion.isMulti) {
+      return Array.isArray(val) && val.length > 0;
+    }
+    return Boolean(val);
+  }, [answers, currentQuestion]);
+
+  const handleContinue = () => {
+    if (!canContinue) return;
     if (currentStep < QUESTIONS.length - 1) {
       setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Finished all 10 questions
       setIsCalculated(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -372,595 +289,753 @@ export const FragranceDiagnostic = () => {
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.location.href = '/';
     }
   };
 
   const handleRestart = () => {
-    setAnswers({});
+    setAnswers({
+      gender: null,
+      character: [],
+      occasion: null,
+      sillage: null,
+      vibe: null
+    });
     setCurrentStep(0);
     setIsCalculated(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- Recommendation Engine Scoring ---
-  const recommendations = useMemo(() => {
-    if (!isCalculated || !products || products.length === 0) return [];
+  // --- Recommendation Engine ---
+  const { anchor, layeringRecommendations } = useMemo(() => {
+    if (!products || products.length === 0) {
+      return { anchor: null, layeringRecommendations: [] };
+    }
+
+    const qGender = answers.gender;
+    const qChars = answers.character || [];
+    const qOccasion = answers.occasion;
+    const qSillage = answers.sillage;
+    const qVibe = answers.vibe;
+
+    // Filter relevant keywords from selected character options
+    const selectedKeywords = [];
+    qChars.forEach((cId) => {
+      const charOpt = QUESTIONS[1].options.find((o) => o.id === cId);
+      if (charOpt && charOpt.traits) {
+        selectedKeywords.push(...charOpt.traits.map((t) => t.toLowerCase()));
+      }
+    });
 
     const scored = products.map((prod) => {
       let score = 0;
       const reasons = [];
 
-      const qGender = answers.gender;
-      const qAtmo = answers.atmosphere;
-      const qOccasion = answers.occasion;
-      const qSillage = answers.sillage;
-      const qSweet = answers.sweetness;
-      const qWoods = answers.woods_spices;
-      const qFlorals = answers.florals_fruits;
-      const qClimate = answers.climate;
-      const qVibe = answers.personality;
-      const qTier = answers.tier;
-
-      // 1. Gender Alignment (Heavy weight: 35 pts)
-      if (qGender) {
-        if (qGender.gender === 'Men') {
-          if (prod.gender === 'Men') {
-            score += 35;
-          } else if (prod.gender === 'Unisex') {
-            score += 28;
-          } else {
-            score -= 100; // Incompatible
-          }
-        } else if (qGender.gender === 'Women') {
-          if (prod.gender === 'Women') {
-            score += 35;
-          } else if (prod.gender === 'Unisex') {
-            score += 28;
-          } else {
-            score -= 100; // Incompatible
-          }
-        } else if (qGender.gender === 'Unisex') {
-          if (prod.gender === 'Unisex') {
-            score += 35;
-            reasons.push('Artisanal gender-neutral formulation');
-          } else {
-            score += 15;
-          }
-        }
+      // 1. Gender Compatibility (35 pts)
+      if (qGender === 'men') {
+        if (prod.gender === 'Men') score += 35;
+        else if (prod.gender === 'Unisex') score += 25;
+        else score -= 80;
+      } else if (qGender === 'women') {
+        if (prod.gender === 'Women') score += 35;
+        else if (prod.gender === 'Unisex') score += 25;
+        else score -= 80;
+      } else if (qGender === 'unisex') {
+        if (prod.gender === 'Unisex') score += 35;
+        else score += 20;
       }
 
-      // 2. Olfactory Universe & Clusters (35 pts)
-      if (qAtmo) {
-        let clusterMatch = false;
-        if (qAtmo.clusters?.includes(prod.character) || qAtmo.clusters?.includes(prod.olfactoryFamily)) {
-          score += 25;
-          clusterMatch = true;
-          reasons.push(`Aligns with ${prod.character.split('/')[0].trim()} character`);
-        }
+      // 2. Character & Accord Overlap (up to 40 pts)
+      const prodTraits = Array.isArray(prod.traits) ? prod.traits.map((t) => t.toLowerCase()) : [];
+      const prodFamily = (prod.olfactoryFamily || '').toLowerCase();
+      const prodChar = (prod.character || '').toLowerCase();
 
-        // Check traits overlap
-        if (prod.traits && qAtmo.traits) {
-          const matchingTraits = prod.traits.filter((t) =>
-            qAtmo.traits.some((qt) => qt.toLowerCase() === t.toLowerCase())
-          );
-          if (matchingTraits.length > 0) {
-            score += matchingTraits.length * 5;
-            if (!clusterMatch) {
-              reasons.push(`Features ${matchingTraits.join(' & ')} facets`);
-            }
-          }
-        }
-      }
-
-      // 3. Sillage & Intensity (15 pts)
-      if (qSillage) {
-        const prodIntensity = prod.intensityScore || (prod.tier === 'S' ? 5 : 4);
-        const diff = Math.abs(prodIntensity - qSillage.intensityScore);
-        if (diff === 0) {
-          score += 15;
-          reasons.push(prod.sillage ? `${prod.sillage} sillage` : 'Desired projection level');
-        } else if (diff <= 1) {
+      let matchedTraitsCount = 0;
+      selectedKeywords.forEach((kw) => {
+        if (prodTraits.includes(kw) || prodFamily.includes(kw) || prodChar.includes(kw)) {
           score += 8;
+          matchedTraitsCount++;
         }
+      });
+      if (matchedTraitsCount > 0) {
+        reasons.push(`Harmonizes with ${qChars.join(', ')} character`);
       }
 
-      // 4. Sweetness Profile (15 pts)
-      if (qSweet) {
-        const charLower = (prod.character || '').toLowerCase();
-        const descLower = (prod.description || '').toLowerCase();
-        const isSweet = charLower.includes('sweet') || charLower.includes('gourmand') || charLower.includes('vanilla') || descLower.includes('vanilla');
-
-        if (qSweet.sweetnessType === 'sweet' && isSweet) {
-          score += 15;
-          reasons.push('Rich vanilla and gourmand warmth');
-        } else if (qSweet.sweetnessType === 'dry' && !isSweet) {
-          score += 15;
-          reasons.push('Dry, crisp profile without sugary weight');
-        } else if (qSweet.sweetnessType === 'balanced') {
-          score += 12;
-        }
+      // 3. Occasion Alignment (15 pts)
+      if (qOccasion === 'daily') {
+        if (prodTraits.some((t) => ['fresh', 'clean', 'citrus', 'aquatic', 'woody'].includes(t))) score += 15;
+      } else if (qOccasion === 'date_night') {
+        if (prodTraits.some((t) => ['amber', 'vanilla', 'sweet', 'warm', 'spicy'].includes(t))) score += 15;
+      } else if (qOccasion === 'evening') {
+        if (prod.tier === 'S' || prodTraits.some((t) => ['oud', 'leather', 'dark', 'oriental'].includes(t))) score += 15;
+      } else if (qOccasion === 'versatile') {
+        if (prod.tier === 'S') score += 15;
       }
 
-      // 5. Woods & Spices (15 pts)
-      if (qWoods) {
-        const char = (prod.character || '').toLowerCase();
-        if (qWoods.woodPreference === 'bold') {
-          if (char.includes('oud') || char.includes('tobacco') || char.includes('leather') || char.includes('spicy')) {
-            score += 15;
-            reasons.push('Smoky leather, spices, and exotic woods');
-          }
-        } else if (qWoods.woodPreference === 'clean') {
-          if (char.includes('woody') || char.includes('vetiver') || char.includes('aromatic')) {
-            score += 15;
-            reasons.push('Noble cedarwood and clean vetiver structure');
-          }
-        } else if (qWoods.woodPreference === 'minimal') {
-          if (!char.includes('oud') && !char.includes('leather')) {
-            score += 12;
-          }
-        }
-      }
+      // 4. Sillage / Intensity Alignment (10 pts)
+      const intensity = prod.intensityScore || (prod.tier === 'S' ? 5 : 4);
+      if (qSillage === 'subtle' && intensity <= 3) score += 10;
+      else if (qSillage === 'radiant' && (intensity === 4 || intensity === 3)) score += 10;
+      else if (qSillage === 'bold' && intensity >= 4) score += 10;
 
-      // 6. Florals & Fruits (15 pts)
-      if (qFlorals) {
-        const char = (prod.character || '').toLowerCase();
-        if (qFlorals.floralPreference === 'regal' && (char.includes('rose') || char.includes('floral') || char.includes('bouquet'))) {
-          score += 15;
-          reasons.push('Precious Damascena rose and floral bouquet');
-        } else if (qFlorals.floralPreference === 'juicy' && (char.includes('fruity') || char.includes('tropical'))) {
-          score += 15;
-          reasons.push('Succulent fruity and tropical nectar');
-        } else if (qFlorals.floralPreference === 'none' && !char.includes('floral') && !char.includes('rose')) {
-          score += 12;
-        }
-      }
+      // 5. Personal Vibe (15 pts)
+      if (qVibe === 'confident' && prodTraits.some((t) => ['fresh', 'cedar', 'woody', 'blue'].includes(t))) score += 15;
+      else if (qVibe === 'seductive' && prodTraits.some((t) => ['amber', 'tonka', 'plum', 'dark'].includes(t))) score += 15;
+      else if (qVibe === 'prestigious' && (prod.tier === 'S' || prodTraits.some((t) => ['oud', 'leather', 'saffron'].includes(t)))) score += 15;
+      else if (qVibe === 'cozy' && prodTraits.some((t) => ['vanilla', 'caramel', 'sweet', 'gourmand'].includes(t))) score += 15;
 
-      // 7. Climate & Occasion (15 pts)
-      if (qClimate) {
-        const char = (prod.character || '').toLowerCase();
-        if (qClimate.climateType === 'tropical' && (char.includes('fresh') || char.includes('aquatic') || char.includes('citrus'))) {
-          score += 15;
-          reasons.push('Engineered for warm tropical diffusion');
-        } else if (qClimate.climateType === 'cool' && (char.includes('amber') || char.includes('night') || char.includes('oud'))) {
-          score += 15;
-          reasons.push('Perfect for air-conditioned lounges and evenings');
-        } else if (qClimate.climateType === 'all') {
-          score += 10;
-        }
-      }
+      // Tier S Masterpiece Boost
+      if (prod.tier === 'S') score += 10;
 
-      // 8. Tier Preference (15 pts)
-      if (qTier) {
-        if (qTier.tierTarget === 'S' && prod.tier === 'S') {
-          score += 20;
-          reasons.push('Official Tier S Launch Icon & crowd-pleaser');
-        } else if (qTier.tierTarget === 'A' && prod.tier === 'A') {
-          score += 18;
-          reasons.push('Tier A Premium Haute formulation');
-        } else if (qTier.tierTarget === 'Niche' && (prod.gender === 'Unisex' || prod.category.includes('Niche'))) {
-          score += 20;
-          reasons.push('Artisanal niche rarity');
-        } else {
-          // General quality bonus
-          if (prod.tier === 'S') score += 12;
-          else if (prod.tier === 'A') score += 8;
-        }
-      }
-
-      // Cap and normalize score
-      const matchPercentage = Math.min(99, Math.max(70, Math.round(75 + (score / 175) * 24)));
+      // Normalize match percentage (85% to 99%)
+      const matchPercentage = Math.min(99, Math.max(82, Math.round(80 + (score / 120) * 19)));
 
       return {
         product: prod,
         score,
         matchPercentage,
-        reasons: reasons.slice(0, 3)
+        reasons: reasons.length > 0 ? reasons : ['Perfect olfactory harmony with your answers']
       };
     });
 
     scored.sort((a, b) => b.score - a.score);
-    return scored.slice(0, 4);
-  }, [isCalculated, answers, products]);
 
-  const topMatch = recommendations[0];
-  const runnerUps = recommendations.slice(1, 4);
+    const anchorItem = scored[0]?.product || products[0];
+    
+    // Pick 4 complementary recommendations that contrast nicely for layering
+    const remaining = scored.filter((s) => s.product.id !== anchorItem.id);
+    const companions = [];
+    const seenFamilies = new Set([anchorItem.olfactoryFamily]);
+
+    // First try picking from different olfactory families
+    for (const item of remaining) {
+      if (!seenFamilies.has(item.product.olfactoryFamily) && companions.length < 4) {
+        companions.push(item.product);
+        seenFamilies.add(item.product.olfactoryFamily);
+      }
+    }
+    // Fill remaining if needed
+    for (const item of remaining) {
+      if (companions.length < 4 && !companions.some((c) => c.id === item.product.id)) {
+        companions.push(item.product);
+      }
+    }
+
+    return {
+      anchor: scored[0] || { product: anchorItem, matchPercentage: 98, reasons: ['Optimal signature match'] },
+      layeringRecommendations: companions
+    };
+  }, [products, answers]);
+
+  const handleAddAnchorToBag = () => {
+    if (!anchor?.product) return;
+    const sizeObj = {
+      '30ml': { label: '30ml Travel Spray', price: 45 },
+      '50ml': { label: '50ml Signature Flacon', price: 75 },
+      '100ml': { label: '100ml Grand Flacon', price: 125 }
+    }[selectedAnchorFormat] || { label: '30ml Travel Spray', price: 45 };
+
+    addToCart(anchor.product, 1, sizeObj.label, null, sizeObj.price);
+    if (showToast) {
+      showToast(`Added ${anchor.product.name} (${sizeObj.label}) to your Bag!`, 'success');
+    }
+  };
+
+  const handleAddCompanionToBag = (prod) => {
+    addToCart(prod, 1, '30ml Travel Spray', null, 45);
+    if (showToast) {
+      showToast(`Added ${prod.name} (30ml) to your Bag!`, 'success');
+    }
+  };
 
   return (
-    <div className="fragrance-diagnostic-page" style={{ minHeight: '80vh', padding: '40px 0 80px', background: '#fafafa' }}>
-      <div className="container" style={{ maxWidth: '900px' }}>
+    <div 
+      style={{
+        background: '#FAF8F5',
+        minHeight: '85vh',
+        padding: 'clamp(20px, 4vw, 44px) clamp(14px, 3.5vw, 32px)',
+        borderRadius: '12px',
+        border: '1px solid #EBE6DF',
+        maxWidth: '960px',
+        margin: '0 auto',
+        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.03)'
+      }}
+    >
+      {!isCalculated ? (
+        /* ================= 5-STEP QUESTIONNAIRE (MATCHING PICTURE) ================= */
+        <div>
+          {/* Top Bar: Back | Centered VALENSZO FRAGRANCE | Step Counter */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between', 
+              marginBottom: '28px',
+              borderBottom: '1px solid #EFEAE3',
+              paddingBottom: '16px'
+            }}
+          >
+            <button 
+              onClick={handleBack} 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '6px', 
+                background: 'none', 
+                border: 'none', 
+                color: '#27272A', 
+                cursor: 'pointer', 
+                fontSize: '0.88rem', 
+                fontWeight: 600,
+                padding: '4px 8px'
+              }}
+            >
+              <ArrowLeft size={16} />
+              <span>Back</span>
+            </button>
 
-        {!isCalculated ? (
-          /* ================= QUESTIONNAIRE STEPPER ================= */
-          <div style={{ background: '#ffffff', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: 'clamp(20px, 4vw, 44px)', boxShadow: 'var(--shadow-sm)' }}>
-            
-            {/* Top Bar: Progress & Step Counter */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="badge badge-black" style={{ fontSize: '0.68rem', letterSpacing: '0.1em' }}>
-                  QUESTION {currentStep + 1} OF {QUESTIONS.length}
-                </span>
-                <span style={{ fontSize: '0.78rem', color: '#926917', fontWeight: 700, fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
-                  VALENSZO DIAGNOSTIC
-                </span>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.2rem', letterSpacing: '0.18em', fontWeight: 800, color: '#111827' }}>
+                VALENSZO
               </div>
-
-              {currentStep > 0 && (
-                <button
-                  onClick={handleBack}
-                  className="btn-icon"
-                  style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', background: 'transparent', color: '#6b7280', cursor: 'pointer' }}
-                >
-                  <ArrowLeft size={14} />
-                  <span>Previous</span>
-                </button>
-              )}
+              <div style={{ fontSize: '0.58rem', letterSpacing: '0.28em', color: '#6B7280', textTransform: 'uppercase', marginTop: '1px' }}>
+                FRAGRANCE
+              </div>
             </div>
 
-            {/* Progress Bar */}
-            <div style={{ width: '100%', height: '4px', background: '#e5e7eb', borderRadius: '2px', marginBottom: '32px', overflow: 'hidden' }}>
-              <div
-                style={{
-                  height: '100%',
-                  background: 'linear-gradient(90deg, #000000 0%, #d97706 100%)',
-                  width: `${((currentStep + 1) / QUESTIONS.length) * 100}%`,
-                  transition: 'width 0.3s ease'
-                }}
-              />
+            <div style={{ fontSize: '0.82rem', color: '#4B5563', fontWeight: 600, minWidth: '70px', textAlign: 'right' }}>
+              Step {currentStep + 1} of {QUESTIONS.length}
             </div>
-
-            {/* Question Header */}
-            <div style={{ marginBottom: '28px', textAlign: 'left' }}>
-              <h2 className="couture-title" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.85rem)', marginBottom: '8px', color: '#000000', lineHeight: '1.25' }}>
-                {currentQuestion.title}
-              </h2>
-              <p style={{ color: '#6b7280', fontSize: '0.92rem', lineHeight: '1.5' }}>
-                {currentQuestion.subtitle}
-              </p>
-            </div>
-
-            {/* Options Grid */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {currentQuestion.options.map((option) => {
-                const isSelected = answers[currentQuestion.id]?.id === option.id;
-                return (
-                  <button
-                    key={option.id}
-                    onClick={() => handleSelectOption(option)}
-                    className="diagnostic-option-btn"
-                    style={{
-                      textAlign: 'left',
-                      padding: '18px 20px',
-                      borderRadius: 'var(--radius-sm)',
-                      border: isSelected ? '2px solid #000000' : '1px solid #e5e7eb',
-                      background: isSelected ? '#f8f9fa' : '#ffffff',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '16px'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: '0.98rem', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>
-                        {option.label}
-                      </div>
-                      <div style={{ fontSize: '0.82rem', color: '#6b7280', lineHeight: '1.45' }}>
-                        {option.desc}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        border: isSelected ? '7px solid #000000' : '2px solid #d1d5db',
-                        flexShrink: 0,
-                        transition: 'all 0.2s ease'
-                      }}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-
           </div>
-        ) : (
-          /* ================= RECOMMENDATIONS VIEW ================= */
-          <div>
-            
-            {/* Header Result Card */}
-            <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-              <div className="couture-sub" style={{ marginBottom: '6px', color: '#926917' }}>
-                OLFACTORY DIAGNOSTIC COMPLETE
-              </div>
-              <h1 className="couture-title" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#000000', marginBottom: '12px' }}>
-                Your Bespoke Scent Match
-              </h1>
-              <p style={{ color: '#4b5563', fontSize: '0.95rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
-                Based on your 10 preferences, our algorithm evaluated all <strong>345 creations</strong> in the Valenszo portfolio to discover your exact olfactory signature.
-              </p>
-            </div>
 
-            {/* TOP #1 SIGNATURE MATCH HERO CARD */}
-            {topMatch && (
-              <div 
-                style={{
-                  background: '#ffffff',
-                  border: '2px solid #000000',
-                  borderRadius: 'var(--radius-md)',
-                  padding: 'clamp(20px, 4vw, 36px)',
-                  marginBottom: '40px',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Gold Glow Top Ribbon */}
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg, #d97706, #f59e0b, #d97706)' }} />
+          {/* Stepper Progress Bar (Line with 5 Circle Nodes matching Picture) */}
+          <div 
+            style={{ 
+              position: 'relative', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between', 
+              margin: '0 auto 36px', 
+              maxWidth: '540px', 
+              padding: '0 24px' 
+            }}
+          >
+            {/* Background Line */}
+            <div 
+              style={{ 
+                position: 'absolute', 
+                top: '50%', 
+                left: '36px', 
+                right: '36px', 
+                height: '2px', 
+                background: '#E5E7EB', 
+                transform: 'translateY(-50%)', 
+                zIndex: 0 
+              }} 
+            />
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', alignItems: 'center' }}>
-                  
-                  {/* Left Column: Product Visual with Match Badge */}
-                  <div style={{ position: 'relative' }}>
-                    <div style={{ aspectRatio: '1', borderRadius: 'var(--radius-sm)', overflow: 'hidden', background: '#f3f4f6' }}>
-                      <img
-                        src={topMatch.product.images?.[0] || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80'}
-                        alt={topMatch.product.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    </div>
+            {/* Filled Progress Line */}
+            <div 
+              style={{ 
+                position: 'absolute', 
+                top: '50%', 
+                left: '36px', 
+                width: `${(currentStep / (QUESTIONS.length - 1)) * 86}%`, 
+                height: '2px', 
+                background: '#000000', 
+                transform: 'translateY(-50%)', 
+                zIndex: 1, 
+                transition: 'width 0.3s ease' 
+              }} 
+            />
 
-                    {/* Floating Match Badge */}
-                    <div
+            {/* Step Circles */}
+            {QUESTIONS.map((_, idx) => {
+              const isCompleted = idx < currentStep;
+              const isCurrent = idx === currentStep;
+
+              return (
+                <div 
+                  key={idx}
+                  style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    background: isCompleted ? '#000000' : isCurrent ? '#000000' : '#FAF8F5',
+                    border: isCompleted ? '2px solid #000000' : isCurrent ? '2px solid #000000' : '2px solid #D1D5DB',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ffffff',
+                    position: 'relative',
+                    zIndex: 2,
+                    transition: 'all 0.25s ease'
+                  }}
+                >
+                  {isCompleted ? (
+                    <Check size={13} color="#ffffff" strokeWidth={3} />
+                  ) : isCurrent ? (
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffffff' }} />
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Question Title & Subtitle (Serif Centered) */}
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 28px' }}>
+            <h2 
+              style={{ 
+                fontFamily: 'var(--font-brand, serif)', 
+                fontSize: 'clamp(1.4rem, 3.5vw, 2.1rem)', 
+                fontWeight: 700, 
+                color: '#111827', 
+                margin: '0 0 8px', 
+                lineHeight: 1.25 
+              }}
+            >
+              {currentQuestion.title}
+            </h2>
+            <p style={{ color: '#6B7280', fontSize: '0.88rem', margin: 0 }}>
+              {currentQuestion.subtitle}
+            </p>
+          </div>
+
+          {/* Card Options Grid (Matching Picture 4x2 Grid on Step 2!) */}
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: currentQuestion.gridCols,
+              gap: '12px',
+              marginBottom: '36px'
+            }}
+          >
+            {currentQuestion.options.map((opt) => {
+              const isSelected = currentQuestion.isMulti 
+                ? (answers[currentQuestion.id] || []).includes(opt.id)
+                : answers[currentQuestion.id] === opt.id;
+
+              return (
+                <div
+                  key={opt.id}
+                  onClick={() => handleToggleOption(opt.id)}
+                  style={{
+                    position: 'relative',
+                    background: isSelected ? '#F7F1E7' : '#FFFFFF',
+                    border: isSelected ? '1.5px solid #C5A059' : '1px solid #EBE7E0',
+                    borderRadius: '8px',
+                    padding: '24px 14px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: isSelected ? '0 4px 14px rgba(197, 160, 89, 0.16)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '128px'
+                  }}
+                >
+                  {/* Top-Right Gold Check Badge on Selected Cards (Matching Picture!) */}
+                  {isSelected && (
+                    <div 
                       style={{
                         position: 'absolute',
-                        top: '12px',
-                        left: '12px',
-                        background: '#000000',
-                        color: '#f59e0b',
-                        border: '1px solid #d97706',
-                        padding: '4px 10px',
-                        borderRadius: '2px',
-                        fontSize: '0.74rem',
-                        fontWeight: 900,
-                        letterSpacing: '0.08em',
+                        top: '8px',
+                        right: '8px',
+                        width: '18px',
+                        height: '18px',
+                        borderRadius: '50%',
+                        background: '#C5A059',
+                        color: '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '5px'
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
                       }}
                     >
-                      <Sparkles size={13} />
-                      <span>{topMatch.matchPercentage}% MATCH &bull; PERFECT SIGNATURE</span>
+                      <Check size={11} strokeWidth={3} />
                     </div>
+                  )}
 
-                    <div
-                      style={{
-                        position: 'absolute',
-                        bottom: '12px',
-                        right: '12px',
-                        background: 'rgba(255, 255, 255, 0.95)',
-                        color: '#111827',
-                        padding: '4px 8px',
-                        borderRadius: '2px',
-                        fontSize: '0.7rem',
-                        fontWeight: 800,
-                        border: '1px solid #e5e7eb'
-                      }}
-                    >
-                      CATALOG NO. {topMatch.product.catalogNo}
-                    </div>
+                  {/* Centered Line Art Icon */}
+                  <div style={{ color: isSelected ? '#B45309' : '#374151', marginBottom: '8px' }}>
+                    <opt.icon size={28} strokeWidth={1.6} />
                   </div>
 
-                  {/* Right Column: Matched Details & Fast Add to Bag */}
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <span className="badge badge-black" style={{ fontSize: '0.66rem' }}>
-                        {topMatch.product.tier === 'S' ? '★ TIER S LAUNCH ICON' : `TIER ${topMatch.product.tier}`}
-                      </span>
-                      <span style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                        {topMatch.product.gender} &bull; {topMatch.product.concentration}
-                      </span>
-                    </div>
-
-                    <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000', marginBottom: '4px' }}>
-                      {topMatch.product.displayName || topMatch.product.name}
-                    </h2>
-
-                    {topMatch.product.brandInspiration && (
-                      <div style={{ fontSize: '0.85rem', color: '#926917', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '12px' }}>
-                        Inspired by {topMatch.product.brandInspiration}
-                      </div>
-                    )}
-
-                    <p style={{ color: '#4b5563', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '16px' }}>
-                      {topMatch.product.tagline || topMatch.product.description}
-                    </p>
-
-                    {/* Reasons Why It Matched */}
-                    <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 'var(--radius-sm)', padding: '14px', marginBottom: '20px' }}>
-                      <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-couture)', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#111827', marginBottom: '8px' }}>
-                        Why this formula matches your chemistry:
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        {topMatch.reasons.map((reason, rIdx) => (
-                          <div key={rIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#374151' }}>
-                            <CheckCircle2 size={14} color="#059669" />
-                            <span>{reason}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Size Selector */}
-                    <div style={{ marginBottom: '18px' }}>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#6b7280', marginBottom: '8px' }}>
-                        Select Format
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                        {topMatch.product.sizes?.map((size, sIdx) => (
-                          <button
-                            key={sIdx}
-                            onClick={() => setSelectedSizeIndex(sIdx)}
-                            style={{
-                              padding: '8px 14px',
-                              borderRadius: 'var(--radius-sm)',
-                              border: selectedSizeIndex === sIdx ? '2px solid #000000' : '1px solid #e5e7eb',
-                              background: selectedSizeIndex === sIdx ? '#000000' : '#ffffff',
-                              color: selectedSizeIndex === sIdx ? '#ffffff' : '#111827',
-                              fontSize: '0.76rem',
-                              fontWeight: 700,
-                              cursor: 'pointer'
-                            }}
-                          >
-                            {size.label} &bull; RM{(topMatch.product.price * size.priceMultiplier).toFixed(0)}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      <button
-                        className="btn btn-dior-black"
-                        onClick={() => {
-                          const chosenSize = topMatch.product.sizes?.[selectedSizeIndex] || { label: '100 ml Flacon', priceMultiplier: 1.0 };
-                          addToCart(topMatch.product, chosenSize.label, chosenSize.priceMultiplier);
-                        }}
-                        style={{ flex: 1, minWidth: '180px', padding: '13px 20px', fontSize: '0.84rem' }}
-                      >
-                        <ShoppingBag size={15} />
-                        <span>Add Signature To Bag</span>
-                      </button>
-
-                      <button
-                        className="btn btn-dior-white"
-                        onClick={() => openProductDetail ? openProductDetail(topMatch.product) : setSelectedProductModal(topMatch.product)}
-                        style={{ padding: '13px 18px', fontSize: '0.84rem' }}
-                      >
-                        <Eye size={15} />
-                        <span>Inspect Notes</span>
-                      </button>
-                    </div>
-
+                  {/* Card Title */}
+                  <div style={{ fontSize: '0.94rem', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>
+                    {opt.label}
                   </div>
 
+                  {/* Subtext */}
+                  <div style={{ fontSize: '0.72rem', color: '#6B7280', lineHeight: 1.35, maxWidth: '170px' }}>
+                    {opt.desc}
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom Action Area: Teaser + CONTINUE Button + Retake */}
+          <div style={{ textAlign: 'center', maxWidth: '440px', margin: '0 auto' }}>
+            {currentQuestion.teaser && (
+              <div 
+                style={{ 
+                  fontFamily: 'var(--font-brand, serif)', 
+                  fontSize: '1.05rem', 
+                  color: '#18181B', 
+                  marginBottom: '16px',
+                  fontWeight: 600
+                }}
+              >
+                {currentQuestion.teaser}
               </div>
             )}
 
-            {/* CURATED RUNNER-UPS / ALTERNATIVES */}
-            {runnerUps.length > 0 && (
-              <div style={{ marginBottom: '40px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '20px' }}>
-                  <div>
-                    <div className="couture-sub" style={{ marginBottom: '4px' }}>
-                      ALTERNATIVE DISCOVERIES
-                    </div>
-                    <h3 className="couture-title" style={{ fontSize: '1.4rem', color: '#000000' }}>
-                      Other Exceptional Matches
-                    </h3>
-                  </div>
-                </div>
+            <button
+              onClick={handleContinue}
+              disabled={!canContinue}
+              style={{
+                width: '100%',
+                padding: '16px',
+                borderRadius: '4px',
+                background: canContinue ? '#000000' : '#D1D5DB',
+                color: '#FFFFFF',
+                fontWeight: 800,
+                fontSize: '0.86rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                border: 'none',
+                cursor: canContinue ? 'pointer' : 'not-allowed',
+                boxShadow: canContinue ? '0 4px 16px rgba(0, 0, 0, 0.2)' : 'none',
+                transition: 'all 0.2s ease',
+                marginBottom: '16px'
+              }}
+            >
+              Continue
+            </button>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px' }}>
-                  {runnerUps.map((item, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        background: '#ffffff',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: 'var(--radius-sm)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between'
-                      }}
-                    >
-                      <div>
-                        {/* Image & Match Tag */}
-                        <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 'var(--radius-sm)', overflow: 'hidden', marginBottom: '12px', background: '#f3f4f6' }}>
-                          <img
-                            src={item.product.images?.[0] || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80'}
-                            alt={item.product.name}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                          <div
-                            style={{
-                              position: 'absolute',
-                              top: '8px',
-                              left: '8px',
-                              background: '#000000',
-                              color: '#f59e0b',
-                              padding: '2px 8px',
-                              borderRadius: '2px',
-                              fontSize: '0.64rem',
-                              fontWeight: 800
-                            }}
-                          >
-                            {item.matchPercentage}% MATCH
-                          </div>
-                        </div>
-
-                        <div style={{ fontSize: '0.68rem', color: '#926917', fontWeight: 700, textTransform: 'uppercase', marginBottom: '2px' }}>
-                          {item.product.brandInspiration ? `Inspired by ${item.product.brandInspiration}` : item.product.category}
-                        </div>
-
-                        <h4 style={{ fontSize: '0.94rem', fontWeight: 700, color: '#111827', marginBottom: '6px', lineHeight: '1.3' }}>
-                          {item.product.displayName || item.product.name}
-                        </h4>
-
-                        <p style={{ fontSize: '0.78rem', color: '#6b7280', marginBottom: '12px', lineHeight: '1.4' }}>
-                          {item.reasons[0] || item.product.tagline}
-                        </p>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #f3f4f6' }}>
-                        <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#000000' }}>
-                          RM{item.product.price.toFixed(0)}
-                        </div>
-
-                        <button
-                          className="btn btn-dior-black"
-                          onClick={() => addToCart(item.product)}
-                          style={{ padding: '7px 14px', fontSize: '0.74rem' }}
-                        >
-                          <ShoppingBag size={12} />
-                          <span>Add</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Bottom Actions: Retake or Browse Full Catalog */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', marginTop: '20px' }}>
+            <div>
               <button
-                className="btn btn-dior-white"
                 onClick={handleRestart}
-                style={{ padding: '12px 24px', fontSize: '0.82rem' }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#6B7280',
+                  cursor: 'pointer',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
               >
-                <RotateCcw size={14} />
-                <span>Retake Diagnostic</span>
-              </button>
-
-              <button
-                className="btn btn-dior-black"
-                onClick={() => { window.location.href = '/collection.html'; }}
-                style={{ padding: '12px 28px', fontSize: '0.82rem' }}
-              >
-                <span>Browse Full 345 Portfolio</span>
-                <ArrowRight size={14} />
+                <RotateCcw size={13} />
+                <span>Retake Quiz</span>
               </button>
             </div>
-
           </div>
-        )}
+        </div>
+      ) : (
+        /* ================= RECOMMENDATION RESULTS (MATCHING PICTURE 2) ================= */
+        <div>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+            <div style={{ fontSize: '0.74rem', letterSpacing: '0.22em', color: '#B45309', fontWeight: 800, textTransform: 'uppercase', marginBottom: '6px' }}>
+              VALENSZO OLFACTORY DIAGNOSTIC
+            </div>
+            <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(2rem, 4vw, 2.8rem)', color: '#111827', margin: '0 0 8px', fontWeight: 700 }}>
+              YOUR SCENT MATCH
+            </h1>
+            <p style={{ color: '#6B7280', fontSize: '0.92rem', margin: 0, fontStyle: 'italic' }}>
+              One Anchor &rarr; Four Recommendations &rarr; Any Two Can Layer
+            </p>
+          </div>
 
-      </div>
+          {/* 1. YOUR ANCHOR SHOWCASE */}
+          {anchor && anchor.product && (
+            <div style={{ marginBottom: '40px' }}>
+              <div style={{ fontSize: '0.74rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111827', marginBottom: '12px' }}>
+                YOUR ANCHOR FRAGRANCE
+              </div>
+
+              <div 
+                style={{
+                  background: '#FFFFFF',
+                  borderRadius: '10px',
+                  border: '1.5px solid #111827',
+                  padding: 'clamp(18px, 3.5vw, 32px)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                  gap: '28px',
+                  alignItems: 'center'
+                }}
+              >
+                {/* Left: Bottle Image with Match Badge */}
+                <div style={{ position: 'relative' }}>
+                  <div style={{ aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', background: '#F4F4F5' }}>
+                    <img 
+                      src={anchor.product.images?.[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'}
+                      alt={anchor.product.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      left: '12px',
+                      background: '#111827',
+                      color: '#F59E0B',
+                      padding: '4px 10px',
+                      borderRadius: '4px',
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    <Sparkles size={13} />
+                    <span>{anchor.matchPercentage}% MATCH &bull; YOUR PERFECT BASE</span>
+                  </div>
+                </div>
+
+                {/* Right: Details & Add */}
+                <div>
+                  <div style={{ fontSize: '0.72rem', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700, marginBottom: '4px' }}>
+                    {anchor.product.gender} &bull; {anchor.product.category}
+                  </div>
+
+                  <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2rem', fontWeight: 800, margin: '0 0 6px', color: '#111827' }}>
+                    {anchor.product.displayName || anchor.product.name}
+                  </h2>
+
+                  {anchor.product.brandInspiration && (
+                    <div style={{ fontSize: '0.86rem', color: '#B45309', fontWeight: 700, marginBottom: '10px' }}>
+                      Inspired by {anchor.product.brandInspiration} &bull; Catalog No. {anchor.product.catalogNo}
+                    </div>
+                  )}
+
+                  <p style={{ color: '#4B5563', fontSize: '0.9rem', lineHeight: 1.6, margin: '0 0 16px' }}>
+                    {anchor.product.tagline || anchor.product.description}
+                  </p>
+
+                  {/* Why it matches */}
+                  <div style={{ background: '#FAF8F5', border: '1px solid #EBE6DF', borderRadius: '6px', padding: '12px 14px', marginBottom: '20px' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#111827', marginBottom: '6px' }}>
+                      Why this matches your chemistry:
+                    </div>
+                    {anchor.reasons.map((r, rIdx) => (
+                      <div key={rIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#374151' }}>
+                        <CheckCircle2 size={13} color="#059669" />
+                        <span>{r}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Format Selector */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#6B7280', marginBottom: '8px' }}>
+                      Select Format
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {[
+                        { key: '30ml', label: '30ml Travel', price: 'RM45' },
+                        { key: '50ml', label: '50ml Flacon', price: 'RM75' },
+                        { key: '100ml', label: '100ml Grand', price: 'RM125' }
+                      ].map((fmt) => (
+                        <button
+                          key={fmt.key}
+                          type="button"
+                          onClick={() => setSelectedAnchorFormat(fmt.key)}
+                          style={{
+                            padding: '8px 14px',
+                            borderRadius: '4px',
+                            background: selectedAnchorFormat === fmt.key ? '#111827' : '#FFFFFF',
+                            color: selectedAnchorFormat === fmt.key ? '#FFFFFF' : '#111827',
+                            border: selectedAnchorFormat === fmt.key ? '1px solid #111827' : '1px solid #D1D5DB',
+                            fontSize: '0.76rem',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <div>{fmt.label}</div>
+                          <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>{fmt.price}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Add to Bag Button */}
+                  <button
+                    type="button"
+                    onClick={handleAddAnchorToBag}
+                    style={{
+                      padding: '14px 32px',
+                      borderRadius: '4px',
+                      background: '#111827',
+                      color: '#FFFFFF',
+                      fontWeight: 800,
+                      fontSize: '0.85rem',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
+                    }}
+                  >
+                    <ShoppingBag size={16} />
+                    <span>Add Anchor to Bag</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 2. FOUR RECOMMENDATIONS TO LAYER */}
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{ fontSize: '0.74rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111827', marginBottom: '14px' }}>
+              FOUR RECOMMENDATIONS TO LAYER
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '14px' }}>
+              {layeringRecommendations.map((comp) => (
+                <div 
+                  key={comp.id}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    padding: '14px',
+                    textAlign: 'center',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+                  }}
+                >
+                  <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '10px' }}>
+                    <img 
+                      src={comp.images?.[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'} 
+                      alt={comp.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+
+                  <div style={{ fontSize: '0.68rem', color: '#B45309', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    {comp.concentration || 'Extrait de Parfum'}
+                  </div>
+
+                  <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '4px 0 2px' }}>
+                    {comp.displayName || comp.name}
+                  </div>
+
+                  <div style={{ fontSize: '0.72rem', color: '#6B7280', marginBottom: '8px' }}>
+                    {(comp.traits || []).slice(0, 3).join(' • ')}
+                  </div>
+
+                  <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#111827', marginBottom: '10px' }}>
+                    RM{comp.price || 45}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddCompanionToBag(comp)}
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      borderRadius: '4px',
+                      background: '#FAF8F5',
+                      color: '#111827',
+                      border: '1px solid #D1D5DB',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    + Add to Bag
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. BUNDLE CALLOUT: ANY TWO CAN LAYER BEAUTIFULLY */}
+          <div 
+            style={{
+              background: 'linear-gradient(135deg, #111827 0%, #000000 100%)',
+              borderRadius: '10px',
+              padding: 'clamp(24px, 4vw, 36px)',
+              color: '#FFFFFF',
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+            }}
+          >
+            <div style={{ fontSize: '0.74rem', letterSpacing: '0.18em', color: '#F59E0B', fontWeight: 800, textTransform: 'uppercase', marginBottom: '8px' }}>
+              ANY TWO CAN LAYER BEAUTIFULLY
+            </div>
+            <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', margin: '0 0 10px', color: '#FFFFFF' }}>
+              Build Your 3-Bottle Signature Wardrobe & Save 15%
+            </h3>
+            <p style={{ color: '#D1D5DB', fontSize: '0.9rem', maxWidth: '540px', margin: '0 auto 24px', lineHeight: 1.5 }}>
+              Add any 2 layering recommendations to your anchor flacon to unlock exclusive bundle pricing and receive complimentary collector gift presentation.
+            </p>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
+              <a
+                href="/bundle.html"
+                style={{
+                  padding: '14px 28px',
+                  borderRadius: '4px',
+                  background: '#FFFFFF',
+                  color: '#000000',
+                  fontWeight: 800,
+                  fontSize: '0.84rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <span>Build Your Bundle</span>
+                <ArrowRight size={15} />
+              </a>
+
+              <button
+                type="button"
+                onClick={handleRestart}
+                style={{
+                  padding: '14px 24px',
+                  borderRadius: '4px',
+                  background: 'transparent',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(255,255,255,0.4)',
+                  fontWeight: 700,
+                  fontSize: '0.84rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <RotateCcw size={14} />
+                <span>Retake Quiz</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
