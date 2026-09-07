@@ -20,7 +20,7 @@ export const ProductCatalog = () => {
           
           {/* SHOP MEN CARD */}
           <a 
-            href="/men.html"
+            href="/men"
             style={{
               position: 'relative',
               borderRadius: '8px',
@@ -95,7 +95,7 @@ export const ProductCatalog = () => {
 
           {/* SHOP WOMEN CARD */}
           <a 
-            href="/women.html"
+            href="/women"
             style={{
               position: 'relative',
               borderRadius: '8px',
@@ -193,7 +193,7 @@ export const ProductCatalog = () => {
             <Clock size={20} color="#b45309" strokeWidth={2.2} />
             <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1c1917', letterSpacing: '0.04em' }}>Long Lasting</span>
           </div>
-          <a href="/bundle.html" style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', textDecoration: 'none', color: '#1c1917' }}>
+          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', textDecoration: 'none', color: '#1c1917' }}>
             <Sparkles size={20} color="#b45309" strokeWidth={2.2} />
             <span style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em' }}>Explore Bundles</span>
           </a>
@@ -254,7 +254,7 @@ export const ProductCatalog = () => {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
               <button
                 type="button"
-                onClick={() => { window.location.href = '/bundle.html'; }}
+                onClick={() => { window.location.href = '/bundle'; }}
                 style={{
                   padding: '14px 28px',
                   borderRadius: '4px',
@@ -278,7 +278,7 @@ export const ProductCatalog = () => {
 
               <button
                 type="button"
-                onClick={() => { window.location.href = '/diagnostic.html'; }}
+                onClick={() => { window.location.href = '/diagnostic'; }}
                 style={{
                   padding: '14px 28px',
                   borderRadius: '4px',
@@ -299,7 +299,7 @@ export const ProductCatalog = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div 
-              onClick={() => { window.location.href = '/bundle.html'; }}
+              onClick={() => { window.location.href = '/bundle'; }}
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.18)',
@@ -327,7 +327,7 @@ export const ProductCatalog = () => {
             </div>
 
             <div 
-              onClick={() => { window.location.href = '/bundle.html'; }}
+              onClick={() => { window.location.href = '/bundle'; }}
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(245, 158, 11, 0.6)',

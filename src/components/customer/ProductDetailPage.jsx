@@ -67,8 +67,31 @@ export const ProductDetailPage = () => {
     showToast
   } = useStore();
 
-  // Fallback if accessed directly with no product
-  const product = activeProduct || products[0] || null;
+  // Fallback if accessed directly with no product or during initial load
+  const product = useMemo(() => {
+    if (activeProduct) return activeProduct;
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlId = params.get('product');
+      if (urlId && products && products.length > 0) {
+        const clean = decodeURIComponent(urlId).trim().toLowerCase();
+        const cleanDigits = clean.replace(/\D/g, '');
+        const found = products.find((p) => {
+          if (!p) return false;
+          if (p.id && p.id.toLowerCase() === clean) return true;
+          if (p.sku && p.sku.toLowerCase() === clean) return true;
+          if (p.catalogNo !== undefined && String(p.catalogNo) === clean) return true;
+          if (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean) return true;
+          if (cleanDigits && (String(p.catalogNo) === cleanDigits || String(p.specs?.catalogNo) === cleanDigits)) return true;
+          if (p.name && p.name.toLowerCase() === clean) return true;
+          if (p.displayName && p.displayName.toLowerCase() === clean) return true;
+          return false;
+        });
+        if (found) return found;
+      }
+    }
+    return products && products.length > 0 ? products[0] : null;
+  }, [activeProduct, products]);
 
   // Selected Size
   const [selectedSize, setSelectedSize] = useState('30ml');
@@ -216,7 +239,7 @@ export const ProductDetailPage = () => {
         
         <button 
           className="pdp-breadcrumb-item" 
-          onClick={() => { window.location.href = `/collection.html?gender=${encodeURIComponent(product.gender || 'Men')}`; }}
+          onClick={() => { window.location.href = `/collection?gender=${encodeURIComponent(product.gender || 'Men')}`; }}
         >
           {product.gender === 'Women' ? 'Women' : 'Men'}
         </button>
@@ -226,7 +249,7 @@ export const ProductDetailPage = () => {
           className="pdp-breadcrumb-item"
           onClick={() => { 
             const fam = product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody';
-            window.location.href = `/collection.html?gender=${encodeURIComponent(product.gender || 'Men')}&category=${encodeURIComponent(fam)}`; 
+            window.location.href = `/collection?gender=${encodeURIComponent(product.gender || 'Men')}&category=${encodeURIComponent(fam)}`; 
           }}
         >
           {product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody'}
@@ -1044,7 +1067,7 @@ export const ProductDetailPage = () => {
                   Pick your favorite fragrances, save up to 25%, and receive free luxury discovery coffret packaging.
                 </p>
                 <a
-                  href="/bundle.html"
+                  href="/bundle"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -1080,7 +1103,7 @@ export const ProductDetailPage = () => {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <a
-                  href="/checkout.html"
+                  href="/checkout"
                   style={{
                     width: '100%',
                     padding: '14px',

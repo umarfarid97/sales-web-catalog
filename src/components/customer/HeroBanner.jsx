@@ -10,7 +10,7 @@ import {
 // Default flagship creations curated for the Steam-inspired showcase
 const CURATED_FEATURED_SLIDES = [
   {
-    id: 'vlz-men-01',
+    id: 'vlz-men-63',
     sku: 'VLZ-M-063',
     catalogNo: 63,
     title: 'VALENSZO SAUVAGE ABSOLU',
@@ -33,7 +33,7 @@ const CURATED_FEATURED_SLIDES = [
     imageLabels: ['Flagship Flacon', 'Noir Twilight', 'Calabrian Bergamot', 'Ambergris & Woods']
   },
   {
-    id: 'vlz-wom-01',
+    id: 'vlz-women-172',
     sku: 'VLZ-W-172',
     catalogNo: 172,
     title: 'VALENSZO DELINA IMPÉRIALE',
@@ -56,8 +56,8 @@ const CURATED_FEATURED_SLIDES = [
     imageLabels: ['Rose Couture', 'Damask Petals', 'Lychee & Amber', 'Night Essence']
   },
   {
-    id: 'vlz-uni-01',
-    sku: 'VLZ-U-068',
+    id: 'vlz-men-68',
+    sku: 'VLZ-M-068',
     catalogNo: 68,
     title: 'VALENSZO BACCARAT ROYALE',
     inspiration: 'Inspired by Baccarat Rouge 540',
@@ -79,9 +79,9 @@ const CURATED_FEATURED_SLIDES = [
     imageLabels: ['Crystal Flacon', 'Liquid Gold', 'Warm Ambergris', 'Atelier Craft']
   },
   {
-    id: 'vlz-men-02',
-    sku: 'VLZ-M-001',
-    catalogNo: 1,
+    id: 'vlz-men-12',
+    sku: 'VLZ-M-012',
+    catalogNo: 12,
     title: 'VALENSZO AVENTUS MILLÉSIME',
     inspiration: 'Inspired by Creed Aventus',
     tier: 'Tier S Launch Icon',
@@ -102,8 +102,8 @@ const CURATED_FEATURED_SLIDES = [
     imageLabels: ['Heritage Flacon', 'Smoky Birch', 'Italian Bergamot', 'Sensual Oakmoss']
   },
   {
-    id: 'vlz-uni-02',
-    sku: 'VLZ-U-227',
+    id: 'vlz-women-227',
+    sku: 'VLZ-W-227',
     catalogNo: 227,
     title: "VALENSZO ANGELS' RESERVE",
     inspiration: "Inspired by Kilian Angels' Share",
@@ -310,10 +310,13 @@ export const HeroBanner = () => {
     if (hasDraggedRef.current) {
       return; // Ignore click navigation if user was swiping or dragging
     }
+    const targetId = slideId || slides[currentSlideIndex]?.id;
+    if (!targetId) return;
+
     if (typeof window !== 'undefined') {
-      window.location.assign(`/product.html?product=${encodeURIComponent(slideId)}`);
+      window.location.assign(`/product?product=${encodeURIComponent(targetId)}`);
     } else if (openProductDetail) {
-      openProductDetail(slideId);
+      openProductDetail(targetId);
     }
   };
 
@@ -486,6 +489,10 @@ export const HeroBanner = () => {
           >
             {/* Top Right Click to View Pill (Anchored over sliding track) */}
             <div
+              onClick={(e) => {
+                e.stopPropagation();
+                handleProductNavigate(slides[currentSlideIndex]?.id);
+              }}
               style={{
                 position: 'absolute',
                 top: 'clamp(12px, 2.5vw, 20px)',
@@ -503,7 +510,8 @@ export const HeroBanner = () => {
                 fontWeight: 700,
                 letterSpacing: '0.06em',
                 color: '#ffffff',
-                pointerEvents: 'none',
+                cursor: 'pointer',
+                pointerEvents: 'auto',
                 boxShadow: '0 4px 14px rgba(0,0,0,0.4)'
               }}
             >
@@ -666,6 +674,10 @@ export const HeroBanner = () => {
                       </div>
 
                       <div 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleProductNavigate(slide.id);
+                        }}
                         style={{
                           background: '#ffffff',
                           color: '#000000',
@@ -679,6 +691,7 @@ export const HeroBanner = () => {
                           alignItems: 'center',
                           gap: '6px',
                           boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
+                          cursor: 'pointer',
                           transition: 'transform 0.15s ease, background 0.15s ease'
                         }}
                       >

@@ -739,7 +739,7 @@ export const BundleBuilderContent = () => {
                 </button>
 
                 <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                  <a href="/checkout.html" style={{ fontSize: '0.78rem', color: '#6b7280', textDecoration: 'underline' }}>
+                  <a href="/checkout" style={{ fontSize: '0.78rem', color: '#6b7280', textDecoration: 'underline' }}>
                     Skip directly to white-glove checkout
                   </a>
                 </div>

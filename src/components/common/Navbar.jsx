@@ -532,13 +532,13 @@ export const Navbar = () => {
                 
                 {/* Featured Olfactory Diagnostic Menu Item */}
                 <div>
-                  <button
+                    <button
                     onClick={() => {
-                      window.location.href = '/diagnostic.html';
+                      window.location.href = '/diagnostic';
                       setIsMenuOpen(false);
                     }}
                     style={{
-                      background: customerView === 'diagnostic' ? '#000000' : 'linear-gradient(135deg, #18181b 0%, #09090b 100%)',
+                      background: customerView === 'diagnostic' ? '#000000' : 'linear-gradient(135deg, #18181b 0%, #090b10 100%)',
                       color: '#ffffff',
                       border: '1px solid #d97706',
                       padding: '14px 16px',
@@ -585,7 +585,7 @@ export const Navbar = () => {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <a 
-                      href="/men.html"
+                      href="/men"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -611,7 +611,7 @@ export const Navbar = () => {
                     </a>
 
                     <a 
-                      href="/women.html"
+                      href="/women"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -638,7 +638,7 @@ export const Navbar = () => {
 
                     <button 
                       onClick={() => { 
-                        window.location.href = '/bundle.html'; 
+                        window.location.href = '/bundle'; 
                         setIsMenuOpen(false); 
                       }}
                       style={{

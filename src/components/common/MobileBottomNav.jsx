@@ -9,9 +9,9 @@ export const MobileBottomNav = () => {
 
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
 
-  const isHome = currentPath === '/' || currentPath.endsWith('index.html');
-  const isShop = currentPath.includes('collection.html');
-  const isBundles = currentPath.includes('bundle.html');
+  const isHome = currentPath === '/' || currentPath.endsWith('index.html') || currentPath === '';
+  const isShop = currentPath.includes('collection');
+  const isBundles = currentPath.includes('bundle');
 
   const handleAccountClick = () => {
     if (!isAuthenticated) {
@@ -60,7 +60,7 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="/collection.html"
+        href="/collection"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -78,7 +78,7 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="/bundle.html"
+        href="/bundle"
         style={{
           display: 'flex',
           flexDirection: 'column',

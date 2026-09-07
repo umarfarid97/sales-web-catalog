@@ -63,7 +63,7 @@ export const initiatePayment = async ({ orderId, amount, customer, paymentMethod
           billPriceSetting: '1',
           billPayorInfo: '1',
           billAmount: (amount * 100).toFixed(0), // In Cents
-          billReturnUrl: `${window.location.origin}/checkout.html?orderId=${orderId}&status=success`,
+          billReturnUrl: `${window.location.origin}/checkout?orderId=${orderId}&status=success`,
           billCallbackUrl: `${window.location.origin}/api/payment-webhook`,
           billExternalReferenceNo: orderId,
           billTo: customer.name,

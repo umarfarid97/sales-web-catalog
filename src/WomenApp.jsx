@@ -508,7 +508,7 @@ export const WomenCollectionContent = () => {
                 <div
                   key={product.id}
                   onClick={() => {
-                    window.location.href = `/product.html?product=${encodeURIComponent(product.id)}`;
+                    window.location.href = `/product?product=${encodeURIComponent(product.id)}`;
                   }}
                   style={{
                     background: '#ffffff',

@@ -67,7 +67,7 @@ export const CartDrawer = () => {
 
   const handleProceedCheckout = () => {
     setIsCartOpen(false);
-    window.location.href = '/checkout.html';
+    window.location.href = '/checkout';
   };
 
   return (

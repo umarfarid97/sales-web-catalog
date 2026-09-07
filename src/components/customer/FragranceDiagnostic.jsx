@@ -989,7 +989,7 @@ export const FragranceDiagnostic = () => {
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
               <a
-                href="/bundle.html"
+                href="/bundle"
                 style={{
                   padding: '14px 28px',
                   borderRadius: '4px',
