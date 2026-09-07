@@ -115,14 +115,16 @@ export const BundleBuilderContent = () => {
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     return products.filter((p) => {
+      if (!p || typeof p !== 'object' || !p.id) return false;
+
       // Gender filter
-      const pGender = p.gender || (p.category === 'Pour Femme' || p.id?.startsWith('vlz-women') ? 'Women' : 'Men');
+      const pGender = p.gender || (p.category === 'Pour Femme' || p.id.startsWith('vlz-women') || p.id.startsWith('vlz-wom') ? 'Women' : 'Men');
       if (genderFilter !== 'All' && pGender !== genderFilter) return false;
 
       // Accord filter
       if (accordFilter !== 'All') {
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
-        const family = (p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || '').toLowerCase();
         const filtLower = accordFilter.toLowerCase();
         if (!traits.includes(filtLower) && !family.includes(filtLower)) {
           return false;
@@ -130,11 +132,11 @@ export const BundleBuilderContent = () => {
       }
 
       // Search Query
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchName = (p.name || '').toLowerCase().includes(q);
-        const matchInspiration = (p.brandInspiration || '').toLowerCase().includes(q);
-        const matchNotes = (p.description || '').toLowerCase().includes(q);
+      if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchName = String(p.name || p.displayName || '').toLowerCase().includes(q);
+        const matchInspiration = String(p.brandInspiration || '').toLowerCase().includes(q);
+        const matchNotes = String(p.description || '').toLowerCase().includes(q);
         if (!matchName && !matchInspiration && !matchNotes) return false;
       }
 

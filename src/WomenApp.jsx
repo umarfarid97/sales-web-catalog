@@ -55,19 +55,21 @@ export const WomenCollectionContent = () => {
     if (!products) return [];
 
     return products.filter((p) => {
-      // Exclusively Women's Fragrances
-      const isWomen = p.id?.startsWith('vlz-women') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
+      if (!p || typeof p !== 'object' || !p.id) return false;
+
+      // Exclusively Women's Fragrances (support both vlz-women and vlz-wom prefixes)
+      const isWomen = p.id.startsWith('vlz-women') || p.id.startsWith('vlz-wom') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
       if (!isWomen) return false;
 
       // Real-time Search Query Filter
-      if (searchQuery.trim()) {
+      if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const name = (p.name || '').toLowerCase();
-        const displayName = (p.displayName || '').toLowerCase();
-        const inspiration = (p.brandInspiration || '').toLowerCase();
-        const family = (p.olfactoryFamily || '').toLowerCase();
-        const character = (p.character || '').toLowerCase();
-        const sku = (p.sku || '').toLowerCase();
+        const name = String(p.name || '').toLowerCase();
+        const displayName = String(p.displayName || '').toLowerCase();
+        const inspiration = String(p.brandInspiration || '').toLowerCase();
+        const family = String(p.olfactoryFamily || '').toLowerCase();
+        const character = String(p.character || '').toLowerCase();
+        const sku = String(p.sku || '').toLowerCase();
         const catalogNo = String(p.catalogNo || '');
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
         const topNotes = Array.isArray(p.pyramid?.topNotes) ? p.pyramid.topNotes.join(' ').toLowerCase() : '';
@@ -93,7 +95,7 @@ export const WomenCollectionContent = () => {
       // Quick chip accord filter
       if (selectedChip !== 'All') {
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
-        const family = (p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || '').toLowerCase();
         const chipLower = selectedChip.toLowerCase();
         if (!traits.includes(chipLower) && !family.includes(chipLower)) {
           return false;
@@ -103,7 +105,7 @@ export const WomenCollectionContent = () => {
       // Drawer Accord Filters
       if (selectedAccords.length > 0) {
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
-        const family = (p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || '').toLowerCase();
         const matchesAny = selectedAccords.some((acc) => {
           const accLower = acc.toLowerCase();
           return traits.includes(accLower) || family.includes(accLower);
@@ -117,14 +119,17 @@ export const WomenCollectionContent = () => {
 
       return true;
     }).sort((a, b) => {
-      if (sortBy === 'price-low') return (a.price || 45) - (b.price || 45);
-      if (sortBy === 'price-high') return (b.price || 45) - (a.price || 45);
-      if (sortBy === 'rating') return (b.rating || 4.8) - (a.rating || 4.8);
+      if (!a || !b) return 0;
+      const priceA = Number(a.price) || 45;
+      const priceB = Number(b.price) || 45;
+      if (sortBy === 'price-low') return priceA - priceB;
+      if (sortBy === 'price-high') return priceB - priceA;
+      if (sortBy === 'rating') return (Number(b.rating) || 5) - (Number(a.rating) || 5);
       // Default: best sellers (Tier S first)
       const tierRank = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
       const rankDiff = (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
       if (rankDiff !== 0) return rankDiff;
-      return (b.reviewsCount || 0) - (a.reviewsCount || 0);
+      return (Number(b.reviewsCount) || 0) - (Number(a.reviewsCount) || 0);
     });
   }, [products, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
 

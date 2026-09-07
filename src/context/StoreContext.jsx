@@ -140,11 +140,20 @@ export const StoreProvider = ({ children }) => {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          const valid = parsed.filter((p) => p && typeof p === 'object' && typeof p.id === 'string' && p.id.trim());
+          if (valid.length > 0) {
+            return valid;
+          }
         }
       }
     } catch (e) {
       console.error('Failed to parse cached products', e);
+      try {
+        localStorage.removeItem('valenszo_products_cache');
+        localStorage.removeItem('lumina_products');
+      } catch {
+        // Ignore storage clear failure
+      }
     }
     return [];
   });
@@ -844,11 +853,13 @@ export const StoreProvider = ({ children }) => {
     showToast('Catalog and orders synchronized with live database', 'info');
   };
 
-  // --- Computed Filtered Products for Customer Catalog ---
-  const filteredProducts = products.filter((product) => {
+  // --- Computed Filtered Products for Customer Catalog (Crash-proof) ---
+  const filteredProducts = (products || []).filter((product) => {
+    if (!product || typeof product !== 'object' || !product.id) return false;
+
     // 1. Gender Collection Filter
-    const isMen = product.id?.startsWith('vlz-men') || product.sku?.startsWith('VLZ-M') || product.category === 'Pour Homme';
-    const isWomen = product.id?.startsWith('vlz-women') || product.sku?.startsWith('VLZ-W') || product.category === 'Pour Femme';
+    const isMen = product.id.startsWith('vlz-men') || product.sku?.startsWith('VLZ-M') || product.category === 'Pour Homme' || product.gender === 'Men';
+    const isWomen = product.id.startsWith('vlz-women') || product.id.startsWith('vlz-wom') || product.sku?.startsWith('VLZ-W') || product.category === 'Pour Femme' || product.gender === 'Women';
 
     if (activeGender === 'Men' && !isMen) return false;
     if (activeGender === 'Women' && !isWomen) return false;
@@ -863,6 +874,7 @@ export const StoreProvider = ({ children }) => {
       (typeof cat === 'string' && cat.startsWith('All'));
 
     if (!isAll && typeof cat === 'string') {
+      const catLower = cat.toLowerCase();
       if (cat.includes('Tier S')) {
         if (product.tier !== 'S') return false;
       } else if (cat.includes('Tier A')) {
@@ -871,64 +883,71 @@ export const StoreProvider = ({ children }) => {
         product.character !== cat &&
         product.olfactoryFamily !== cat &&
         product.category !== cat &&
-        !product.traits?.some((t) => t?.toLowerCase() === cat.toLowerCase())
+        !(Array.isArray(product.traits) && product.traits.some((t) => typeof t === 'string' && t.toLowerCase() === catLower))
       ) {
         return false;
       }
     }
 
-    if (searchQuery.trim()) {
+    if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      const matchName = product.name?.toLowerCase().includes(q);
-      const matchBrand = product.brandInspiration?.toLowerCase().includes(q);
-      const matchListing = product.originalListing?.toLowerCase().includes(q);
-      const matchDesc = product.description?.toLowerCase().includes(q);
-      const matchCategory = product.category?.toLowerCase().includes(q);
-      const matchCharacter = product.character?.toLowerCase().includes(q);
-      const matchTraits = product.traits?.some((t) => t.toLowerCase().includes(q));
-      const matchSku = product.sku?.toLowerCase().includes(q);
+      const matchName = String(product.name || product.displayName || '').toLowerCase().includes(q);
+      const matchBrand = String(product.brandInspiration || '').toLowerCase().includes(q);
+      const matchListing = String(product.originalListing || '').toLowerCase().includes(q);
+      const matchDesc = String(product.description || '').toLowerCase().includes(q);
+      const matchCategory = String(product.category || '').toLowerCase().includes(q);
+      const matchCharacter = String(product.character || '').toLowerCase().includes(q);
+      const matchTraits = Array.isArray(product.traits) && product.traits.some((t) => typeof t === 'string' && t.toLowerCase().includes(q));
+      const matchSku = String(product.sku || '').toLowerCase().includes(q);
       const matchNo = String(product.catalogNo) === q || `no. ${product.catalogNo}` === q || `no ${product.catalogNo}` === q || `#${product.catalogNo}` === q;
       if (!matchName && !matchBrand && !matchListing && !matchDesc && !matchCategory && !matchCharacter && !matchTraits && !matchSku && !matchNo) {
         return false;
       }
     }
 
-    if (inStockOnly && product.stock <= 0) {
+    if (inStockOnly && (Number(product.stock) || 0) <= 0) {
       return false;
     }
 
-    if (product.price > maxPrice) {
+    if ((Number(product.price) || 0) > maxPrice) {
       return false;
     }
 
     return true;
   }).sort((a, b) => {
-    if (sortBy === 'price-low') return a.price - b.price;
-    if (sortBy === 'price-high') return b.price - a.price;
-    if (sortBy === 'rating') return b.rating - a.rating;
-    if (sortBy === 'name') return a.name.localeCompare(b.name);
+    if (!a || !b) return 0;
+    const priceA = Number(a.price) || 0;
+    const priceB = Number(b.price) || 0;
+    if (sortBy === 'price-low') return priceA - priceB;
+    if (sortBy === 'price-high') return priceB - priceA;
+    if (sortBy === 'rating') return (Number(b.rating) || 5) - (Number(a.rating) || 5);
+    if (sortBy === 'name') {
+      const nameA = String(a.name || a.displayName || '');
+      const nameB = String(b.name || b.displayName || '');
+      return nameA.localeCompare(nameB);
+    }
     // Default sort: Tier S first, then Tier A, then Catalog No
     const tierWeight = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
     const diffTier = (tierWeight[b.tier] || 0) - (tierWeight[a.tier] || 0);
     if (diffTier !== 0) return diffTier;
-    return (a.catalogNo || 0) - (b.catalogNo || 0);
+    return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
   });
 
-  // --- Admin KPI Analytics Data ---
-  const totalRevenue = orders.reduce((sum, ord) => sum + (ord.status !== 'Cancelled' ? ord.total : 0), 0);
-  const totalOrdersCount = orders.length;
-  const pendingOrdersCount = orders.filter((o) => o.status === 'Pending' || o.status === 'Processing').length;
-  const lowStockCount = products.filter((p) => p.stock < 5).length;
-  const outOfStockCount = products.filter((p) => p.stock === 0).length;
+  // --- Admin KPI Analytics Data (Safe) ---
+  const totalRevenue = (orders || []).reduce((sum, ord) => sum + (ord && ord.status !== 'Cancelled' ? (Number(ord.total) || 0) : 0), 0);
+  const totalOrdersCount = (orders || []).length;
+  const pendingOrdersCount = (orders || []).filter((o) => o && (o.status === 'Pending' || o.status === 'Processing')).length;
+  const lowStockCount = (products || []).filter((p) => p && (Number(p.stock) || 0) < 5).length;
+  const outOfStockCount = (products || []).filter((p) => p && (Number(p.stock) || 0) === 0).length;
   const averageOrderValue = totalOrdersCount > 0 ? totalRevenue / totalOrdersCount : 0;
 
-  // --- Dynamic Live Category Counts ---
+  // --- Dynamic Live Category Counts (Safe) ---
   const menCount = useMemo(() => {
-    return products.filter((p) => p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme').length;
+    return (products || []).filter((p) => p && (p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men')).length;
   }, [products]);
 
   const womenCount = useMemo(() => {
-    return products.filter((p) => p.id?.startsWith('vlz-women') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme').length;
+    return (products || []).filter((p) => p && (p.id?.startsWith('vlz-women') || p.id?.startsWith('vlz-wom') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women')).length;
   }, [products]);
 
   return (
