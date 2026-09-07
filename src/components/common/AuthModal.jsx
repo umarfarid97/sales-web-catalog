@@ -30,12 +30,14 @@ export const AuthModal = () => {
   const [regZip, setRegZip] = useState('50250');
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   if (!isAuthModalOpen) return null;
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+    setSuccessMessage('');
 
     if (!signInEmail || !signInPassword) {
       setErrorMessage('Please enter both email and password.');
@@ -51,6 +53,7 @@ export const AuthModal = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+    setSuccessMessage('');
 
     if (!regName || !regEmail || !regPassword) {
       setErrorMessage('Please fill in your name, email, and password.');
@@ -75,6 +78,10 @@ export const AuthModal = () => {
 
     if (!res.success) {
       setErrorMessage(res.error || 'Registration failed.');
+    } else if (res.requiresConfirmation) {
+      setSuccessMessage(res.message);
+      setSignInEmail(regEmail);
+      setAuthModalMode('signin');
     }
   };
 
@@ -177,7 +184,7 @@ export const AuthModal = () => {
           }}>
             <button
               type="button"
-              onClick={() => { setAuthModalMode('signin'); setErrorMessage(''); }}
+              onClick={() => { setAuthModalMode('signin'); setErrorMessage(''); setSuccessMessage(''); }}
               style={{
                 flex: 1,
                 padding: '8px',
@@ -196,7 +203,7 @@ export const AuthModal = () => {
             </button>
             <button
               type="button"
-              onClick={() => { setAuthModalMode('register'); setErrorMessage(''); }}
+              onClick={() => { setAuthModalMode('register'); setErrorMessage(''); setSuccessMessage(''); }}
               style={{
                 flex: 1,
                 padding: '8px',
@@ -214,6 +221,22 @@ export const AuthModal = () => {
               Create Account
             </button>
           </div>
+
+          {/* Success Message */}
+          {successMessage && (
+            <div style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              color: '#166534',
+              padding: '10px 14px',
+              borderRadius: '6px',
+              fontSize: '0.8rem',
+              marginBottom: '18px',
+              lineHeight: 1.5
+            }}>
+              {successMessage}
+            </div>
+          )}
 
           {/* Error Message */}
           {errorMessage && (

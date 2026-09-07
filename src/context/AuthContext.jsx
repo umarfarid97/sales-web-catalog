@@ -128,6 +128,12 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (error) {
+        if (error.message?.includes('Invalid login credentials')) {
+          return { success: false, error: 'Invalid email or password. Please check your credentials or register a new account.' };
+        }
+        if (error.message?.includes('Email not confirmed')) {
+          return { success: false, error: 'Please confirm your email address. Check your inbox for the confirmation link.' };
+        }
         return { success: false, error: error.message || 'Invalid email or password.' };
       }
 
@@ -192,10 +198,22 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (error) {
-        return { success: false, error: error.message };
+        if (error.message?.includes('already registered')) {
+          return { success: false, error: 'An account with this email already exists. Please sign in.' };
+        }
+        return { success: false, error: error.message || 'Registration failed.' };
       }
 
       if (data?.user) {
+        // If email confirmation is required, session will be null
+        if (!data.session) {
+          return {
+            success: true,
+            requiresConfirmation: true,
+            message: 'Your account was created! Please check your email inbox to confirm your registration before signing in.'
+          };
+        }
+
         const newUser = {
           id: data.user.id,
           email: cleanEmail,
