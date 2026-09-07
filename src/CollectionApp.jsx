@@ -71,7 +71,8 @@ export const CollectionPageContent = () => {
       if (!p || typeof p !== 'object' || !p.id) return false;
 
       // Gender filter
-      const pGender = p.gender || (p.category === 'Pour Femme' || p.id.startsWith('vlz-women') || p.id.startsWith('vlz-wom') ? 'Women' : 'Men');
+      const pId = String(p.id || '');
+      const pGender = p.gender || (p.category === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') ? 'Women' : 'Men');
       if (activeGender && pGender !== activeGender) return false;
 
       // Quick chip accord filter
@@ -397,7 +398,7 @@ export const CollectionPageContent = () => {
             }}
           >
             {filteredProducts.map((product) => {
-              const isFav = favorites.includes(product.id);
+              const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
               const price = product.price || 45;
 
               return (

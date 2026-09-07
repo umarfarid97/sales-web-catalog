@@ -323,7 +323,8 @@ export const StoreProvider = ({ children }) => {
     const saved = localStorage.getItem('valenszo_favorites') || localStorage.getItem('lumina_favorites');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed.filter((id) => typeof id === 'string' && id.trim());
       } catch (e) {
         console.error('Failed to parse saved favorites', e);
       }
@@ -858,8 +859,10 @@ export const StoreProvider = ({ children }) => {
     if (!product || typeof product !== 'object' || !product.id) return false;
 
     // 1. Gender Collection Filter
-    const isMen = product.id.startsWith('vlz-men') || product.sku?.startsWith('VLZ-M') || product.category === 'Pour Homme' || product.gender === 'Men';
-    const isWomen = product.id.startsWith('vlz-women') || product.id.startsWith('vlz-wom') || product.sku?.startsWith('VLZ-W') || product.category === 'Pour Femme' || product.gender === 'Women';
+    const pId = String(product.id || '');
+    const pSku = String(product.sku || '');
+    const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || product.category === 'Pour Homme' || product.gender === 'Men';
+    const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || product.category === 'Pour Femme' || product.gender === 'Women';
 
     if (activeGender === 'Men' && !isMen) return false;
     if (activeGender === 'Women' && !isWomen) return false;
@@ -943,11 +946,21 @@ export const StoreProvider = ({ children }) => {
 
   // --- Dynamic Live Category Counts (Safe) ---
   const menCount = useMemo(() => {
-    return (products || []).filter((p) => p && (p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men')).length;
+    return (products || []).filter((p) => {
+      if (!p || typeof p !== 'object') return false;
+      const pId = String(p.id || '');
+      const pSku = String(p.sku || '');
+      return pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
+    }).length;
   }, [products]);
 
   const womenCount = useMemo(() => {
-    return (products || []).filter((p) => p && (p.id?.startsWith('vlz-women') || p.id?.startsWith('vlz-wom') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women')).length;
+    return (products || []).filter((p) => {
+      if (!p || typeof p !== 'object') return false;
+      const pId = String(p.id || '');
+      const pSku = String(p.sku || '');
+      return pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
+    }).length;
   }, [products]);
 
   return (

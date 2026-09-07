@@ -58,7 +58,9 @@ export const WomenCollectionContent = () => {
       if (!p || typeof p !== 'object' || !p.id) return false;
 
       // Exclusively Women's Fragrances (support both vlz-women and vlz-wom prefixes)
-      const isWomen = p.id.startsWith('vlz-women') || p.id.startsWith('vlz-wom') || p.sku?.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
+      const pId = String(p.id || '');
+      const pSku = String(p.sku || '');
+      const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
       if (!isWomen) return false;
 
       // Real-time Search Query Filter
@@ -499,7 +501,7 @@ export const WomenCollectionContent = () => {
             }}
           >
             {filteredProducts.map((product) => {
-              const isFav = favorites.includes(product.id);
+              const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
               const price = product.price || 45;
 
               return (

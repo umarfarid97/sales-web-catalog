@@ -58,7 +58,9 @@ export const MenCollectionContent = () => {
       if (!p || typeof p !== 'object' || !p.id) return false;
 
       // Exclusively Men's Fragrances
-      const isMen = p.id.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
+      const pId = String(p.id || '');
+      const pSku = String(p.sku || '');
+      const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
       if (!isMen) return false;
 
       // Real-time Search Query Filter
@@ -499,7 +501,7 @@ export const MenCollectionContent = () => {
             }}
           >
             {filteredProducts.map((product) => {
-              const isFav = favorites.includes(product.id);
+              const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
               const price = product.price || 45;
 
               return (

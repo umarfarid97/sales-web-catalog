@@ -38,7 +38,7 @@ export const ProductDetailModal = () => {
       ];
 
   const currentSizeObj = sizes[selectedSizeIndex] || sizes[0];
-  const dynamicPrice = Math.round(product.price * currentSizeObj.priceMultiplier);
+  const dynamicPrice = Math.round((Number(product.price) || 45) * (Number(currentSizeObj?.priceMultiplier) || 1.0));
 
   const handleAddToCart = () => {
     addToCart(

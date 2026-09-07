@@ -118,7 +118,8 @@ export const BundleBuilderContent = () => {
       if (!p || typeof p !== 'object' || !p.id) return false;
 
       // Gender filter
-      const pGender = p.gender || (p.category === 'Pour Femme' || p.id.startsWith('vlz-women') || p.id.startsWith('vlz-wom') ? 'Women' : 'Men');
+      const pId = String(p.id || '');
+      const pGender = p.gender || (p.category === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') ? 'Women' : 'Men');
       if (genderFilter !== 'All' && pGender !== genderFilter) return false;
 
       // Accord filter
