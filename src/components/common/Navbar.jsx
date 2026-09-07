@@ -10,7 +10,6 @@ import {
   Sparkles,
   ArrowRight,
   User,
-  Search,
   LogOut,
   Shield
 } from 'lucide-react';
@@ -87,20 +86,6 @@ export const Navbar = () => {
     }
   };
 
-  const handleSearchClick = () => {
-    if (typeof window !== 'undefined') {
-      if (!window.location.pathname.includes('collection.html')) {
-        window.location.href = '/collection.html';
-        return;
-      }
-      const searchInput = document.querySelector('input[type="text"]');
-      if (searchInput) {
-        searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        searchInput.focus();
-      }
-    }
-  };
-
   return (
     <>
       {/* 1. Sleek Announcement Banner (with dismissible 'X') */}
@@ -164,7 +149,7 @@ export const Navbar = () => {
           position: 'relative'
         }}>
           
-          {/* Left Column: Hamburger Menu & Search Icon */}
+          {/* Left Column: Hamburger Menu */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -183,25 +168,6 @@ export const Navbar = () => {
               }}
             >
               {isMenuOpen ? <X size={22} strokeWidth={1.75} /> : <Menu size={22} strokeWidth={1.75} />}
-            </button>
-
-            <button
-              onClick={handleSearchClick}
-              aria-label="Search Fragrance Catalog"
-              title="Search Fragrances"
-              style={{
-                background: 'transparent',
-                border: 'none',
-                padding: '6px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#000000',
-                transition: 'opacity 0.2s ease'
-              }}
-            >
-              <Search size={20} strokeWidth={1.75} />
             </button>
           </div>
 

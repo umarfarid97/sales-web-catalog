@@ -18,7 +18,8 @@ import {
   Star, 
   X, 
   Check, 
-  ChevronDown
+  ChevronDown,
+  Search
 } from 'lucide-react';
 
 // Styles
@@ -39,6 +40,10 @@ export const MenCollectionContent = () => {
   const [sortBy, setSortBy] = useState('best-sellers');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
+  // Search State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   // Filter Drawer States
   const [priceMax, setPriceMax] = useState(250);
   const [selectedAccords, setSelectedAccords] = useState([]);
@@ -53,6 +58,37 @@ export const MenCollectionContent = () => {
       // Exclusively Men's Fragrances
       const isMen = p.id?.startsWith('vlz-men') || p.sku?.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
       if (!isMen) return false;
+
+      // Real-time Search Query Filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const name = (p.name || '').toLowerCase();
+        const displayName = (p.displayName || '').toLowerCase();
+        const inspiration = (p.brandInspiration || '').toLowerCase();
+        const family = (p.olfactoryFamily || '').toLowerCase();
+        const character = (p.character || '').toLowerCase();
+        const sku = (p.sku || '').toLowerCase();
+        const catalogNo = String(p.catalogNo || '');
+        const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
+        const topNotes = Array.isArray(p.pyramid?.topNotes) ? p.pyramid.topNotes.join(' ').toLowerCase() : '';
+        const heartNotes = Array.isArray(p.pyramid?.heartNotes) ? p.pyramid.heartNotes.join(' ').toLowerCase() : '';
+        const baseNotes = Array.isArray(p.pyramid?.baseNotes) ? p.pyramid.baseNotes.join(' ').toLowerCase() : '';
+
+        const matchesSearch =
+          name.includes(q) ||
+          displayName.includes(q) ||
+          inspiration.includes(q) ||
+          family.includes(q) ||
+          character.includes(q) ||
+          sku.includes(q) ||
+          catalogNo.includes(q) ||
+          traits.includes(q) ||
+          topNotes.includes(q) ||
+          heartNotes.includes(q) ||
+          baseNotes.includes(q);
+
+        if (!matchesSearch) return false;
+      }
 
       // Quick chip accord filter
       if (selectedChip !== 'All') {
@@ -90,7 +126,7 @@ export const MenCollectionContent = () => {
       if (rankDiff !== 0) return rankDiff;
       return (b.reviewsCount || 0) - (a.reviewsCount || 0);
     });
-  }, [products, selectedChip, selectedAccords, priceMax, sortBy]);
+  }, [products, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
 
   const toggleAccord = (accord) => {
     setSelectedAccords((prev) => 
@@ -104,9 +140,10 @@ export const MenCollectionContent = () => {
     setSelectedIntensities([]);
     setPriceMax(250);
     setSelectedChip('All');
+    setSearchQuery('');
   };
 
-  const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
+  const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0) + (searchQuery.trim() ? 1 : 0);
 
   return (
     <>
@@ -322,32 +359,131 @@ export const MenCollectionContent = () => {
               </select>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsFilterDrawerOpen(true)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 16px',
-                borderRadius: '4px',
-                border: '1px solid #d1d5db',
-                background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
-                color: '#111827',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              <SlidersHorizontal size={14} />
-              <span>Filter</span>
-              {activeFiltersCount > 0 && (
-                <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Search Button near Filter */}
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen((prev) => !prev)}
+                aria-label="Search Fragrance Collection"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 14px',
+                  borderRadius: '4px',
+                  border: isSearchOpen || searchQuery ? '1px solid #111827' : '1px solid #d1d5db',
+                  background: isSearchOpen || searchQuery ? '#f9fafb' : '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <Search size={14} />
+                <span>Search</span>
+                {searchQuery.trim() && (
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#000000' }} />
+                )}
+              </button>
+
+              {/* Filter Button */}
+              <button
+                type="button"
+                onClick={() => setIsFilterDrawerOpen(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 16px',
+                  borderRadius: '4px',
+                  border: '1px solid #d1d5db',
+                  background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                <SlidersHorizontal size={14} />
+                <span>Filter</span>
+                {activeFiltersCount > 0 && (
+                  <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Expandable Luxury Search Input Bar */}
+          {isSearchOpen && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 14px',
+              background: '#f9fafb',
+              border: '1px solid #e5e7eb',
+              borderRadius: '6px',
+              marginBottom: '1.5rem',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+            }}>
+              <Search size={16} color="#6b7280" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search men's creations by name, brand inspiration, notes (e.g. Sauvage, Bergamot)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '0.86rem',
+                  color: '#111827',
+                  fontFamily: 'inherit'
+                }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: '#9ca3af',
+                    cursor: 'pointer',
+                    padding: '2px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  title="Clear search"
+                >
+                  <X size={15} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery('');
+                }}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  color: '#6b7280',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '2px 4px'
+                }}
+              >
+                Close
+              </button>
+            </div>
+          )}
 
           {/* Product Grid (Matching Picture 2: 2 columns mobile, 4 columns desktop) */}
           <div 
