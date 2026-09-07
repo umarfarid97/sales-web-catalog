@@ -85,39 +85,23 @@ export const ProductDetailPage = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isUpsellDrawerOpen, setIsUpsellDrawerOpen] = useState(false);
 
-  if (!product) {
-    return (
-      <div className="pdp-page-container" style={{ textAlign: 'center', padding: '5rem 1rem' }}>
-        <h2>Fragrance Not Found</h2>
-        <p style={{ color: '#6b7280', margin: '1rem 0 2rem' }}>The requested creation may have been archived or is temporarily unavailable.</p>
-        <button 
-          className="dior-btn dior-btn-primary" 
-          onClick={() => navigateToCatalog()}
-          style={{ background: '#000', color: '#fff', padding: '12px 24px' }}
-        >
-          Return to Boutique Catalog
-        </button>
-      </div>
-    );
-  }
-
-  const isFav = favorites.includes(product.id);
-
   // Price calculations based on selected size
   const priceBySize = useMemo(() => {
+    if (!product) return { '30ml': 0, '50ml': 0, '100ml': 0 };
     const base = Number(product.price) || 189;
     return {
       '30ml': Math.round(base * 0.63),
       '50ml': Math.round(base * 0.82),
       '100ml': base
     };
-  }, [product.price]);
+  }, [product?.price]);
 
-  const currentUnitPrice = priceBySize[selectedSize] || product.price;
+  const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
   const totalPrice = currentUnitPrice * quantity;
 
   // 5 Gallery Images matching the mockup (Bottle, Slate scene, Macro detail, Video still, Luxury box)
   const galleryItems = useMemo(() => {
+    if (!product) return [];
     const primary = product.images?.[0] || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80';
     return [
       { type: 'image', url: primary, label: 'Flacon Front' },
@@ -130,9 +114,9 @@ export const ProductDetailPage = () => {
 
   // Dynamic Accords Intensity Profile
   const accords = useMemo(() => {
+    if (!product) return [];
     const traits = Array.isArray(product.traits) ? product.traits : [];
     const family = product.olfactoryFamily || '';
-    const name = product.name || '';
 
     // Check key facets
     const isWoody = traits.some(t => /wood|vetiver|cedar|oud/i.test(t)) || /wood|oud/i.test(family);
@@ -156,22 +140,14 @@ export const ProductDetailPage = () => {
     ];
   }, [product]);
 
-  // Visible accords (first 5 on mobile unless expanded)
-  const visibleAccords = showAllAccords ? accords : accords.slice(0, 5);
-
-  // Key Notes extracted from pyramid
-  const topNote = product.pyramid?.topNotes?.[0] || 'Calabrian Bergamot';
-  const heartNote = product.pyramid?.heartNotes?.[0] || 'French Lavender';
-  const baseNote = product.pyramid?.baseNotes?.[0] || 'Precious Amber';
-
   // 4 Curated Fragrance Layering Suggestions ("Pairs Well With")
   const layeringSuggestions = useMemo(() => {
-    if (!products || products.length === 0) return [];
+    if (!product || !products || products.length === 0) return [];
     // Select 4 other fragrances with different traits
     return products
       .filter(p => p.id !== product.id)
       .slice(0, 4)
-      .map((p, idx) => {
+      .map((p) => {
         // Luxury curated titles if available, or product displayName
         const facets = p.traits && p.traits.length >= 2 
           ? `${p.traits[0]} • ${p.traits[1]}` 
@@ -186,6 +162,24 @@ export const ProductDetailPage = () => {
         };
       });
   }, [products, product]);
+
+  if (!product) {
+    return (
+      <div className="pdp-page-container" style={{ textAlign: 'center', padding: '5rem 1rem' }}>
+        <h2>Fragrance Not Found</h2>
+        <p style={{ color: '#6b7280', margin: '1rem 0 2rem' }}>The requested creation may have been archived or is temporarily unavailable.</p>
+        <button 
+          className="dior-btn dior-btn-primary" 
+          onClick={() => navigateToCatalog()}
+          style={{ background: '#000', color: '#fff', padding: '12px 24px' }}
+        >
+          Return to Boutique Catalog
+        </button>
+      </div>
+    );
+  }
+
+  const isFav = favorites.includes(product.id);
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, null, currentUnitPrice);
