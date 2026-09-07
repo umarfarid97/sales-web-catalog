@@ -114,7 +114,7 @@ export const AdminHeader = () => {
 
         {/* Action Buttons */}
         <button
-          className="btn btn-emerald"
+          className="admin-btn-primary"
           onClick={handleAddNewProduct}
         >
           <Plus size={16} />
@@ -122,7 +122,7 @@ export const AdminHeader = () => {
         </button>
 
         <button
-          className="btn btn-secondary"
+          className="admin-btn-secondary"
           onClick={handleExportCSV}
           title="Export CSV Report"
         >

@@ -119,9 +119,9 @@ export const ProductFormModal = () => {
       onClick={() => setIsProductFormOpen(false)}
     >
       <div 
-        className="modal-content modal-content-lg"
+        className="modal-content modal-content-lg admin-modal-light"
         onClick={(e) => e.stopPropagation()}
-        style={{ border: '1px solid rgba(212, 175, 55, 0.35)', background: 'rgba(15, 17, 25, 0.98)', maxHeight: '90vh', overflowY: 'auto' }}
+        style={{ background: '#ffffff', color: '#0b0c10', border: '1px solid #e5e7eb', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.2)' }}
       >
         <button
           className="modal-close-btn"
@@ -131,11 +131,11 @@ export const ProductFormModal = () => {
           <X size={18} />
         </button>
 
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(212, 175, 55, 0.2)' }}>
-          <h2 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 700 }}>
+        <div style={{ padding: '24px 32px', borderBottom: '1px solid #e5e7eb' }}>
+          <h2 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 700, color: '#0b0c10' }}>
             {editingProduct ? 'Edit Fragrance Creation' : 'Formulate New Fragrance Creation'}
           </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: '0.85rem', color: '#6b7280' }}>
             Configure olfactory pyramid notes, flacon inventory, and perfume specifications.
           </p>
         </div>
@@ -147,24 +147,24 @@ export const ProductFormModal = () => {
             {/* Left: General Info */}
             <div>
               <div className="form-group">
-                <label className="form-label">Fragrance Title *</label>
+                <label className="admin-form-label">Fragrance Title *</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Oud Royal Extrait"
-                  className="form-input"
+                  className="admin-form-input"
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div className="form-group">
-                  <label className="form-label">Olfactory Family *</label>
+                  <label className="admin-form-label">Olfactory Family *</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="form-select"
+                    className="admin-form-select"
                   >
                     {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
                       <option key={fam} value={fam}>{fam}</option>
@@ -173,154 +173,154 @@ export const ProductFormModal = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Concentration</label>
+                  <label className="admin-form-label">Concentration</label>
                   <input
                     type="text"
                     value={formData.concentration}
                     onChange={(e) => setFormData({ ...formData, concentration: e.target.value })}
                     placeholder="e.g. Extrait de Parfum (32%)"
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
                 <div className="form-group">
-                  <label className="form-label">Base Price ($) *</label>
+                  <label className="admin-form-label">Base Price (RM) *</label>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Original Price ($)</label>
+                  <label className="admin-form-label">Original Price (RM)</label>
                   <input
                     type="number"
                     step="0.01"
                     value={formData.originalPrice}
                     onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Flacons in Stock *</label>
+                  <label className="admin-form-label">Flacons in Stock *</label>
                   <input
                     type="number"
                     required
                     value={formData.stock}
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Tagline (Notes Preview)</label>
+                <label className="admin-form-label">Tagline (Notes Preview)</label>
                 <input
                   type="text"
                   value={formData.tagline}
                   onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
                   placeholder="e.g. Imperial Agarwood, Spiced Persian Saffron & May Rose"
-                  className="form-input"
+                  className="admin-form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Poetic Description</label>
+                <label className="admin-form-label">Poetic Description</label>
                 <textarea
                   rows={3}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="form-textarea"
+                  className="admin-form-textarea"
                 />
               </div>
             </div>
 
             {/* Right: Notes Pyramid & Image */}
             <div>
-              <div style={{ padding: '16px', background: 'rgba(212, 175, 55, 0.06)', border: '1px solid rgba(212, 175, 55, 0.25)', borderRadius: 'var(--radius-md)', marginBottom: '16px' }}>
-                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-gold-light)', textTransform: 'uppercase', marginBottom: '10px' }}>
+              <div style={{ padding: '16px', background: '#fafaf9', border: '1px solid #e7e5e4', borderRadius: '8px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#b38e44', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px' }}>
                   Olfactory Pyramid Breakdown
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '10px' }}>
-                  <label className="form-label" style={{ fontSize: '0.78rem' }}>Top Notes (Comma-separated)</label>
+                  <label className="admin-form-label" style={{ fontSize: '0.74rem' }}>Top Notes (Comma-separated)</label>
                   <input
                     type="text"
                     value={formData.topNotes}
                     onChange={(e) => setFormData({ ...formData, topNotes: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                     style={{ fontSize: '0.85rem' }}
                   />
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '10px' }}>
-                  <label className="form-label" style={{ fontSize: '0.78rem' }}>Heart Notes (Comma-separated)</label>
+                  <label className="admin-form-label" style={{ fontSize: '0.74rem' }}>Heart Notes (Comma-separated)</label>
                   <input
                     type="text"
                     value={formData.heartNotes}
                     onChange={(e) => setFormData({ ...formData, heartNotes: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                     style={{ fontSize: '0.85rem' }}
                   />
                 </div>
 
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" style={{ fontSize: '0.78rem' }}>Base Notes (Comma-separated)</label>
+                  <label className="admin-form-label" style={{ fontSize: '0.74rem' }}>Base Notes (Comma-separated)</label>
                   <input
                     type="text"
                     value={formData.baseNotes}
                     onChange={(e) => setFormData({ ...formData, baseNotes: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                     style={{ fontSize: '0.85rem' }}
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Flacon Image URL</label>
+                <label className="admin-form-label">Flacon Image URL</label>
                 <input
                   type="url"
                   value={formData.imageUrl}
                   onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="form-input"
+                  className="admin-form-input"
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div className="form-group">
-                  <label className="form-label">Longevity</label>
+                  <label className="admin-form-label">Longevity</label>
                   <input
                     type="text"
                     value={formData.longevity}
                     onChange={(e) => setFormData({ ...formData, longevity: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Sillage</label>
+                  <label className="admin-form-label">Sillage</label>
                   <input
                     type="text"
                     value={formData.sillage}
                     onChange={(e) => setFormData({ ...formData, sillage: e.target.value })}
-                    className="form-input"
+                    className="admin-form-input"
                   />
                 </div>
               </div>
 
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: 'var(--text-main)', cursor: 'pointer', marginTop: '12px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#111827', cursor: 'pointer', marginTop: '12px', fontWeight: 600 }}>
                 <input
                   type="checkbox"
                   checked={formData.isFeatured}
                   onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                  style={{ accentColor: 'var(--accent-gold)' }}
+                  style={{ accentColor: '#000000', width: '16px', height: '16px' }}
                 />
                 <span>Feature on Boutique Hero Showcase</span>
               </label>
@@ -328,15 +328,15 @@ export const ProductFormModal = () => {
 
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="admin-btn-secondary"
               onClick={() => setIsProductFormOpen(false)}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-gold">
+            <button type="submit" className="admin-btn-primary">
               <Save size={16} />
               <span>{editingProduct ? 'Update Creation' : 'Publish Fragrance'}</span>
             </button>

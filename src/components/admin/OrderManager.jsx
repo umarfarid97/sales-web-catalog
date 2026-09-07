@@ -36,10 +36,10 @@ export const OrderManager = () => {
   return (
     <div>
       
-      <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+      <div className="admin-table-container">
         
         {/* Status Filter Tabs Toolbar */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(212, 175, 55, 0.15)', display: 'flex', gap: '8px', overflowX: 'auto' }}>
+        <div style={{ padding: '16px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', gap: '8px', overflowX: 'auto', background: '#fcfcfc' }}>
           {['All', ...statusOptions].map((st) => {
             const count = getStatusCount(st);
             const isActive = selectedStatusTab === st;
@@ -53,9 +53,9 @@ export const OrderManager = () => {
                   borderRadius: 'var(--radius-full)',
                   fontSize: '0.82rem',
                   fontWeight: 600,
-                  background: isActive ? 'var(--accent-gold-gradient)' : 'rgba(255, 255, 255, 0.04)',
-                  color: isActive ? '#0b0c10' : 'var(--text-muted)',
-                  border: `1px solid ${isActive ? 'var(--accent-gold)' : 'var(--border-subtle)'}`,
+                  background: isActive ? '#000000' : '#ffffff',
+                  color: isActive ? '#ffffff' : '#374151',
+                  border: `1px solid ${isActive ? '#000000' : '#d1d5db'}`,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
@@ -68,7 +68,8 @@ export const OrderManager = () => {
                 <span 
                   style={{
                     fontSize: '0.72rem',
-                    background: isActive ? 'rgba(0, 0, 0, 0.25)' : 'rgba(255, 255, 255, 0.08)',
+                    background: isActive ? 'rgba(255, 255, 255, 0.25)' : '#f3f4f6',
+                    color: isActive ? '#ffffff' : '#4b5563',
                     padding: '1px 6px',
                     borderRadius: 'var(--radius-full)'
                   }}
@@ -83,19 +84,19 @@ export const OrderManager = () => {
         {/* Search Toolbar */}
         <div className="admin-table-toolbar">
           <div style={{ position: 'relative', width: '100%', maxWidth: '360px' }}>
-            <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
+            <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} />
             <input
               type="text"
               placeholder="Search Order ID, Client Name, Email, Tracking..."
               value={orderSearch}
               onChange={(e) => setOrderSearch(e.target.value)}
-              className="form-input"
+              className="admin-form-input"
               style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '0.85rem' }}
             />
             {orderSearch && (
               <button
                 onClick={() => setOrderSearch('')}
-                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer' }}
               >
                 <X size={14} />
               </button>
@@ -121,7 +122,7 @@ export const OrderManager = () => {
             <tbody>
               {filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-muted)' }}>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
                     No luxury fragrance orders found matching your search.
                   </td>
                 </tr>
@@ -131,7 +132,7 @@ export const OrderManager = () => {
                     
                     {/* Order ID */}
                     <td>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-gold-light)', fontSize: '0.85rem' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#b38e44', fontSize: '0.85rem' }}>
                         {ord.id}
                       </span>
                     </td>
@@ -139,8 +140,8 @@ export const OrderManager = () => {
                     {/* Customer */}
                     <td>
                       <div>
-                        <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '0.9rem' }}>{ord.customer?.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{ord.customer?.city}, {ord.customer?.country}</div>
+                        <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9rem' }}>{ord.customer?.name}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{ord.customer?.city}, {ord.customer?.country}</div>
                       </div>
                     </td>
 
@@ -148,8 +149,8 @@ export const OrderManager = () => {
                     <td>
                       <div style={{ fontSize: '0.85rem' }}>
                         {ord.items.map((it, idx) => (
-                          <div key={idx} style={{ color: '#f3e5ab' }}>
-                            {it.quantity}x {it.name} <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>({it.size || '100ml'})</span>
+                          <div key={idx} style={{ color: '#111827' }}>
+                            {it.quantity}x {it.name} <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>({it.size || '100ml'})</span>
                           </div>
                         ))}
                       </div>
@@ -164,11 +165,11 @@ export const OrderManager = () => {
                             <span>Gift Boxed</span>
                           </span>
                         ) : (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Standard Box</span>
+                          <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Standard Box</span>
                         )}
 
                         {ord.customer?.engravingText && (
-                          <span style={{ fontSize: '0.72rem', color: '#fce08b', fontStyle: 'italic' }}>
+                          <span style={{ fontSize: '0.72rem', color: '#b45309', fontStyle: 'italic' }}>
                             <Feather size={10} style={{ display: 'inline', marginRight: '3px' }} />
                             &quot;{ord.customer.engravingText}&quot;
                           </span>
@@ -178,7 +179,7 @@ export const OrderManager = () => {
 
                     {/* Total */}
                     <td>
-                      <span style={{ fontWeight: 700, color: '#fce08b', fontFamily: 'var(--font-mono)' }}>
+                      <span style={{ fontWeight: 700, color: '#111827', fontFamily: 'var(--font-mono)' }}>
                         RM {ord.total.toFixed(2)}
                       </span>
                     </td>
@@ -192,7 +193,7 @@ export const OrderManager = () => {
 
                     {/* Date */}
                     <td>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
+                      <span style={{ fontSize: '0.8rem', color: '#6b7280' }}>
                         {new Date(ord.placedAt).toLocaleDateString()}
                       </span>
                     </td>
@@ -200,11 +201,11 @@ export const OrderManager = () => {
                     {/* Action */}
                     <td style={{ textAlign: 'right' }}>
                       <button
-                        className="btn btn-secondary"
+                        className="admin-btn-secondary"
                         style={{ padding: '6px 12px', fontSize: '0.78rem' }}
                         onClick={() => setViewingOrder(ord)}
                       >
-                        <Eye size={13} color="var(--accent-gold)" />
+                        <Eye size={13} color="#b38e44" />
                         <span>Inspect</span>
                       </button>
                     </td>

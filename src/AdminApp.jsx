@@ -29,48 +29,48 @@ const AdminLayout = () => {
 
   if (!isAdmin) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0a0d14', color: '#ffffff' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fdfdfd', color: '#0b0c10' }}>
         <Navbar />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '460px', width: '100%', textAlign: 'center', background: '#111827', border: '1px solid #1f2937', borderRadius: '8px', padding: '2.5rem 2rem', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.15)', border: '1px solid #d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#f59e0b' }}>
+          <div style={{ maxWidth: '460px', width: '100%', textAlign: 'center', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '2.5rem 2rem', boxShadow: '0 20px 40px rgba(0,0,0,0.06)' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fef3c7', border: '1px solid #fde68a', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#b45309' }}>
               <Shield size={32} />
             </div>
 
             {isAuthenticated ? (
               <>
-                <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.5rem', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
+                <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.5rem', color: '#0b0c10', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
                   Restricted Administrator Area
                 </h2>
-                <p style={{ color: '#9ca3af', fontSize: '0.88rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
-                  You are signed in as <strong style={{ color: '#f59e0b' }}>{currentUser?.email}</strong>. This account does not have Maison Valenszo atelier administrator privileges.
+                <p style={{ color: '#4b5563', fontSize: '0.88rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+                  You are signed in as <strong style={{ color: '#b45309' }}>{currentUser?.email}</strong>. This account does not have Maison Valenszo atelier administrator privileges.
                 </p>
                 <a
                   href="/"
-                  className="dior-btn"
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', background: '#d97706', color: '#ffffff', padding: '14px', borderRadius: '4px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem', textDecoration: 'none' }}
+                  className="admin-btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '14px', borderRadius: '4px', textDecoration: 'none' }}
                 >
                   Return to Boutique Storefront
                 </a>
               </>
             ) : (
               <>
-                <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.6rem', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
+                <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.6rem', color: '#0b0c10', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
                   Atelier Administrator Access
                 </h2>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+                <p style={{ color: '#4b5563', fontSize: '0.9rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
                   Authentication required. Please sign in with Maison Valenszo administrative credentials to manage inventory and client orders.
                 </p>
                 <button
-                  className="dior-btn"
+                  className="admin-btn-primary"
                   onClick={() => openAuthModal({ mode: 'signin', title: 'Atelier Administrator Sign In' })}
-                  style={{ width: '100%', background: '#d97706', color: '#ffffff', padding: '14px', borderRadius: '4px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem', border: 'none', cursor: 'pointer' }}
+                  style={{ width: '100%', padding: '14px', borderRadius: '4px', marginBottom: '1rem', cursor: 'pointer' }}
                 >
                   Sign In as Administrator
                 </button>
                 <a
                   href="/"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#9ca3af', fontSize: '0.84rem', textDecoration: 'none', marginTop: '0.5rem' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#6b7280', fontSize: '0.84rem', textDecoration: 'none', marginTop: '0.5rem' }}
                 >
                   <ArrowLeft size={14} /> Return to Customer Storefront
                 </a>

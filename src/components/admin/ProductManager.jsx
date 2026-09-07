@@ -57,26 +57,26 @@ export const ProductManager = () => {
     <div>
       
       {/* Table Container */}
-      <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+      <div className="admin-table-container">
         
         {/* Table Toolbar */}
-        <div className="admin-table-toolbar" style={{ borderBottom: '1px solid rgba(212, 175, 55, 0.15)' }}>
+        <div className="admin-table-toolbar">
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px', flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', width: '100%', maxWidth: '320px' }}>
-              <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--accent-gold)' }} />
+              <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} />
               <input
                 type="text"
                 placeholder="Search SKU, fragrance title..."
                 value={searchTable}
                 onChange={(e) => setSearchTable(e.target.value)}
-                className="form-input"
+                className="admin-form-input"
                 style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '0.85rem' }}
               />
               {searchTable && (
                 <button
                   onClick={() => setSearchTable('')}
-                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer' }}
                 >
                   <X size={14} />
                 </button>
@@ -87,7 +87,7 @@ export const ProductManager = () => {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="form-select"
+              className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
               <option value="All">All Olfactory Families</option>
@@ -100,7 +100,7 @@ export const ProductManager = () => {
             <select
               value={filterStockStatus}
               onChange={(e) => setFilterStockStatus(e.target.value)}
-              className="form-select"
+              className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
               <option value="all">All Flacon Stock Levels</option>
@@ -111,7 +111,7 @@ export const ProductManager = () => {
 
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
-              className="btn btn-gold"
+              className="admin-btn-primary"
               onClick={handleAddNew}
               style={{ padding: '8px 16px', fontSize: '0.85rem' }}
             >
@@ -140,7 +140,7 @@ export const ProductManager = () => {
             <tbody>
               {tableItems.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-muted)' }}>
+                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
                     No fragrance records found matching your filters.
                   </td>
                 </tr>
@@ -162,12 +162,12 @@ export const ProductManager = () => {
                               height: '42px',
                               borderRadius: '8px',
                               objectFit: 'cover',
-                              border: '1px solid rgba(212, 175, 55, 0.25)'
+                              border: '1px solid #e5e7eb'
                             }}
                           />
                           <div>
-                            <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.95rem' }}>{prod.name}</div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+                            <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>{prod.name}</div>
+                            <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
                               {prod.badge && <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 6px', marginRight: '6px' }}>{prod.badge}</span>}
                             </div>
                           </div>
@@ -176,29 +176,29 @@ export const ProductManager = () => {
 
                       {/* SKU */}
                       <td>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-gold-light)' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#4b5563' }}>
                           {prod.sku || 'N/A'}
                         </span>
                       </td>
 
                       {/* Category */}
                       <td>
-                        <span className="badge badge-neutral" style={{ background: 'rgba(212, 175, 55, 0.08)', color: '#f3e5ab' }}>
+                        <span className="badge badge-neutral">
                           {prod.category}
                         </span>
                       </td>
 
                       {/* Concentration */}
                       <td>
-                        <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                        <span style={{ fontSize: '0.82rem', color: '#4b5563' }}>
                           {prod.concentration?.split(' ')[0] || 'Extrait'}
                         </span>
                       </td>
 
                       {/* Price */}
                       <td>
-                        <span style={{ fontWeight: 700, color: '#fce08b', fontFamily: 'var(--font-mono)' }}>
-                          ${prod.price.toFixed(2)}
+                        <span style={{ fontWeight: 700, color: '#111827', fontFamily: 'var(--font-mono)' }}>
+                          RM {prod.price.toFixed(2)}
                         </span>
                       </td>
 
@@ -216,8 +216,8 @@ export const ProductManager = () => {
 
                       {/* Rating */}
                       <td>
-                        <span style={{ color: '#fcd34d', fontWeight: 700, fontSize: '0.85rem' }}>
-                          ★ {prod.rating} <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>({prod.reviewsCount})</span>
+                        <span style={{ color: '#d97706', fontWeight: 700, fontSize: '0.85rem' }}>
+                          ★ {prod.rating} <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>({prod.reviewsCount})</span>
                         </span>
                       </td>
 
@@ -226,29 +226,26 @@ export const ProductManager = () => {
                         <div style={{ display: 'inline-flex', gap: '6px' }}>
                           <button
                             className="btn-icon"
-                            style={{ width: '32px', height: '32px' }}
                             onClick={() => restockProduct(prod.id, 10)}
                             title="Restock +10 flacons"
                           >
-                            <RefreshCw size={13} color="var(--accent-gold)" />
+                            <RefreshCw size={13} color="#b38e44" />
                           </button>
 
                           <button
                             className="btn-icon"
-                            style={{ width: '32px', height: '32px' }}
                             onClick={() => handleEdit(prod)}
                             title="Edit creation"
                           >
-                            <Edit size={13} color="#38bdf8" />
+                            <Edit size={13} color="#2563eb" />
                           </button>
 
                           <button
                             className="btn-icon"
-                            style={{ width: '32px', height: '32px' }}
                             onClick={() => handleDelete(prod.id, prod.name)}
                             title="Delete creation"
                           >
-                            <Trash2 size={13} color="#f87171" />
+                            <Trash2 size={13} color="#dc2626" />
                           </button>
                         </div>
                       </td>

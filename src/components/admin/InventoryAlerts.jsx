@@ -25,23 +25,23 @@ export const InventoryAlerts = () => {
       
       {/* Alert Banner */}
       {lowStockItems.length > 0 ? (
-        <div className="inventory-alert-card" style={{ border: '1px solid rgba(244, 63, 94, 0.35)', background: 'rgba(244, 63, 94, 0.08)' }}>
+        <div className="inventory-alert-card" style={{ border: '1px solid #fecaca', background: '#fef2f2' }}>
           <div className="inventory-alert-info">
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(244, 63, 94, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fb7185' }}>
+            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
               <AlertTriangle size={24} />
             </div>
             <div>
-              <h3 className="font-serif-title" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#ffffff' }}>
+              <h3 className="font-serif-title" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#991b1b' }}>
                 {lowStockItems.length} Fragrance Creations Require Atelier Maceration &amp; Flacon Restock
               </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: '0.85rem', color: '#7f1d1d' }}>
                 {outOfStockItems.length} creations are completely depleted / sold out.
               </p>
             </div>
           </div>
 
           <button
-            className="btn btn-gold"
+            className="admin-btn-primary"
             onClick={handleBatchRestock}
             style={{ padding: '10px 20px', fontSize: '0.88rem' }}
           >
@@ -51,23 +51,23 @@ export const InventoryAlerts = () => {
         </div>
       ) : (
         <div 
-          className="glass-panel"
+          className="admin-card-panel"
           style={{
             padding: '30px',
             marginBottom: '28px',
             display: 'flex',
             alignItems: 'center',
             gap: '16px',
-            background: 'rgba(16, 185, 129, 0.1)',
-            borderColor: 'rgba(16, 185, 129, 0.3)'
+            background: '#ecfdf5',
+            borderColor: '#a7f3d0'
           }}
         >
           <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#34d399' }}>Flacon Vault Inventory Healthy</h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#065f46' }}>Flacon Vault Inventory Healthy</h3>
+            <p style={{ fontSize: '0.85rem', color: '#047857' }}>
               All signature fragrance creations have sufficient safety reserves (&gt; 5 flacons).
             </p>
           </div>
@@ -76,9 +76,9 @@ export const InventoryAlerts = () => {
 
       {/* Low Stock Items Grid */}
       {lowStockItems.length > 0 && (
-        <div className="admin-table-container" style={{ border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+        <div className="admin-table-container">
           <div className="admin-table-toolbar">
-            <h3 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--accent-gold-light)' }}>
+            <h3 className="font-serif-title" style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0b0c10' }}>
               Critical Inventory Fragrances
             </h3>
           </div>
@@ -97,8 +97,8 @@ export const InventoryAlerts = () => {
                 <tr key={prod.id}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img src={prod.images[0]} alt={prod.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover' }} />
-                      <span className="font-serif-title" style={{ fontWeight: 700 }}>{prod.name}</span>
+                      <img src={prod.images[0]} alt={prod.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e5e7eb' }} />
+                      <span className="font-serif-title" style={{ fontWeight: 700, color: '#111827' }}>{prod.name}</span>
                     </div>
                   </td>
                   <td>
@@ -111,7 +111,7 @@ export const InventoryAlerts = () => {
                   </td>
                   <td style={{ textAlign: 'right' }}>
                     <button
-                      className="btn btn-gold"
+                      className="admin-btn-secondary"
                       style={{ padding: '6px 14px', fontSize: '0.8rem' }}
                       onClick={() => restockProduct(prod.id, 10)}
                     >

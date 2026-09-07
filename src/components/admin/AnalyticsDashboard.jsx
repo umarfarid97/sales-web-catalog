@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
-  DollarSign, 
+  Wallet, 
   ShoppingCart, 
   TrendingUp, 
   ArrowUpRight, 
@@ -31,11 +31,11 @@ export const AnalyticsDashboard = () => {
 
   // Olfactory family breakdown calculation
   const categoryStats = [
-    { name: 'Woody & Smoky', share: 36, color: '#d4af37' },
-    { name: 'Amber & Oriental', share: 26, color: '#f59e0b' },
-    { name: 'Floral & Romantic', share: 20, color: '#e2a8b2' },
-    { name: 'Fresh & Citrus', share: 12, color: '#10b981' },
-    { name: 'Discovery Sets', share: 6, color: '#06b6d4' }
+    { name: 'Woody & Smoky', share: 36, color: '#b45309' },
+    { name: 'Amber & Oriental', share: 26, color: '#d97706' },
+    { name: 'Floral & Romantic', share: 20, color: '#db2777' },
+    { name: 'Fresh & Citrus', share: 12, color: '#059669' },
+    { name: 'Discovery Sets', share: 6, color: '#0891b2' }
   ];
 
   // Top products
@@ -48,11 +48,11 @@ export const AnalyticsDashboard = () => {
       <div className="kpi-grid">
         
         {/* KPI 1: Revenue */}
-        <div className="kpi-card" style={{ border: '1px solid rgba(212, 175, 55, 0.25)' }}>
+        <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-title">Maison Gross Revenue</span>
-            <div className="kpi-icon-box" style={{ background: 'rgba(212, 175, 55, 0.15)', color: 'var(--accent-gold)' }}>
-              <DollarSign size={20} />
+            <div className="kpi-icon-box" style={{ background: '#fef3c7', color: '#b45309' }}>
+              <Wallet size={20} />
             </div>
           </div>
           <div className="kpi-value">RM {totalRevenue.toFixed(2)}</div>
@@ -63,10 +63,10 @@ export const AnalyticsDashboard = () => {
         </div>
 
         {/* KPI 2: Total Orders */}
-        <div className="kpi-card" style={{ border: '1px solid rgba(212, 175, 55, 0.25)' }}>
+        <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-title">Fragrance Orders</span>
-            <div className="kpi-icon-box" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
+            <div className="kpi-icon-box" style={{ background: '#ecfdf5', color: '#059669' }}>
               <ShoppingCart size={20} />
             </div>
           </div>
@@ -78,10 +78,10 @@ export const AnalyticsDashboard = () => {
         </div>
 
         {/* KPI 3: Average Order Value */}
-        <div className="kpi-card" style={{ border: '1px solid rgba(212, 175, 55, 0.25)' }}>
+        <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-title">Avg Flacon Cart (AOV)</span>
-            <div className="kpi-icon-box" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24' }}>
+            <div className="kpi-icon-box" style={{ background: '#fffbeb', color: '#d97706' }}>
               <TrendingUp size={20} />
             </div>
           </div>
@@ -93,10 +93,10 @@ export const AnalyticsDashboard = () => {
         </div>
 
         {/* KPI 4: Active SKUs */}
-        <div className="kpi-card" style={{ border: '1px solid rgba(212, 175, 55, 0.25)' }}>
+        <div className="kpi-card">
           <div className="kpi-header">
             <span className="kpi-title">Active Scent Formulas</span>
-            <div className="kpi-icon-box" style={{ background: 'rgba(226, 168, 178, 0.15)', color: '#fda4af' }}>
+            <div className="kpi-icon-box" style={{ background: '#fdf2f8', color: '#db2777' }}>
               <Sparkles size={20} />
             </div>
           </div>
@@ -112,11 +112,11 @@ export const AnalyticsDashboard = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '24px', marginTop: '24px' }}>
         
         {/* Weekly Revenue Bar Chart */}
-        <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+        <div className="admin-card-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
             <div>
-              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700 }}>Weekly Fragrance Demand Velocity</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Daily boutique sales breakdown</p>
+              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Weekly Fragrance Demand Velocity</h3>
+              <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Daily boutique sales breakdown</p>
             </div>
             <span className="badge badge-gold">7-Day Realtime</span>
           </div>
@@ -125,7 +125,7 @@ export const AnalyticsDashboard = () => {
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '180px', paddingTop: '20px', gap: '12px' }}>
             {weeklyData.map((d, i) => (
               <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
-                <div style={{ fontSize: '0.72rem', color: '#fce08b', marginBottom: '6px', fontFamily: 'var(--font-mono)' }}>
+                <div style={{ fontSize: '0.74rem', color: '#111827', fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-mono)' }}>
                   RM {d.revenue}
                 </div>
                 <div 
@@ -133,13 +133,13 @@ export const AnalyticsDashboard = () => {
                     width: '100%', 
                     maxWidth: '42px', 
                     height: `${d.height}%`, 
-                    background: i === 4 ? 'var(--accent-gold-gradient)' : 'rgba(212, 175, 55, 0.25)', 
+                    background: i === 4 ? '#b38e44' : '#e5e7eb', 
                     borderRadius: '6px 6px 0 0',
-                    transition: 'height 0.4s ease',
-                    boxShadow: i === 4 ? '0 0 15px rgba(212, 175, 55, 0.4)' : 'none'
+                    transition: 'all 0.3s ease',
+                    boxShadow: i === 4 ? '0 4px 12px rgba(179, 142, 68, 0.35)' : 'none'
                   }} 
                 />
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', marginTop: '8px', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.78rem', color: '#4b5563', marginTop: '8px', fontWeight: 600 }}>
                   {d.day}
                 </div>
               </div>
@@ -148,11 +148,11 @@ export const AnalyticsDashboard = () => {
         </div>
 
         {/* Olfactory Families Share */}
-        <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+        <div className="admin-card-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div>
-              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700 }}>Olfactory Family Demand</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Volume by fragrance family</p>
+              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Olfactory Family Demand</h3>
+              <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Volume by fragrance family</p>
             </div>
           </div>
 
@@ -160,10 +160,10 @@ export const AnalyticsDashboard = () => {
             {categoryStats.map((cat, i) => (
               <div key={i}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{cat.name}</span>
+                  <span style={{ fontWeight: 600, color: '#111827' }}>{cat.name}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', color: cat.color, fontWeight: 700 }}>{cat.share}%</span>
                 </div>
-                <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '9999px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '6px', background: '#f3f4f6', borderRadius: '9999px', overflow: 'hidden' }}>
                   <div style={{ width: `${cat.share}%`, height: '100%', background: cat.color, borderRadius: '9999px' }} />
                 </div>
               </div>
@@ -174,15 +174,15 @@ export const AnalyticsDashboard = () => {
       </div>
 
       {/* Bottom: Top Selling Fragrances Table */}
-      <div className="glass-panel" style={{ padding: '24px', marginTop: '24px', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+      <div className="admin-card-panel" style={{ marginTop: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div>
-            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700 }}>Top Signature Fragrances</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Highest velocity creations by customer rating</p>
+            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Top Signature Fragrances</h3>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Highest velocity creations by customer rating</p>
           </div>
           <button 
-            className="btn btn-secondary"
-            style={{ padding: '6px 14px', fontSize: '0.82rem' }}
+            className="admin-btn-secondary"
+            style={{ padding: '6px 14px', fontSize: '0.78rem' }}
             onClick={() => setAdminTab('products')}
           >
             Manage Catalog →
@@ -191,12 +191,12 @@ export const AnalyticsDashboard = () => {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           {topProducts.map((prod) => (
-            <div key={prod.id} style={{ padding: '14px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <img src={prod.images[0]} alt={prod.name} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(212, 175, 55, 0.25)' }} />
+            <div key={prod.id} style={{ padding: '14px', background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <img src={prod.images[0]} alt={prod.name} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #e5e7eb' }} />
               <div>
-                <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.88rem' }}>{prod.name}</div>
-                <div style={{ fontSize: '0.78rem', color: '#fce08b', fontFamily: 'var(--font-mono)' }}>RM {prod.price.toFixed(2)}</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>★ {prod.rating} ({prod.reviewsCount} reviews)</div>
+                <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.88rem', color: '#111827' }}>{prod.name}</div>
+                <div style={{ fontSize: '0.82rem', color: '#b38e44', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>RM {prod.price.toFixed(2)}</div>
+                <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>★ {prod.rating} ({prod.reviewsCount} reviews)</div>
               </div>
             </div>
           ))}
