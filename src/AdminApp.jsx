@@ -31,8 +31,8 @@ const AdminLayout = () => {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fdfdfd', color: '#0b0c10' }}>
         <Navbar />
-        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '460px', width: '100%', textAlign: 'center', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '2.5rem 2rem', boxShadow: '0 20px 40px rgba(0,0,0,0.06)' }}>
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(1.5rem, 4vw, 3rem) 1rem' }}>
+          <div style={{ maxWidth: '460px', width: '100%', textAlign: 'center', background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: 'clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem)', boxShadow: '0 20px 40px rgba(0,0,0,0.06)' }}>
             <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fef3c7', border: '1px solid #fde68a', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#b45309' }}>
               <Shield size={32} />
             </div>

@@ -109,11 +109,11 @@ export const AnalyticsDashboard = () => {
       </div>
 
       {/* Grid: Charts & Top Scents */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '24px', marginTop: '24px' }}>
+      <div className="admin-charts-grid">
         
         {/* Weekly Revenue Bar Chart */}
         <div className="admin-card-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '8px' }}>
             <div>
               <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Weekly Fragrance Demand Velocity</h3>
               <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Daily boutique sales breakdown</p>
@@ -122,10 +122,10 @@ export const AnalyticsDashboard = () => {
           </div>
 
           {/* Simple Clean Bar Chart */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '180px', paddingTop: '20px', gap: '12px' }}>
+          <div className="admin-bar-chart-wrap" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '180px', paddingTop: '20px', gap: '10px' }}>
             {weeklyData.map((d, i) => (
-              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
-                <div style={{ fontSize: '0.74rem', color: '#111827', fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-mono)' }}>
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end', minWidth: 0 }}>
+                <div className="admin-bar-value" style={{ fontSize: '0.74rem', color: '#111827', fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
                   RM {d.revenue}
                 </div>
                 <div 
@@ -139,7 +139,7 @@ export const AnalyticsDashboard = () => {
                     boxShadow: i === 4 ? '0 4px 12px rgba(179, 142, 68, 0.35)' : 'none'
                   }} 
                 />
-                <div style={{ fontSize: '0.78rem', color: '#4b5563', marginTop: '8px', fontWeight: 600 }}>
+                <div className="admin-bar-day" style={{ fontSize: '0.78rem', color: '#4b5563', marginTop: '8px', fontWeight: 600 }}>
                   {d.day}
                 </div>
               </div>
@@ -149,7 +149,7 @@ export const AnalyticsDashboard = () => {
 
         {/* Olfactory Families Share */}
         <div className="admin-card-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '8px' }}>
             <div>
               <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Olfactory Family Demand</h3>
               <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Volume by fragrance family</p>
@@ -175,7 +175,7 @@ export const AnalyticsDashboard = () => {
 
       {/* Bottom: Top Selling Fragrances Table */}
       <div className="admin-card-panel" style={{ marginTop: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Top Signature Fragrances</h3>
             <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Highest velocity creations by customer rating</p>
@@ -189,12 +189,12 @@ export const AnalyticsDashboard = () => {
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+        <div className="admin-top-products-grid">
           {topProducts.map((prod) => (
             <div key={prod.id} style={{ padding: '14px', background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <img src={prod.images[0]} alt={prod.name} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #e5e7eb' }} />
-              <div>
-                <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.88rem', color: '#111827' }}>{prod.name}</div>
+              <img src={prod.images[0]} alt={prod.name} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #e5e7eb', flexShrink: 0 }} />
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.88rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{prod.name}</div>
                 <div style={{ fontSize: '0.82rem', color: '#b38e44', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>RM {prod.price.toFixed(2)}</div>
                 <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>★ {prod.rating} ({prod.reviewsCount} reviews)</div>
               </div>

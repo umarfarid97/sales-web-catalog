@@ -52,26 +52,26 @@ export const OrderDetailModal = () => {
           <X size={18} />
         </button>
 
-        <div style={{ padding: '32px' }}>
+        <div style={{ padding: 'clamp(18px, 4vw, 28px)' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #e5e7eb', paddingBottom: '20px', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #e5e7eb', paddingBottom: '20px', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <h3 className="font-serif-title" style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0b0c10' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <h3 className="font-serif-title" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)', fontWeight: 800, color: '#0b0c10' }}>
                   Order {order.id}
                 </h3>
                 <span className={`order-status-badge status-${order.status.toLowerCase()}`}>
                   {order.status}
                 </span>
               </div>
-              <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '4px' }}>
+              <p style={{ fontSize: '0.82rem', color: '#6b7280', marginTop: '4px' }}>
                 Placed on {new Date(order.placedAt).toLocaleString()}
               </p>
             </div>
 
             {/* Quick Status Workflow Buttons */}
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: 'auto' }}>
               {order.status === 'Pending' && (
                 <button 
                   className="admin-btn-primary"
@@ -105,7 +105,7 @@ export const OrderDetailModal = () => {
           </div>
 
           {/* Grid Layout: Client & Delivery Info */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px', marginBottom: '28px' }}>
+          <div className="admin-order-modal-grid">
             
             {/* Client Card */}
             <div style={{ padding: '20px', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
@@ -226,8 +226,8 @@ export const OrderDetailModal = () => {
           </div>
 
           {/* Totals Summary */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.9rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <div style={{ width: '100%', maxWidth: '300px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.9rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6b7280' }}>
                 <span>Subtotal:</span>
                 <span style={{ color: '#111827' }}>RM {order.subtotal.toFixed(2)}</span>

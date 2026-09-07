@@ -62,7 +62,7 @@ export const ProductManager = () => {
         {/* Table Toolbar */}
         <div className="admin-table-toolbar">
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px', flexWrap: 'wrap' }}>
+          <div className="admin-table-toolbar-filters">
             <div style={{ position: 'relative', width: '100%', maxWidth: '320px' }}>
               <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#6b7280' }} />
               <input
@@ -109,7 +109,7 @@ export const ProductManager = () => {
             </select>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '10px', width: 'auto' }}>
             <button
               className="admin-btn-primary"
               onClick={handleAddNew}
@@ -122,8 +122,8 @@ export const ProductManager = () => {
 
         </div>
 
-        {/* Table Body */}
-        <div style={{ overflowX: 'auto' }}>
+        {/* Desktop Table View */}
+        <div className="admin-table-desktop-view">
           <table className="admin-table">
             <thead>
               <tr>
@@ -256,6 +256,75 @@ export const ProductManager = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards View (Optimized for Smartphones) */}
+        <div className="admin-mobile-cards-view">
+          {tableItems.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '36px 16px', color: '#6b7280', fontSize: '0.88rem' }}>
+              No fragrance records found matching your filters.
+            </div>
+          ) : (
+            tableItems.map((prod) => {
+              const isOutOfStock = prod.stock === 0;
+              const isLow = prod.stock > 0 && prod.stock < 5;
+
+              return (
+                <div key={prod.id} className="admin-mobile-card">
+                  <div className="admin-mobile-card-header">
+                    <img
+                      src={prod.images[0]}
+                      alt={prod.name}
+                      className="admin-mobile-card-img"
+                    />
+                    <div className="admin-mobile-card-info">
+                      <div className="admin-mobile-card-title">{prod.name}</div>
+                      <div className="admin-mobile-card-meta">
+                        <span className="admin-mobile-card-sku">{prod.sku || 'N/A'}</span>
+                        <span className="badge badge-neutral" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>{prod.category}</span>
+                        {prod.badge && (
+                          <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 5px' }}>{prod.badge}</span>
+                        )}
+                      </div>
+                      <div className="admin-mobile-card-price-row">
+                        <span className="admin-mobile-card-price">RM {prod.price.toFixed(2)}</span>
+                        <span className={`badge ${
+                          isOutOfStock ? 'badge-danger' :
+                          isLow ? 'badge-warning' : 'badge-success'
+                        }`} style={{ fontSize: '0.72rem' }}>
+                          {prod.stock} flacons
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="admin-mobile-card-actions">
+                    <button
+                      className="admin-mobile-action-btn"
+                      onClick={() => restockProduct(prod.id, 10)}
+                    >
+                      <RefreshCw size={13} color="#b38e44" />
+                      <span>+10 Flacons</span>
+                    </button>
+                    <button
+                      className="admin-mobile-action-btn"
+                      onClick={() => handleEdit(prod)}
+                    >
+                      <Edit size={13} color="#2563eb" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      className="admin-mobile-action-btn text-danger"
+                      onClick={() => handleDelete(prod.id, prod.name)}
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
 
       </div>

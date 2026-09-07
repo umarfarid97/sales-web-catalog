@@ -83,46 +83,79 @@ export const InventoryAlerts = () => {
             </h3>
           </div>
 
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Fragrance Creation</th>
-                <th>Olfactory Family</th>
-                <th>Current Reserve</th>
-                <th style={{ textAlign: 'right' }}>Replenish Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lowStockItems.map((prod) => (
-                <tr key={prod.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img src={prod.images[0]} alt={prod.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e5e7eb' }} />
-                      <span className="font-serif-title" style={{ fontWeight: 700, color: '#111827' }}>{prod.name}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span className="badge badge-gold" style={{ fontSize: '0.72rem' }}>{prod.category}</span>
-                  </td>
-                  <td>
-                    <span className={`badge ${prod.stock === 0 ? 'badge-danger' : 'badge-warning'}`}>
-                      {prod.stock === 0 ? 'Depleted (0 flacons)' : `${prod.stock} flacons left`}
-                    </span>
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button
-                      className="admin-btn-secondary"
-                      style={{ padding: '6px 14px', fontSize: '0.8rem' }}
-                      onClick={() => restockProduct(prod.id, 10)}
-                    >
-                      <Plus size={14} />
-                      <span>Restock +10</span>
-                    </button>
-                  </td>
+          {/* Desktop Table View */}
+          <div className="admin-table-desktop-view">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Fragrance Creation</th>
+                  <th>Olfactory Family</th>
+                  <th>Current Reserve</th>
+                  <th style={{ textAlign: 'right' }}>Replenish Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {lowStockItems.map((prod) => (
+                  <tr key={prod.id}>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <img src={prod.images[0]} alt={prod.name} style={{ width: '38px', height: '38px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e5e7eb' }} />
+                        <span className="font-serif-title" style={{ fontWeight: 700, color: '#111827' }}>{prod.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge badge-gold" style={{ fontSize: '0.72rem' }}>{prod.category}</span>
+                    </td>
+                    <td>
+                      <span className={`badge ${prod.stock === 0 ? 'badge-danger' : 'badge-warning'}`}>
+                        {prod.stock === 0 ? 'Depleted (0 flacons)' : `${prod.stock} flacons left`}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button
+                        className="admin-btn-secondary"
+                        style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+                        onClick={() => restockProduct(prod.id, 10)}
+                      >
+                        <Plus size={14} />
+                        <span>Restock +10</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Cards View (Optimized for Smartphones) */}
+          <div className="admin-mobile-cards-view">
+            {lowStockItems.map((prod) => (
+              <div key={prod.id} className="admin-mobile-card">
+                <div className="admin-mobile-card-header">
+                  <img src={prod.images[0]} alt={prod.name} className="admin-mobile-card-img" />
+                  <div className="admin-mobile-card-info">
+                    <div className="admin-mobile-card-title">{prod.name}</div>
+                    <div className="admin-mobile-card-meta">
+                      <span className="badge badge-neutral" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>{prod.category}</span>
+                      <span className={`badge ${prod.stock === 0 ? 'badge-danger' : 'badge-warning'}`} style={{ fontSize: '0.72rem' }}>
+                        {prod.stock === 0 ? 'Depleted (0)' : `${prod.stock} left`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="admin-mobile-card-actions">
+                  <button
+                    className="admin-btn-primary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '9px 12px', fontSize: '0.8rem' }}
+                    onClick={() => restockProduct(prod.id, 10)}
+                  >
+                    <Plus size={14} />
+                    <span>Replenish +10 Flacons</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

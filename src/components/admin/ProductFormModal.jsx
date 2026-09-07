@@ -131,18 +131,18 @@ export const ProductFormModal = () => {
           <X size={18} />
         </button>
 
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid #e5e7eb' }}>
-          <h2 className="font-serif-title" style={{ fontSize: '1.4rem', fontWeight: 700, color: '#0b0c10' }}>
+        <div style={{ padding: 'clamp(18px, 4vw, 28px)', borderBottom: '1px solid #e5e7eb' }}>
+          <h2 className="font-serif-title" style={{ fontSize: 'clamp(1.2rem, 4vw, 1.4rem)', fontWeight: 700, color: '#0b0c10' }}>
             {editingProduct ? 'Edit Fragrance Creation' : 'Formulate New Fragrance Creation'}
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+          <p style={{ fontSize: '0.82rem', color: '#6b7280', marginTop: '4px' }}>
             Configure olfactory pyramid notes, flacon inventory, and perfume specifications.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ padding: '24px 32px' }}>
+        <form onSubmit={handleSubmit} style={{ padding: 'clamp(18px, 4vw, 28px)' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
+          <div className="admin-modal-form-grid">
             
             {/* Left: General Info */}
             <div>
@@ -158,7 +158,7 @@ export const ProductFormModal = () => {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="admin-form-row-2col">
                 <div className="form-group">
                   <label className="admin-form-label">Olfactory Family *</label>
                   <select
@@ -184,7 +184,7 @@ export const ProductFormModal = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+              <div className="admin-form-row-3col">
                 <div className="form-group">
                   <label className="admin-form-label">Base Price (RM) *</label>
                   <input
@@ -293,7 +293,7 @@ export const ProductFormModal = () => {
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="admin-form-row-2col">
                 <div className="form-group">
                   <label className="admin-form-label">Longevity</label>
                   <input
@@ -328,7 +328,7 @@ export const ProductFormModal = () => {
 
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e5e7eb', flexWrap: 'wrap' }}>
             <button
               type="button"
               className="admin-btn-secondary"

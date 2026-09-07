@@ -39,7 +39,7 @@ export const OrderManager = () => {
       <div className="admin-table-container">
         
         {/* Status Filter Tabs Toolbar */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', gap: '8px', overflowX: 'auto', background: '#fcfcfc' }}>
+        <div className="admin-status-scroller">
           {['All', ...statusOptions].map((st) => {
             const count = getStatusCount(st);
             const isActive = selectedStatusTab === st;
@@ -61,7 +61,8 @@ export const OrderManager = () => {
                   gap: '6px',
                   whiteSpace: 'nowrap',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.15s ease',
+                  flexShrink: 0
                 }}
               >
                 <span>{st}</span>
@@ -104,8 +105,8 @@ export const OrderManager = () => {
           </div>
         </div>
 
-        {/* Orders Table */}
-        <div style={{ overflowX: 'auto' }}>
+        {/* Orders Table (Desktop) */}
+        <div className="admin-table-desktop-view">
           <table className="admin-table">
             <thead>
               <tr>
@@ -140,41 +141,28 @@ export const OrderManager = () => {
                     {/* Customer */}
                     <td>
                       <div>
-                        <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9rem' }}>{ord.customer?.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{ord.customer?.city}, {ord.customer?.country}</div>
+                        <div style={{ fontWeight: 600, color: '#111827' }}>{ord.customer?.name}</div>
+                        <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{ord.customer?.email}</div>
                       </div>
                     </td>
 
                     {/* Items */}
                     <td>
-                      <div style={{ fontSize: '0.85rem' }}>
-                        {ord.items.map((it, idx) => (
-                          <div key={idx} style={{ color: '#111827' }}>
-                            {it.quantity}x {it.name} <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>({it.size || '100ml'})</span>
-                          </div>
-                        ))}
+                      <div style={{ fontSize: '0.85rem', color: '#374151' }}>
+                        {ord.items?.length} item(s)
                       </div>
                     </td>
 
-                    {/* Gifting / Samples */}
+                    {/* Gifting */}
                     <td>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                        {ord.customer?.giftPackaging ? (
-                          <span className="badge badge-gold" style={{ fontSize: '0.68rem', width: 'fit-content' }}>
-                            <Gift size={11} />
-                            <span>Gift Boxed</span>
-                          </span>
-                        ) : (
-                          <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Standard Box</span>
-                        )}
-
-                        {ord.customer?.engravingText && (
-                          <span style={{ fontSize: '0.72rem', color: '#b45309', fontStyle: 'italic' }}>
-                            <Feather size={10} style={{ display: 'inline', marginRight: '3px' }} />
-                            &quot;{ord.customer.engravingText}&quot;
-                          </span>
-                        )}
-                      </div>
+                      {ord.customer?.giftPackaging ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#b45309', fontSize: '0.82rem', fontWeight: 600 }}>
+                          <Gift size={14} />
+                          <span>Deluxe Gift Box</span>
+                        </div>
+                      ) : (
+                        <span style={{ color: '#9ca3af', fontSize: '0.82rem' }}>Standard</span>
+                      )}
                     </td>
 
                     {/* Total */}
@@ -215,6 +203,55 @@ export const OrderManager = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards View (Optimized for Smartphones) */}
+        <div className="admin-mobile-cards-view">
+          {filteredOrders.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '36px 16px', color: '#6b7280', fontSize: '0.88rem' }}>
+              No luxury fragrance orders found matching your search.
+            </div>
+          ) : (
+            filteredOrders.map((ord) => (
+              <div key={ord.id} className="admin-mobile-order-card">
+                <div className="admin-mobile-order-top">
+                  <span className="admin-mobile-order-id">{ord.id}</span>
+                  <span className={`order-status-badge status-${ord.status.toLowerCase()}`} style={{ fontSize: '0.72rem' }}>
+                    {ord.status}
+                  </span>
+                </div>
+
+                <div className="admin-mobile-order-customer">
+                  <strong>{ord.customer?.name}</strong>
+                  <span style={{ color: '#6b7280', fontSize: '0.78rem' }}>{ord.customer?.city || 'Kuala Lumpur'}, {ord.customer?.state || 'WP'}</span>
+                </div>
+
+                <div className="admin-mobile-order-summary">
+                  <span style={{ color: '#4b5563' }}>
+                    {ord.items?.length || 1} Flacon{(ord.items?.length || 1) > 1 ? 's' : ''}
+                    {ord.customer?.giftPackaging ? ' • 🎁 Gift' : ''}
+                  </span>
+                  <span className="admin-mobile-order-total">
+                    RM {ord.total.toFixed(2)}
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f3f4f6', paddingTop: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                    {new Date(ord.placedAt).toLocaleDateString()}
+                  </span>
+                  <button
+                    className="admin-btn-primary"
+                    style={{ padding: '7px 14px', fontSize: '0.78rem' }}
+                    onClick={() => setViewingOrder(ord)}
+                  >
+                    <Eye size={13} />
+                    <span>Inspect &amp; Dispatch</span>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>

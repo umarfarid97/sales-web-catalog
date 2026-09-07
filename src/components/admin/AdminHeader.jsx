@@ -67,7 +67,7 @@ export const AdminHeader = () => {
       </div>
 
       {/* Tabs & Top Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+      <div className="admin-tabs-and-actions">
         
         {/* Navigation Tabs */}
         <div className="admin-nav-tabs">
@@ -115,35 +115,37 @@ export const AdminHeader = () => {
         </div>
 
         {/* Action Buttons */}
-        <button
-          className="admin-btn-primary"
-          onClick={handleAddNewProduct}
-        >
-          <Plus size={16} />
-          <span>New Product</span>
-        </button>
+        <div className="admin-header-actions">
+          <button
+            className="admin-btn-primary"
+            onClick={handleAddNewProduct}
+          >
+            <Plus size={16} />
+            <span>New Product</span>
+          </button>
 
-        <button
-          className="admin-btn-secondary"
-          onClick={handleExportCSV}
-          title="Export CSV Report"
-        >
-          <Download size={16} />
-          <span>Export CSV</span>
-        </button>
+          <button
+            className="admin-btn-secondary"
+            onClick={handleExportCSV}
+            title="Export CSV Report"
+          >
+            <Download size={16} />
+            <span>Export CSV</span>
+          </button>
 
-        <button
-          className="admin-btn-secondary"
-          onClick={() => {
-            setRole('customer');
-            window.location.href = '/';
-          }}
-          title="Return to Customer Boutique Storefront"
-          style={{ background: '#f9fafb', color: '#111827' }}
-        >
-          <ArrowLeft size={16} />
-          <span>Boutique Storefront</span>
-        </button>
+          <button
+            className="admin-btn-secondary"
+            onClick={() => {
+              setRole('customer');
+              window.location.href = '/';
+            }}
+            title="Return to Customer Boutique Storefront"
+            style={{ background: '#f9fafb', color: '#111827' }}
+          >
+            <ArrowLeft size={16} />
+            <span>Boutique</span>
+          </button>
+        </div>
 
       </div>
 
