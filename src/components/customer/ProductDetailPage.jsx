@@ -174,7 +174,15 @@ export const ProductDetailPage = () => {
     );
   }
 
-  const isFav = favorites.includes(product.id);
+  const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
+
+  // Safe pyramid notes for visual swatches
+  const topNote = String(product.pyramid?.topNotes?.[0] || 'Calabrian Bergamot');
+  const heartNote = String(product.pyramid?.heartNotes?.[0] || 'Damascena Rose');
+  const baseNote = String(product.pyramid?.baseNotes?.[0] || 'Royal Woods');
+
+  // Visible accords based on accordion toggle
+  const visibleAccords = showAllAccords ? accords : accords.slice(0, 5);
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, null, currentUnitPrice);
