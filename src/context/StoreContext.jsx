@@ -164,8 +164,10 @@ export const StoreProvider = ({ children }) => {
   const openProductDetail = useCallback((product) => {
     if (!product) return;
     const targetId = typeof product === 'string' ? product : product.id;
+    const targetGender = typeof product === 'object' && product.gender ? product.gender : '';
+    const genderQuery = targetGender ? `&gender=${encodeURIComponent(targetGender)}` : '';
     // Multi-Page Application (MPA) full browser page navigation with Clean URL
-    window.location.href = `/product?product=${encodeURIComponent(targetId)}`;
+    window.location.href = `/product?product=${encodeURIComponent(targetId)}${genderQuery}`;
   }, []);
 
   const closeProductDetail = useCallback(() => {
@@ -186,22 +188,65 @@ export const StoreProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Helper to match a product by id, sku, catalog number, name or slug
-  const findProductMatch = useCallback((targetId, list) => {
+  // Helper to match a product by id, sku, catalog number, name or slug using strict multi-pass priority
+  const findProductMatch = useCallback((targetId, list, targetGender = null) => {
     if (!targetId || !Array.isArray(list) || list.length === 0) return null;
-    const clean = decodeURIComponent(targetId).trim().toLowerCase();
-    const cleanDigits = clean.replace(/\D/g, '');
+    const clean = decodeURIComponent(String(targetId)).trim().toLowerCase();
+    if (!clean) return null;
 
-    return list.find((p) => {
-      if (!p) return false;
-      if (p.id && p.id.toLowerCase() === clean) return true;
-      if (p.sku && p.sku.toLowerCase() === clean) return true;
-      if (p.catalogNo !== undefined && String(p.catalogNo) === clean) return true;
-      if (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean) return true;
-      if (cleanDigits && (String(p.catalogNo) === cleanDigits || String(p.specs?.catalogNo) === cleanDigits)) return true;
-      if (p.name && p.name.toLowerCase() === clean) return true;
-      return false;
-    }) || null;
+    // Pass 1: Strict exact ID match across catalog (e.g. 'vlz-men-79')
+    let match = list.find((p) => p && p.id && String(p.id).trim().toLowerCase() === clean);
+    if (match) return match;
+
+    // Pass 2: Strict exact SKU match across catalog (e.g. 'vlz-m-79')
+    match = list.find((p) => p && p.sku && String(p.sku).trim().toLowerCase() === clean);
+    if (match) return match;
+
+    // Pass 3: Strict exact Name match
+    match = list.find((p) => p && p.name && String(p.name).trim().toLowerCase() === clean);
+    if (match) return match;
+
+    // Pass 4: Detect gender hint from parameter or targetId string
+    const detectedGender = targetGender || (
+      (clean.includes('men') && !clean.includes('women')) ? 'Men' :
+      clean.includes('women') ? 'Women' : null
+    );
+
+    if (detectedGender) {
+      const genderList = list.filter((p) => p && p.gender && p.gender.toLowerCase() === detectedGender.toLowerCase());
+      // Match ID, SKU, Name or clean slug within gender
+      match = genderList.find((p) => 
+        (p.id && String(p.id).trim().toLowerCase() === clean) ||
+        (p.sku && String(p.sku).trim().toLowerCase() === clean) ||
+        (p.name && String(p.name).trim().toLowerCase() === clean)
+      );
+      if (match) return match;
+
+      // Match catalog number within same gender
+      const cleanDigits = clean.replace(/\D/g, '');
+      if (cleanDigits) {
+        match = genderList.find((p) => 
+          (p.catalogNo !== undefined && String(p.catalogNo) === cleanDigits) ||
+          (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === cleanDigits)
+        );
+        if (match) return match;
+      }
+    }
+
+    // Pass 5: Pure numeric digits match ONLY if the query itself is purely numeric (e.g. "79")
+    if (/^\d+$/.test(clean)) {
+      match = list.find((p) => 
+        (p.catalogNo !== undefined && String(p.catalogNo) === clean) ||
+        (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean)
+      );
+      if (match) return match;
+    }
+
+    // Pass 6: Fallback partial name contains
+    match = list.find((p) => p && p.name && String(p.name).toLowerCase().includes(clean));
+    if (match) return match;
+
+    return null;
   }, []);
 
   // Restore active product or URL parameters on page load
@@ -234,7 +279,7 @@ export const StoreProvider = ({ children }) => {
     }
 
     if (productId) {
-      const found = findProductMatch(productId, products);
+      const found = findProductMatch(productId, products, detectedGender);
       if (found) {
         setActiveProduct(found);
         setCustomerView('product');

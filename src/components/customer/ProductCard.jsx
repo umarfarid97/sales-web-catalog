@@ -61,10 +61,11 @@ export const ProductCard = ({ product }) => {
         overflow: 'hidden'
       }}
     >
-      {/* 1. Neutral Soft-Tinted Product Image Wrap */}
+      {/* 1. Neutral Crisp Product Image Wrap */}
       <div 
         style={{
-          background: '#f7f5f0',
+          background: '#ffffff',
+          border: '1px solid #ede8e1',
           borderRadius: '12px',
           aspectRatio: '1 / 1.08',
           display: 'flex',

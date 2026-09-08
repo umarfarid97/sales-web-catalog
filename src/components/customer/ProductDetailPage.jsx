@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   Heart, 
@@ -27,7 +27,7 @@ import '../../styles/pdp.css';
 const getNotePhoto = (noteName = '') => {
   const lower = noteName.toLowerCase();
   if (lower.includes('bergamot') || lower.includes('lime') || lower.includes('citrus') || lower.includes('lemon')) {
-    return 'https://images.unsplash.com/photo-1597714026733-4700d1c9fa9c?w=400&auto=format&fit=crop&q=80';
+    return 'https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=400&auto=format&fit=crop&q=80';
   }
   if (lower.includes('lavender') || lower.includes('violet') || lower.includes('iris')) {
     return 'https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=400&auto=format&fit=crop&q=80';
@@ -73,19 +73,58 @@ export const ProductDetailPage = () => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const urlId = params.get('product');
+      const genderParam = params.get('gender');
       if (urlId && products && products.length > 0) {
-        const clean = decodeURIComponent(urlId).trim().toLowerCase();
-        const cleanDigits = clean.replace(/\D/g, '');
-        const found = products.find((p) => {
-          if (!p) return false;
-          if (p.id && p.id.toLowerCase() === clean) return true;
-          if (p.sku && p.sku.toLowerCase() === clean) return true;
-          if (p.catalogNo !== undefined && String(p.catalogNo) === clean) return true;
-          if (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean) return true;
-          if (cleanDigits && (String(p.catalogNo) === cleanDigits || String(p.specs?.catalogNo) === cleanDigits)) return true;
-          if (p.name && p.name.toLowerCase() === clean) return true;
-          return false;
-        });
+        const clean = decodeURIComponent(String(urlId)).trim().toLowerCase();
+
+        // Pass 1: Strict exact ID match across catalog
+        let found = products.find((p) => p && p.id && String(p.id).trim().toLowerCase() === clean);
+        if (found) return found;
+
+        // Pass 2: Strict exact SKU match across catalog
+        found = products.find((p) => p && p.sku && String(p.sku).trim().toLowerCase() === clean);
+        if (found) return found;
+
+        // Pass 3: Strict exact Name match
+        found = products.find((p) => p && p.name && String(p.name).trim().toLowerCase() === clean);
+        if (found) return found;
+
+        // Pass 4: Detect gender hint from query parameter or targetId string
+        const detectedGender = genderParam || (
+          (clean.includes('men') && !clean.includes('women')) ? 'Men' :
+          clean.includes('women') ? 'Women' : null
+        );
+
+        if (detectedGender) {
+          const genderList = products.filter((p) => p && p.gender && p.gender.toLowerCase() === detectedGender.toLowerCase());
+          found = genderList.find((p) => 
+            (p.id && String(p.id).trim().toLowerCase() === clean) ||
+            (p.sku && String(p.sku).trim().toLowerCase() === clean) ||
+            (p.name && String(p.name).trim().toLowerCase() === clean)
+          );
+          if (found) return found;
+
+          const cleanDigits = clean.replace(/\D/g, '');
+          if (cleanDigits) {
+            found = genderList.find((p) => 
+              (p.catalogNo !== undefined && String(p.catalogNo) === cleanDigits) ||
+              (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === cleanDigits)
+            );
+            if (found) return found;
+          }
+        }
+
+        // Pass 5: Pure numeric digits match ONLY if the query itself is purely numeric (e.g. "79")
+        if (/^\d+$/.test(clean)) {
+          found = products.find((p) => 
+            (p.catalogNo !== undefined && String(p.catalogNo) === clean) ||
+            (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean)
+          );
+          if (found) return found;
+        }
+
+        // Pass 6: Fallback partial name contains
+        found = products.find((p) => p && p.name && String(p.name).toLowerCase().includes(clean));
         if (found) return found;
       }
     }
@@ -101,6 +140,39 @@ export const ProductDetailPage = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isUpsellDrawerOpen, setIsUpsellDrawerOpen] = useState(false);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const mainCtaRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!mainCtaRef.current) return;
+      const rect = mainCtaRef.current.getBoundingClientRect();
+      // Only show sticky purchase bar when scrolled past the main purchase CTA
+      setShowStickyBar(rect.bottom < 0);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('touchmove', handleScroll, { passive: true });
+
+    let observer;
+    if (typeof IntersectionObserver !== 'undefined' && mainCtaRef.current) {
+      observer = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          setShowStickyBar(true);
+        } else if (entry.isIntersecting || entry.boundingClientRect.top > 0) {
+          setShowStickyBar(false);
+        }
+      }, { threshold: 0 });
+      observer.observe(mainCtaRef.current);
+    }
+
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('touchmove', handleScroll);
+      if (observer) observer.disconnect();
+    };
+  }, []);
 
   // Price calculations based on selected size
   const priceBySize = useMemo(() => {
@@ -116,17 +188,23 @@ export const ProductDetailPage = () => {
   const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
   const totalPrice = currentUnitPrice * quantity;
 
-  // 5 Gallery Images matching the mockup (Bottle, Slate scene, Macro detail, Video still, Luxury box)
+  // Actual Product Imagery (single or multiple) without fake filler perfumes
   const galleryItems = useMemo(() => {
     if (!product) return [];
-    const primary = product.images?.[0] || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80';
-    return [
-      { type: 'image', url: primary, label: 'Flacon Front' },
-      { type: 'image', url: product.images?.[1] || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80', label: 'Dark Slate Atmosphere' },
-      { type: 'image', url: product.images?.[2] || 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900&auto=format&fit=crop&q=80', label: 'Artisanal Detail' },
-      { type: 'video', url: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=900&auto=format&fit=crop&q=80', label: 'Cinematic Visual' },
-      { type: 'image', url: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=900&auto=format&fit=crop&q=80', label: 'Collector Coffret' }
-    ];
+    const rawList = Array.isArray(product.images) && product.images.length > 0
+      ? product.images
+      : (product.image ? [product.image] : []);
+
+    const uniqueImages = Array.from(new Set(rawList.filter(Boolean)));
+    if (uniqueImages.length === 0) {
+      return [{ type: 'image', url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80', label: 'Flacon Front' }];
+    }
+
+    return uniqueImages.map((imgUrl, idx) => ({
+      type: 'image',
+      url: imgUrl,
+      label: idx === 0 ? 'Flacon Front' : `Gallery View ${idx + 1}`
+    }));
   }, [product]);
 
   // Dynamic Accords Intensity Profile
@@ -264,24 +342,26 @@ export const ProductDetailPage = () => {
         {/* Gallery Showcase */}
         <div className="pdp-gallery-wrapper">
           
-          {/* Thumbnail Rail */}
-          <div className="pdp-thumbnail-strip">
-            {galleryItems.map((item, idx) => (
-              <button
-                key={idx}
-                className={`pdp-thumbnail-item ${activeThumbIndex === idx ? 'active' : ''}`}
-                onClick={() => handleSelectThumbnail(idx)}
-                aria-label={`View ${item.label}`}
-              >
-                <img src={item.url} alt={item.label} loading="lazy" />
-                {item.type === 'video' && (
-                  <div className="pdp-thumbnail-video-overlay">
-                    <Play size={16} fill="white" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
+          {/* Thumbnail Rail - only displayed when product has multiple views */}
+          {galleryItems.length > 1 && (
+            <div className="pdp-thumbnail-strip">
+              {galleryItems.map((item, idx) => (
+                <button
+                  key={idx}
+                  className={`pdp-thumbnail-item ${activeThumbIndex === idx ? 'active' : ''}`}
+                  onClick={() => handleSelectThumbnail(idx)}
+                  aria-label={`View ${item.label}`}
+                >
+                  <img src={item.url} alt={item.label} loading="lazy" />
+                  {item.type === 'video' && (
+                    <div className="pdp-thumbnail-video-overlay">
+                      <Play size={16} fill="white" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Main Stage Presentation */}
           <div className="pdp-main-stage">
@@ -294,10 +374,12 @@ export const ProductDetailPage = () => {
               <Heart size={20} fill={isFav ? "#111827" : "none"} color="#111827" />
             </button>
 
-            {/* Mobile Image Counter Pill */}
-            <div className="pdp-mobile-counter-pill">
-              {activeThumbIndex + 1}/{galleryItems.length}
-            </div>
+            {/* Mobile Image Counter Pill - only when multiple images exist */}
+            {galleryItems.length > 1 && (
+              <div className="pdp-mobile-counter-pill">
+                {activeThumbIndex + 1}/{galleryItems.length}
+              </div>
+            )}
 
             {/* Flacon Imagery */}
             <div className="pdp-flacon-inner-canvas">
@@ -390,7 +472,7 @@ export const ProductDetailPage = () => {
           </div>
 
           {/* Quantity Stepper & Add to Cart */}
-          <div className="pdp-cta-row">
+          <div className="pdp-cta-row" ref={mainCtaRef}>
             <div className="pdp-stepper">
               <button 
                 type="button" 
@@ -542,7 +624,11 @@ export const ProductDetailPage = () => {
                 <div className="pdp-note-swatches-row">
                   <div className="pdp-swatch-box">
                     <div className="pdp-swatch-image-frame">
-                      <img src={getNotePhoto(topNote)} alt={topNote} />
+                      <img 
+                        src={getNotePhoto(topNote)} 
+                        alt={topNote} 
+                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
+                      />
                     </div>
                     <span className="pdp-swatch-name">{topNote.split(' ')?.[0] || 'Bergamot'}</span>
                     <span className="pdp-swatch-stage">(Top)</span>
@@ -550,7 +636,11 @@ export const ProductDetailPage = () => {
 
                   <div className="pdp-swatch-box">
                     <div className="pdp-swatch-image-frame">
-                      <img src={getNotePhoto(heartNote)} alt={heartNote} />
+                      <img 
+                        src={getNotePhoto(heartNote)} 
+                        alt={heartNote} 
+                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
+                      />
                     </div>
                     <span className="pdp-swatch-name">{heartNote.split(' ')?.[0] || 'Lavender'}</span>
                     <span className="pdp-swatch-stage">(Heart)</span>
@@ -558,7 +648,11 @@ export const ProductDetailPage = () => {
 
                   <div className="pdp-swatch-box">
                     <div className="pdp-swatch-image-frame">
-                      <img src={getNotePhoto(baseNote)} alt={baseNote} />
+                      <img 
+                        src={getNotePhoto(baseNote)} 
+                        alt={baseNote} 
+                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
+                      />
                     </div>
                     <span className="pdp-swatch-name">{baseNote.split(' ')?.[0] || 'Amber'}</span>
                     <span className="pdp-swatch-stage">(Base)</span>
@@ -817,7 +911,7 @@ export const ProductDetailPage = () => {
       </section>
 
       {/* ================= 5. MOBILE STICKY BOTTOM PURCHASE BAR ================= */}
-      <div className="pdp-mobile-sticky-bar">
+      <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
         <div className="pdp-sticky-bar-inner">
           <button 
             type="button" 
