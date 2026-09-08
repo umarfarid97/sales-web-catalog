@@ -6,10 +6,10 @@ export const BrandValuesFooter = () => {
     <section 
       className="valenszo-brand-values-banner"
       style={{
-        background: '#0a0a0a',
+        background: '#231710',
         color: '#ffffff',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '2rem 1.25rem',
+        borderTop: '1px solid #332016',
+        padding: '2.5rem 1.25rem',
         margin: 0
       }}
     >

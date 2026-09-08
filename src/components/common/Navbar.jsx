@@ -130,27 +130,28 @@ export const Navbar = () => {
         </div>
       )}
 
-      {/* 2. Minimalist Parisian Luxury Top Bar (Matching Dior Boutique Header) */}
+      {/* 2. Artisanal Luxury Top Bar (Matching Craft & Cafe Header) */}
       <header className="site-header" style={{ 
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
-        background: '#ffffff', 
-        borderBottom: '1px solid rgba(0, 0, 0, 0.08)' 
+        background: '#231710', 
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        color: '#ffffff'
       }}>
         <div style={{
           maxWidth: '1440px',
           margin: '0 auto',
           padding: '0 clamp(16px, 3.5vw, 36px)',
-          height: '62px',
+          height: '66px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           position: 'relative'
         }}>
           
-          {/* Left Column: Hamburger Menu */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
+          {/* Left Column: Hamburger Menu & Brand Monogram on Desktop */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', zIndex: 2 }}>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Open Boutique Menu"
@@ -163,42 +164,70 @@ export const Navbar = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#000000',
+                color: '#ffffff',
                 transition: 'opacity 0.2s ease'
               }}
             >
               {isMenuOpen ? <X size={22} strokeWidth={1.75} /> : <Menu size={22} strokeWidth={1.75} />}
             </button>
+
+            <a 
+              href="/"
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                textDecoration: 'none', 
+                color: '#ffffff' 
+              }}
+            >
+              <ValenszoLogo 
+                size="topbar" 
+                showMonogram={true} 
+                showBrandName={false} 
+                showSubtitle={false} 
+                inverted={true}
+              />
+              <span style={{ 
+                fontFamily: 'var(--font-brand, serif)', 
+                fontSize: '1.25rem', 
+                fontWeight: 800, 
+                letterSpacing: '0.12em',
+                color: '#ffffff',
+                display: 'none'
+              }} className="desktop-brand-text">
+                VALENSZO
+              </span>
+            </a>
           </div>
 
-          {/* Center Column: Iconic VALENSZO Monogram Logo Emblem (Mathematically Centered) */}
-          <div 
+          {/* Center Column: Desktop Navigation Links (Craft & Cafe Style) */}
+          <nav 
+            className="desktop-nav-links"
             style={{ 
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              textAlign: 'center', 
-              cursor: 'pointer', 
               display: 'flex', 
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '4px'
+              alignItems: 'center', 
+              gap: 'clamp(14px, 2vw, 28px)',
+              listStyle: 'none'
             }}
-            onClick={() => {
-              if (role === 'admin') {
-                setRole('customer');
-              }
-              window.location.href = '/';
-            }}
-            title="VALENSZO Haute Parfumerie"
           >
-            <ValenszoLogo 
-              size="topbar" 
-              showMonogram={true} 
-              showBrandName={false} 
-              showSubtitle={false} 
-            />
-          </div>
+            <a href="/collection" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+              All Creations
+            </a>
+            <a href="/men" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+              Men
+            </a>
+            <a href="/women" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+              Women
+            </a>
+            <a href="/bundle" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+              Bundles
+            </a>
+            <a href="/diagnostic" style={{ textDecoration: 'none', color: '#f59e0b', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Sparkles size={13} />
+              <span>Scent Quiz</span>
+            </a>
+          </nav>
 
           {/* Right Column: Account / Order Tracker & Shopping Bag */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
@@ -224,7 +253,7 @@ export const Navbar = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#000000',
+                  color: '#ffffff',
                   position: 'relative',
                   transition: 'opacity 0.2s ease'
                 }}
@@ -374,7 +403,7 @@ export const Navbar = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#000000',
+                  color: '#ffffff',
                   position: 'relative',
                   transition: 'opacity 0.2s ease'
                 }}
@@ -385,7 +414,7 @@ export const Navbar = () => {
                     position: 'absolute',
                     top: '2px',
                     right: '2px',
-                    background: '#000000',
+                    background: '#d97706',
                     color: '#ffffff',
                     borderRadius: '50%',
                     width: '16px',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
@@ -31,9 +31,11 @@ export const ProductCard = ({ product }) => {
     showToast(`Added ${product.name} to your Shopping Bag!`, 'success');
   };
 
+  const formattedPrice = Number(product.price || 45).toFixed(2);
+
   return (
     <div 
-      className="dior-product-card"
+      className="artisan-product-card"
       onClick={handleOpen}
       tabIndex={0}
       role="button"
@@ -44,121 +46,215 @@ export const ProductCard = ({ product }) => {
           handleOpen();
         }
       }}
+      style={{
+        background: '#ffffff',
+        borderRadius: '16px',
+        border: '1px solid #ede8e1',
+        padding: '14px',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '0 4px 16px rgba(44, 26, 17, 0.05)',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        position: 'relative'
+      }}
     >
-      {/* Flacon Visual */}
-      <div className="dior-card-img-wrap">
+      {/* 1. Neutral Soft-Tinted Product Image Wrap */}
+      <div 
+        style={{
+          background: '#f7f5f0',
+          borderRadius: '12px',
+          aspectRatio: '1 / 1.08',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          marginBottom: '12px'
+        }}
+      >
         <img 
-          src={product.images[0]} 
+          src={product.images?.[0] || product.image} 
           alt={product.name} 
-          className="dior-card-img"
           loading="lazy"
+          style={{
+            maxWidth: '82%',
+            maxHeight: '82%',
+            objectFit: 'contain',
+            transition: 'transform 0.25s ease'
+          }}
         />
 
-        {/* Wishlist Button */}
+        {/* Wishlist Heart Button */}
         <button
-          className={`dior-card-fav-btn ${isFav ? 'active' : ''}`}
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             toggleFavorite(product.id);
           }}
           aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
+          style={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.92)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: isFav ? '#d97706' : '#786558',
+            backdropFilter: 'blur(4px)',
+            transition: 'all 0.15s ease'
+          }}
         >
-          <Heart size={16} fill={isFav ? "currentColor" : "none"} />
+          <Heart size={15} fill={isFav ? "currentColor" : "none"} />
         </button>
 
-        {/* Floating Badges */}
-        <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', flexDirection: 'column', gap: '4px', zIndex: 2 }}>
-          {product.tier && (
+        {/* Subtle Tier Pill Badge */}
+        {product.tier && (
+          <div 
+            style={{ 
+              position: 'absolute', 
+              top: '8px', 
+              left: '8px', 
+              zIndex: 2 
+            }}
+          >
             <span 
-              className="badge"
               style={{
-                background: product.tier === 'S' ? '#000000' : product.tier === 'A' ? '#111827' : '#374151',
-                color: product.tier === 'S' ? '#f59e0b' : '#ffffff',
+                background: product.tier === 'S' ? '#2b1810' : '#4a382e',
+                color: product.tier === 'S' ? '#fbbf24' : '#ffffff',
                 border: product.tier === 'S' ? '1px solid #d97706' : '1px solid rgba(255,255,255,0.2)',
-                fontSize: '0.64rem',
+                fontSize: '0.62rem',
                 fontWeight: 800,
                 letterSpacing: '0.08em',
-                padding: '2px 8px',
-                borderRadius: '2px'
+                padding: '3px 8px',
+                borderRadius: '9999px',
+                textTransform: 'uppercase'
               }}
             >
-              {product.tier === 'S' ? '★ TIER S · ICON' : product.tier === 'A' ? 'TIER A · PREMIUM' : `TIER ${product.tier}`}
+              {product.tier === 'S' ? '★ TIER S' : `TIER ${product.tier}`}
             </span>
-          )}
-          {product.catalogNo && (
-            <span 
-              className="badge"
-              style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                color: '#111827',
-                fontSize: '0.64rem',
-                fontWeight: 800,
-                padding: '2px 6px',
-                borderRadius: '2px',
-                border: '1px solid #e5e7eb'
-              }}
-            >
-              NO. {product.catalogNo}
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Card Info Body */}
-      <div className="dior-card-body">
-        
-        {/* Category & Inspiration Line */}
-        <div className="dior-card-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
-          <span style={{ fontSize: '0.66rem' }}>
-            {product.gender ? `${product.gender.toUpperCase()}` : ''} {product.character ? `· ${product.character.split('/')[0].trim()}` : ''}
-          </span>
-          {product.brandInspiration && (
-            <span style={{ color: '#926917', fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.06em' }}>
-              {product.brandInspiration}
-            </span>
-          )}
+      {/* 2. Price Row (Bold Price on Left, 5 Stars on Right) */}
+      <div 
+        style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          marginBottom: '6px'
+        }}
+      >
+        <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1f140e', fontFamily: 'var(--font-brand, serif)' }}>
+          RM{formattedPrice}
         </div>
 
-        {/* Title */}
-        <h3 className="dior-card-title" style={{ fontSize: '1.02rem', lineHeight: '1.3' }}>
-          {product.name}
-        </h3>
-
-        {/* Short Note Summary */}
-        <p className="dior-card-desc">
-          {product.tagline}
-        </p>
-
-        {/* Size Pills */}
-        <div className="dior-card-sizes">
-          {product.sizes?.slice(0, 3).map((s, i) => (
-            <span key={i} className="dior-size-pill">
-              {s.ml ? `${s.ml} ml` : s.label}
-            </span>
+        {/* 5 Warm Amber Stars */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="5.0 Rating">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} size={13} fill="#d97706" color="#d97706" strokeWidth={1} />
           ))}
         </div>
+      </div>
 
-        {/* Price & Add to Bag */}
-        <div className="dior-card-price-row">
-          <div className="dior-card-price">
-            RM{Number(product.price || 45).toFixed(0)}
-          </div>
+      {/* 3. Product Title */}
+      <h3 
+        style={{ 
+          fontSize: '0.98rem', 
+          fontWeight: 800, 
+          color: '#1f140e', 
+          margin: '0 0 3px',
+          lineHeight: 1.28,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}
+        title={product.name}
+      >
+        {product.name}
+      </h3>
 
-          <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            {product.concentration ? product.concentration.split('(')[0].trim() : 'Extrait'}
-          </div>
-        </div>
+      {/* 4. Subtitle / Inspiration */}
+      <p 
+        style={{ 
+          fontSize: '0.78rem', 
+          color: '#786558', 
+          margin: '0 0 12px',
+          lineHeight: 1.4,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}
+      >
+        {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : product.tagline || 'Extrait de Parfum • High Longevity'}
+      </p>
 
+      {/* 5. Dual Action Pill Buttons (Craft & Cafe Style) */}
+      <div 
+        style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr', 
+          gap: '8px', 
+          marginTop: 'auto' 
+        }}
+      >
+        {/* Left: Warm Sand Pill Button (Quick View) */}
         <button
-          className="btn btn-dior-black"
-          onClick={handleQuickAdd}
-          style={{ width: '100%', padding: '11px 0', fontSize: '0.78rem', marginTop: 'auto' }}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpen();
+          }}
+          style={{
+            background: '#ebe5dc',
+            color: '#2b1810',
+            border: 'none',
+            borderRadius: '9999px',
+            padding: '9px 8px',
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            textAlign: 'center',
+            transition: 'background 0.15s ease',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#dfd7cc'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = '#ebe5dc'; }}
         >
-          <ShoppingBag size={14} />
-          <span>Add To Bag</span>
+          Quick View
         </button>
 
+        {/* Right: Rich Espresso Pill Button (Add to Bag) */}
+        <button
+          type="button"
+          onClick={handleQuickAdd}
+          style={{
+            background: '#2b1810',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '9999px',
+            padding: '9px 8px',
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            textAlign: 'center',
+            transition: 'background 0.15s ease',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#3e271e'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = '#2b1810'; }}
+        >
+          Add to Bag
+        </button>
       </div>
+
     </div>
   );
 };

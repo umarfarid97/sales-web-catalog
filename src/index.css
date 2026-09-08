@@ -5,65 +5,79 @@
 
 :root {
   /* Color Palette - Dior Haute Couture White & Jet Black */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #f1f2f4;
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f5f2eb;
+  --bg-tertiary: #ebe5dc;
   --bg-card: #ffffff;
   --bg-card-hover: #ffffff;
   --bg-glass: rgba(255, 255, 255, 0.94);
   --bg-glass-heavy: rgba(255, 255, 255, 0.98);
   --bg-overlay: rgba(0, 0, 0, 0.75);
-  --bg-dark-section: #050811;
-  --bg-dior-navy: #080d1a;
+  --bg-dark-section: #1e130c;
+  --bg-dior-navy: #2b1810;
 
-  /* Dior Jet Black & Platinum Accents */
-  --dior-black: #000000;
-  --dior-black-hover: #1f2937;
+  /* Artisanal Luxury Palette (Craft & Cafe Aesthetic) */
+  --espresso-dark: #1e130c;
+  --espresso-main: #2b1810;
+  --coffee-brown: #3e271e;
+  --coffee-warm: #4d3326;
+  --coffee-taupe: #786558;
+  --sand-oat: #ebe5dc;
+  --sand-oat-hover: #ded6ca;
+  --sand-cream: #faf8f5;
+  --sand-light: #f5f2eb;
+  --border-warm: #ede8e1;
+
+  /* Jet Black & Warm Gold Accents */
+  --dior-black: #2b1810;
+  --dior-black-hover: #3e271e;
   --dior-white: #ffffff;
-  --dior-charcoal: #111827;
-  --dior-gold: #c5a059;
-  --dior-gold-light: #e6c88b;
-  --dior-copper: #d97706;
+  --dior-charcoal: #1c120c;
+  --dior-gold: #d97706;
+  --dior-gold-light: #f59e0b;
+  --dior-copper: #b45309;
 
   /* Primary Theme Accent */
-  --accent-primary: #000000;
-  --accent-primary-hover: #1f2937;
-  --accent-secondary: #c5a059;
+  --accent-primary: #2b1810;
+  --accent-primary-hover: #3e271e;
+  --accent-secondary: #d97706;
   --accent-copper-gradient: linear-gradient(135deg, #f5b078 0%, #e28743 50%, #b85d19 100%);
 
   /* Borders & Dividers */
-  --border-subtle: #e5e7eb;
-  --border-card: #e5e7eb;
-  --border-hover: #000000;
-  --border-focus: #000000;
+  --border-subtle: #ede8e1;
+  --border-card: #ede8e1;
+  --border-hover: #2b1810;
+  --border-focus: #2b1810;
 
-  /* Typography - VALENSZO Luxury Didone & Modern Couture */
-  --font-brand: 'Bodoni Moda', 'Playfair Display', 'Cinzel', Didot, 'Bodoni MT', Georgia, serif;
+  /* Typography - Editorial Serif & Warm Sans */
+  --font-brand: 'Playfair Display', 'Bodoni Moda', 'Cinzel', Didot, 'Bodoni MT', Georgia, serif;
+  --font-editorial: 'Playfair Display', 'Bodoni Moda', Georgia, serif;
   --font-dior: var(--font-brand);
   --font-couture: 'Montserrat', 'Outfit', -apple-system, sans-serif;
-  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', 'Montserrat', serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Text Colors */
-  --text-main: #000000;
-  --text-secondary: #374151;
-  --text-muted: #6b7280;
-  --text-dim: #9ca3af;
+  --text-main: #1f140e;
+  --text-secondary: #4a382e;
+  --text-muted: #786558;
+  --text-dim: #a39284;
   --text-inverse: #ffffff;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.12);
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(44, 26, 17, 0.05);
+  --shadow-md: 0 4px 20px rgba(44, 26, 17, 0.08);
+  --shadow-lg: 0 12px 35px rgba(44, 26, 17, 0.12);
+  --shadow-card: 0 4px 20px rgba(44, 26, 17, 0.05);
   --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.7);
 
   /* Radius */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
   --radius-full: 9999px;
 
   /* Transitions */
@@ -319,6 +333,86 @@ h1, h2, h3, h4, h5, h6 {
   color: #ffffff;
 }
 
+/* Artisanal Luxury Pill Buttons (Craft & Cafe Style) */
+.btn-pill {
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-pill-espresso {
+  background: var(--espresso-main);
+  color: #ffffff;
+  border-color: var(--espresso-main);
+}
+.btn-pill-espresso:hover {
+  background: var(--coffee-brown);
+  border-color: var(--coffee-brown);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-pill-oat {
+  background: var(--sand-oat);
+  color: var(--espresso-main);
+  border-color: var(--sand-oat);
+}
+.btn-pill-oat:hover {
+  background: var(--sand-oat-hover);
+  color: var(--espresso-main);
+}
+
+.btn-pill-white {
+  background: #ffffff;
+  color: var(--espresso-main);
+  border-color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.btn-pill-white:hover {
+  background: var(--sand-light);
+  color: var(--espresso-dark);
+}
+
+.btn-pill-outline-warm {
+  background: transparent;
+  color: var(--espresso-main);
+  border: 1.5px solid var(--espresso-main);
+}
+.btn-pill-outline-warm:hover {
+  background: var(--espresso-main);
+  color: #ffffff;
+}
+
+/* Editorial Serif Section Heading */
+.section-heading-editorial {
+  font-family: var(--font-editorial);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.section-subtitle-editorial {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: 0 auto 2rem;
+  line-height: 1.5;
+}
+
 /* Dior Badges & Tags */
 .badge {
   display: inline-flex;
@@ -530,11 +624,25 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Responsive Desktop Header Navigation */
 .desktop-nav-links {
-  display: none;
+  display: none !important;
 }
 
 @media (min-width: 860px) {
   .desktop-nav-links {
+    display: flex !important;
+  }
+  .desktop-brand-text {
+    display: inline !important;
+  }
+}
+
+/* Mobile Bottom Navigation Visibility */
+.valenszo-mobile-bottom-nav {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .valenszo-mobile-bottom-nav {
     display: flex !important;
   }
 }

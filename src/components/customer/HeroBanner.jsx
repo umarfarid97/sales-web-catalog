@@ -323,7 +323,7 @@ export const HeroBanner = () => {
   return (
     <section 
       style={{
-        background: 'linear-gradient(180deg, #090b10 0%, #0d0f17 50%, #08090e 100%)',
+        background: 'linear-gradient(180deg, #231710 0%, #2b1810 50%, #1a0f09 100%)',
         color: '#ffffff',
         padding: 'clamp(1rem, 2.5vw, 1.8rem) clamp(10px, 2.5vw, 20px) 0.85rem',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
@@ -343,7 +343,7 @@ export const HeroBanner = () => {
           width: '500px',
           height: '400px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, rgba(0,0,0,0) 70%)',
+          background: 'radial-gradient(circle, rgba(217, 119, 6, 0.2) 0%, rgba(0,0,0,0) 70%)',
           filter: 'blur(70px)',
           pointerEvents: 'none'
         }}
@@ -351,42 +351,55 @@ export const HeroBanner = () => {
 
       <div style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
         
-        {/* 1. Header: 'FEATURED & RECOMMENDED' */}
+        {/* 1. Header: 'Crafted to Perfection. Every Single Note.' */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between', 
-          marginBottom: '12px',
-          padding: '0 4px'
+          marginBottom: '14px',
+          padding: '0 4px',
+          flexWrap: 'wrap',
+          gap: '8px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
-              fontSize: 'clamp(0.74rem, 1.6vw, 0.84rem)',
+          <div>
+            <h1 style={{
+              fontSize: 'clamp(1.4rem, 3.2vw, 2.3rem)',
               fontWeight: 800,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: '#f3f4f6',
-              fontFamily: 'var(--font-couture, sans-serif)'
+              fontFamily: 'var(--font-brand, serif)',
+              letterSpacing: '-0.01em',
+              color: '#ffffff',
+              margin: '0 0 4px',
+              lineHeight: 1.15
             }}>
-              Featured & Recommended
-            </span>
+              Crafted to Perfection. Every Single Note.
+            </h1>
+            <p style={{
+              fontSize: 'clamp(0.76rem, 1.5vw, 0.88rem)',
+              color: '#d6cbbf',
+              margin: 0,
+              fontWeight: 500
+            }}>
+              Handcrafted haute perfumerie &bull; Extrait de Parfum (30% pure oil concentration)
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ 
-              fontSize: '0.68rem', 
-              color: 'var(--dior-gold, #c5a059)', 
-              fontWeight: 700, 
-              letterSpacing: '0.1em',
+              fontSize: '0.72rem', 
+              color: '#fbbf24', 
+              fontWeight: 800, 
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              background: 'rgba(197, 160, 89, 0.15)',
-              padding: '2px 8px',
-              borderRadius: '2px',
-              border: '1px solid rgba(197, 160, 89, 0.4)'
+              background: 'rgba(217, 119, 6, 0.2)',
+              padding: '4px 12px',
+              borderRadius: '9999px',
+              border: '1px solid rgba(245, 158, 11, 0.4)'
             }}>
               Maison Icons
             </span>
-          </div>
-
-          <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 600 }}>
-            {currentSlideIndex + 1} / {slides.length}
+            <span style={{ fontSize: '0.76rem', color: '#b8aba0', fontWeight: 600 }}>
+              {currentSlideIndex + 1} / {slides.length}
+            </span>
           </div>
         </div>
 
@@ -476,10 +489,10 @@ export const HeroBanner = () => {
             onMouseLeave={handleMouseUp}
             style={{
               width: '100%',
-              borderRadius: '10px',
+              borderRadius: '16px',
               overflow: 'hidden',
               position: 'relative',
-              background: '#090b10',
+              background: '#190f0a',
               border: '1px solid rgba(255, 255, 255, 0.14)',
               boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75)',
               userSelect: 'none',
@@ -679,17 +692,17 @@ export const HeroBanner = () => {
                           handleProductNavigate(slide.id);
                         }}
                         style={{
-                          background: '#ffffff',
-                          color: '#000000',
-                          padding: 'clamp(10px, 2vw, 14px) clamp(16px, 2.5vw, 22px)',
-                          borderRadius: '4px',
-                          fontFamily: 'var(--font-couture, sans-serif)',
+                          background: '#faf8f5',
+                          color: '#231710',
+                          padding: '11px 26px',
+                          borderRadius: '9999px',
+                          fontFamily: 'var(--font-body, sans-serif)',
                           fontSize: '0.84rem',
                           fontWeight: 800,
                           letterSpacing: '0.04em',
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: '6px',
+                          gap: '8px',
                           boxShadow: '0 4px 18px rgba(0,0,0,0.45)',
                           cursor: 'pointer',
                           transition: 'transform 0.15s ease, background 0.15s ease'

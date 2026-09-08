@@ -30,15 +30,15 @@ export const MobileBottomNav = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'rgba(255, 255, 255, 0.96)',
+        background: 'rgba(250, 248, 245, 0.96)',
         backdropFilter: 'blur(16px)',
-        borderTop: '1px solid #e5e7eb',
+        borderTop: '1px solid #ede8e1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: '8px 0 10px',
         zIndex: 998,
-        boxShadow: '0 -2px 12px rgba(0, 0, 0, 0.06)'
+        boxShadow: '0 -2px 12px rgba(44, 26, 17, 0.06)'
       }}
     >
       <a 
@@ -49,13 +49,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isHome ? '#000000' : '#6b7280',
-          fontWeight: isHome ? 700 : 500,
+          color: isHome ? '#2b1810' : '#8c7d72',
+          fontWeight: isHome ? 800 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Home size={20} strokeWidth={isHome ? 2.4 : 1.7} color={isHome ? '#000000' : '#6b7280'} />
+        <Home size={20} strokeWidth={isHome ? 2.4 : 1.7} color={isHome ? '#2b1810' : '#8c7d72'} />
         <span>Home</span>
       </a>
 
@@ -67,13 +67,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isShop ? '#000000' : '#6b7280',
-          fontWeight: isShop ? 700 : 500,
+          color: isShop ? '#2b1810' : '#8c7d72',
+          fontWeight: isShop ? 800 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Compass size={20} strokeWidth={isShop ? 2.4 : 1.7} color={isShop ? '#000000' : '#6b7280'} />
+        <Compass size={20} strokeWidth={isShop ? 2.4 : 1.7} color={isShop ? '#2b1810' : '#8c7d72'} />
         <span>Shop</span>
       </a>
 
@@ -85,13 +85,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isBundles ? '#000000' : '#6b7280',
-          fontWeight: isBundles ? 700 : 500,
+          color: isBundles ? '#2b1810' : '#8c7d72',
+          fontWeight: isBundles ? 800 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Gift size={20} strokeWidth={isBundles ? 2.4 : 1.7} color={isBundles ? '#000000' : '#6b7280'} />
+        <Gift size={20} strokeWidth={isBundles ? 2.4 : 1.7} color={isBundles ? '#2b1810' : '#8c7d72'} />
         <span>Bundles</span>
       </a>
 
@@ -106,14 +106,14 @@ export const MobileBottomNav = () => {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: '#6b7280',
+          color: '#8c7d72',
           fontSize: '0.68rem',
           fontWeight: 500,
           padding: 0,
           letterSpacing: '0.04em'
         }}
       >
-        <User size={20} strokeWidth={1.7} color="#6b7280" />
+        <User size={20} strokeWidth={1.7} color="#8c7d72" />
         <span>Account</span>
       </button>
     </nav>

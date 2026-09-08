@@ -11,6 +11,7 @@ import { OrderTrackerModal } from './components/customer/OrderTrackerModal';
 import { AuthModal } from './components/common/AuthModal';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { ProductCard } from './components/customer/ProductCard';
 import { 
   SlidersHorizontal, 
   ChevronRight, 
@@ -498,97 +499,9 @@ export const MenCollectionContent = () => {
               gap: 'clamp(0.85rem, 2.5vw, 1.75rem)'
             }}
           >
-            {filteredProducts.map((product) => {
-              const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
-              const price = product.price || 45;
-
-              return (
-                <div
-                  key={product.id}
-                  onClick={() => {
-                    window.location.href = `/product?product=${encodeURIComponent(product.id)}`;
-                  }}
-                  style={{
-                    background: '#ffffff',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'transform 0.2s',
-                    position: 'relative'
-                  }}
-                >
-                  {/* Flacon Container */}
-                  <div 
-                    style={{
-                      position: 'relative',
-                      borderRadius: '6px',
-                      overflow: 'hidden',
-                      background: '#f8f9fa',
-                      aspectRatio: '1 / 1.15',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '0.75rem',
-                      border: '1px solid #f0f0f0'
-                    }}
-                  >
-                    <img 
-                      src={product.images?.[0] || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
-                      alt={product.name}
-                      loading="lazy"
-                      style={{ maxWidth: '80%', maxHeight: '80%', objectFit: 'contain' }}
-                    />
-
-                    {/* Wishlist Heart */}
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(product.id);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        border: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        color: isFav ? '#000000' : '#6b7280'
-                      }}
-                    >
-                      <Heart size={16} fill={isFav ? '#000000' : 'none'} />
-                    </button>
-                  </div>
-
-                  {/* Product Details */}
-                  <div>
-                    <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.01em' }}>
-                      {product.name}
-                    </h3>
-                    <div style={{ fontSize: '0.75rem', color: '#6b7280', margin: '3px 0 6px' }}>
-                      {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}
-                    </div>
-                    <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#111827' }}>
-                      RM{price}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginTop: '4px' }}>
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={11} fill="#f59e0b" color="#f59e0b" />
-                      ))}
-                      <span style={{ fontSize: '0.7rem', color: '#6b7280', marginLeft: '4px' }}>
-                        ({product.reviewsCount || 124})
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
 
           {filteredProducts.length === 0 && (
