@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   ShieldCheck, 
   Gift, 
@@ -18,7 +18,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer style={{ background: '#04060a', borderTop: '1px solid rgba(255, 255, 255, 0.08)', padding: '50px 0 80px', color: '#ffffff' }}>
+    <footer style={{ background: '#f8f9fa', borderTop: '1px solid #e5e7eb', padding: '50px 0 80px', color: '#111827' }}>
       <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 24px)' }}>
         
         {/* Valenszo 4 Pillars */}
@@ -28,40 +28,40 @@ export const Footer = () => {
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: '20px',
             paddingBottom: '40px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid #e5e7eb',
             marginBottom: '40px'
           }}
         >
           <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#ffffff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#000000' }}>
               <Gift size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Valenszo Art of Gifting</h4>
-            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Complimentary iconic Valenszo gift box with signature ribbon.</p>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px', fontSize: '0.85rem' }}>Valenszo Art of Gifting</h4>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Complimentary iconic Valenszo gift box with signature ribbon.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#ffffff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#000000' }}>
               <Feather size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>2 Deluxe Samples</h4>
-            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px', fontSize: '0.85rem' }}>2 Deluxe Samples</h4>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#ffffff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#000000' }}>
               <RefreshCw size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Refillable Flacons</h4>
-            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Sustainable design: refill your Valenszo flacon infinitely.</p>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px', fontSize: '0.85rem' }}>Refillable Flacons</h4>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Sustainable design: refill your Valenszo flacon infinitely.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#ffffff', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#000000' }}>
               <ShieldCheck size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Free Climate Delivery</h4>
-            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>White-glove delivery on all orders over RM150.</p>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px', fontSize: '0.85rem' }}>Free Climate Delivery</h4>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>White-glove delivery on all orders over RM150.</p>
           </div>
         </div>
 
@@ -79,22 +79,22 @@ export const Footer = () => {
             <div style={{ marginBottom: '14px', display: 'flex', justifyContent: 'flex-start' }}>
               <ValenszoLogo size="md" layout="horizontal" subtitle="FRAGRANCE MALAYSIA" style={{ alignItems: 'flex-start' }} />
             </div>
-            <p style={{ fontSize: '0.84rem', color: '#9ca3af', lineHeight: '1.6', marginBottom: '14px' }}>
+            <p style={{ fontSize: '0.84rem', color: '#4b5563', lineHeight: '1.6', marginBottom: '14px' }}>
               Valenszo is an act of creation inspired by noble essences and rare raw materials. Handcrafted luxury fragrances with timeless elegance.
             </p>
-            <div style={{ fontSize: '0.72rem', color: '#c5a059', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '0.72rem', color: '#111827', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               Kuala Lumpur &bull; Paris &bull; Worldwide Delivery
             </div>
           </div>
 
           {/* Fragrance Collections */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Fragrance Collections</h4>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px', fontSize: '0.88rem' }}>Fragrance Collections</h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', padding: 0 }}>
               <li>
                 <button 
                   onClick={() => { window.location.href = '/collection'; }} 
-                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
                   Valenszo Complete Line
                 </button>
@@ -102,7 +102,7 @@ export const Footer = () => {
               <li>
                 <button 
                   onClick={() => { window.location.href = '/men'; }} 
-                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
                   Men's Haute Collection
                 </button>
@@ -110,7 +110,7 @@ export const Footer = () => {
               <li>
                 <button 
                   onClick={() => { window.location.href = '/women'; }} 
-                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
                   Women's Haute Collection
                 </button>
@@ -118,7 +118,7 @@ export const Footer = () => {
               <li>
                 <button 
                   onClick={() => { window.location.href = '/bundle'; }} 
-                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
                   Signature Bundle Wardrobes
                 </button>
@@ -128,8 +128,8 @@ export const Footer = () => {
 
           {/* Client Care */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Client Services</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#9ca3af', padding: 0 }}>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px', fontSize: '0.88rem' }}>Client Services</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#4b5563', padding: 0 }}>
               <li>Complimentary Bottle Presentation</li>
               <li>The Valenszo Art of Gifting</li>
               <li>Infinite Refill Station Guidance</li>
@@ -140,8 +140,8 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Newsletter</h4>
-            <p style={{ fontSize: '0.84rem', color: '#9ca3af', marginBottom: '12px', lineHeight: 1.5 }}>
+            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px', fontSize: '0.88rem' }}>Newsletter</h4>
+            <p style={{ fontSize: '0.84rem', color: '#4b5563', marginBottom: '12px', lineHeight: 1.5 }}>
               Subscribe to receive exclusive Valenszo Fragrance news and private previews.
             </p>
             <form onSubmit={handleNewsletter} style={{ display: 'flex', gap: '6px' }}>
@@ -152,10 +152,10 @@ export const Footer = () => {
                 style={{
                   padding: '9px 12px',
                   fontSize: '0.82rem',
-                  background: '#111827',
-                  border: '1px solid #374151',
+                  background: '#ffffff',
+                  border: '1px solid #d1d5db',
                   borderRadius: '4px',
-                  color: '#ffffff',
+                  color: '#111827',
                   flex: 1,
                   outline: 'none'
                 }}
@@ -164,8 +164,8 @@ export const Footer = () => {
                 type="submit" 
                 style={{
                   padding: '0 16px',
-                  background: '#c5a059',
-                  color: '#000000',
+                  background: '#000000',
+                  color: '#ffffff',
                   border: 'none',
                   borderRadius: '4px',
                   fontWeight: 700,
@@ -186,7 +186,7 @@ export const Footer = () => {
         <div 
           style={{
             paddingTop: '20px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid #e5e7eb',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',

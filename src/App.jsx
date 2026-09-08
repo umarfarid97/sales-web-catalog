@@ -74,7 +74,7 @@ const MainLayout = () => {
       <Navbar />
 
       {/* Main Dynamic Viewport */}
-      <main style={{ flex: 1, background: '#090b10' }}>
+      <main style={{ flex: 1 }}>
         {isAdminRoute && !isAdmin ? (
           /* ================= RESTRICTED ADMIN AREA ================= */
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(1.5rem, 4vw, 3rem) 1rem', minHeight: '60vh' }}>

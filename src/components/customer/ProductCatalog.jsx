@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { HeroBanner } from './HeroBanner';
 import { 
   Sparkles,
@@ -10,19 +10,19 @@ import {
 
 export const ProductCatalog = () => {
   return (
-    <div style={{ background: '#090b10', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#ffffff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* 1. Cinematic Campaign Hero Slider */}
       <HeroBanner />
 
       {/* 2. DUAL COLLECTION SPLIT CARDS (MEN & WOMEN) - ZERO GAP */}
       <section 
         style={{ 
-          background: '#090b10', 
+          background: '#ffffff', 
           margin: 0, 
-          padding: '12px clamp(10px, 2.5vw, 20px) 14px' 
+          padding: '8px clamp(8px, 2vw, 16px) 8px' 
         }}
       >
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(8px, 2vw, 16px)' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(6px, 1.5vw, 12px)' }}>
           
           {/* SHOP MEN CARD */}
           <a 
@@ -38,8 +38,8 @@ export const ProductCatalog = () => {
               flexDirection: 'column',
               justifyContent: 'flex-end',
               padding: 'clamp(1rem, 3vw, 1.8rem)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
@@ -114,8 +114,8 @@ export const ProductCatalog = () => {
               flexDirection: 'column',
               justifyContent: 'flex-end',
               padding: 'clamp(1rem, 3vw, 1.8rem)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+              border: '1px solid rgba(0, 0, 0, 0.08)',
               backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
@@ -182,11 +182,11 @@ export const ProductCatalog = () => {
       {/* 3. FOUR PILLARS LUXURY TRUST RIBBON - FLUSH, ZERO GAP */}
       <section 
         style={{ 
-          background: 'linear-gradient(90deg, #0c0f16 0%, #111827 50%, #0c0f16 100%)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          background: '#f8f9fa',
+          borderTop: '1px solid #e5e7eb',
+          borderBottom: '1px solid #e5e7eb',
           margin: 0,
-          padding: '14px clamp(10px, 2.5vw, 20px)'
+          padding: '12px clamp(8px, 2vw, 16px)'
         }}
       >
         <div 
@@ -196,31 +196,31 @@ export const ProductCatalog = () => {
             margin: '0 auto',
             display: 'grid', 
             gridTemplateColumns: 'repeat(4, 1fr)', 
-            gap: '12px',
+            gap: '10px',
             alignItems: 'center'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-            <ShieldCheck size={18} color="#c5a059" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <ShieldCheck size={18} color="#b45309" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#111827', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Premium Quality
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-            <Clock size={18} color="#c5a059" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <Clock size={18} color="#b45309" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#111827', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Long Lasting
             </span>
           </div>
-          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', textDecoration: 'none', color: '#f3f4f6' }}>
-            <Sparkles size={18} color="#c5a059" strokeWidth={2.4} />
+          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', textDecoration: 'none', color: '#111827' }}>
+            <Sparkles size={18} color="#b45309" strokeWidth={2.4} />
             <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Explore Bundles
             </span>
           </a>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-            <Truck size={18} color="#c5a059" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            <Truck size={18} color="#b45309" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#111827', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Fast Shipping
             </span>
           </div>
@@ -230,9 +230,9 @@ export const ProductCatalog = () => {
       {/* 4. SIGNATURE BUNDLE & SAVE PROMOTION BANNER - FLUSH, ZERO GAP */}
       <section 
         style={{ 
-          background: '#07090e',
+          background: '#ffffff',
           margin: 0, 
-          padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(10px, 2.5vw, 20px)' 
+          padding: '10px clamp(8px, 2vw, 16px) 24px' 
         }}
       >
         <div 
