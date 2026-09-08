@@ -308,11 +308,6 @@ export const ProductDetailPage = () => {
               />
             </div>
 
-            {/* Signature Slogan Overlay */}
-            <div className="pdp-stage-slogan">
-              BOLD. REFINED. UNFORGETTABLE.
-            </div>
-
             {/* Desktop Fullscreen / Zoom Lightbox Button */}
             <button 
               className="pdp-stage-zoom-btn"
