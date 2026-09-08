@@ -437,16 +437,10 @@ export const FragranceDiagnostic = () => {
     }[selectedAnchorFormat] || { label: '30ml Travel Spray', price: 45 };
 
     addToCart(anchor.product, 1, sizeObj.label, null, sizeObj.price);
-    if (showToast) {
-      showToast(`Added ${anchor.product.name} (${sizeObj.label}) to your Bag!`, 'success');
-    }
   };
 
   const handleAddCompanionToBag = (prod) => {
     addToCart(prod, 1, '30ml Travel Spray', null, 45);
-    if (showToast) {
-      showToast(`Added ${prod.name} (30ml) to your Bag!`, 'success');
-    }
   };
 
   return (

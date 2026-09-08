@@ -205,7 +205,6 @@ export const BundleBuilderContent = () => {
 
     addToCart(bundleProduct, 1, `${currentTier.bottleCount}x Set`, null, currentTier.bundlePrice);
     setIsCartOpen(true);
-    showToast(`Curated ${currentTier.name} added to your bag!`, 'success');
   };
 
   return (

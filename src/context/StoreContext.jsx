@@ -365,10 +365,18 @@ export const StoreProvider = ({ children }) => {
   // Toasts
   const [toasts, setToasts] = useState([]);
 
-  // Toast Helpers
-  const showToast = useCallback((message, type = 'success', duration = 3500) => {
+  // Toast Helpers: Enforce single active notification & prevent duplicate stacking
+  const showToast = useCallback((message, type = 'success', duration = 3000) => {
+    if (!message) return;
     const id = Date.now() + Math.random().toString(36).substr(2, 4);
-    setToasts((prev) => [...prev, { id, message, type }]);
+    setToasts((prev) => {
+      // Prevent duplicate identical messages from stacking
+      if (prev.some((t) => t.message === message)) {
+        return prev;
+      }
+      // Keep only single active toast at a time to prevent blocking any UI controls
+      return [{ id, message, type }];
+    });
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, duration);
@@ -377,6 +385,13 @@ export const StoreProvider = ({ children }) => {
   const removeToast = (id) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
+
+  // Automatically clear bag toasts when Cart Drawer opens so the drawer footer/checkout is 100% unobstructed
+  useEffect(() => {
+    if (isCartOpen) {
+      setToasts((prev) => prev.filter((t) => !t.message.toLowerCase().includes('bag')));
+    }
+  }, [isCartOpen]);
 
   // --- Initial Cloud Load & Real-Time Sync ---
   useEffect(() => {

@@ -267,7 +267,7 @@ export const CartDrawer = () => {
 
         {/* Drawer Footer & Checkout */}
         {cart.length > 0 && (
-          <div className="cart-drawer-footer" style={{ borderTop: '1px solid #e5e7eb', background: '#ffffff', padding: '18px 24px', flexShrink: 0 }}>
+          <div className="cart-drawer-footer" style={{ borderTop: '1px solid #e5e7eb', background: '#ffffff', padding: '18px 24px calc(18px + env(safe-area-inset-bottom, 0px))', flexShrink: 0 }}>
             
             {/* Promo Code Input */}
             <form onSubmit={handleApplyPromo} style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
@@ -277,12 +277,12 @@ export const CartDrawer = () => {
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                 className="form-input"
-                style={{ padding: '9px 12px', fontSize: '0.82rem', letterSpacing: '0.08em', flex: 1, background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }}
+                style={{ padding: '9px 12px', fontSize: '0.82rem', letterSpacing: '0.08em', flex: 1, background: '#ffffff', color: '#000000', border: '1px solid #d1d5db', borderRadius: '8px' }}
               />
               <button 
                 type="submit" 
-                className="btn btn-dior-solid" 
-                style={{ padding: '9px 18px', fontSize: '0.78rem', background: '#000000', color: '#ffffff', border: '1px solid #000000', cursor: 'pointer' }}
+                className="btn-pill btn-pill-espresso" 
+                style={{ padding: '9px 18px', fontSize: '0.78rem', cursor: 'pointer', letterSpacing: '0.06em' }}
               >
                 Apply
               </button>
@@ -335,9 +335,22 @@ export const CartDrawer = () => {
 
             {/* Proceed to Checkout CTA */}
             <button
-              className="btn btn-dior-solid"
+              className="btn-pill btn-pill-espresso"
               onClick={handleProceedCheckout}
-              style={{ width: '100%', padding: '15px 20px', fontSize: '0.88rem', background: '#000000', color: '#ffffff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase' }}
+              style={{
+                width: '100%',
+                padding: '16px 20px',
+                fontSize: '0.9rem',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                letterSpacing: '0.06em',
+                fontWeight: 800,
+                boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
+              }}
             >
               <span>Proceed to White-Glove Checkout</span>
               <ArrowRight size={16} />

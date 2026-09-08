@@ -14,8 +14,7 @@ export const ProductDetailModal = () => {
     setSelectedProductModal, 
     addToCart, 
     favorites, 
-    toggleFavorite, 
-    showToast 
+    toggleFavorite
   } = useStore();
 
   const product = selectedProductModal;
@@ -29,9 +28,10 @@ export const ProductDetailModal = () => {
   if (!product) return null;
 
   const isFav = favorites.includes(product.id);
-  const sizes = product.sizes && product.sizes.length > 0 
+  const sizes = Array.isArray(product.sizes) && product.sizes.length > 0 
     ? product.sizes 
     : [
+        { label: '30 ml', ml: 30, priceMultiplier: 0.45, isRefillable: false },
         { label: '60 ml', ml: 60, priceMultiplier: 0.75, isRefillable: true },
         { label: '100 ml', ml: 100, priceMultiplier: 1.0, isRefillable: true },
         { label: '200 ml Refillable', ml: 200, priceMultiplier: 1.68, isRefillable: true }
@@ -49,8 +49,6 @@ export const ProductDetailModal = () => {
       dynamicPrice
     );
 
-    const engMsg = showEngraving && engravingText.trim() ? ` with custom engraving "${engravingText}"` : '';
-    showToast(`Added ${quantity}x ${product.name} (${currentSizeObj.label})${engMsg} to your Bag!`, 'success');
     setSelectedProductModal(null);
   };
 

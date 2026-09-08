@@ -209,14 +209,12 @@ export const ProductDetailPage = () => {
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, null, currentUnitPrice);
     setIsUpsellDrawerOpen(true);
-    showToast(`Added ${quantity}x ${product.name} (${selectedSize}) to your Bag!`, 'success');
   };
 
   const handleQuickAddLayer = (e, item) => {
     e.stopPropagation();
     const defaultPrice = item.fullProduct.price || 150;
     addToCart(item.fullProduct, 1, '30ml', null, Math.round(defaultPrice * 0.63));
-    showToast(`Added ${item.name} to your Layering Bag!`, 'success');
   };
 
   const handleSelectThumbnail = (index) => {
