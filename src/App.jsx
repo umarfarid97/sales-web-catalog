@@ -56,18 +56,15 @@ const MainLayout = () => {
   const isAdminRoute = pathname.includes('admin');
   const showAdminPortal = (role === 'admin' || isAdminRoute) && isAdmin;
 
-  // CRITICAL: "women" contains the substring "men". Must check women first with precedence!
-  const isWomen = pathname.includes('women') || genderQuery?.toLowerCase() === 'women';
-  const isMen = !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || genderQuery?.toLowerCase() === 'men');
-  // All collections condition
-  const isCollection = pathname.includes('collection') || customerView === 'collection';
-  // Bundle condition
-  const isBundle = pathname.includes('bundle') || customerView === 'bundle';
-  // Diagnostic quiz condition
-  const isDiagnostic = pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic';
-  // Product detail condition
-  const isProduct = pathname.includes('product') || Boolean(productQuery) || customerView === 'product';
-  // Checkout page condition
+  // Product detail condition - highest priority when a product is requested
+  const isProduct = Boolean(productQuery) || pathname.includes('product') || customerView === 'product';
+
+  // Category & collection conditions - only active when NOT viewing a specific product
+  const isWomen = !isProduct && (pathname.includes('women') || (genderQuery?.toLowerCase() === 'women' && !productQuery));
+  const isMen = !isProduct && !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || (genderQuery?.toLowerCase() === 'men' && !productQuery));
+  const isCollection = !isProduct && (pathname.includes('collection') || customerView === 'collection');
+  const isBundle = !isProduct && (pathname.includes('bundle') || customerView === 'bundle');
+  const isDiagnostic = !isProduct && (pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic');
   const isCheckout = pathname.includes('checkout') || customerView === 'checkout';
 
   return (
@@ -145,6 +142,8 @@ const MainLayout = () => {
           <div className="customer-store-view">
             {isCheckout ? (
               <CheckoutPageContent />
+            ) : isProduct ? (
+              <ProductDetailPage />
             ) : isWomen ? (
               <WomenCollectionContent />
             ) : isMen ? (
@@ -155,8 +154,6 @@ const MainLayout = () => {
               <BundleBuilderContent />
             ) : isDiagnostic ? (
               <FragranceDiagnostic />
-            ) : isProduct ? (
-              <ProductDetailPage />
             ) : (
               <ProductCatalog />
             )}

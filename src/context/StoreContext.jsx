@@ -164,10 +164,8 @@ export const StoreProvider = ({ children }) => {
   const openProductDetail = useCallback((product) => {
     if (!product) return;
     const targetId = typeof product === 'string' ? product : product.id;
-    const targetGender = typeof product === 'object' && product.gender ? product.gender : '';
-    const genderQuery = targetGender ? `&gender=${encodeURIComponent(targetGender)}` : '';
     // Multi-Page Application (MPA) full browser page navigation with Clean URL
-    window.location.href = `/product?product=${encodeURIComponent(targetId)}${genderQuery}`;
+    window.location.href = `/product?product=${encodeURIComponent(targetId)}`;
   }, []);
 
   const closeProductDetail = useCallback(() => {

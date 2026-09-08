@@ -6,9 +6,34 @@ import react from '@vitejs/plugin-react'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+const mpaRewritePlugin = () => {
+  const rewrite = (req, res, next) => {
+    const rawUrl = req.url || '';
+    const cleanPath = rawUrl.split('?')[0];
+    const pages = ['product', 'men', 'women', 'collection', 'bundle', 'checkout', 'diagnostic', 'admin'];
+    for (const page of pages) {
+      if (cleanPath === `/${page}` || cleanPath === `/${page}/`) {
+        const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
+        req.url = `/${page}.html${query}`;
+        break;
+      }
+    }
+    next();
+  };
+  return {
+    name: 'mpa-rewrite',
+    configureServer(server) {
+      server.middlewares.use(rewrite);
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use(rewrite);
+    }
+  };
+};
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), mpaRewritePlugin()],
   build: {
     rollupOptions: {
       input: {
