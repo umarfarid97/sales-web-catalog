@@ -8,8 +8,7 @@ export const ProductCard = ({ product }) => {
     setSelectedProductModal, 
     addToCart, 
     favorites, 
-    toggleFavorite,
-    showToast
+    toggleFavorite
   } = useStore();
 
   const isFav = favorites.includes(product.id);
@@ -28,7 +27,6 @@ export const ProductCard = ({ product }) => {
     const finalPrice = product.price;
 
     addToCart(product, 1, defaultSize, null, finalPrice);
-    showToast(`Added ${product.name} to your Shopping Bag!`, 'success');
   };
 
   const formattedPrice = Number(product.price || 45).toFixed(2);

@@ -14,8 +14,10 @@ import {
   Check, 
   CheckCircle2, 
   ArrowLeft, 
+  ArrowRight,
   ShoppingBag, 
-  Landmark 
+  Landmark,
+  Gift
 } from 'lucide-react';
 
 // Styles
@@ -25,7 +27,7 @@ import './styles/customer.css';
 import './styles/pdp.css';
 import './styles/admin.css';
 
-const CheckoutPageLayout = () => {
+export const CheckoutPageContent = () => {
   const {
     cart,
     cartSubtotal,
@@ -144,67 +146,62 @@ const CheckoutPageLayout = () => {
 
   if (cart.length === 0 && !placedOrder) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Navbar />
-        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1.5rem' }}>
-          <div style={{ textAlign: 'center', maxWidth: '440px' }}>
-            <ShoppingBag size={48} style={{ color: '#d1d5db', margin: '0 auto 1.5rem' }} />
-            <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', marginBottom: '0.75rem' }}>
-              Your Shopping Bag is Empty
-            </h2>
-            <p style={{ color: '#6b7280', marginBottom: '2rem', lineHeight: 1.6 }}>
-              Select a signature extrait de parfum from the boutique to proceed to white-glove checkout.
-            </p>
-            <a
-              href="/"
-              className="dior-btn"
-              style={{ display: 'inline-block', background: '#000', color: '#fff', padding: '14px 28px', textDecoration: 'none', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}
-            >
-              Discover Fragrances
-            </a>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(3rem, 6vw, 5rem) 1.5rem', background: '#faf8f5' }}>
+        <div style={{ textAlign: 'center', maxWidth: '460px', width: '100%', background: '#ffffff', padding: 'clamp(2rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem)', borderRadius: '20px', border: '1px solid #ede8e1', boxShadow: '0 8px 32px rgba(44, 26, 17, 0.06)' }}>
+          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#f5efe6', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#2b1810' }}>
+            <ShoppingBag size={30} />
           </div>
-        </main>
-        <Footer />
-        <ToastContainer />
-      </div>
+          <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.5rem, 3vw, 1.85rem)', fontWeight: 800, color: '#2b1810', marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+            Your Shopping Bag is Empty
+          </h2>
+          <p style={{ color: '#786558', marginBottom: '2rem', lineHeight: 1.6, fontSize: '0.9rem' }}>
+            Select a signature extrait de parfum from our atelier to proceed to white-glove checkout.
+          </p>
+          <a
+            href="/collection"
+            className="btn-pill btn-pill-espresso"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px 32px', textDecoration: 'none', fontWeight: 700, fontSize: '0.88rem', width: '100%' }}
+          >
+            <span>Discover Fragrances</span>
+            <ArrowRight size={15} />
+          </a>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
-      <Navbar />
-
-      <main style={{ flex: 1, padding: '2.5rem 0 5rem' }}>
-        <div className="container" style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 1.5rem' }}>
+    <main style={{ flex: 1, padding: 'clamp(1.5rem, 3.5vw, 3rem) 0 clamp(3rem, 6vw, 5rem)', background: '#faf8f5', color: '#2b1810' }}>
+      <div className="container checkout-container" style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 clamp(12px, 3vw, 24px)' }}>
+        
+        {/* Header Title */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(1.75rem, 4vw, 2.75rem)' }}>
+          <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#d97706', fontWeight: 800, background: '#fbf3e6', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #f3d99d' }}>
+            Maison Valenszo Haute Parfumerie
+          </span>
+          <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', marginTop: '0.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#231710' }}>
+            {step === 1 && 'The Art of Gifting & Samples'}
+            {step === 2 && 'Delivery Details & Secure Payment'}
+            {step === 3 && 'Order Confirmed'}
+          </h1>
           
-          {/* Header Title */}
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#d97706', fontWeight: 700 }}>
-              Maison Valenszo Haute Parfumerie
+          {/* Step Indicators */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(0.75rem, 3vw, 1.75rem)', marginTop: '1.25rem' }}>
+            <span style={{ fontSize: '0.82rem', fontWeight: step === 1 ? 800 : 500, color: step === 1 ? '#231710' : '#8c7d72', borderBottom: step === 1 ? '2.5px solid #231710' : '2px solid transparent', paddingBottom: '4px', transition: 'all 0.2s ease' }}>
+              1. Gifting & Samples
             </span>
-            <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2.4rem', marginTop: '0.4rem', fontWeight: 800 }}>
-              {step === 1 && 'The Art of Gifting & Samples'}
-              {step === 2 && 'Delivery Details & Secure Payment'}
-              {step === 3 && 'Order Confirmed'}
-            </h1>
-            
-            {/* Step Indicators */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.5rem' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: step === 1 ? 800 : 500, color: step === 1 ? '#000' : '#9ca3af', borderBottom: step === 1 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
-                1. Gifting & Samples
-              </span>
-              <span style={{ fontSize: '0.85rem', fontWeight: step === 2 ? 800 : 500, color: step === 2 ? '#000' : '#9ca3af', borderBottom: step === 2 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
-                2. Delivery & Payment
-              </span>
-              <span style={{ fontSize: '0.85rem', fontWeight: step === 3 ? 800 : 500, color: step === 3 ? '#000' : '#9ca3af', borderBottom: step === 3 ? '2px solid #000' : 'none', paddingBottom: '4px' }}>
-                3. Confirmation
-              </span>
-            </div>
+            <span style={{ fontSize: '0.82rem', fontWeight: step === 2 ? 800 : 500, color: step === 2 ? '#231710' : '#8c7d72', borderBottom: step === 2 ? '2.5px solid #231710' : '2px solid transparent', paddingBottom: '4px', transition: 'all 0.2s ease' }}>
+              2. Delivery & Payment
+            </span>
+            <span style={{ fontSize: '0.82rem', fontWeight: step === 3 ? 800 : 500, color: step === 3 ? '#231710' : '#8c7d72', borderBottom: step === 3 ? '2.5px solid #231710' : '2px solid transparent', paddingBottom: '4px', transition: 'all 0.2s ease' }}>
+              3. Confirmation
+            </span>
           </div>
+        </div>
 
-          {/* STEP 1: GIFTING & SAMPLES */}
-          {step === 1 && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem', alignItems: 'start' }}>
+        {/* STEP 1: GIFTING & SAMPLES */}
+        {step === 1 && (
+          <div className="checkout-step-grid">
               <div>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                   Complimentary Atelier Discovery Sprays
@@ -279,16 +276,31 @@ const CheckoutPageLayout = () => {
                 </div>
 
                 <button
-                  className="dior-btn"
+                  type="button"
                   onClick={() => setStep(2)}
-                  style={{ marginTop: '2rem', width: '100%', background: '#000', color: '#fff', padding: '15px', borderRadius: '4px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                  className="btn-pill btn-pill-espresso"
+                  style={{
+                    marginTop: '2rem',
+                    width: '100%',
+                    padding: '15px 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    fontSize: '0.9rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    border: 'none',
+                    boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
+                  }}
                 >
-                  Continue to Delivery & Payment
+                  <span>Continue to Delivery & Payment</span>
+                  <ArrowRight size={16} />
                 </button>
               </div>
 
               {/* Order Summary Sidebar */}
-              <div style={{ background: '#faf9f6', border: '1px solid #ebd9c8', borderRadius: '8px', padding: '1.5rem' }}>
+              <div className="checkout-summary-sidebar" style={{ background: '#faf9f6', border: '1px solid #ebd9c8', borderRadius: '16px', padding: 'clamp(1.25rem, 3vw, 1.75rem)' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #ebd9c8', paddingBottom: '0.5rem' }}>
                   Order Summary ({cart.length} creations)
                 </h3>
@@ -325,7 +337,7 @@ const CheckoutPageLayout = () => {
 
           {/* STEP 2: DELIVERY & REALISTIC PAYMENT FORM */}
           {step === 2 && (
-            <form onSubmit={handleSubmitOrder} style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '3rem', alignItems: 'start' }}>
+            <form onSubmit={handleSubmitOrder} className="checkout-step-grid">
               <div>
                 <button
                   type="button"
@@ -338,41 +350,41 @@ const CheckoutPageLayout = () => {
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem' }}>
                   Delivery Address (Malaysia & International)
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                <div className="checkout-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>First Name</label>
-                    <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>First Name</label>
+                    <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Last Name</label>
-                    <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>Last Name</label>
+                    <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1rem', marginBottom: '1rem' }}>
+                <div className="checkout-fields-row" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1rem', marginBottom: '1rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Email Address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>Email Address</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>Phone Number</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                 </div>
 
                 <div style={{ marginBottom: '1rem' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Street Address</label>
-                  <input type="text" name="address" value={formData.address} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>Street Address</label>
+                  <input type="text" name="address" value={formData.address} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+                <div className="checkout-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>City</label>
-                    <input type="text" name="city" value={formData.city} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>City</label>
+                    <input type="text" name="city" value={formData.city} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '4px' }}>Postal Code</label>
-                    <input type="text" name="postalCode" value={formData.postalCode} onChange={handleInputChange} required style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #d1d5db' }} />
+                    <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>Postal Code</label>
+                    <input type="text" name="postalCode" value={formData.postalCode} onChange={handleInputChange} required style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9rem' }} />
                   </div>
                 </div>
 
@@ -388,12 +400,13 @@ const CheckoutPageLayout = () => {
                         style={{
                           padding: '14px 16px',
                           border: isSelected ? '1.5px solid #000' : '1px solid #e5e7eb',
-                          borderRadius: '6px',
+                          borderRadius: '8px',
                           display: 'flex',
                           alignItems: 'flex-start',
                           gap: '12px',
                           cursor: 'pointer',
-                          background: isSelected ? '#faf9f6' : '#ffffff'
+                          background: isSelected ? '#faf9f6' : '#ffffff',
+                          transition: 'all 0.2s ease'
                         }}
                       >
                         <input
@@ -419,29 +432,37 @@ const CheckoutPageLayout = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="dior-btn"
-                  style={{ width: '100%', background: '#000', color: '#fff', padding: '16px', borderRadius: '4px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+                  className="btn-pill btn-pill-espresso"
+                  style={{
+                    width: '100%',
+                    padding: '16px 24px',
+                    fontSize: '0.92rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.04em',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
+                  }}
                 >
                   {isSubmitting ? 'Securing Atelier Order...' : `Authorize & Place Order — RM${cartTotal.toFixed(2)}`}
                 </button>
               </div>
 
               {/* Order Summary */}
-              <div style={{ background: '#faf9f6', border: '1px solid #ebd9c8', borderRadius: '8px', padding: '1.5rem' }}>
+              <div className="checkout-summary-sidebar" style={{ background: '#faf9f6', border: '1px solid #ebd9c8', borderRadius: '16px', padding: 'clamp(1.25rem, 3vw, 1.75rem)' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #ebd9c8', paddingBottom: '0.5rem' }}>
                   Order Total
                 </h3>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
                   <span>Creations Subtotal</span>
-                  <span>RM{cartSubtotal.toFixed(2)}</span>
+                  <span style={{ fontWeight: 600 }}>RM{cartSubtotal.toFixed(2)}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
                   <span>Complimentary Samples</span>
                   <span style={{ color: '#059669', fontWeight: 600 }}>2x Free</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
                   <span>Shipping</span>
-                  <span>{cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}</span>
+                  <span style={{ fontWeight: 600 }}>{cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.3rem', fontWeight: 800, borderTop: '1px solid #ebd9c8', paddingTop: '10px', marginTop: '10px' }}>
                   <span>Total Due</span>
@@ -496,8 +517,8 @@ const CheckoutPageLayout = () => {
 
               <a
                 href="/"
-                className="dior-btn"
-                style={{ display: 'inline-block', background: '#000', color: '#fff', padding: '14px 28px', textDecoration: 'none', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}
+                className="btn-pill btn-pill-espresso"
+                style={{ display: 'inline-block', padding: '14px 28px', textDecoration: 'none', fontWeight: 800, letterSpacing: '0.04em' }}
               >
                 Return to Boutique Storefront
               </a>
@@ -505,16 +526,33 @@ const CheckoutPageLayout = () => {
           )}
 
         </div>
+
+        {/* Responsive layout overrides for Mobile & Tablet */}
+        <style>{`
+          .checkout-step-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 2.5rem;
+            align-items: start;
+          }
+          @media (max-width: 900px) {
+            .checkout-step-grid {
+              grid-template-columns: 1fr !important;
+              gap: 1.5rem !important;
+            }
+            .checkout-summary-sidebar {
+              order: -1;
+              margin-bottom: 0.5rem;
+            }
+          }
+          @media (max-width: 600px) {
+            .checkout-fields-row {
+              grid-template-columns: 1fr !important;
+              gap: 0.85rem !important;
+            }
+          }
+        `}</style>
       </main>
-
-      <BrandValuesFooter />
-
-      <Footer />
-
-      <MobileBottomNav />
-      <AuthModal />
-      <ToastContainer />
-    </div>
   );
 };
 
@@ -523,7 +561,14 @@ export default function CheckoutApp() {
     <ErrorBoundary>
       <AuthProvider>
         <StoreProvider>
-          <CheckoutPageLayout />
+          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#faf8f5' }}>
+            <Navbar />
+            <CheckoutPageContent />
+            <BrandValuesFooter />
+            <Footer />
+            <AuthModal />
+            <ToastContainer />
+          </div>
         </StoreProvider>
       </AuthProvider>
     </ErrorBoundary>

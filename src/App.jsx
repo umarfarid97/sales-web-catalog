@@ -24,6 +24,7 @@ import { MenCollectionContent } from './MenApp';
 import { WomenCollectionContent } from './WomenApp';
 import { CollectionPageContent } from './CollectionApp';
 import { BundleBuilderContent } from './BundleApp';
+import { CheckoutPageContent } from './CheckoutApp';
 
 // Admin Components
 import { AdminHeader } from './components/admin/AdminHeader';
@@ -66,6 +67,8 @@ const MainLayout = () => {
   const isDiagnostic = pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic';
   // Product detail condition
   const isProduct = pathname.includes('product') || Boolean(productQuery) || customerView === 'product';
+  // Checkout page condition
+  const isCheckout = pathname.includes('checkout') || customerView === 'checkout';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -140,7 +143,9 @@ const MainLayout = () => {
         ) : (
           /* ================= CUSTOMER STOREFRONT ================= */
           <div className="customer-store-view">
-            {isWomen ? (
+            {isCheckout ? (
+              <CheckoutPageContent />
+            ) : isWomen ? (
               <WomenCollectionContent />
             ) : isMen ? (
               <MenCollectionContent />
@@ -165,8 +170,8 @@ const MainLayout = () => {
       {/* Universal Footer */}
       <Footer />
 
-      {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
+      {/* Mobile Bottom Navigation (hidden on checkout for distraction-free ordering) */}
+      {!isCheckout && <MobileBottomNav />}
 
       {/* Overlays & Modals */}
       <ProductDetailModal />
