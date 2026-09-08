@@ -21,7 +21,9 @@ import {
   Gift, 
   ShieldCheck, 
   Truck, 
-  Star
+  Star,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 
 // Styles
@@ -93,7 +95,6 @@ export const BundleBuilderContent = () => {
       }
       return next;
     });
-    // Pick first unfilled slot or 0
     setActiveSlotIndex(0);
   };
 
@@ -103,7 +104,6 @@ export const BundleBuilderContent = () => {
     setSelectedSlots((prev) => {
       if (prev.some(slot => slot !== null)) return prev;
       const initial = [...prev];
-      // Pick 3 popular defaults
       if (products[0]) initial[0] = products[0];
       if (products[1]) initial[1] = products[1];
       if (products[2]) initial[2] = products[2];
@@ -180,9 +180,11 @@ export const BundleBuilderContent = () => {
   const handleAddBundleToBag = () => {
     if (!isComplete) {
       showToast(`Please select all ${currentTier.bottleCount} fragrances to complete your bundle!`, 'error');
-      // Jump to first empty slot
       const emptyIdx = selectedSlots.findIndex(s => s === null);
       if (emptyIdx !== -1) setActiveSlotIndex(emptyIdx);
+      // Smooth scroll up to slots tray on mobile
+      const slotsEl = document.getElementById('bundle-slots-section');
+      if (slotsEl) slotsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -208,83 +210,89 @@ export const BundleBuilderContent = () => {
 
   return (
     <>
-      <main style={{ flex: 1, paddingBottom: '6rem' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
+      <main style={{ flex: 1, paddingBottom: '140px', background: '#faf8f5' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem clamp(12px, 3vw, 24px)' }}>
           
           {/* Breadcrumbs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
-            <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#786558', marginBottom: '1rem' }}>
+            <a href="/" style={{ color: '#786558', textDecoration: 'none' }}>Home</a>
             <ChevronRight size={12} />
-            <span style={{ color: '#111827', fontWeight: 600 }}>Bundles</span>
+            <span style={{ color: '#2b1810', fontWeight: 700 }}>Curated Bundles</span>
           </div>
 
-          {/* Bundle Hero Banner */}
-          <div className="editorial-hero-banner">
-            {/* Deep dark protective scrim preventing any camouflage with photo */}
-            <div className="editorial-hero-scrim" />
-
-            {/* Ambient warm glow */}
-            <div 
-              style={{
-                position: 'absolute',
-                left: '5%',
-                top: '20%',
-                width: '240px',
-                height: '240px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, rgba(0,0,0,0) 70%)',
-                filter: 'blur(40px)',
-                pointerEvents: 'none',
-                zIndex: 2
-              }}
-            />
-
-            {/* Left Editorial Text */}
-            <div className="editorial-hero-text">
-              <h1 className="editorial-hero-title">
-                Signature
-                <br />
-                Bundles
-              </h1>
-              <p className="editorial-hero-subtitle">
-                Curate your bespoke scent wardrobe • Save up to 25% with luxury gift presentation
-              </p>
+          {/* Artisanal Luxury Hero Banner */}
+          <div 
+            style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              background: 'linear-gradient(135deg, #231710 0%, #2b1810 50%, #1e130c 100%)',
+              color: '#ffffff',
+              padding: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+              marginBottom: '1.5rem',
+              boxShadow: '0 8px 24px rgba(35, 23, 16, 0.15)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+          >
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.2)', color: '#fbbf24', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', width: 'fit-content', marginBottom: '0.75rem' }}>
+              <Sparkles size={13} />
+              <span>THE MAISON WARDROBE</span>
             </div>
-
-            {/* Right Visual: Coffret bottles with smooth left fade */}
-            <div 
-              className="editorial-hero-media"
-              style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&auto=format&fit=crop&q=80)',
-                backgroundPosition: 'center 30%'
+            <h1 
+              style={{ 
+                fontFamily: 'var(--font-brand, serif)', 
+                fontSize: 'clamp(1.5rem, 3.5vw, 2.4rem)', 
+                fontWeight: 800, 
+                margin: '0 0 0.5rem',
+                color: '#ffffff',
+                lineHeight: 1.2
               }}
-            />
+            >
+              Curate Your Scent Wardrobe
+            </h1>
+            <p style={{ color: '#ede8e1', fontSize: 'clamp(0.82rem, 1.8vw, 0.95rem)', margin: 0, maxWidth: '560px', lineHeight: 1.45 }}>
+              Layer complimentary notes to create your bespoke presence. Save up to 25% with complimentary presentation coffret.
+            </p>
           </div>
 
-          {/* Tier Selector Navigation Bar */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <div style={{ display: 'inline-flex', background: '#ffffff', padding: '6px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb', gap: '8px' }}>
+          {/* Tier Switcher (Artisanal Pill Design) */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <div 
+              style={{ 
+                display: 'inline-flex', 
+                background: '#ede8e1', 
+                padding: '4px', 
+                borderRadius: '9999px', 
+                gap: '4px',
+                width: '100%',
+                maxWidth: '460px'
+              }}
+            >
               <button
                 type="button"
                 onClick={() => handleTierChange('3-bottle')}
                 style={{
-                  padding: '12px 24px',
-                  borderRadius: '8px',
+                  flex: 1,
+                  padding: '10px 14px',
+                  borderRadius: '9999px',
                   border: 'none',
-                  background: selectedTierKey === '3-bottle' ? '#000000' : 'transparent',
-                  color: selectedTierKey === '3-bottle' ? '#ffffff' : '#374151',
+                  background: selectedTierKey === '3-bottle' ? '#2b1810' : 'transparent',
+                  color: selectedTierKey === '3-bottle' ? '#ffffff' : '#54433a',
                   fontWeight: 700,
-                  fontSize: '0.88rem',
+                  fontSize: '0.82rem',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: '2px',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s ease',
+                  boxShadow: selectedTierKey === '3-bottle' ? '0 4px 12px rgba(43, 24, 16, 0.2)' : 'none'
                 }}
               >
                 <span>3-Bottle Wardrobe</span>
-                <span style={{ fontSize: '0.72rem', color: selectedTierKey === '3-bottle' ? '#c5a059' : '#059669', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.68rem', color: selectedTierKey === '3-bottle' ? '#fbbf24' : '#d97706', fontWeight: 800 }}>
                   Save 15% • RM115
                 </span>
               </button>
@@ -293,52 +301,76 @@ export const BundleBuilderContent = () => {
                 type="button"
                 onClick={() => handleTierChange('5-bottle')}
                 style={{
-                  padding: '12px 24px',
-                  borderRadius: '8px',
+                  flex: 1,
+                  padding: '10px 14px',
+                  borderRadius: '9999px',
                   border: 'none',
-                  background: selectedTierKey === '5-bottle' ? '#000000' : 'transparent',
-                  color: selectedTierKey === '5-bottle' ? '#ffffff' : '#374151',
+                  background: selectedTierKey === '5-bottle' ? '#2b1810' : 'transparent',
+                  color: selectedTierKey === '5-bottle' ? '#ffffff' : '#54433a',
                   fontWeight: 700,
-                  fontSize: '0.88rem',
+                  fontSize: '0.82rem',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: '2px',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s ease',
+                  boxShadow: selectedTierKey === '5-bottle' ? '0 4px 12px rgba(43, 24, 16, 0.2)' : 'none'
                 }}
               >
                 <span>5-Bottle Collector</span>
-                <span style={{ fontSize: '0.72rem', color: selectedTierKey === '5-bottle' ? '#c5a059' : '#059669', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.68rem', color: selectedTierKey === '5-bottle' ? '#fbbf24' : '#d97706', fontWeight: 800 }}>
                   Save 25% • RM169
                 </span>
               </button>
             </div>
           </div>
 
-          {/* Builder Layout: Slots Tray + Catalog Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '2rem', alignItems: 'start' }}>
+          {/* Builder Responsive Layout: Left Catalog / Right Sticky Summary on Desktop */}
+          <div className="bundle-builder-grid">
             
             {/* Left Column: Interactive Slot Pedestals & Perfume Catalog */}
-            <div>
-              {/* SLOTS TRAY */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.75rem', border: '1px solid #e5e7eb', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ minWidth: 0, width: '100%' }}>
+              
+              {/* STEP 1: SLOTS TRAY */}
+              <div 
+                id="bundle-slots-section"
+                className="bundle-card-panel"
+                style={{ 
+                  background: '#ffffff', 
+                  borderRadius: '16px', 
+                  padding: 'clamp(1rem, 2.5vw, 1.5rem)', 
+                  border: '1px solid #ede8e1', 
+                  boxShadow: '0 4px 16px rgba(44, 26, 17, 0.04)', 
+                  marginBottom: '1.5rem' 
+                }}
+              >
+                {/* Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '1rem' }}>
                   <div>
-                    <h2 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0 }}>
+                    <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.05rem', fontWeight: 800, color: '#2b1810', margin: 0 }}>
                       Step 1: Fill Your {currentTier.bottleCount} Slots ({filledSlotsCount}/{currentTier.bottleCount} selected)
                     </h2>
-                    <p style={{ fontSize: '0.82rem', color: '#6b7280', margin: '4px 0 0' }}>
-                      Click any slot below to select which position to fill from the catalog.
+                    <p style={{ fontSize: '0.78rem', color: '#786558', margin: '3px 0 0' }}>
+                      Tap any slot below, then choose your fragrance from the collection.
                     </p>
                   </div>
-                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: isComplete ? '#059669' : '#c5a059' }}>
-                    {isComplete ? '✓ Bundle Complete' : `${currentTier.bottleCount - filledSlotsCount} More Required`}
+                  <div 
+                    style={{ 
+                      fontSize: '0.74rem', 
+                      fontWeight: 800, 
+                      padding: '4px 10px',
+                      borderRadius: '9999px',
+                      background: isComplete ? '#ecfdf5' : '#fef3c7',
+                      color: isComplete ? '#065f46' : '#b45309'
+                    }}
+                  >
+                    {isComplete ? '✓ Bundle Ready' : `${currentTier.bottleCount - filledSlotsCount} More Required`}
                   </div>
                 </div>
 
-                {/* Slots Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${currentTier.bottleCount}, 1fr)`, gap: '1rem' }}>
+                {/* Slots Pedestals Container (Responsive: Grid on Desktop, 3-col compact or swipable on Mobile) */}
+                <div className={`bundle-slots-track ${currentTier.bottleCount <= 3 ? 'track-compact' : 'track-scroll'}`}>
                   {selectedSlots.map((item, idx) => {
                     const isActive = activeSlotIndex === idx;
                     const slotInfo = currentTier.slotLabels[idx] || { title: `Fragrance ${idx + 1}`, role: 'Complementary note' };
@@ -347,38 +379,50 @@ export const BundleBuilderContent = () => {
                       <div
                         key={idx}
                         onClick={() => setActiveSlotIndex(idx)}
+                        className={`bundle-slot-item ${isActive ? 'active-slot' : ''}`}
                         style={{
-                          borderRadius: '10px',
-                          border: `2px ${isActive ? 'solid #000000' : item ? 'solid #e5e7eb' : 'dashed #d1d5db'}`,
-                          background: isActive ? '#fbfbfa' : item ? '#ffffff' : '#f9fafb',
-                          padding: '1rem 0.75rem',
+                          borderRadius: '12px',
+                          border: isActive 
+                            ? '2px solid #d97706' 
+                            : item 
+                              ? '1.5px solid #ede8e1' 
+                              : '1.5px dashed #d5cbbf',
+                          background: isActive 
+                            ? '#fffcf7' 
+                            : item 
+                              ? '#ffffff' 
+                              : '#faf8f5',
+                          padding: '0.75rem 0.5rem',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
                           textAlign: 'center',
                           cursor: 'pointer',
                           position: 'relative',
-                          transition: 'all 0.2s',
-                          boxShadow: isActive ? '0 0 0 3px rgba(0,0,0,0.08)' : 'none'
+                          transition: 'all 0.2s ease',
+                          boxShadow: isActive ? '0 0 0 3px rgba(217, 119, 6, 0.18)' : 'none',
+                          minWidth: 0,
+                          overflow: 'hidden'
                         }}
                       >
                         {/* Slot Badge */}
                         <div style={{ 
-                          fontSize: '0.68rem', 
-                          fontWeight: 700, 
+                          fontSize: '0.64rem', 
+                          fontWeight: 800, 
                           textTransform: 'uppercase', 
-                          color: isActive ? '#000000' : '#6b7280',
-                          marginBottom: '0.5rem',
+                          letterSpacing: '0.04em',
+                          color: isActive ? '#d97706' : '#786558',
+                          marginBottom: '0.35rem',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '4px'
                         }}>
                           <span>Slot {idx + 1}</span>
-                          {isActive && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#c5a059' }} />}
+                          {isActive && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#d97706' }} />}
                         </div>
 
                         {/* Flacon Visual */}
-                        <div style={{ width: '80px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', margin: '0.5rem 0' }}>
+                        <div className="bundle-slot-visual" style={{ width: '64px', height: '76px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', margin: '0.25rem 0' }}>
                           {item ? (
                             <>
                               <img
@@ -394,44 +438,45 @@ export const BundleBuilderContent = () => {
                                   position: 'absolute',
                                   top: '-6px',
                                   right: '-6px',
-                                  width: '22px',
-                                  height: '22px',
+                                  width: '20px',
+                                  height: '20px',
                                   borderRadius: '50%',
-                                  background: '#111827',
+                                  background: '#2b1810',
                                   color: '#ffffff',
                                   border: 'none',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  cursor: 'pointer'
+                                  cursor: 'pointer',
+                                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
                                 }}
                               >
-                                <X size={12} />
+                                <X size={11} />
                               </button>
                             </>
                           ) : (
-                            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af' }}>
-                              <Plus size={20} />
+                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#ebe5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#786558' }}>
+                              <Plus size={16} />
                             </div>
                           )}
                         </div>
 
                         {/* Details */}
                         {item ? (
-                          <div style={{ marginTop: '0.25rem' }}>
-                            <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111827', lineHeight: 1.2 }}>
+                          <div style={{ marginTop: '0.25rem', width: '100%', minWidth: 0, overflow: 'hidden' }}>
+                            <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#2b1810', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {item.name}
                             </div>
-                            <div style={{ fontSize: '0.7rem', color: '#6b7280', marginTop: '2px' }}>
-                              {item.brandInspiration ? `Inspired by ${item.brandInspiration}` : 'Extrait de Parfum'}
+                            <div style={{ fontSize: '0.62rem', color: '#786558', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {item.brandInspiration ? `Inspired by ${item.brandInspiration}` : 'Extrait'}
                             </div>
                           </div>
                         ) : (
-                          <div>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#374151' }}>
+                          <div style={{ width: '100%', minWidth: 0, overflow: 'hidden' }}>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#4a382e', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {slotInfo.title}
                             </div>
-                            <div style={{ fontSize: '0.68rem', color: '#9ca3af', marginTop: '2px' }}>
+                            <div style={{ fontSize: '0.62rem', color: '#8c7d72', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                               {slotInfo.role}
                             </div>
                           </div>
@@ -440,68 +485,102 @@ export const BundleBuilderContent = () => {
                     );
                   })}
                 </div>
+                {currentTier.bottleCount > 3 && (
+                  <div className="bundle-slots-hint" style={{ fontSize: '0.68rem', color: '#8c7d72', textAlign: 'right', marginTop: '6px' }}>
+                    Swipe horizontally to view all {currentTier.bottleCount} slots →
+                  </div>
+                )}
               </div>
 
-              {/* Step 2: PERFUME SELECTOR CATALOG */}
-              <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.75rem', border: '1px solid #e5e7eb', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* STEP 2: PERFUME SELECTOR CATALOG */}
+              <div 
+                className="bundle-card-panel"
+                style={{ 
+                  background: '#ffffff', 
+                  borderRadius: '16px', 
+                  padding: 'clamp(1rem, 2.5vw, 1.5rem)', 
+                  border: '1px solid #ede8e1', 
+                  boxShadow: '0 4px 16px rgba(44, 26, 17, 0.04)' 
+                }}
+              >
+                {/* Step 2 Header */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginBottom: '1rem' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0 }}>
+                    <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.05rem', fontWeight: 800, color: '#2b1810', margin: 0 }}>
                       Step 2: Choose Fragrance for Slot {activeSlotIndex + 1}
                     </h3>
-                    <p style={{ fontSize: '0.82rem', color: '#6b7280', margin: '4px 0 0' }}>
-                      Currently filling: <strong>{currentTier.slotLabels[activeSlotIndex]?.title}</strong>
+                    <p style={{ fontSize: '0.78rem', color: '#786558', margin: '3px 0 0' }}>
+                      Filling: <strong style={{ color: '#d97706' }}>{currentTier.slotLabels[activeSlotIndex]?.title || `Slot ${activeSlotIndex + 1}`}</strong>
                     </p>
                   </div>
 
-                  {/* Gender Selector */}
-                  <div style={{ display: 'flex', background: '#f3f4f6', padding: '4px', borderRadius: '8px', gap: '4px' }}>
+                  {/* Gender Filter Pills */}
+                  <div style={{ display: 'flex', background: '#ede8e1', padding: '3px', borderRadius: '9999px', gap: '2px' }}>
                     {['All', 'Men', 'Women'].map((g) => (
                       <button
                         key={g}
                         type="button"
                         onClick={() => setGenderFilter(g)}
                         style={{
-                          padding: '6px 14px',
-                          borderRadius: '6px',
+                          padding: '5px 12px',
+                          borderRadius: '9999px',
                           border: 'none',
-                          background: genderFilter === g ? '#ffffff' : 'transparent',
-                          color: genderFilter === g ? '#111827' : '#6b7280',
-                          fontWeight: genderFilter === g ? 700 : 500,
-                          fontSize: '0.78rem',
+                          background: genderFilter === g ? '#2b1810' : 'transparent',
+                          color: genderFilter === g ? '#ffffff' : '#54433a',
+                          fontWeight: 700,
+                          fontSize: '0.74rem',
                           cursor: 'pointer',
-                          boxShadow: genderFilter === g ? '0 1px 3px rgba(0,0,0,0.08)' : 'none'
+                          transition: 'all 0.15s ease'
                         }}
                       >
-                        {g === 'All' ? 'All Collections' : g === 'Men' ? "Men's" : "Women's"}
+                        {g === 'All' ? 'All' : g === 'Men' ? "Men's" : "Women's"}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Search Bar & Filter Chips */}
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '1.25rem' }}>
-                  <div style={{ position: 'relative', flex: 1 }}>
-                    <Search size={16} color="#9ca3af" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
-                    <input
-                      type="text"
-                      placeholder="Search by name, accord, or inspiration (e.g. Sauvage, Baccarat, Vanilla)..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                {/* Search Bar */}
+                <div style={{ position: 'relative', marginBottom: '0.85rem' }}>
+                  <Search size={15} color="#786558" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input
+                    type="text"
+                    placeholder="Search perfumes by name, inspiration, or accord..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px 9px 36px',
+                      borderRadius: '9999px',
+                      border: '1px solid #dfd7cc',
+                      background: '#faf8f5',
+                      fontSize: '0.82rem',
+                      color: '#2b1810',
+                      outline: 'none'
+                    }}
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
                       style={{
-                        width: '100%',
-                        padding: '10px 14px 10px 40px',
-                        borderRadius: '8px',
-                        border: '1px solid #d1d5db',
-                        fontSize: '0.85rem',
-                        outline: 'none'
+                        position: 'absolute',
+                        right: '12px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        color: '#786558',
+                        cursor: 'pointer',
+                        padding: 0
                       }}
-                    />
-                  </div>
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
                 </div>
 
-                {/* Accord Chips */}
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '1.5rem', scrollbarWidth: 'none' }}>
+                {/* Accord Filter Pills */}
+                <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '8px', marginBottom: '1.25rem', scrollbarWidth: 'none' }}>
                   {ACCORD_FILTERS.map((acc) => {
                     const isActive = accordFilter === acc;
                     return (
@@ -510,15 +589,17 @@ export const BundleBuilderContent = () => {
                         type="button"
                         onClick={() => setAccordFilter(acc)}
                         style={{
-                          padding: '6px 14px',
-                          borderRadius: '999px',
-                          border: `1.5px solid ${isActive ? '#000' : '#e5e7eb'}`,
-                          background: isActive ? '#000' : '#fff',
-                          color: isActive ? '#fff' : '#4b5563',
-                          fontSize: '0.78rem',
-                          fontWeight: isActive ? 700 : 500,
+                          padding: '5px 12px',
+                          borderRadius: '9999px',
+                          border: '1px solid',
+                          borderColor: isActive ? '#2b1810' : '#e4dcd2',
+                          background: isActive ? '#2b1810' : '#ffffff',
+                          color: isActive ? '#ffffff' : '#54433a',
+                          fontSize: '0.74rem',
+                          fontWeight: 700,
                           cursor: 'pointer',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.15s ease'
                         }}
                       >
                         {acc}
@@ -527,64 +608,104 @@ export const BundleBuilderContent = () => {
                   })}
                 </div>
 
-                {/* Perfumes Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.25rem' }}>
-                  {filteredProducts.slice(0, 24).map((prod) => {
+                {/* Perfumes Responsive Grid (2 columns on mobile, 3 columns on desktop) */}
+                <div className="bundle-catalog-grid">
+                  {filteredProducts.slice(0, 30).map((prod) => {
                     const isSelectedInActive = selectedSlots[activeSlotIndex]?.id === prod.id;
                     const slotAssigned = selectedSlots.findIndex(s => s?.id === prod.id);
 
                     return (
                       <div
                         key={prod.id}
+                        className="bundle-card-item"
                         style={{
-                          border: `1.5px solid ${isSelectedInActive ? '#000000' : '#f0f0f0'}`,
-                          borderRadius: '8px',
+                          border: isSelectedInActive 
+                            ? '1.5px solid #d97706' 
+                            : slotAssigned !== -1 
+                              ? '1.5px solid #2b1810' 
+                              : '1px solid #ede8e1',
+                          borderRadius: '12px',
                           background: '#ffffff',
-                          padding: '1rem',
+                          padding: 'clamp(8px, 1.5vw, 12px)',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          position: 'relative'
+                          position: 'relative',
+                          boxShadow: '0 2px 8px rgba(44, 26, 17, 0.04)'
                         }}
                       >
+                        {/* Slot Assigned Badge */}
                         {slotAssigned !== -1 && (
                           <div style={{
                             position: 'absolute',
                             top: '8px',
                             left: '8px',
-                            background: '#111827',
+                            background: '#2b1810',
                             color: '#ffffff',
-                            padding: '3px 8px',
-                            borderRadius: '4px',
-                            fontSize: '0.68rem',
-                            fontWeight: 700,
+                            padding: '2px 7px',
+                            borderRadius: '9999px',
+                            fontSize: '0.62rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.04em',
                             zIndex: 2
                           }}>
                             In Slot {slotAssigned + 1}
                           </div>
                         )}
 
-                        {/* Image */}
-                        <div style={{ height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                        {/* Image Container */}
+                        <div 
+                          style={{ 
+                            background: '#f7f5f0',
+                            borderRadius: '8px',
+                            aspectRatio: '1 / 1.05',
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            marginBottom: '8px',
+                            padding: '6px'
+                          }}
+                        >
                           <img
                             src={prod.images?.[0] || prod.image}
                             alt={prod.name}
                             loading="lazy"
-                            style={{ maxWidth: '85%', maxHeight: '85%', objectFit: 'contain' }}
+                            style={{ maxWidth: '82%', maxHeight: '82%', objectFit: 'contain' }}
                           />
                         </div>
 
                         {/* Title & Notes */}
-                        <div>
-                          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#111827', lineHeight: 1.25 }}>
+                        <div style={{ marginBottom: '8px' }}>
+                          <div 
+                            style={{ 
+                              fontSize: 'clamp(0.78rem, 1.6vw, 0.88rem)', 
+                              fontWeight: 800, 
+                              color: '#2b1810', 
+                              lineHeight: 1.25,
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis'
+                            }}
+                            title={prod.name}
+                          >
                             {prod.name}
                           </div>
-                          <div style={{ fontSize: '0.72rem', color: '#6b7280', margin: '3px 0 8px' }}>
+                          <div 
+                            style={{ 
+                              fontSize: '0.68rem', 
+                              color: '#786558', 
+                              margin: '2px 0 4px',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis'
+                            }}
+                          >
                             {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : 'Extrait de Parfum'}
                           </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginBottom: '0.75rem' }}>
-                            <Star size={11} fill="#f59e0b" color="#f59e0b" />
-                            <span style={{ fontSize: '0.72rem', fontWeight: 700 }}>{prod.rating || '4.9'}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} size={10} fill="#d97706" color="#d97706" />
+                            ))}
                           </div>
                         </div>
 
@@ -594,30 +715,43 @@ export const BundleBuilderContent = () => {
                           onClick={() => selectProductForSlot(prod)}
                           style={{
                             width: '100%',
-                            padding: '9px 0',
-                            borderRadius: '6px',
+                            minWidth: 0,
+                            padding: '7px 4px',
+                            borderRadius: '9999px',
                             border: 'none',
-                            background: isSelectedInActive ? '#059669' : '#111827',
-                            color: '#ffffff',
+                            background: isSelectedInActive 
+                              ? '#d97706' 
+                              : slotAssigned !== -1 
+                                ? '#ebe5dc' 
+                                : '#2b1810',
+                            color: isSelectedInActive 
+                              ? '#ffffff' 
+                              : slotAssigned !== -1 
+                                ? '#2b1810' 
+                                : '#ffffff',
                             fontWeight: 700,
-                            fontSize: '0.78rem',
+                            fontSize: '0.68rem',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '6px',
-                            transition: 'all 0.15s'
+                            gap: '4px',
+                            transition: 'all 0.15s ease',
+                            whiteSpace: 'nowrap',
+                            boxSizing: 'border-box'
                           }}
                         >
                           {isSelectedInActive ? (
                             <>
-                              <Check size={14} />
-                              <span>Selected for Slot {activeSlotIndex + 1}</span>
+                              <Check size={12} />
+                              <span>Slot {activeSlotIndex + 1} Filled</span>
                             </>
+                          ) : slotAssigned !== -1 ? (
+                            <span>Move to S{activeSlotIndex + 1}</span>
                           ) : (
                             <>
-                              <Plus size={14} />
-                              <span>Select for Slot {activeSlotIndex + 1}</span>
+                              <Plus size={12} />
+                              <span>Add to S{activeSlotIndex + 1}</span>
                             </>
                           )}
                         </button>
@@ -628,44 +762,52 @@ export const BundleBuilderContent = () => {
               </div>
             </div>
 
-            {/* Right Column: Sticky Bundle Summary Card */}
-            <div style={{ position: 'sticky', top: '90px' }}>
-              <div style={{ background: '#ffffff', borderRadius: '12px', padding: '1.75rem', border: '1px solid #e5e7eb', boxShadow: '0 8px 30px rgba(0,0,0,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f3f4f6', paddingBottom: '1rem', marginBottom: '1.25rem' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0 }}>
+            {/* Right Column: Sticky Bundle Summary Card (Desktop Only) */}
+            <div className="bundle-desktop-summary" style={{ position: 'sticky', top: '90px' }}>
+              <div 
+                style={{ 
+                  background: '#ffffff', 
+                  borderRadius: '16px', 
+                  padding: '1.5rem', 
+                  border: '1px solid #ede8e1', 
+                  boxShadow: '0 8px 24px rgba(44, 26, 17, 0.06)' 
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f2ece4', paddingBottom: '0.85rem', marginBottom: '1rem' }}>
+                  <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.05rem', fontWeight: 800, color: '#2b1810', margin: 0 }}>
                     Bundle Summary
                   </h3>
-                  <span style={{ background: '#ecfdf5', color: '#065f46', fontSize: '0.72rem', fontWeight: 700, padding: '4px 8px', borderRadius: '999px' }}>
+                  <span style={{ background: '#d97706', color: '#ffffff', fontSize: '0.68rem', fontWeight: 800, padding: '3px 8px', borderRadius: '9999px', letterSpacing: '0.04em' }}>
                     SAVE {currentTier.discountPercent}%
                   </span>
                 </div>
 
-                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#2b1810', marginBottom: '0.25rem' }}>
                   {currentTier.name}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '1.25rem' }}>
+                <div style={{ fontSize: '0.74rem', color: '#786558', marginBottom: '1rem', lineHeight: 1.4 }}>
                   {currentTier.subtitle}
                 </div>
 
                 {/* Selected Fragrances List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '1.5rem', borderBottom: '1px solid #f3f4f6', paddingBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.25rem', borderBottom: '1px solid #f2ece4', paddingBottom: '1rem' }}>
                   {selectedSlots.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.82rem' }}>
-                      <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item ? '#111827' : '#f3f4f6', color: item ? '#ffffff' : '#9ca3af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 700 }}>
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+                      <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item ? '#2b1810' : '#ede8e1', color: item ? '#ffffff' : '#786558', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.68rem', fontWeight: 800, flexShrink: 0 }}>
                         {idx + 1}
                       </span>
                       {item ? (
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontWeight: 700, color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ fontWeight: 700, color: '#2b1810', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.name}
                           </div>
-                          <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>
+                          <div style={{ fontSize: '0.68rem', color: '#786558' }}>
                             {item.brandInspiration ? `Inspired by ${item.brandInspiration}` : 'Extrait de Parfum'}
                           </div>
                         </div>
                       ) : (
-                        <div style={{ flex: 1, color: '#9ca3af', fontStyle: 'italic' }}>
-                          Empty — click to select
+                        <div style={{ flex: 1, color: '#a8978b', fontStyle: 'italic', fontSize: '0.74rem' }}>
+                          Empty — tap slot to choose
                         </div>
                       )}
                     </div>
@@ -673,35 +815,35 @@ export const BundleBuilderContent = () => {
                 </div>
 
                 {/* Perks Included */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.78rem', color: '#4b5563', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.75rem', color: '#54433a', marginBottom: '1.25rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Truck size={14} color="#059669" />
-                    <span>Free Express Shipping across Malaysia</span>
+                    <Truck size={14} color="#d97706" />
+                    <span>Free Express Shipping Across Malaysia</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Gift size={14} color="#059669" />
-                    <span>Complimentary Discovery Box & 2 Free Vials</span>
+                    <Gift size={14} color="#d97706" />
+                    <span>Complimentary Discovery Box & Ribbon</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <ShieldCheck size={14} color="#059669" />
-                    <span>100% Satisfaction & Authenticity Guarantee</span>
+                    <ShieldCheck size={14} color="#d97706" />
+                    <span>Authentic French Oil Concentration (35%)</span>
                   </div>
                 </div>
 
                 {/* Price Breakdown */}
-                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '1.25rem', marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#6b7280', marginBottom: '6px' }}>
+                <div style={{ borderTop: '1px solid #f2ece4', paddingTop: '1rem', marginBottom: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#786558', marginBottom: '4px' }}>
                     <span>Standard Value</span>
                     <span style={{ textDecoration: 'line-through' }}>RM{currentTier.originalPrice}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>
-                    <span>Bundle Discount ({currentTier.discountPercent}%)</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#d97706', fontWeight: 800, marginBottom: '6px' }}>
+                    <span>Bundle Savings ({currentTier.discountPercent}%)</span>
                     <span>-RM{currentTier.savingsAmount}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingTop: '8px', borderTop: '1px solid #f3f4f6' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: 800 }}>Total</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingTop: '6px', borderTop: '1px solid #f2ece4' }}>
+                    <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#2b1810' }}>Total</span>
                     <div>
-                      <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#111827' }}>
+                      <span style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.35rem', fontWeight: 800, color: '#2b1810' }}>
                         RM{currentTier.bundlePrice}
                       </span>
                     </div>
@@ -712,15 +854,12 @@ export const BundleBuilderContent = () => {
                 <button
                   type="button"
                   onClick={handleAddBundleToBag}
+                  className="btn-pill btn-pill-espresso"
                   style={{
                     width: '100%',
-                    padding: '14px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    background: isComplete ? '#000000' : '#e5e7eb',
-                    color: isComplete ? '#ffffff' : '#9ca3af',
+                    padding: '13px',
+                    fontSize: '0.84rem',
                     fontWeight: 700,
-                    fontSize: '0.88rem',
                     letterSpacing: '0.06em',
                     textTransform: 'uppercase',
                     cursor: isComplete ? 'pointer' : 'not-allowed',
@@ -728,8 +867,8 @@ export const BundleBuilderContent = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    boxShadow: isComplete ? '0 4px 14px rgba(0,0,0,0.18)' : 'none',
-                    transition: 'all 0.2s'
+                    boxShadow: isComplete ? '0 4px 16px rgba(43, 24, 16, 0.25)' : 'none',
+                    opacity: isComplete ? 1 : 0.6
                   }}
                 >
                   <ShoppingBag size={16} />
@@ -737,12 +876,6 @@ export const BundleBuilderContent = () => {
                     {isComplete ? `Add Bundle to Bag (RM${currentTier.bundlePrice})` : `Select ${currentTier.bottleCount - filledSlotsCount} More`}
                   </span>
                 </button>
-
-                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                  <a href="/checkout" style={{ fontSize: '0.78rem', color: '#6b7280', textDecoration: 'underline' }}>
-                    Skip directly to white-glove checkout
-                  </a>
-                </div>
               </div>
             </div>
 
@@ -750,13 +883,199 @@ export const BundleBuilderContent = () => {
 
         </div>
       </main>
+
+      {/* STICKY MOBILE BOTTOM BUNDLE ACTION BAR */}
+      <div className="bundle-mobile-floating-bar">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
+          {/* Progress Circles */}
+          <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+            {selectedSlots.map((item, i) => (
+              <span 
+                key={i} 
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: item ? '#d97706' : '#dfd7cc',
+                  transition: 'background 0.2s'
+                }} 
+              />
+            ))}
+          </div>
+
+          <div>
+            <div style={{ fontSize: '0.72rem', color: '#786558', lineHeight: 1.1 }}>
+              {isComplete ? 'Complete!' : `${filledSlotsCount}/${currentTier.bottleCount} Selected`}
+            </div>
+            <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#2b1810', fontFamily: 'var(--font-brand, serif)' }}>
+              RM{currentTier.bundlePrice}
+              <span style={{ fontSize: '0.68rem', color: '#d97706', fontWeight: 700, marginLeft: '4px' }}>
+                (-{currentTier.discountPercent}%)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddBundleToBag}
+          className="btn-pill btn-pill-espresso"
+          style={{
+            padding: '10px 18px',
+            fontSize: '0.78rem',
+            fontWeight: 800,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            whiteSpace: 'nowrap',
+            boxShadow: '0 4px 12px rgba(43, 24, 16, 0.25)'
+          }}
+        >
+          {isComplete ? (
+            <>
+              <ShoppingBag size={14} />
+              <span>Add to Bag</span>
+            </>
+          ) : (
+            <>
+              <span>Fill Slot {activeSlotIndex + 1}</span>
+              <ArrowRight size={14} />
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Component Styles for Responsive Layout */}
+      <style>{`
+        .bundle-builder-grid {
+          display: grid;
+          grid-template-columns: 1fr 340px;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .bundle-slots-track {
+          display: grid;
+          grid-template-columns: repeat(${currentTier.bottleCount}, 1fr);
+          gap: 0.85rem;
+        }
+
+        .bundle-slots-hint {
+          display: none;
+        }
+
+        .bundle-catalog-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+
+        .bundle-desktop-summary {
+          display: block;
+        }
+
+        .bundle-mobile-floating-bar {
+          display: none;
+        }
+
+        @media (max-width: 960px) {
+          .bundle-builder-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+          }
+
+          .bundle-desktop-summary {
+            display: block;
+            width: 100%;
+            position: static !important;
+          }
+
+          .bundle-card-panel {
+            padding: 0.85rem 0.65rem !important;
+          }
+
+          .bundle-slots-hint {
+            display: block;
+          }
+
+          /* For 3 bottles: fit all 3 side-by-side neatly on mobile */
+          .bundle-slots-track.track-compact {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 6px !important;
+            width: 100% !important;
+          }
+
+          .bundle-slots-track.track-compact .bundle-slot-item {
+            flex: none !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            padding: 0.5rem 0.25rem !important;
+            box-sizing: border-box !important;
+          }
+
+          .bundle-slots-track.track-compact .bundle-slot-visual {
+            width: 52px !important;
+            height: 64px !important;
+          }
+
+          /* For 5 bottles: smooth swipe carousel with peek */
+          .bundle-slots-track.track-scroll {
+            display: flex !important;
+            gap: 8px !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+          }
+
+          .bundle-slots-track.track-scroll::-webkit-scrollbar {
+            display: none;
+          }
+
+          .bundle-slots-track.track-scroll .bundle-slot-item {
+            flex: 0 0 112px !important;
+            scroll-snap-align: start;
+            padding: 0.6rem 0.35rem !important;
+          }
+
+          .bundle-slots-track.track-scroll .bundle-slot-visual {
+            width: 58px !important;
+            height: 70px !important;
+          }
+
+          .bundle-catalog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            width: 100% !important;
+          }
+
+          .bundle-mobile-floating-bar {
+            display: flex !important;
+            position: fixed;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            background: rgba(250, 248, 245, 0.98);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid #ede8e1;
+            padding: 8px 16px;
+            z-index: 996;
+            box-shadow: 0 -4px 16px rgba(44, 26, 17, 0.08);
+            align-items: center;
+            justifyContent: space-between;
+          }
+        }
+      `}</style>
     </>
   );
 };
 
 export const BundleBuilderLayout = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#faf9f6', color: '#111827' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#faf8f5', color: '#2b1810' }}>
       <Navbar />
       <BundleBuilderContent />
       <BrandValuesFooter />
