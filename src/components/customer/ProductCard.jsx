@@ -56,7 +56,11 @@ export const ProductCard = ({ product }) => {
         boxShadow: '0 4px 16px rgba(44, 26, 17, 0.05)',
         cursor: 'pointer',
         transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-        position: 'relative'
+        position: 'relative',
+        width: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       }}
     >
       {/* 1. Neutral Soft-Tinted Product Image Wrap */}
@@ -198,11 +202,14 @@ export const ProductCard = ({ product }) => {
 
       {/* 5. Dual Action Pill Buttons (Craft & Cafe Style) */}
       <div 
+        className="artisan-card-actions"
         style={{ 
           display: 'grid', 
           gridTemplateColumns: '1fr 1fr', 
-          gap: '8px', 
-          marginTop: 'auto' 
+          gap: '6px', 
+          marginTop: 'auto',
+          width: '100%',
+          minWidth: 0
         }}
       >
         {/* Left: Warm Sand Pill Button (Quick View) */}
@@ -212,48 +219,76 @@ export const ProductCard = ({ product }) => {
             e.stopPropagation();
             handleOpen();
           }}
+          className="artisan-card-btn artisan-card-btn-view"
           style={{
             background: '#ebe5dc',
             color: '#2b1810',
             border: 'none',
             borderRadius: '9999px',
-            padding: '9px 8px',
-            fontSize: '0.76rem',
+            padding: '8px 4px',
+            fontSize: '0.74rem',
             fontWeight: 700,
             cursor: 'pointer',
             textAlign: 'center',
             transition: 'background 0.15s ease',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            minWidth: 0,
+            boxSizing: 'border-box'
           }}
           onMouseEnter={(e) => { e.currentTarget.style.background = '#dfd7cc'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = '#ebe5dc'; }}
         >
-          Quick View
+          <span className="card-btn-desktop">Quick View</span>
+          <span className="card-btn-mobile">View</span>
         </button>
 
         {/* Right: Rich Espresso Pill Button (Add to Bag) */}
         <button
           type="button"
           onClick={handleQuickAdd}
+          className="artisan-card-btn artisan-card-btn-add"
           style={{
             background: '#2b1810',
             color: '#ffffff',
             border: 'none',
             borderRadius: '9999px',
-            padding: '9px 8px',
-            fontSize: '0.76rem',
+            padding: '8px 4px',
+            fontSize: '0.74rem',
             fontWeight: 700,
             cursor: 'pointer',
             textAlign: 'center',
             transition: 'background 0.15s ease',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            minWidth: 0,
+            boxSizing: 'border-box'
           }}
           onMouseEnter={(e) => { e.currentTarget.style.background = '#3e271e'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = '#2b1810'; }}
         >
-          Add to Bag
+          <span className="card-btn-desktop">Add to Bag</span>
+          <span className="card-btn-mobile">+ Bag</span>
         </button>
       </div>
+
+      <style>{`
+        .card-btn-desktop { display: inline; }
+        .card-btn-mobile { display: none; }
+        @media (max-width: 640px) {
+          .artisan-product-card {
+            padding: 10px !important;
+            border-radius: 14px !important;
+          }
+          .artisan-card-actions {
+            gap: 4px !important;
+          }
+          .artisan-card-btn {
+            padding: 7px 2px !important;
+            font-size: 0.68rem !important;
+          }
+          .card-btn-desktop { display: none !important; }
+          .card-btn-mobile { display: inline !important; }
+        }
+      `}</style>
 
     </div>
   );

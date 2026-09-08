@@ -14,32 +14,59 @@ import {
 
 export const ProductCatalog = () => {
   const { products } = useStore();
-  const [activeCategory, setActiveCategory] = useState('All');
 
-  // Filter products for the "Newly Sourced Roasts / Haute Creations" section
-  const featuredProducts = useMemo(() => {
+  // Curated newly crafted creations only (strictly selected new releases / launch icons)
+  const newlyCraftedProducts = useMemo(() => {
     if (!products || !Array.isArray(products)) return [];
     
-    let list = products.filter(p => p && p.id);
-    
-    if (activeCategory === 'Men') {
-      list = list.filter(p => {
-        const pId = String(p.id || '');
-        const isFemme = p.gender === 'Women' || p.category === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom');
-        return !isFemme;
-      });
-    } else if (activeCategory === 'Women') {
-      list = list.filter(p => {
-        const pId = String(p.id || '');
-        return p.gender === 'Women' || p.category === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom');
-      });
-    } else if (activeCategory === 'Bundles') {
-      list = list.filter(p => p.isBundle || String(p.category || '').toLowerCase().includes('bundle') || p.tier === 'S');
+    // Explicit new releases (e.g. SZINDORE)
+    const explicitNew = products.filter(p => {
+      if (!p || !p.id) return false;
+      const b = (p.badge || '').toLowerCase();
+      return b.includes('new') || p.isNew;
+    });
+
+    // Men's new/launch icons
+    const menIcons = products.filter(p => {
+      if (!p || !p.id) return false;
+      const isM = p.gender === 'Men' || p.category === 'Pour Homme' || String(p.id).startsWith('vlz-men');
+      const b = (p.badge || '').toLowerCase();
+      return isM && (p.isFeatured || b.includes('launch icon') || b.includes('tier s'));
+    });
+
+    // Women's new/launch icons
+    const womenIcons = products.filter(p => {
+      if (!p || !p.id) return false;
+      const isW = p.gender === 'Women' || p.category === 'Pour Femme' || String(p.id).startsWith('vlz-women');
+      const b = (p.badge || '').toLowerCase();
+      return isW && (p.isFeatured || b.includes('launch icon') || b.includes('tier s'));
+    });
+
+    const selected = [];
+    explicitNew.forEach(p => selected.push(p));
+
+    let mIdx = 0, wIdx = 0;
+    while (selected.length < 6 && (mIdx < menIcons.length || wIdx < womenIcons.length)) {
+      if (mIdx < menIcons.length && !selected.some(s => s.id === menIcons[mIdx].id)) {
+        selected.push(menIcons[mIdx]);
+      }
+      mIdx++;
+      if (selected.length < 6 && wIdx < womenIcons.length && !selected.some(s => s.id === womenIcons[wIdx].id)) {
+        selected.push(womenIcons[wIdx]);
+      }
+      wIdx++;
     }
 
-    // Display 6 curated products in the grid
-    return list.slice(0, 6);
-  }, [products, activeCategory]);
+    if (selected.length < 6) {
+      const existingIds = new Set(selected.map(p => p.id));
+      const others = products
+        .filter(p => p && p.id && !existingIds.has(p.id))
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      return [...selected, ...others].slice(0, 6);
+    }
+
+    return selected.slice(0, 6);
+  }, [products]);
 
   return (
     <div style={{ background: '#faf8f5', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -393,6 +420,7 @@ export const ProductCatalog = () => {
 
       {/* 4. NEWLY CRAFTED CREATIONS PRODUCT GRID (Matching "Newly Sourced Roasts" in Reference) */}
       <section 
+        id="newly-crafted-section"
         style={{ 
           background: '#faf8f5',
           margin: 0, 
@@ -402,11 +430,30 @@ export const ProductCatalog = () => {
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           
           {/* Editorial Section Heading */}
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '6px', 
+                background: '#f0ebe4', 
+                color: '#8c5e3c', 
+                padding: '5px 14px', 
+                borderRadius: '9999px', 
+                fontSize: '0.72rem', 
+                fontWeight: 800, 
+                letterSpacing: '0.08em', 
+                textTransform: 'uppercase', 
+                marginBottom: '10px' 
+              }}
+            >
+              <Sparkles size={13} color="#d97706" />
+              <span>Selected New Releases</span>
+            </div>
             <h2 
               className="section-heading-editorial"
               style={{
-                fontSize: 'clamp(1.6rem, 3.2vw, 2.4rem)',
+                fontSize: 'clamp(1.5rem, 3.2vw, 2.3rem)',
                 fontWeight: 800,
                 color: '#231710',
                 margin: '0 0 10px',
@@ -426,57 +473,21 @@ export const ProductCatalog = () => {
             >
               Hand-blended artisanal extraits formulated with 35% oil concentration for captivating, all-day presence.
             </p>
-
-            {/* Category Filter Pills (Craft & Cafe Style) */}
-            <div 
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                gap: '8px', 
-                flexWrap: 'wrap', 
-                marginTop: '20px' 
-              }}
-            >
-              {['All', 'Men', 'Women', 'Bundles'].map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    style={{
-                      padding: '8px 22px',
-                      borderRadius: '9999px',
-                      border: '1.5px solid',
-                      borderColor: isActive ? '#2b1810' : '#e4dcd2',
-                      background: isActive ? '#2b1810' : '#ffffff',
-                      color: isActive ? '#ffffff' : '#54433a',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                      boxShadow: isActive ? '0 4px 12px rgba(43, 24, 16, 0.2)' : 'none'
-                    }}
-                  >
-                    {cat === 'All' ? 'All Creations' : cat === 'Bundles' ? 'Scent Wardrobes' : `${cat}'s Collection`}
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
-          {/* 3-Column Product Grid (2 columns on mobile) */}
+          {/* Product Grid (3 columns on desktop, 2 columns on mobile) */}
           <div 
             className="artisan-product-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
               gap: 'clamp(12px, 2vw, 24px)',
+              width: '100%',
+              boxSizing: 'border-box',
               marginBottom: '32px'
             }}
           >
-            {featuredProducts.map((product) => (
+            {newlyCraftedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -836,8 +847,10 @@ export const ProductCatalog = () => {
         }
         @media (max-width: 768px) {
           .artisan-product-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 12px !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
           .trust-ribbon-grid {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -846,8 +859,10 @@ export const ProductCatalog = () => {
         }
         @media (max-width: 480px) {
           .artisan-product-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 10px !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
         }
       `}</style>
