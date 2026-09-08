@@ -84,7 +84,6 @@ export const ProductDetailPage = () => {
           if (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean) return true;
           if (cleanDigits && (String(p.catalogNo) === cleanDigits || String(p.specs?.catalogNo) === cleanDigits)) return true;
           if (p.name && p.name.toLowerCase() === clean) return true;
-          if (p.displayName && p.displayName.toLowerCase() === clean) return true;
           return false;
         });
         if (found) return found;
@@ -166,14 +165,14 @@ export const ProductDetailPage = () => {
       .filter(p => p.id !== product.id)
       .slice(0, 4)
       .map((p) => {
-        // Luxury curated titles if available, or product displayName
+        // Curated fragrance layering companion title
         const facets = p.traits && p.traits.length >= 2 
           ? `${p.traits[0]} • ${p.traits[1]}` 
           : p.olfactoryFamily?.split('/')?.slice(0, 2)?.join(' • ') || 'Citrus • Fresh';
 
         return {
           id: p.id,
-          name: p.displayName || p.name,
+          name: p.name,
           facets: facets,
           image: p.images?.[0] || p.image,
           fullProduct: p
@@ -210,7 +209,7 @@ export const ProductDetailPage = () => {
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, null, currentUnitPrice);
     setIsUpsellDrawerOpen(true);
-    showToast(`Added ${quantity}x ${product.displayName || product.name} (${selectedSize}) to your Bag!`, 'success');
+    showToast(`Added ${quantity}x ${product.name} (${selectedSize}) to your Bag!`, 'success');
   };
 
   const handleQuickAddLayer = (e, item) => {
@@ -257,7 +256,7 @@ export const ProductDetailPage = () => {
         <span className="pdp-breadcrumb-separator"><ChevronRight size={12} /></span>
 
         <span className="pdp-breadcrumb-current">
-          {product.displayName || product.name}
+          {product.name}
         </span>
       </nav>
 
@@ -305,7 +304,7 @@ export const ProductDetailPage = () => {
             {/* Flacon Imagery */}
             <img 
               src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
-              alt={product.displayName || product.name}
+              alt={product.name}
               className="pdp-main-flacon-img"
             />
 
@@ -344,7 +343,7 @@ export const ProductDetailPage = () => {
           </div>
 
           <h1 className="pdp-product-title">
-            {product.displayName || product.name}
+            {product.name}
           </h1>
 
           <div className="pdp-product-subtitle">
@@ -632,7 +631,7 @@ export const ProductDetailPage = () => {
                   <div className="pdp-campaign-content">
                     <div className="pdp-campaign-slogan">CONFIDENCE HAS A SCENT</div>
                     <div className="pdp-campaign-caption">
-                      {product.displayName || product.name}. For what's next.
+                      {product.name}. For what's next.
                     </div>
                   </div>
                 </div>
@@ -713,7 +712,7 @@ export const ProductDetailPage = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
                 <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
                   <strong>Step 1: The Anchor Base</strong>
-                  <p style={{ fontSize: '0.88rem', color: '#6b7280', margin: '4px 0 0' }}>Apply 2 sprays of {product.displayName || product.name} to warm pulse points (collarbones and wrists).</p>
+                  <p style={{ fontSize: '0.88rem', color: '#6b7280', margin: '4px 0 0' }}>Apply 2 sprays of {product.name} to warm pulse points (collarbones and wrists).</p>
                 </div>
                 <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
                   <strong>Step 2: The Illuminating Accent</strong>
@@ -896,7 +895,7 @@ export const ProductDetailPage = () => {
               <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)' }}>
                 <Sparkles size={48} color="#c5a059" style={{ marginBottom: '1rem', animation: 'pulse 2s infinite' }} />
                 <h3 style={{ fontFamily: 'var(--font-brand, serif)', letterSpacing: '0.15em', fontSize: '1.4rem' }}>
-                  {product.displayName || product.name}
+                  {product.name}
                 </h3>
                 <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
                   Cinematic Haute Parfumerie Experience · Maceration & Atomization
@@ -966,12 +965,12 @@ export const ProductDetailPage = () => {
               <div style={{ display: 'flex', gap: '14px', background: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
                 <img
                   src={galleryItems[0].url}
-                  alt={product.displayName || product.name}
+                  alt={product.name}
                   style={{ width: '64px', height: '74px', objectFit: 'contain', background: '#ffffff', borderRadius: '4px', padding: '4px', border: '1px solid #e5e7eb' }}
                 />
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', margin: 0 }}>
-                    {product.displayName || product.name}
+                    {product.name}
                   </h4>
                   <div style={{ fontSize: '0.74rem', color: '#6b7280', margin: '2px 0 6px' }}>
                     {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}

@@ -8,9 +8,9 @@ export const BrandValuesFooter = () => {
       style={{
         background: '#0a0a0a',
         color: '#ffffff',
-        borderTop: '1px solid #262626',
-        padding: '2.5rem 1.5rem',
-        marginTop: 'auto'
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '2rem 1.25rem',
+        margin: 0
       }}
     >
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>

@@ -51,8 +51,7 @@ export const formatProductFromDb = (row) => {
     id: String(row.id || `vlz-gen-${Date.now()}`),
     sku: String(row.sku || ''),
     catalogNo: parsedCatalogNo,
-    name: String(row.name || specs.displayName || 'Maison Fragrance'),
-    displayName: String(specs.displayName || row.name || 'Maison Fragrance'),
+    name: String(row.name || 'Maison Fragrance'),
     brandInspiration: String(specs.brandInspiration || ''),
     originalListing: String(specs.originalListing || ''),
     gender: resolvedGender,
@@ -114,7 +113,6 @@ export const formatProductToDb = (product) => {
     specs: {
       ...product.specs,
       catalogNo: product.catalogNo,
-      displayName: product.displayName,
       brandInspiration: product.brandInspiration,
       originalListing: product.originalListing,
       gender: product.gender,

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { 
   ShieldCheck, 
   Gift, 
@@ -18,50 +18,50 @@ export const Footer = () => {
   };
 
   return (
-    <footer style={{ background: '#f8f9fa', borderTop: '1px solid var(--border-subtle)', padding: '60px 0 30px' }}>
-      <div className="container">
+    <footer style={{ background: '#04060a', borderTop: '1px solid rgba(255, 255, 255, 0.08)', padding: '50px 0 80px', color: '#ffffff' }}>
+      <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 24px)' }}>
         
         {/* Valenszo 4 Pillars */}
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '24px',
-            paddingBottom: '48px',
-            borderBottom: '1px solid var(--border-subtle)',
-            marginBottom: '48px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '20px',
+            paddingBottom: '40px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            marginBottom: '40px'
           }}
         >
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
+          <div style={{ textAlign: 'center', padding: '12px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
               <Gift size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Valenszo Art of Gifting</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Complimentary iconic Valenszo gift box with signature ribbon.</p>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Valenszo Art of Gifting</h4>
+            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Complimentary iconic Valenszo gift box with signature ribbon.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
+          <div style={{ textAlign: 'center', padding: '12px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
               <Feather size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>2 Deluxe Samples</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>2 Deluxe Samples</h4>
+            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
+          <div style={{ textAlign: 'center', padding: '12px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
               <RefreshCw size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Refillable Flacons</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Sustainable design: refill your Valenszo flacon infinitely.</p>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Refillable Flacons</h4>
+            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Sustainable design: refill your Valenszo flacon infinitely.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '16px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ffffff', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#000000' }}>
+          <div style={{ textAlign: 'center', padding: '12px' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(197, 160, 89, 0.12)', border: '1px solid rgba(197, 160, 89, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#c5a059' }}>
               <ShieldCheck size={20} />
             </div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '4px' }}>Free Climate Delivery</h4>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>White-glove delivery on all orders over RM150.</p>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem' }}>Free Climate Delivery</h4>
+            <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>White-glove delivery on all orders over RM150.</p>
           </div>
         </div>
 
@@ -70,8 +70,8 @@ export const Footer = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '40px',
-            marginBottom: '48px'
+            gap: '36px',
+            marginBottom: '40px'
           }}
         >
           {/* Brand Col */}
@@ -79,40 +79,48 @@ export const Footer = () => {
             <div style={{ marginBottom: '14px', display: 'flex', justifyContent: 'flex-start' }}>
               <ValenszoLogo size="md" layout="horizontal" subtitle="FRAGRANCE MALAYSIA" style={{ alignItems: 'flex-start' }} />
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '14px' }}>
+            <p style={{ fontSize: '0.84rem', color: '#9ca3af', lineHeight: '1.6', marginBottom: '14px' }}>
               Valenszo is an act of creation inspired by noble essences and rare raw materials. Handcrafted luxury fragrances with timeless elegance.
             </p>
-            <div style={{ fontSize: '0.74rem', color: '#000000', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '0.72rem', color: '#c5a059', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               Kuala Lumpur &bull; Paris &bull; Worldwide Delivery
             </div>
           </div>
 
           {/* Fragrance Collections */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Fragrance Collections</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Fragrance Collections</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', padding: 0 }}>
               <li>
                 <button 
-                  onClick={() => setSelectedCategory('All Creations')} 
-                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
+                  onClick={() => { window.location.href = '/collection'; }} 
+                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
                   Valenszo Complete Line
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => setSelectedCategory('La Collection Privée')} 
-                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
+                  onClick={() => { window.location.href = '/men'; }} 
+                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
-                  La Collection Privée Christian Dior
+                  Men's Haute Collection
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => setSelectedCategory('Discovery & Sets')} 
-                  style={{ background: 'none', border: 'none', color: '#4b5563', fontSize: '0.86rem', cursor: 'pointer', textAlign: 'left' }}
+                  onClick={() => { window.location.href = '/women'; }} 
+                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
                 >
-                  Discovery Coffrets &amp; Gift Sets
+                  Women's Haute Collection
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => { window.location.href = '/bundle'; }} 
+                  style={{ background: 'none', border: 'none', color: '#9ca3af', fontSize: '0.84rem', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                >
+                  Signature Bundle Wardrobes
                 </button>
               </li>
             </ul>
@@ -120,11 +128,11 @@ export const Footer = () => {
 
           {/* Client Care */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Client Services</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.86rem', color: '#4b5563' }}>
-              <li>Complimentary Bottle Engraving</li>
-              <li>The Dior Art of Gifting</li>
-              <li>Sauvage Refill Station Locator</li>
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Client Services</h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#9ca3af', padding: 0 }}>
+              <li>Complimentary Bottle Presentation</li>
+              <li>The Valenszo Art of Gifting</li>
+              <li>Infinite Refill Station Guidance</li>
               <li>Track Your Delivery</li>
               <li>Contact Maison Concierge</li>
             </ul>
@@ -132,19 +140,42 @@ export const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h4 className="couture-sub" style={{ color: '#000000', marginBottom: '16px' }}>Newsletter</h4>
-            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
-              Subscribe to receive exclusive Dior Fragrance news and private previews.
+            <h4 className="couture-sub" style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem' }}>Newsletter</h4>
+            <p style={{ fontSize: '0.84rem', color: '#9ca3af', marginBottom: '12px', lineHeight: 1.5 }}>
+              Subscribe to receive exclusive Valenszo Fragrance news and private previews.
             </p>
             <form onSubmit={handleNewsletter} style={{ display: 'flex', gap: '6px' }}>
               <input
                 type="email"
                 required
                 placeholder="Enter email address"
-                className="form-input"
-                style={{ padding: '8px 12px', fontSize: '0.82rem' }}
+                style={{
+                  padding: '9px 12px',
+                  fontSize: '0.82rem',
+                  background: '#111827',
+                  border: '1px solid #374151',
+                  borderRadius: '4px',
+                  color: '#ffffff',
+                  flex: 1,
+                  outline: 'none'
+                }}
               />
-              <button type="submit" className="btn btn-dior-black" style={{ padding: '0 16px' }} aria-label="Subscribe">
+              <button 
+                type="submit" 
+                style={{
+                  padding: '0 16px',
+                  background: '#c5a059',
+                  color: '#000000',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }} 
+                aria-label="Subscribe"
+              >
                 <ArrowRight size={15} />
               </button>
             </form>
@@ -154,8 +185,8 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div 
           style={{
-            paddingTop: '24px',
-            borderTop: '1px solid var(--border-subtle)',
+            paddingTop: '20px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',

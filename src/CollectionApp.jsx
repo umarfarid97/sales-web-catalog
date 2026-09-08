@@ -468,7 +468,7 @@ export const CollectionPageContent = () => {
                   {/* Product Details */}
                   <div>
                     <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#111827', margin: 0, letterSpacing: '-0.01em' }}>
-                      {product.displayName || product.name}
+                      {product.name}
                     </h3>
                     <div style={{ fontSize: '0.75rem', color: '#6b7280', margin: '3px 0 6px' }}>
                       {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}

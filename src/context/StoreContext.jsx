@@ -200,7 +200,6 @@ export const StoreProvider = ({ children }) => {
       if (p.specs?.catalogNo !== undefined && String(p.specs.catalogNo) === clean) return true;
       if (cleanDigits && (String(p.catalogNo) === cleanDigits || String(p.specs?.catalogNo) === cleanDigits)) return true;
       if (p.name && p.name.toLowerCase() === clean) return true;
-      if (p.displayName && p.displayName.toLowerCase() === clean) return true;
       return false;
     }) || null;
   }, []);
@@ -754,7 +753,6 @@ export const StoreProvider = ({ children }) => {
       id,
       sku: productData.sku || `VAL-C-${Date.now().toString().slice(-4)}`,
       name: productData.name,
-      displayName: productData.displayName || productData.name,
       category: productData.category || 'Woody & Smoky',
       tagline: productData.tagline || '',
       description: productData.description || '',
@@ -913,7 +911,7 @@ export const StoreProvider = ({ children }) => {
 
     if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      const matchName = String(product.name || product.displayName || '').toLowerCase().includes(q);
+      const matchName = String(product.name || '').toLowerCase().includes(q);
       const matchBrand = String(product.brandInspiration || '').toLowerCase().includes(q);
       const matchListing = String(product.originalListing || '').toLowerCase().includes(q);
       const matchDesc = String(product.description || '').toLowerCase().includes(q);
@@ -944,8 +942,8 @@ export const StoreProvider = ({ children }) => {
     if (sortBy === 'price-high') return priceB - priceA;
     if (sortBy === 'rating') return (Number(b.rating) || 5) - (Number(a.rating) || 5);
     if (sortBy === 'name') {
-      const nameA = String(a.name || a.displayName || '');
-      const nameB = String(b.name || b.displayName || '');
+      const nameA = String(a.name || '');
+      const nameB = String(b.name || '');
       return nameA.localeCompare(nameB);
     }
     // Default sort: Tier S first, then Tier A, then Catalog No

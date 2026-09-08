@@ -121,7 +121,7 @@ export const ProductCard = ({ product }) => {
 
         {/* Title */}
         <h3 className="dior-card-title" style={{ fontSize: '1.02rem', lineHeight: '1.3' }}>
-          {product.displayName || product.name}
+          {product.name}
         </h3>
 
         {/* Short Note Summary */}

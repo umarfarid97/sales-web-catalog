@@ -168,7 +168,7 @@ export const HeroBanner = () => {
         id: p.id || fallback.id,
         sku: p.sku || fallback.sku,
         catalogNo: p.catalogNo || fallback.catalogNo,
-        title: p.displayName || p.name || fallback.title,
+        title: p.name || fallback.title,
         inspiration: p.brandInspiration ? `Inspired by ${p.brandInspiration}` : fallback.inspiration,
         tier: p.tier === 'S' ? 'Tier S Launch Icon' : (p.tier || fallback.tier),
         category: p.category || fallback.category,
@@ -325,7 +325,7 @@ export const HeroBanner = () => {
       style={{
         background: 'linear-gradient(180deg, #090b10 0%, #0d0f17 50%, #08090e 100%)',
         color: '#ffffff',
-        padding: 'clamp(1.5rem, 3.5vw, 2.5rem) clamp(12px, 3.5vw, 24px) clamp(2rem, 4vw, 3rem)',
+        padding: 'clamp(1rem, 2.5vw, 1.8rem) clamp(10px, 2.5vw, 20px) 0.85rem',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
         position: 'relative',
         overflow: 'hidden'
@@ -715,7 +715,7 @@ export const HeroBanner = () => {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '8px',
-            marginTop: '16px'
+            marginTop: '10px'
           }}
         >
           {slides.map((_, idx) => {

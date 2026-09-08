@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Home, Compass, Gift, User } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
@@ -30,15 +30,15 @@ export const MobileBottomNav = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'rgba(255, 255, 255, 0.98)',
-        backdropFilter: 'blur(12px)',
-        borderTop: '1px solid #e5e7eb',
+        background: 'rgba(9, 11, 16, 0.95)',
+        backdropFilter: 'blur(16px)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: '8px 0 10px',
         zIndex: 998,
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.5)'
       }}
     >
       <a 
@@ -49,13 +49,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isHome ? '#000000' : '#6b7280',
+          color: isHome ? '#c5a059' : '#9ca3af',
           fontWeight: isHome ? 700 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Home size={20} strokeWidth={isHome ? 2.2 : 1.7} />
+        <Home size={20} strokeWidth={isHome ? 2.4 : 1.7} color={isHome ? '#c5a059' : '#9ca3af'} />
         <span>Home</span>
       </a>
 
@@ -67,13 +67,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isShop ? '#000000' : '#6b7280',
+          color: isShop ? '#c5a059' : '#9ca3af',
           fontWeight: isShop ? 700 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Compass size={20} strokeWidth={isShop ? 2.2 : 1.7} />
+        <Compass size={20} strokeWidth={isShop ? 2.4 : 1.7} color={isShop ? '#c5a059' : '#9ca3af'} />
         <span>Shop</span>
       </a>
 
@@ -85,13 +85,13 @@ export const MobileBottomNav = () => {
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isBundles ? '#000000' : '#6b7280',
+          color: isBundles ? '#c5a059' : '#9ca3af',
           fontWeight: isBundles ? 700 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Gift size={20} strokeWidth={isBundles ? 2.2 : 1.7} />
+        <Gift size={20} strokeWidth={isBundles ? 2.4 : 1.7} color={isBundles ? '#c5a059' : '#9ca3af'} />
         <span>Bundles</span>
       </a>
 
@@ -106,14 +106,14 @@ export const MobileBottomNav = () => {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: '#6b7280',
+          color: '#9ca3af',
           fontSize: '0.68rem',
           fontWeight: 500,
           padding: 0,
           letterSpacing: '0.04em'
         }}
       >
-        <User size={20} strokeWidth={1.7} />
+        <User size={20} strokeWidth={1.7} color="#9ca3af" />
         <span>Account</span>
       </button>
     </nav>

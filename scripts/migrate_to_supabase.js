@@ -23,7 +23,6 @@ function formatProductToDb(product) {
     features: product.features || [],
     specs: {
       catalogNo: product.catalogNo,
-      displayName: product.displayName,
       brandInspiration: product.brandInspiration,
       originalListing: product.originalListing,
       gender: product.gender,

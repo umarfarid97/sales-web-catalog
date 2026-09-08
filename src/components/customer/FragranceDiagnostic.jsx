@@ -813,7 +813,7 @@ export const FragranceDiagnostic = () => {
                   </div>
 
                   <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2rem', fontWeight: 800, margin: '0 0 6px', color: '#111827' }}>
-                    {anchor.product.displayName || anchor.product.name}
+                    {anchor.product.name}
                   </h2>
 
                   {anchor.product.brandInspiration && (
@@ -933,7 +933,7 @@ export const FragranceDiagnostic = () => {
                   </div>
 
                   <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '4px 0 2px' }}>
-                    {comp.displayName || comp.name}
+                    {comp.name}
                   </div>
 
                   <div style={{ fontSize: '0.72rem', color: '#6B7280', marginBottom: '8px' }}>

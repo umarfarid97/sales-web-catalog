@@ -135,7 +135,7 @@ export const BundleBuilderContent = () => {
       // Search Query
       if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const matchName = String(p.name || p.displayName || '').toLowerCase().includes(q);
+        const matchName = String(p.name || '').toLowerCase().includes(q);
         const matchInspiration = String(p.brandInspiration || '').toLowerCase().includes(q);
         const matchNotes = String(p.description || '').toLowerCase().includes(q);
         if (!matchName && !matchInspiration && !matchNotes) return false;
@@ -420,7 +420,7 @@ export const BundleBuilderContent = () => {
                         {item ? (
                           <div style={{ marginTop: '0.25rem' }}>
                             <div style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111827', lineHeight: 1.2 }}>
-                              {item.displayName || item.name}
+                              {item.name}
                             </div>
                             <div style={{ fontSize: '0.7rem', color: '#6b7280', marginTop: '2px' }}>
                               {item.brandInspiration ? `Inspired by ${item.brandInspiration}` : 'Extrait de Parfum'}
@@ -577,7 +577,7 @@ export const BundleBuilderContent = () => {
                         {/* Title & Notes */}
                         <div>
                           <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#111827', lineHeight: 1.25 }}>
-                            {prod.displayName || prod.name}
+                            {prod.name}
                           </div>
                           <div style={{ fontSize: '0.72rem', color: '#6b7280', margin: '3px 0 8px' }}>
                             {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : 'Extrait de Parfum'}
@@ -657,7 +657,7 @@ export const BundleBuilderContent = () => {
                       {item ? (
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontWeight: 700, color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {item.displayName || item.name}
+                            {item.name}
                           </div>
                           <div style={{ fontSize: '0.7rem', color: '#6b7280' }}>
                             {item.brandInspiration ? `Inspired by ${item.brandInspiration}` : 'Extrait de Parfum'}

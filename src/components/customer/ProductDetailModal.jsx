@@ -177,7 +177,7 @@ export const ProductDetailModal = () => {
             </div>
 
             <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '4px', color: '#000000' }}>
-              {product.displayName || product.name}
+              {product.name}
             </h2>
 
             {product.brandInspiration && (

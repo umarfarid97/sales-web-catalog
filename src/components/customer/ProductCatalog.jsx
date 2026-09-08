@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { HeroBanner } from './HeroBanner';
 import { 
   Sparkles,
@@ -10,13 +10,19 @@ import {
 
 export const ProductCatalog = () => {
   return (
-    <div>
-      {/* 1. Cinematic Campaign Hero (Picture 1: 'More Than a Scent, A Better You') */}
+    <div style={{ background: '#090b10', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* 1. Cinematic Campaign Hero Slider */}
       <HeroBanner />
 
-      {/* 2. DUAL COLLECTION SPLIT CARDS (MEN & WOMEN - MATCHING PICTURE 1) */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.5rem clamp(12px, 3.5vw, 24px) 1.5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(10px, 2.5vw, 24px)' }}>
+      {/* 2. DUAL COLLECTION SPLIT CARDS (MEN & WOMEN) - ZERO GAP */}
+      <section 
+        style={{ 
+          background: '#090b10', 
+          margin: 0, 
+          padding: '12px clamp(10px, 2.5vw, 20px) 14px' 
+        }}
+      >
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'clamp(8px, 2vw, 16px)' }}>
           
           {/* SHOP MEN CARD */}
           <a 
@@ -25,14 +31,15 @@ export const ProductCatalog = () => {
               position: 'relative',
               borderRadius: '8px',
               overflow: 'hidden',
-              minHeight: 'clamp(260px, 46vw, 440px)',
+              minHeight: 'clamp(240px, 48vw, 420px)',
               background: '#09090b',
               cursor: 'pointer',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
-              padding: 'clamp(1rem, 3.5vw, 2rem)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              padding: 'clamp(1rem, 3vw, 1.8rem)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
               backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
@@ -54,10 +61,10 @@ export const ProductCatalog = () => {
               <h3 
                 style={{ 
                   fontFamily: 'var(--font-brand, serif)', 
-                  fontSize: 'clamp(1.2rem, 3vw, 1.7rem)', 
+                  fontSize: 'clamp(1.15rem, 2.8vw, 1.6rem)', 
                   fontWeight: 800, 
-                  margin: '0 0 4px', 
-                  letterSpacing: '0.02em',
+                  margin: '0 0 3px', 
+                  letterSpacing: '0.04em',
                   color: '#ffffff',
                   textShadow: '0 2px 10px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.95)'
                 }}
@@ -66,11 +73,11 @@ export const ProductCatalog = () => {
               </h3>
               <p 
                 style={{ 
-                  fontSize: 'clamp(0.76rem, 1.8vw, 0.9rem)', 
+                  fontSize: 'clamp(0.72rem, 1.6vw, 0.86rem)', 
                   color: '#f3f4f6', 
                   fontWeight: 600, 
-                  lineHeight: 1.4, 
-                  margin: '0 0 12px',
+                  lineHeight: 1.35, 
+                  margin: '0 0 10px',
                   textShadow: '0 1px 6px rgba(0,0,0,0.95)'
                 }}
               >
@@ -78,8 +85,8 @@ export const ProductCatalog = () => {
               </p>
               <div 
                 style={{
-                  width: 'clamp(36px, 5vw, 44px)',
-                  height: 'clamp(36px, 5vw, 44px)',
+                  width: 'clamp(32px, 4.5vw, 42px)',
+                  height: 'clamp(32px, 4.5vw, 42px)',
                   borderRadius: '50%',
                   background: '#ffffff',
                   display: 'flex',
@@ -88,7 +95,7 @@ export const ProductCatalog = () => {
                   boxShadow: '0 4px 14px rgba(0,0,0,0.35)'
                 }}
               >
-                <ArrowRight size={18} color="#111827" strokeWidth={2.6} />
+                <ArrowRight size={16} color="#111827" strokeWidth={2.6} />
               </div>
             </div>
           </a>
@@ -100,14 +107,15 @@ export const ProductCatalog = () => {
               position: 'relative',
               borderRadius: '8px',
               overflow: 'hidden',
-              minHeight: 'clamp(260px, 46vw, 440px)',
+              minHeight: 'clamp(240px, 48vw, 420px)',
               background: '#18181b',
               cursor: 'pointer',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-end',
-              padding: 'clamp(1rem, 3.5vw, 2rem)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              padding: 'clamp(1rem, 3vw, 1.8rem)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
               backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80)',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
@@ -129,10 +137,10 @@ export const ProductCatalog = () => {
               <h3 
                 style={{ 
                   fontFamily: 'var(--font-brand, serif)', 
-                  fontSize: 'clamp(1.2rem, 3vw, 1.7rem)', 
+                  fontSize: 'clamp(1.15rem, 2.8vw, 1.6rem)', 
                   fontWeight: 800, 
-                  margin: '0 0 4px', 
-                  letterSpacing: '0.02em',
+                  margin: '0 0 3px', 
+                  letterSpacing: '0.04em',
                   color: '#ffffff',
                   textShadow: '0 2px 10px rgba(0,0,0,0.95), 0 1px 3px rgba(0,0,0,0.95)'
                 }}
@@ -141,11 +149,11 @@ export const ProductCatalog = () => {
               </h3>
               <p 
                 style={{ 
-                  fontSize: 'clamp(0.76rem, 1.8vw, 0.9rem)', 
+                  fontSize: 'clamp(0.72rem, 1.6vw, 0.86rem)', 
                   color: '#f3f4f6', 
                   fontWeight: 600, 
-                  lineHeight: 1.4, 
-                  margin: '0 0 12px',
+                  lineHeight: 1.35, 
+                  margin: '0 0 10px',
                   textShadow: '0 1px 6px rgba(0,0,0,0.95)'
                 }}
               >
@@ -153,8 +161,8 @@ export const ProductCatalog = () => {
               </p>
               <div 
                 style={{
-                  width: 'clamp(36px, 5vw, 44px)',
-                  height: 'clamp(36px, 5vw, 44px)',
+                  width: 'clamp(32px, 4.5vw, 42px)',
+                  height: 'clamp(32px, 4.5vw, 42px)',
                   borderRadius: '50%',
                   background: '#ffffff',
                   display: 'flex',
@@ -163,7 +171,7 @@ export const ProductCatalog = () => {
                   boxShadow: '0 4px 14px rgba(0,0,0,0.35)'
                 }}
               >
-                <ArrowRight size={18} color="#111827" strokeWidth={2.6} />
+                <ArrowRight size={16} color="#111827" strokeWidth={2.6} />
               </div>
             </div>
           </a>
@@ -171,52 +179,76 @@ export const ProductCatalog = () => {
         </div>
       </section>
 
-      {/* 3. FOUR PILLARS TRUST STRIP (MATCHING PICTURE 1) */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 clamp(12px, 3.5vw, 24px) 2.5rem' }}>
+      {/* 3. FOUR PILLARS LUXURY TRUST RIBBON - FLUSH, ZERO GAP */}
+      <section 
+        style={{ 
+          background: 'linear-gradient(90deg, #0c0f16 0%, #111827 50%, #0c0f16 100%)',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          margin: 0,
+          padding: '14px clamp(10px, 2.5vw, 20px)'
+        }}
+      >
         <div 
+          className="trust-ribbon-grid"
           style={{ 
+            maxWidth: '1280px', 
+            margin: '0 auto',
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
+            gridTemplateColumns: 'repeat(4, 1fr)', 
             gap: '12px',
-            background: '#fcfbf9',
-            border: '1px solid #e7e5e4',
-            borderRadius: '8px',
-            padding: '1.25rem 1rem',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+            alignItems: 'center'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <ShieldCheck size={20} color="#b45309" strokeWidth={2.2} />
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1c1917', letterSpacing: '0.04em' }}>Premium Quality</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+            <ShieldCheck size={18} color="#c5a059" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Premium Quality
+            </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <Clock size={20} color="#b45309" strokeWidth={2.2} />
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1c1917', letterSpacing: '0.04em' }}>Long Lasting</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+            <Clock size={18} color="#c5a059" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Long Lasting
+            </span>
           </div>
-          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', textDecoration: 'none', color: '#1c1917' }}>
-            <Sparkles size={20} color="#b45309" strokeWidth={2.2} />
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em' }}>Explore Bundles</span>
+          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', textDecoration: 'none', color: '#f3f4f6' }}>
+            <Sparkles size={18} color="#c5a059" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Explore Bundles
+            </span>
           </a>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <Truck size={20} color="#b45309" strokeWidth={2.2} />
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1c1917', letterSpacing: '0.04em' }}>Fast Shipping</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+            <Truck size={18} color="#c5a059" strokeWidth={2.4} />
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700, color: '#f3f4f6', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Fast Shipping
+            </span>
           </div>
         </div>
       </section>
 
-      {/* 4. SIGNATURE BUNDLE & SAVE PROMOTION BANNER */}
-      <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 clamp(12px, 3.5vw, 24px) 3.5rem' }}>
+      {/* 4. SIGNATURE BUNDLE & SAVE PROMOTION BANNER - FLUSH, ZERO GAP */}
+      <section 
+        style={{ 
+          background: '#07090e',
+          margin: 0, 
+          padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(10px, 2.5vw, 20px)' 
+        }}
+      >
         <div 
           style={{
+            maxWidth: '1280px',
+            margin: '0 auto',
             background: 'linear-gradient(135deg, #111827 0%, #000000 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '12px',
-            padding: 'clamp(2rem, 4vw, 3.5rem)',
+            padding: 'clamp(1.5rem, 3.5vw, 3rem)',
             color: '#ffffff',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '2.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '2rem',
             alignItems: 'center',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.18)'
+            boxShadow: '0 12px 40px rgba(0,0,0,0.3)'
           }}
         >
           <div>
@@ -227,9 +259,9 @@ export const ProductCatalog = () => {
             <h3 
               style={{ 
                 fontFamily: 'var(--font-brand, serif)', 
-                fontSize: 'clamp(1.8rem, 3vw, 2.4rem)', 
+                fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', 
                 fontWeight: 800, 
-                margin: '0 0 1rem', 
+                margin: '0 0 0.85rem', 
                 letterSpacing: '-0.01em', 
                 lineHeight: 1.2,
                 color: '#ffffff',
@@ -241,9 +273,9 @@ export const ProductCatalog = () => {
             <p 
               style={{ 
                 color: '#f3f4f6', 
-                fontSize: '0.94rem', 
-                lineHeight: 1.6, 
-                margin: '0 0 1.75rem', 
+                fontSize: '0.9rem', 
+                lineHeight: 1.55, 
+                margin: '0 0 1.5rem', 
                 maxWidth: '480px',
                 fontWeight: 500,
                 textShadow: '0 1px 6px rgba(0,0,0,0.8)'
@@ -251,18 +283,18 @@ export const ProductCatalog = () => {
             >
               In French perfumery, signature presence comes from layering. Choose 3 or 5 of your favorite creations to enjoy exclusive bundle pricing and receive complimentary collector gift presentation.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
               <button
                 type="button"
                 onClick={() => { window.location.href = '/bundle'; }}
                 style={{
-                  padding: '14px 28px',
+                  padding: '12px 24px',
                   borderRadius: '4px',
                   background: '#ffffff',
                   color: '#000000',
                   border: 'none',
                   fontWeight: 800,
-                  fontSize: '0.84rem',
+                  fontSize: '0.82rem',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   cursor: 'pointer',
@@ -280,13 +312,13 @@ export const ProductCatalog = () => {
                 type="button"
                 onClick={() => { window.location.href = '/diagnostic'; }}
                 style={{
-                  padding: '14px 28px',
+                  padding: '12px 24px',
                   borderRadius: '4px',
                   background: 'transparent',
                   color: '#ffffff',
                   border: '1.5px solid rgba(255,255,255,0.75)',
                   fontWeight: 700,
-                  fontSize: '0.84rem',
+                  fontSize: '0.82rem',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   cursor: 'pointer'
@@ -297,31 +329,31 @@ export const ProductCatalog = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div 
               onClick={() => { window.location.href = '/bundle'; }}
               style={{
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.18)',
                 borderRadius: '8px',
-                padding: '1.5rem',
+                padding: '1.25rem 1rem',
                 cursor: 'pointer',
                 textAlign: 'center'
               }}
             >
-              <div style={{ fontSize: '0.72rem', color: '#fbbf24', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '0.7rem', color: '#fbbf24', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Save 15%
               </div>
-              <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.45rem', fontWeight: 800, margin: '6px 0 2px', color: '#ffffff' }}>
+              <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.35rem', fontWeight: 800, margin: '4px 0 2px', color: '#ffffff' }}>
                 RM115
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#cbd5e1', textDecoration: 'line-through' }}>
+              <div style={{ fontSize: '0.7rem', color: '#cbd5e1', textDecoration: 'line-through' }}>
                 Standard RM135
               </div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, marginTop: '8px', color: '#ffffff' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '6px', color: '#ffffff' }}>
                 3-Bottle Wardrobe
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#e2e8f0', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.7rem', color: '#e2e8f0', marginTop: '3px' }}>
                 Anchor + 2 Companions
               </div>
             </div>
@@ -332,24 +364,24 @@ export const ProductCatalog = () => {
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(245, 158, 11, 0.6)',
                 borderRadius: '8px',
-                padding: '1.5rem',
+                padding: '1.25rem 1rem',
                 cursor: 'pointer',
                 textAlign: 'center'
               }}
             >
-              <div style={{ fontSize: '0.72rem', color: '#fbbf24', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '0.7rem', color: '#fbbf24', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Save 25% · Best Value
               </div>
-              <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.45rem', fontWeight: 800, margin: '6px 0 2px', color: '#ffffff' }}>
+              <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.35rem', fontWeight: 800, margin: '4px 0 2px', color: '#ffffff' }}>
                 RM169
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#cbd5e1', textDecoration: 'line-through' }}>
+              <div style={{ fontSize: '0.7rem', color: '#cbd5e1', textDecoration: 'line-through' }}>
                 Standard RM225
               </div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, marginTop: '8px', color: '#ffffff' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, marginTop: '6px', color: '#ffffff' }}>
                 5-Bottle Master Collector
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#e2e8f0', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.7rem', color: '#e2e8f0', marginTop: '3px' }}>
                 Full Olfactory Spectrum
               </div>
             </div>
@@ -357,6 +389,15 @@ export const ProductCatalog = () => {
         </div>
       </section>
 
+      {/* Mobile responsive styles */}
+      <style>{`
+        @media (max-width: 640px) {
+          .trust-ribbon-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px 8px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
