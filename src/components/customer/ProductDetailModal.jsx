@@ -87,16 +87,21 @@ export const ProductDetailModal = () => {
                 width: '100%',
                 borderRadius: 'var(--radius-sm)',
                 overflow: 'hidden',
-                background: '#fbfbfb',
+                background: '#fbf9f6',
                 border: '1px solid var(--border-subtle)',
                 marginBottom: '16px',
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                boxSizing: 'border-box'
               }}
             >
               <img 
                 src={product.images[activeImageIndex] || product.images[0]} 
                 alt={product.name}
-                style={{ width: '100%', height: 'clamp(260px, 38vh, 400px)', objectFit: 'cover' }}
+                style={{ width: '100%', height: 'clamp(260px, 38vh, 400px)', objectFit: 'contain' }}
               />
 
               {product.refillable && (

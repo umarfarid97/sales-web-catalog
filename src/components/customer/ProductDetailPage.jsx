@@ -300,11 +300,13 @@ export const ProductDetailPage = () => {
             </div>
 
             {/* Flacon Imagery */}
-            <img 
-              src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
-              alt={product.name}
-              className="pdp-main-flacon-img"
-            />
+            <div className="pdp-flacon-inner-canvas">
+              <img 
+                src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
+                alt={product.name}
+                className="pdp-main-flacon-img"
+              />
+            </div>
 
             {/* Signature Slogan Overlay */}
             <div className="pdp-stage-slogan">
