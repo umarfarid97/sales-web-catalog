@@ -54,37 +54,55 @@ export const initiatePayment = async ({ orderId, amount, customer, paymentMethod
     // 1. FPX / Malaysian Online Banking (ToyyibPay / Curlec Adapter)
     if (paymentMethod === 'fpx') {
       if (toyyibKey && toyyibCategory) {
-        // Production ToyyibPay Bill Creation
+        const isSandbox = import.meta.env.VITE_TOYYIBPAY_SANDBOX !== 'false';
+        const toyyibHost = isSandbox ? 'https://dev.toyyibpay.com' : 'https://toyyibpay.com';
+        // In browser dev mode, route through Vite proxy to avoid CORS blocks
+        const apiEndpoint = import.meta.env.DEV
+          ? '/toyyib-api/index.php/api/createBill'
+          : `${toyyibHost}/index.php/api/createBill`;
+
         const billData = new URLSearchParams({
           userSecretKey: toyyibKey,
           categoryCode: toyyibCategory,
           billName: `Maison Valenszo Order ${orderId}`,
-          billDescription: `Luxury Fragrance Order ${orderId} for ${customer.name}`,
+          billDescription: `Luxury Fragrance Order ${orderId} for ${customer.name || 'Valenszo Client'}`,
           billPriceSetting: '1',
           billPayorInfo: '1',
-          billAmount: (amount * 100).toFixed(0), // In Cents
+          billAmount: Math.max(100, Math.round(amount * 100)).toString(), // In Cents (e.g. RM150.00 = 15000)
           billReturnUrl: `${window.location.origin}/checkout?orderId=${orderId}&status=success`,
           billCallbackUrl: `${window.location.origin}/api/payment-webhook`,
           billExternalReferenceNo: orderId,
-          billTo: customer.name,
-          billEmail: customer.email,
-          billPhone: customer.phone || '60123456789'
+          billTo: customer.name || 'Valenszo Client',
+          billEmail: customer.email || 'client@valenszo.com',
+          billPhone: customer.phone || '0123456789'
         });
 
-        const res = await fetch('https://toyyibpay.com/index.php/api/createBill', {
-          method: 'POST',
-          body: billData
-        });
-        const data = await res.json();
+        try {
+          const res = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: billData
+          });
+          const data = await res.json();
 
-        if (data && data[0]?.BillCode) {
-          return {
-            success: true,
-            redirectUrl: `https://toyyibpay.com/${data[0].BillCode}`,
-            reference: data[0].BillCode
-          };
+          if (Array.isArray(data) && data[0]?.BillCode) {
+            return {
+              success: true,
+              redirectUrl: `${toyyibHost}/${data[0].BillCode}`,
+              reference: data[0].BillCode,
+              billCode: data[0].BillCode,
+              environment: isSandbox ? 'sandbox' : 'production'
+            };
+          } else {
+            console.warn('[PaymentService] ToyyibPay did not return a valid BillCode:', data);
+          }
+        } catch (fetchErr) {
+          console.error('[PaymentService] ToyyibPay API request failed:', fetchErr);
         }
       }
+
 
       // Development / Testing Mode Simulation
       return {

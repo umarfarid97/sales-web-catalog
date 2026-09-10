@@ -1,6 +1,6 @@
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -32,8 +32,24 @@ const mpaRewritePlugin = () => {
 };
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), mpaRewritePlugin()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const isSandbox = env.VITE_TOYYIBPAY_SANDBOX !== 'false';
+  const toyyibTarget = isSandbox ? 'https://dev.toyyibpay.com' : 'https://toyyibpay.com';
+
+  return {
+    plugins: [react(), mpaRewritePlugin()],
+    server: {
+      proxy: {
+        '/toyyib-api': {
+          target: toyyibTarget,
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/toyyib-api/, '')
+        }
+      }
+    },
+
   build: {
     rollupOptions: {
       input: {
@@ -49,4 +65,5 @@ export default defineConfig({
       },
     },
   },
-})
+};
+});

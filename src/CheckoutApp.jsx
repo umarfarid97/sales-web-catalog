@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
@@ -47,6 +47,61 @@ export const CheckoutPageContent = () => {
   const [giftNote, setGiftNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
+  const [paymentNotice, setPaymentNotice] = useState(null);
+
+  // Detect return redirect from ToyyibPay FPX gateway
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('orderId') || params.get('order_id');
+    const statusId = params.get('status_id');
+    const billCode = params.get('billcode');
+
+    if (orderId) {
+      try {
+        const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
+        const matchedOrder = savedOrders.find((o) => o.id === orderId);
+
+        if (matchedOrder) {
+          if (statusId === '1') {
+            matchedOrder.paymentStatus = 'Paid';
+            matchedOrder.billCode = billCode || matchedOrder.billCode;
+            setPaymentNotice({
+              type: 'success',
+              message: `Payment authorized successfully via ToyyibPay FPX Sandbox (Bill Code: ${billCode || matchedOrder.billCode || 'Confirmed'})`
+            });
+          } else if (statusId === '3') {
+            matchedOrder.paymentStatus = 'Failed';
+            setPaymentNotice({
+              type: 'error',
+              message: 'Payment was not completed or was cancelled at ToyyibPay FPX.'
+            });
+          }
+          setPlacedOrder(matchedOrder);
+          setStep(3);
+        } else {
+          // Fallback order object if not found in local cache
+          const fallbackOrder = {
+            id: orderId,
+            trackingNumber: `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`,
+            paymentMethod: 'fpx',
+            paymentStatus: statusId === '1' ? 'Paid' : 'Pending',
+            billCode: billCode || 'N/A'
+          };
+          if (statusId === '1') {
+            setPaymentNotice({
+              type: 'success',
+              message: `Payment authorized successfully via ToyyibPay FPX Sandbox (Bill Code: ${billCode || 'Confirmed'})`
+            });
+          }
+          setPlacedOrder(fallbackOrder);
+          setStep(3);
+        }
+      } catch (err) {
+        console.warn('Could not restore return order state:', err);
+      }
+    }
+  }, []);
 
   const [formData, setFormData] = useState(() => {
     const parts = (currentUser?.name || '').split(' ');
@@ -485,6 +540,22 @@ export const CheckoutPageContent = () => {
                 Thank you for your patronage. Your atelier creation has entered bespoke cold-maceration inspection.
               </p>
               
+              {paymentNotice && (
+                <div style={{
+                  background: paymentNotice.type === 'success' ? '#ecfdf5' : '#fef2f2',
+                  border: `1px solid ${paymentNotice.type === 'success' ? '#a7f3d0' : '#fecaca'}`,
+                  color: paymentNotice.type === 'success' ? '#065f46' : '#991b1b',
+                  borderRadius: '6px',
+                  padding: '12px 16px',
+                  marginBottom: '1.5rem',
+                  fontSize: '0.88rem',
+                  fontWeight: 600,
+                  textAlign: 'center'
+                }}>
+                  {paymentNotice.message}
+                </div>
+              )}
+
               <div style={{ background: '#faf9f6', padding: '1.25rem', borderRadius: '6px', marginBottom: '1.5rem', border: '1px solid #f0ede6', textAlign: 'left' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <strong>Order Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)' }}>{placedOrder.id}</span>
@@ -492,9 +563,23 @@ export const CheckoutPageContent = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <strong>Tracking Number:</strong> <span style={{ fontFamily: 'var(--font-mono)', color: '#926917' }}>{placedOrder.trackingNumber}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <strong>Payment Method:</strong> <span style={{ textTransform: 'capitalize' }}>{placedOrder.paymentMethod}</span>
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: placedOrder.billCode ? '6px' : '0' }}>
+                  <strong>Payment Status:</strong> 
+                  <span style={{ 
+                    fontWeight: 700, 
+                    color: placedOrder.paymentStatus === 'Paid' ? '#059669' : '#b45309' 
+                  }}>
+                    {placedOrder.paymentStatus || 'Confirmed'}
+                  </span>
+                </div>
+                {placedOrder.billCode && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <strong>ToyyibPay Bill Code:</strong> <span style={{ fontFamily: 'var(--font-mono)', color: '#1e40af' }}>{placedOrder.billCode}</span>
+                  </div>
+                )}
               </div>
 
               {placedOrder.paymentMethod === 'bank-transfer' && (
