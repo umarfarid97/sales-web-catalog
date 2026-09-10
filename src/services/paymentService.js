@@ -37,6 +37,74 @@ export const MAISON_BANK_DETAILS = {
 };
 
 /**
+ * Interpret ToyyibPay return query status
+ * @param {URLSearchParams|string} searchParams
+ * @returns {{ isSuccess: boolean, isFailed: boolean, isPending: boolean, status: string, billCode: string, orderId: string, transactionId: string, message: string }}
+ */
+export const parseToyyibPayStatus = (searchParams) => {
+  if (!searchParams) return { isSuccess: false, isFailed: false, isPending: false, status: 'None' };
+  const params = typeof searchParams === 'string' 
+    ? new URLSearchParams(searchParams) 
+    : searchParams;
+
+  const statusId = params.get('status_id');
+  const billCode = params.get('billcode') || '';
+  const orderId = params.get('orderId') || params.get('order_id') || '';
+  const msg = params.get('msg') || '';
+  const transactionId = params.get('transaction_id') || '';
+
+  if (statusId === '1') {
+    return {
+      isSuccess: true,
+      isFailed: false,
+      isPending: false,
+      status: 'Paid',
+      billCode,
+      orderId,
+      transactionId,
+      message: 'Payment authorized successfully via ToyyibPay FPX.'
+    };
+  }
+
+  if (statusId === '2') {
+    return {
+      isSuccess: false,
+      isFailed: false,
+      isPending: true,
+      status: 'Pending',
+      billCode,
+      orderId,
+      transactionId,
+      message: 'Payment is pending clearance by your bank.'
+    };
+  }
+
+  if (statusId === '3') {
+    return {
+      isSuccess: false,
+      isFailed: true,
+      isPending: false,
+      status: 'Failed',
+      billCode,
+      orderId,
+      transactionId,
+      message: msg || 'Payment was cancelled or declined by your bank.'
+    };
+  }
+
+  return {
+    isSuccess: false,
+    isFailed: false,
+    isPending: false,
+    status: 'Unknown',
+    billCode,
+    orderId,
+    transactionId,
+    message: ''
+  };
+};
+
+/**
  * Initialize payment for a placed order
  * @param {Object} params
  * @param {string} params.orderId - Unique order ID e.g. ORD-10928

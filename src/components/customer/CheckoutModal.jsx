@@ -123,30 +123,45 @@ export const CheckoutModal = () => {
         paymentMethod: formData.paymentMethod
       };
 
-      const newOrder = await createOrder(orderData);
+      const newOrder = await createOrder(orderData, formData.paymentMethod, { silent: true });
       
-      // Initialize payment gateway if applicable
-      const payResult = await initiatePayment({
-        orderId: newOrder.id,
-        amount: cartTotal,
-        customer: orderData.customer,
-        paymentMethod: formData.paymentMethod
-      });
-
-      if (payResult && !payResult.success) {
-        showToast(payResult.error || 'Payment initialization failed. Please try again.', 'error');
+      if (!newOrder) {
         setIsSubmitting(false);
         return;
       }
 
-      if (payResult.redirectUrl) {
-        window.location.href = payResult.redirectUrl;
+      // Initialize payment gateway if applicable
+      if (formData.paymentMethod === 'fpx') {
+        const payResult = await initiatePayment({
+          orderId: newOrder.id,
+          amount: cartTotal,
+          customer: orderData.customer,
+          paymentMethod: 'fpx'
+        });
+
+        if (payResult && !payResult.success) {
+          showToast(payResult.error || 'Payment initialization failed. Please try again.', 'error');
+          setIsSubmitting(false);
+          return;
+        }
+
+        if (payResult.redirectUrl) {
+          window.location.href = payResult.redirectUrl;
+          return;
+        }
+      }
+
+      if (formData.paymentMethod === 'bank-transfer') {
+        setPlacedOrder(newOrder);
+        setStep(3);
+        showToast('Order received with Maison Concierge! Please proceed with bank transfer.', 'success');
         return;
       }
 
       setPlacedOrder(newOrder);
       setStep(3);
-      showToast('Votre commande est confirmée! Order placed with Maison Atelier.', 'success');
+      showToast('Order received with Maison Atelier.', 'success');
+
     } catch (err) {
       console.error('Order creation failed:', err);
       showToast('Failed to place order. Please try again.', 'error');

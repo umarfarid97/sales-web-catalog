@@ -712,7 +712,17 @@ export const StoreProvider = ({ children }) => {
   const isFavorite = (productId) => favorites.includes(productId);
 
   // --- Orders Actions (Cloud + Local) ---
-  const placeOrder = async (customerOrOrderData, paymentMethodParam) => {
+  const backupCartForCheckout = () => {
+    try {
+      if (cart && cart.length > 0) {
+        sessionStorage.setItem('valenszo_pending_checkout_cart', JSON.stringify(cart));
+      }
+    } catch (e) {
+      console.warn('Cart snapshot error:', e);
+    }
+  };
+
+  const placeOrder = async (customerOrOrderData, paymentMethodParam, options = {}) => {
     if (cart.length === 0) {
       showToast('Cannot checkout with an empty cart!', 'error');
       return null;
@@ -725,6 +735,11 @@ export const StoreProvider = ({ children }) => {
       customerData = customerOrOrderData.customer;
       paymentMethod = customerOrOrderData.paymentMethod || paymentMethodParam || 'credit-card';
     }
+
+    const isSilent = options.silent || customerOrOrderData?.silent || false;
+    const isGateway = paymentMethod === 'fpx' || paymentMethod === 'credit-card';
+    const initialStatus = isGateway ? 'Pending Payment' : 'Pending';
+    const initialPaymentStatus = isGateway ? 'Unpaid' : 'Pending';
 
     const orderNumber = Math.floor(10000 + Math.random() * 90000);
     const orderId = `ORD-${orderNumber}`;
@@ -745,18 +760,22 @@ export const StoreProvider = ({ children }) => {
       discountCode: appliedPromo ? appliedPromo.code : '',
       shipping: cartShipping,
       total: cartTotal,
-      status: 'Pending',
+      status: initialStatus,
+      paymentStatus: initialPaymentStatus,
       paymentMethod,
       placedAt: new Date().toISOString(),
       trackingNumber
     };
 
-    // 1. Save order atomically to Supabase with row locking and stock deduction
+    // 1. Snapshot cart into sessionStorage so it is preserved if payment fails/cancels
+    backupCartForCheckout();
+
+    // 2. Save order atomically to Supabase with row locking and stock deduction
     createAtomicOrderInSupabase(newOrder).catch((err) => {
       console.warn('Atomic order placement fallback:', err);
     });
 
-    // 2. Optimistic local stock update
+    // 3. Optimistic local stock update
     const updatedProducts = products.map((prod) => {
       const orderedItem = cart.find((item) => item.id === prod.id);
       if (orderedItem) {
@@ -775,13 +794,99 @@ export const StoreProvider = ({ children }) => {
       return updatedOrders;
     });
 
-    // 3. Clear cart & promo
-    clearCart();
-    setIsCheckoutOpen(false);
+    // 4. For gateway payments (ToyyibPay FPX / Cards), DO NOT show premature confirmation toast!
+    // Confirmation toast & cart clearing only happen once payment succeeds.
+    if (!isSilent && !isGateway) {
+      clearCart();
+      setIsCheckoutOpen(false);
+      showToast(`Order ${orderId} received with Maison Atelier!`, 'success');
+    }
 
-    showToast(`Order ${orderId} placed successfully!`, 'success');
     return newOrder;
   };
+
+  const confirmOrderPayment = async (orderId, details = {}) => {
+    setOrders((prevOrders) => {
+      const updated = prevOrders.map((ord) => {
+        if (ord.id === orderId) {
+          return {
+            ...ord,
+            status: 'Processing',
+            paymentStatus: 'Paid',
+            billCode: details.billCode || ord.billCode,
+            transactionId: details.transactionId || ord.transactionId,
+            paidAt: new Date().toISOString()
+          };
+        }
+        return ord;
+      });
+      localStorage.setItem('valenszo_real_orders', JSON.stringify(updated));
+      return updated;
+    });
+
+    // Update in Supabase
+    updateOrderStatusInSupabase(orderId, 'Processing').catch(console.warn);
+
+    // Clear cart and backup once payment is confirmed
+    clearCart();
+    try {
+      sessionStorage.removeItem('valenszo_pending_checkout_cart');
+    } catch (e) {}
+  };
+
+  const cancelOrderAndRestoreStock = async (orderId) => {
+    const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
+    const orderToCancel = savedOrders.find((o) => o.id === orderId);
+
+    // 1. Mark order as Payment Failed / Cancelled
+    setOrders((prevOrders) => {
+      const updated = prevOrders.map((ord) => {
+        if (ord.id === orderId) {
+          return {
+            ...ord,
+            status: 'Cancelled',
+            paymentStatus: 'Failed',
+            cancelledAt: new Date().toISOString()
+          };
+        }
+        return ord;
+      });
+      localStorage.setItem('valenszo_real_orders', JSON.stringify(updated));
+      return updated;
+    });
+    updateOrderStatusInSupabase(orderId, 'Cancelled').catch(console.warn);
+
+    // 2. Restore local stock
+    if (orderToCancel && Array.isArray(orderToCancel.items)) {
+      setProducts((prevProducts) =>
+        prevProducts.map((prod) => {
+          const orderedItem = orderToCancel.items.find((item) => (item.productId && item.productId === prod.id) || item.id === prod.id);
+          if (orderedItem) {
+            return {
+              ...prod,
+              stock: prod.stock + (Number(orderedItem.quantity) || 1)
+            };
+          }
+          return prod;
+        })
+      );
+    }
+
+    // 3. Restore cart from session snapshot if current cart is empty
+    try {
+      const savedCart = sessionStorage.getItem('valenszo_pending_checkout_cart');
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCart(parsed);
+          localStorage.setItem('valenszo_real_cart', JSON.stringify(parsed));
+        }
+      }
+    } catch (err) {
+      console.warn('Could not restore cart from snapshot:', err);
+    }
+  };
+
 
   const updateOrderStatus = async (orderId, newStatus) => {
     const deliveredAt = newStatus === 'Delivered' ? new Date().toISOString() : null;
@@ -1115,6 +1220,9 @@ export const StoreProvider = ({ children }) => {
         placeOrder,
         createOrder: placeOrder,
         updateOrderStatus,
+        confirmOrderPayment,
+        cancelOrderAndRestoreStock,
+        backupCartForCheckout,
 
         // Admin KPIs
         totalRevenue,

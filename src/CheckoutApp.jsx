@@ -9,7 +9,7 @@ import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AuthModal } from './components/common/AuthModal';
 import { COMPLIMENTARY_SAMPLES } from './data/initialProducts';
-import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment } from './services/paymentService';
+import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment, parseToyyibPayStatus } from './services/paymentService';
 import { 
   Check, 
   CheckCircle2, 
@@ -17,7 +17,8 @@ import {
   ArrowRight,
   ShoppingBag, 
   Landmark,
-  Gift
+  Gift,
+  AlertCircle
 } from 'lucide-react';
 
 // Styles
@@ -36,6 +37,8 @@ export const CheckoutPageContent = () => {
     cartTotal,
     appliedPromo,
     createOrder,
+    confirmOrderPayment,
+    cancelOrderAndRestoreStock,
     showToast
   } = useStore();
 
@@ -46,62 +49,73 @@ export const CheckoutPageContent = () => {
   const [isGiftBoxSelected, setIsGiftBoxSelected] = useState(true);
   const [giftNote, setGiftNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStateText, setSubmitStateText] = useState('');
   const [placedOrder, setPlacedOrder] = useState(null);
   const [paymentNotice, setPaymentNotice] = useState(null);
 
-  // Detect return redirect from ToyyibPay FPX gateway
+  // Synchronize return redirect from ToyyibPay FPX gateway
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    const orderId = params.get('orderId') || params.get('order_id');
-    const statusId = params.get('status_id');
-    const billCode = params.get('billcode');
+    const statusResult = parseToyyibPayStatus(window.location.search);
+    const orderId = statusResult.orderId;
 
-    if (orderId) {
-      try {
-        const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
-        const matchedOrder = savedOrders.find((o) => o.id === orderId);
+    if (!orderId) return;
 
-        if (matchedOrder) {
-          if (statusId === '1') {
-            matchedOrder.paymentStatus = 'Paid';
-            matchedOrder.billCode = billCode || matchedOrder.billCode;
-            setPaymentNotice({
-              type: 'success',
-              message: `Payment authorized successfully via ToyyibPay FPX Sandbox (Bill Code: ${billCode || matchedOrder.billCode || 'Confirmed'})`
-            });
-          } else if (statusId === '3') {
-            matchedOrder.paymentStatus = 'Failed';
-            setPaymentNotice({
-              type: 'error',
-              message: 'Payment was not completed or was cancelled at ToyyibPay FPX.'
-            });
-          }
-          setPlacedOrder(matchedOrder);
-          setStep(3);
-        } else {
-          // Fallback order object if not found in local cache
-          const fallbackOrder = {
-            id: orderId,
-            trackingNumber: `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`,
-            paymentMethod: 'fpx',
-            paymentStatus: statusId === '1' ? 'Paid' : 'Pending',
-            billCode: billCode || 'N/A'
-          };
-          if (statusId === '1') {
-            setPaymentNotice({
-              type: 'success',
-              message: `Payment authorized successfully via ToyyibPay FPX Sandbox (Bill Code: ${billCode || 'Confirmed'})`
-            });
-          }
-          setPlacedOrder(fallbackOrder);
-          setStep(3);
-        }
-      } catch (err) {
-        console.warn('Could not restore return order state:', err);
-      }
+    if (statusResult.isSuccess) {
+      // --- SCENARIO A: PAYMENT CONFIRMED ---
+      confirmOrderPayment(orderId, {
+        billCode: statusResult.billCode,
+        transactionId: statusResult.transactionId
+      });
+
+      const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
+      const matchedOrder = savedOrders.find((o) => o.id === orderId) || {
+        id: orderId,
+        trackingNumber: `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`,
+        paymentMethod: 'fpx',
+        paymentStatus: 'Paid',
+        billCode: statusResult.billCode
+      };
+
+      matchedOrder.paymentStatus = 'Paid';
+      matchedOrder.billCode = statusResult.billCode;
+      setPlacedOrder(matchedOrder);
+      setStep(3);
+      setPaymentNotice({
+        type: 'success',
+        title: 'Payment Verified via ToyyibPay FPX',
+        message: `Your payment has been approved and confirmed. Reference Bill Code: ${statusResult.billCode || 'Confirmed'}.`
+      });
+      showToast('Payment verified successfully! Your atelier order is confirmed.', 'success');
+    } else if (statusResult.isFailed) {
+      // --- SCENARIO B: PAYMENT CANCELLED OR DECLINED AT BANK ---
+      cancelOrderAndRestoreStock(orderId);
+      setStep(2); // Keep customer on Checkout Step 2 so they don't see "Order Confirmed"
+      setPaymentNotice({
+        type: 'error',
+        title: 'Payment Cancelled or Declined',
+        message: 'Your payment was not completed at ToyyibPay. Your items and gift preferences have been preserved in your bag. You may select another bank or try another payment method below.'
+      });
+      showToast('Payment was not completed. Your items remain saved in your bag.', 'warning');
+    } else if (statusResult.isPending) {
+      // --- SCENARIO C: PENDING CLEARING ---
+      const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
+      const matchedOrder = savedOrders.find((o) => o.id === orderId) || {
+        id: orderId,
+        paymentMethod: 'fpx',
+        paymentStatus: 'Pending Verification',
+        billCode: statusResult.billCode
+      };
+      setPlacedOrder(matchedOrder);
+      setStep(3);
+      setPaymentNotice({
+        type: 'warning',
+        title: 'Payment Pending Clearing',
+        message: 'Your payment is currently clearing with your bank. We will update your order status as soon as ToyyibPay confirms receipt.'
+      });
     }
   }, []);
+
 
   const [formData, setFormData] = useState(() => {
     const parts = (currentUser?.name || '').split(' ');
@@ -140,6 +154,11 @@ export const CheckoutPageContent = () => {
     if (cart.length === 0) return;
 
     setIsSubmitting(true);
+    setSubmitStateText(
+      formData.paymentMethod === 'fpx' 
+        ? 'Connecting to ToyyibPay Secure FPX...' 
+        : 'Securing Atelier Order...'
+    );
 
     const orderData = {
       customer: {
@@ -173,30 +192,48 @@ export const CheckoutPageContent = () => {
     };
 
     try {
-      const order = await createOrder(orderData);
+      // Create draft order (silent: true prevents premature "Order Confirmed" toast before gateway redirect)
+      const order = await createOrder(orderData, formData.paymentMethod, { silent: true });
 
-      // Initialize payment gateway if configured
-      const payResult = await initiatePayment({
-        orderId: order.id,
-        amount: cartTotal,
-        customer: orderData.customer,
-        paymentMethod: formData.paymentMethod
-      });
-
-      if (payResult && !payResult.success) {
-        showToast(payResult.error || 'Payment initialization failed. Please try again.', 'error');
+      if (!order) {
         setIsSubmitting(false);
         return;
       }
 
-      if (payResult.redirectUrl) {
-        window.location.href = payResult.redirectUrl;
+      // 1. FPX Online Banking via ToyyibPay
+      if (formData.paymentMethod === 'fpx') {
+        const payResult = await initiatePayment({
+          orderId: order.id,
+          amount: cartTotal,
+          customer: orderData.customer,
+          paymentMethod: 'fpx'
+        });
+
+        if (payResult && !payResult.success) {
+          showToast(payResult.error || 'Payment initialization failed. Please try again.', 'error');
+          setIsSubmitting(false);
+          return;
+        }
+
+        if (payResult.redirectUrl) {
+          // Seamless redirect to ToyyibPay without premature success toast
+          window.location.href = payResult.redirectUrl;
+          return;
+        }
+      }
+
+      // 2. Direct Bank Transfer / Concierge Pay
+      if (formData.paymentMethod === 'bank-transfer') {
+        setPlacedOrder(order);
+        setStep(3);
+        showToast('Order received with Maison Concierge! Please proceed with bank transfer.', 'success');
         return;
       }
 
+      // 3. Fallback
       setPlacedOrder(order);
       setStep(3);
-      showToast('Order confirmed! An invitation & tracking details have been generated.', 'success');
+      showToast('Order received with Maison Atelier.', 'success');
     } catch (err) {
       console.error('Order creation error:', err);
       showToast('There was an issue finalizing your order. Please retry.', 'error');
@@ -204,6 +241,7 @@ export const CheckoutPageContent = () => {
       setIsSubmitting(false);
     }
   };
+
 
   if (cart.length === 0 && !placedOrder) {
     return (
@@ -407,10 +445,42 @@ export const CheckoutPageContent = () => {
                 >
                   <ArrowLeft size={14} /> Back to Gifting Options
                 </button>
+                {paymentNotice && paymentNotice.type === 'error' && (
+                  <div style={{
+                    background: '#fef2f2',
+                    border: '1.5px solid #fca5a5',
+                    color: '#991b1b',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    marginBottom: '1.75rem',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px'
+                  }}>
+                    <AlertCircle size={22} style={{ flexShrink: 0, marginTop: '2px', color: '#dc2626' }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '4px' }}>
+                        {paymentNotice.title}
+                      </div>
+                      <p style={{ fontSize: '0.85rem', color: '#7f1d1d', margin: 0, lineHeight: 1.5 }}>
+                        {paymentNotice.message}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPaymentNotice(null)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#991b1b', fontSize: '1.2rem', padding: 0, lineHeight: 1 }}
+                      aria-label="Dismiss notice"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
 
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem' }}>
                   Delivery Address (Malaysia & International)
                 </h3>
+
                 <div className="checkout-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                   <div>
                     <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '6px', color: '#4b5563' }}>First Name</label>
@@ -504,8 +574,9 @@ export const CheckoutPageContent = () => {
                     boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
                   }}
                 >
-                  {isSubmitting ? 'Securing Atelier Order...' : `Authorize & Place Order — RM${cartTotal.toFixed(2)}`}
+                  {isSubmitting ? (submitStateText || 'Securing Atelier Order...') : `Authorize & Place Order — RM${cartTotal.toFixed(2)}`}
                 </button>
+
               </div>
 
               {/* Order Summary */}
