@@ -8,8 +8,10 @@ import {
   Plus, 
   Download,
   ShieldCheck,
-  ArrowLeft
+  ArrowLeft,
+  Sliders
 } from 'lucide-react';
+
 
 export const AdminHeader = () => {
   const { 
@@ -112,7 +114,16 @@ export const AdminHeader = () => {
               </span>
             )}
           </button>
+
+          <button
+            className={`admin-tab-btn ${adminTab === 'attributes' ? 'active' : ''}`}
+            onClick={() => setAdminTab('attributes')}
+          >
+            <Sliders size={16} />
+            <span>Attributes</span>
+          </button>
         </div>
+
 
         {/* Action Buttons */}
         <div className="admin-header-actions">

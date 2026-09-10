@@ -519,9 +519,92 @@ export const fetchAllProfilesFromSupabase = async () => {
   }
 };
 
+// --- Attributes Management ---
+
+export const formatAttributeFromDb = (row) => {
+  if (!row || typeof row !== 'object') return null;
+  return {
+    id: String(row.id),
+    type: String(row.type || 'category'),
+    name: String(row.name || ''),
+    value: String(row.value || row.name || ''),
+    displayOrder: typeof row.display_order === 'number' ? row.display_order : 0,
+    createdAt: row.created_at || null,
+    updatedAt: row.updated_at || null
+  };
+};
+
+export const formatAttributeToDb = (attr) => {
+  return {
+    id: attr.id || `${attr.type === 'category' ? 'cat' : 'conc'}-${Date.now()}`,
+    type: attr.type,
+    name: attr.name,
+    value: attr.value || attr.name,
+    display_order: typeof attr.displayOrder === 'number' ? attr.displayOrder : (typeof attr.display_order === 'number' ? attr.display_order : 0),
+    updated_at: new Date().toISOString()
+  };
+};
+
+export const fetchAttributesFromSupabase = async () => {
+  if (!isSupabaseConfigured || !supabase) return [];
+  try {
+    const { data, error } = await supabase
+      .from('attributes')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      if (error.code === 'PGRST205') {
+        console.warn('[Supabase] public.attributes table not created yet. Using live products data.');
+      } else {
+        console.error('Error fetching attributes from Supabase:', error);
+      }
+      return [];
+    }
+
+    return (data || []).map(formatAttributeFromDb).filter(Boolean);
+  } catch (err) {
+    console.error('Exception fetching attributes from Supabase:', err);
+    return [];
+  }
+};
+
+export const saveAttributeToSupabase = async (attr) => {
+  if (!isSupabaseConfigured || !supabase) return null;
+  try {
+    const payload = formatAttributeToDb(attr);
+    const { data, error } = await supabase
+      .from('attributes')
+      .upsert(payload, { onConflict: 'id' })
+      .select();
+
+    if (error) throw error;
+    return data && data[0] ? formatAttributeFromDb(data[0]) : null;
+  } catch (err) {
+    console.error('Error saving attribute to Supabase:', err);
+    return null;
+  }
+};
+
+export const deleteAttributeFromSupabase = async (id) => {
+  if (!isSupabaseConfigured || !supabase) return false;
+  try {
+    const { error } = await supabase
+      .from('attributes')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.error('Error deleting attribute from Supabase:', err);
+    return false;
+  }
+};
+
 // --- Realtime Subscriptions ---
 
-export const subscribeToStoreChanges = (onProductChange, onOrderChange) => {
+export const subscribeToStoreChanges = (onProductChange, onOrderChange, onAttributeChange) => {
   if (!isSupabaseConfigured || !supabase) return () => {};
 
   const channel = supabase
@@ -540,9 +623,17 @@ export const subscribeToStoreChanges = (onProductChange, onOrderChange) => {
         if (onOrderChange) onOrderChange(payload);
       }
     )
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'attributes' },
+      (payload) => {
+        if (onAttributeChange) onAttributeChange(payload);
+      }
+    )
     .subscribe();
 
   return () => {
     supabase.removeChannel(channel);
   };
 };
+

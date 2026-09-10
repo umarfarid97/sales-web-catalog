@@ -9,14 +9,24 @@ export const ProductFormModal = () => {
     setIsProductFormOpen, 
     editingProduct, 
     addProduct, 
-    updateProduct 
+    updateProduct,
+    categories,
+    concentrations
   } = useStore();
+
+  const resolveInitialCategory = (product) => {
+    if (!product) return 'Men';
+    if (product.gender === 'Women' || product.category === 'Women' || product.category === 'Pour Femme') return 'Women';
+    if (product.gender === 'Unisex' || product.category === 'Unisex' || product.category === 'Niche & Unisex') return 'Unisex';
+    return 'Men';
+  };
 
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
-    category: 'Woody & Smoky',
-    concentration: 'Extrait de Parfum (32% Concentration)',
+    category: 'Men',
+    olfactoryFamily: 'Woody & Smoky',
+    concentration: 'Extrait de Parfum (30%)',
     price: '',
     originalPrice: '',
     stock: '15',
@@ -35,12 +45,15 @@ export const ProductFormModal = () => {
   });
 
   useEffect(() => {
+    const defaultConc = concentrations && concentrations.length > 0 ? concentrations[0].name : 'Extrait de Parfum (30%)';
+    
     if (editingProduct) {
       setFormData({
         name: editingProduct.name || '',
         sku: editingProduct.sku || '',
-        category: editingProduct.category || 'Woody & Smoky',
-        concentration: editingProduct.concentration || 'Extrait de Parfum (32% Concentration)',
+        category: resolveInitialCategory(editingProduct),
+        olfactoryFamily: editingProduct.olfactoryFamily || editingProduct.specs?.olfactoryFamily || 'Woody & Smoky',
+        concentration: editingProduct.concentration || editingProduct.specs?.concentration || defaultConc,
         price: editingProduct.price?.toString() || '',
         originalPrice: editingProduct.originalPrice?.toString() || '',
         stock: editingProduct.stock?.toString() || '',
@@ -61,8 +74,9 @@ export const ProductFormModal = () => {
       setFormData({
         name: '',
         sku: `VAL-PAR-${Math.floor(100 + Math.random() * 900)}`,
-        category: 'Woody & Smoky',
-        concentration: 'Extrait de Parfum (32% Concentration)',
+        category: 'Men',
+        olfactoryFamily: 'Woody & Smoky',
+        concentration: defaultConc,
         price: '45.00',
         originalPrice: '55.00',
         stock: '15',
@@ -80,7 +94,7 @@ export const ProductFormModal = () => {
         isFeatured: false
       });
     }
-  }, [editingProduct, isProductFormOpen]);
+  }, [editingProduct, isProductFormOpen, concentrations]);
 
   if (!isProductFormOpen) return null;
 
@@ -88,11 +102,22 @@ export const ProductFormModal = () => {
     e.preventDefault();
     const productPayload = {
       ...formData,
+      category: formData.category,
+      gender: formData.category,
+      olfactoryFamily: formData.olfactoryFamily,
+      concentration: formData.concentration,
       price: parseFloat(formData.price) || 0,
       originalPrice: parseFloat(formData.originalPrice) || parseFloat(formData.price) || 0,
       stock: parseInt(formData.stock, 10) || 0,
       rating: parseFloat(formData.rating) || 5.0,
       reviewsCount: parseInt(formData.reviewsCount, 10) || 0,
+      specs: {
+        ...(editingProduct?.specs || {}),
+        gender: formData.category,
+        category: formData.category,
+        olfactoryFamily: formData.olfactoryFamily,
+        concentration: formData.concentration
+      },
       pyramid: {
         topNotes: formData.topNotes.split(',').map((s) => s.trim()).filter(Boolean),
         heartNotes: formData.heartNotes.split(',').map((s) => s.trim()).filter(Boolean),
@@ -112,6 +137,7 @@ export const ProductFormModal = () => {
       addProduct(productPayload);
     }
   };
+
 
   return (
     <div 
@@ -160,29 +186,45 @@ export const ProductFormModal = () => {
 
               <div className="admin-form-row-2col">
                 <div className="form-group">
-                  <label className="admin-form-label">Olfactory Family *</label>
+                  <label className="admin-form-label">Category (Gender Taxonomy) *</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     className="admin-form-select"
                   >
-                    {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
-                      <option key={fam} value={fam}>{fam}</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.name}>{cat.name}</option>
                     ))}
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label className="admin-form-label">Concentration</label>
-                  <input
-                    type="text"
+                  <label className="admin-form-label">Concentration (Extrait / EDP) *</label>
+                  <select
                     value={formData.concentration}
                     onChange={(e) => setFormData({ ...formData, concentration: e.target.value })}
-                    placeholder="e.g. Extrait de Parfum (32%)"
-                    className="admin-form-input"
-                  />
+                    className="admin-form-select"
+                  >
+                    {concentrations.map((conc) => (
+                      <option key={conc.id} value={conc.name}>{conc.name}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
+
+              <div className="form-group">
+                <label className="admin-form-label">Olfactory Family *</label>
+                <select
+                  value={formData.olfactoryFamily}
+                  onChange={(e) => setFormData({ ...formData, olfactoryFamily: e.target.value })}
+                  className="admin-form-select"
+                >
+                  {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
+                    <option key={fam} value={fam}>{fam}</option>
+                  ))}
+                </select>
+              </div>
+
 
               <div className="admin-form-row-3col">
                 <div className="form-group">

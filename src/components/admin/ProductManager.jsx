@@ -18,6 +18,7 @@ export const ProductManager = () => {
   } = useStore();
 
   const [searchTable, setSearchTable] = useState('');
+  const [filterGenderCategory, setFilterGenderCategory] = useState('All'); // 'All', 'Women', 'Men', 'Unisex'
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterStockStatus, setFilterStockStatus] = useState('all'); // 'all', 'low', 'out'
 
@@ -39,7 +40,11 @@ export const ProductManager = () => {
 
   // Filtered Table Items
   const tableItems = products.filter((p) => {
-    if (filterCategory !== 'All' && p.category !== filterCategory) return false;
+    const pGender = p.gender || p.specs?.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
+    if (filterGenderCategory !== 'All' && pGender !== filterGenderCategory) return false;
+
+    const pFamily = p.olfactoryFamily || p.specs?.olfactoryFamily || p.category;
+    if (filterCategory !== 'All' && pFamily !== filterCategory && p.category !== filterCategory) return false;
     if (filterStockStatus === 'low' && (p.stock >= 5 || p.stock === 0)) return false;
     if (filterStockStatus === 'out' && p.stock > 0) return false;
     if (searchTable.trim()) {
@@ -50,6 +55,7 @@ export const ProductManager = () => {
     }
     return true;
   });
+
 
   return (
     <div>
@@ -81,6 +87,19 @@ export const ProductManager = () => {
               )}
             </div>
 
+            {/* Category (Gender Taxonomy) Filter */}
+            <select
+              value={filterGenderCategory}
+              onChange={(e) => setFilterGenderCategory(e.target.value)}
+              className="admin-form-select"
+              style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
+            >
+              <option value="All">All Categories (3 Types)</option>
+              <option value="Women">Women</option>
+              <option value="Men">Men</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+
             {/* Olfactory Family Filter */}
             <select
               value={filterCategory}
@@ -93,6 +112,7 @@ export const ProductManager = () => {
                 <option key={fam} value={fam}>{fam}</option>
               ))}
             </select>
+
 
             {/* Stock Level Filter */}
             <select
@@ -127,6 +147,7 @@ export const ProductManager = () => {
               <tr>
                 <th>Perfume Name</th>
                 <th>SKU</th>
+                <th>Category</th>
                 <th>Olfactory Family</th>
                 <th>Concentration</th>
                 <th>Base Price</th>
@@ -138,7 +159,7 @@ export const ProductManager = () => {
             <tbody>
               {tableItems.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
                     No fragrance records found matching your filters.
                   </td>
                 </tr>
@@ -146,6 +167,7 @@ export const ProductManager = () => {
                 tableItems.map((prod) => {
                   const isOutOfStock = prod.stock === 0;
                   const isLow = prod.stock > 0 && prod.stock < 5;
+                  const resolvedGender = prod.gender || prod.specs?.gender || (prod.category === 'Pour Femme' || prod.category === 'Women' ? 'Women' : (prod.category === 'Niche & Unisex' || prod.category === 'Unisex' ? 'Unisex' : 'Men'));
 
                   return (
                     <tr key={prod.id}>
@@ -179,10 +201,26 @@ export const ProductManager = () => {
                         </span>
                       </td>
 
-                      {/* Category */}
+                      {/* Category (3 Types Only) */}
+                      <td>
+                        <span style={{ 
+                          fontSize: '0.72rem', 
+                          fontWeight: 700, 
+                          padding: '2px 8px', 
+                          borderRadius: '4px',
+                          display: 'inline-block',
+                          background: resolvedGender === 'Women' ? '#fdf2f8' : (resolvedGender === 'Unisex' ? '#f5f3ff' : '#f0f9ff'),
+                          color: resolvedGender === 'Women' ? '#9d174d' : (resolvedGender === 'Unisex' ? '#5b21b6' : '#0369a1'),
+                          border: `1px solid ${resolvedGender === 'Women' ? '#fbcfe8' : (resolvedGender === 'Unisex' ? '#ddd6fe' : '#bae6fd')}`
+                        }}>
+                          {resolvedGender}
+                        </span>
+                      </td>
+
+                      {/* Olfactory Family */}
                       <td>
                         <span className="badge badge-neutral">
-                          {prod.category}
+                          {prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.category}
                         </span>
                       </td>
 
@@ -192,6 +230,7 @@ export const ProductManager = () => {
                           {prod.concentration || prod.specs?.concentration || 'N/A'}
                         </span>
                       </td>
+
 
                       {/* Price */}
                       <td>

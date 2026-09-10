@@ -12,10 +12,61 @@ import {
   updateOrderDispatchInSupabase,
   subscribeToStoreChanges,
   formatProductFromDb,
-  formatOrderFromDb
+  formatOrderFromDb,
+  fetchAttributesFromSupabase,
+  saveAttributeToSupabase,
+  deleteAttributeFromSupabase,
+  formatAttributeFromDb
 } from '../services/supabaseService';
 
+
 const StoreContext = createContext();
+
+// Helper to derive attributes directly from real products in database
+const deriveAttributesFromProducts = (productsList) => {
+  if (!Array.isArray(productsList) || productsList.length === 0) {
+    return [
+      { id: 'cat-women', type: 'category', name: 'Women', value: 'Women', displayOrder: 1 },
+      { id: 'cat-men', type: 'category', name: 'Men', value: 'Men', displayOrder: 2 },
+      { id: 'cat-unisex', type: 'category', name: 'Unisex', value: 'Unisex', displayOrder: 3 },
+      { id: 'conc-extrait-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
+      { id: 'conc-edp-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
+      { id: 'conc-edp-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
+      { id: 'conc-extrait-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
+    ];
+  }
+
+  // 1. Categories (3 types only: Women, Men, Unisex)
+  const categoryOrder = { Women: 1, Men: 2, Unisex: 3 };
+  const categories = ['Women', 'Men', 'Unisex'].map(name => ({
+    id: `cat-${name.toLowerCase()}`,
+    type: 'category',
+    name,
+    value: name,
+    displayOrder: categoryOrder[name] || 4
+  }));
+
+  // 2. Concentrations extracted by frequency from actual database products
+  const concCounts = {};
+  productsList.forEach(p => {
+    const conc = p.specs?.concentration || p.concentration;
+    if (conc && typeof conc === 'string' && conc.trim()) {
+      concCounts[conc.trim()] = (concCounts[conc.trim()] || 0) + 1;
+    }
+  });
+
+  const concentrations = Object.entries(concCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([conc, _count], idx) => ({
+      id: `conc-${idx + 1}-${conc.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`,
+      type: 'concentration',
+      name: conc,
+      value: conc,
+      displayOrder: idx + 1
+    }));
+
+  return [...categories, ...concentrations];
+};
 
 export const useStore = () => {
   const context = useContext(StoreContext);
@@ -28,8 +79,23 @@ export const useStore = () => {
 export const StoreProvider = ({ children }) => {
   const { currentUser, isAdmin, openAuthModal } = useAuth();
 
+  // Store Attributes: Categories (3 Types Only) & Concentrations (Populated from real DB)
+  const [attributes, setAttributes] = useState(() => {
+    try {
+      const saved = localStorage.getItem('valenszo_attributes_cache');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Could not parse cached attributes', e);
+    }
+    return deriveAttributesFromProducts([]);
+  });
+
   // Role Mode: 'customer' | 'admin'
   const [role, setRoleState] = useState(() => {
+
     if (typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('admin')) {
       return 'admin';
     }
@@ -466,6 +532,19 @@ export const StoreProvider = ({ children }) => {
           setOrders(realOrders);
           localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
         }
+
+        // 3. Attributes Sync (Categories & Concentrations) directly from Supabase
+        const cloudAttrs = await fetchAttributesFromSupabase();
+        if (isMounted) {
+          if (Array.isArray(cloudAttrs) && cloudAttrs.length > 0) {
+            setAttributes(cloudAttrs);
+            localStorage.setItem('valenszo_attributes_cache', JSON.stringify(cloudAttrs));
+          } else if (cloudProducts && cloudProducts.length > 0) {
+            const derived = deriveAttributesFromProducts(cloudProducts);
+            setAttributes(derived);
+            localStorage.setItem('valenszo_attributes_cache', JSON.stringify(derived));
+          }
+        }
       } catch (err) {
         console.error('Supabase initial sync error:', err);
         if (isMounted) setIsCloudConnected(false);
@@ -511,6 +590,24 @@ export const StoreProvider = ({ children }) => {
             });
           }
         }
+      },
+      (payload) => {
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const updatedAttr = formatAttributeFromDb(payload.new);
+          if (updatedAttr) {
+            setAttributes((prev) => {
+              const idx = prev.findIndex((a) => a.id === updatedAttr.id);
+              if (idx > -1) {
+                const next = [...prev];
+                next[idx] = updatedAttr;
+                return next;
+              }
+              return [...prev, updatedAttr];
+            });
+          }
+        } else if (payload.eventType === 'DELETE' && payload.old?.id) {
+          setAttributes((prev) => prev.filter((a) => a.id !== payload.old.id));
+        }
       }
     );
 
@@ -530,12 +627,17 @@ export const StoreProvider = ({ children }) => {
   }, [products]);
 
   useEffect(() => {
+    localStorage.setItem('valenszo_attributes_cache', JSON.stringify(attributes));
+  }, [attributes]);
+
+  useEffect(() => {
     localStorage.setItem('valenszo_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
     localStorage.setItem('valenszo_orders', JSON.stringify(orders));
   }, [orders]);
+
 
   useEffect(() => {
     localStorage.setItem('valenszo_favorites', JSON.stringify(favorites));
@@ -1099,6 +1201,147 @@ export const StoreProvider = ({ children }) => {
     showToast(`Restocked +${amount} units`, 'success');
   };
 
+  // --- Attributes Management (Admin Operations Cloud + Local) ---
+
+  // Standardized categories: 3 types only (Men, Women, Unisex)
+  const categories = useMemo(() => {
+    const list = attributes.filter(a => a.type === 'category');
+    const validNames = ['Women', 'Men', 'Unisex'];
+    const filtered = list.filter(c => validNames.includes(c.name));
+    
+    // Ensure all 3 exist in standard order
+    const map = new Map(filtered.map(c => [c.name, c]));
+    return validNames.map((name, idx) => map.get(name) || {
+      id: `cat-${name.toLowerCase()}`,
+      type: 'category',
+      name,
+      value: name,
+      displayOrder: idx + 1
+    });
+  }, [attributes]);
+
+  // Concentrations ordered by displayOrder (populated from real database)
+  const concentrations = useMemo(() => {
+    const list = attributes.filter(a => a.type === 'concentration');
+    if (list.length > 0) {
+      return [...list].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    }
+    return [
+      { id: 'conc-extrait-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
+      { id: 'conc-edp-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
+      { id: 'conc-edp-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
+      { id: 'conc-extrait-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
+    ];
+  }, [attributes]);
+
+  // Real product distribution counts for Categories and Concentrations
+  const attributeStats = useMemo(() => {
+    const categoryCounts = { Women: 0, Men: 0, Unisex: 0 };
+    const concentrationCounts = {};
+
+    products.forEach(p => {
+      const g = p.specs?.gender || p.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
+      if (categoryCounts[g] !== undefined) {
+        categoryCounts[g]++;
+      }
+
+      const conc = p.specs?.concentration || p.concentration;
+      if (conc && typeof conc === 'string') {
+        const trimmed = conc.trim();
+        concentrationCounts[trimmed] = (concentrationCounts[trimmed] || 0) + 1;
+      }
+    });
+
+    return { categoryCounts, concentrationCounts };
+  }, [products]);
+
+  const addAttribute = useCallback(async (attrData) => {
+    const newAttr = {
+      id: attrData.id || `${attrData.type === 'category' ? 'cat' : 'conc'}-${Date.now()}`,
+      type: attrData.type,
+      name: (attrData.name || '').trim(),
+      value: (attrData.value || attrData.name || '').trim(),
+      displayOrder: Number(attrData.displayOrder) || (attributes.length + 1),
+      createdAt: new Date().toISOString()
+    };
+
+    setAttributes(prev => {
+      const updated = [...prev, newAttr];
+      localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
+      return updated;
+    });
+
+    try {
+      const saved = await saveAttributeToSupabase(newAttr);
+      if (saved) {
+        showToast(`Saved "${newAttr.name}" to Supabase database`, 'success');
+      } else {
+        showToast(`Saved "${newAttr.name}" locally`, 'info');
+      }
+    } catch (e) {
+      console.error('Error saving attribute:', e);
+      showToast(`Saved "${newAttr.name}" locally (offline)`, 'info');
+    }
+    return newAttr;
+  }, [attributes, showToast]);
+
+  const updateAttribute = useCallback(async (id, attrData) => {
+    let updatedAttr = null;
+    setAttributes(prev => {
+      const updated = prev.map(a => {
+        if (a.id === id) {
+          updatedAttr = {
+            ...a,
+            ...attrData,
+            name: attrData.name ? attrData.name.trim() : a.name,
+            value: attrData.value ? attrData.value.trim() : (attrData.name ? attrData.name.trim() : a.value),
+            displayOrder: attrData.displayOrder !== undefined ? Number(attrData.displayOrder) : a.displayOrder,
+            updatedAt: new Date().toISOString()
+          };
+          return updatedAttr;
+        }
+        return a;
+      });
+      localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
+      return updated;
+    });
+
+    if (updatedAttr) {
+      try {
+        const saved = await saveAttributeToSupabase(updatedAttr);
+        if (saved) {
+          showToast(`Updated "${updatedAttr.name}" in database`, 'success');
+        } else {
+          showToast(`Updated "${updatedAttr.name}" locally`, 'info');
+        }
+      } catch (e) {
+        console.error('Error updating attribute:', e);
+        showToast(`Updated "${updatedAttr.name}" locally`, 'info');
+      }
+    }
+  }, [showToast]);
+
+  const deleteAttribute = useCallback(async (id) => {
+    const target = attributes.find(a => a.id === id);
+    setAttributes(prev => {
+      const updated = prev.filter(a => a.id !== id);
+      localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
+      return updated;
+    });
+
+    try {
+      const success = await deleteAttributeFromSupabase(id);
+      if (success) {
+        showToast(`Deleted "${target?.name || 'attribute'}" from database`, 'success');
+      } else {
+        showToast(`Deleted "${target?.name || 'attribute'}" locally`, 'info');
+      }
+    } catch (e) {
+      console.error('Error deleting attribute:', e);
+      showToast(`Deleted attribute locally`, 'info');
+    }
+  }, [attributes, showToast]);
+
   // --- Refresh Database Sync ---
   const resetToDemoData = async () => {
     setCart([]);
@@ -1120,6 +1363,11 @@ export const StoreProvider = ({ children }) => {
         setOrders(freshOrders);
         localStorage.setItem('valenszo_real_orders', JSON.stringify(freshOrders));
       }
+      const freshAttrs = await fetchAttributesFromSupabase();
+      if (freshAttrs && freshAttrs.length > 0) {
+        setAttributes(freshAttrs);
+        localStorage.setItem('valenszo_attributes_cache', JSON.stringify(freshAttrs));
+      }
     }
 
     showToast('Catalog and orders synchronized with live database', 'info');
@@ -1129,9 +1377,10 @@ export const StoreProvider = ({ children }) => {
     setIsLoadingFromCloud(true);
     try {
       if (isSupabaseConfigured) {
-        const [freshProducts, freshOrders] = await Promise.all([
+        const [freshProducts, freshOrders, freshAttrs] = await Promise.all([
           fetchProductsFromSupabase(),
-          fetchOrdersFromSupabase()
+          fetchOrdersFromSupabase(),
+          fetchAttributesFromSupabase()
         ]);
         if (freshProducts && freshProducts.length > 0) {
           setProducts(freshProducts);
@@ -1142,6 +1391,14 @@ export const StoreProvider = ({ children }) => {
           setOrders(realOrders);
           localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
         }
+        if (freshAttrs && freshAttrs.length > 0) {
+          setAttributes(freshAttrs);
+          localStorage.setItem('valenszo_attributes_cache', JSON.stringify(freshAttrs));
+        } else if (freshProducts && freshProducts.length > 0) {
+          const derived = deriveAttributesFromProducts(freshProducts);
+          setAttributes(derived);
+          localStorage.setItem('valenszo_attributes_cache', JSON.stringify(derived));
+        }
         showToast('Live store data synchronized with Supabase', 'success');
       } else {
         showToast('Running in local storage mode', 'info');
@@ -1151,6 +1408,7 @@ export const StoreProvider = ({ children }) => {
       showToast('Failed to refresh data from cloud', 'error');
     } finally {
       setIsLoadingFromCloud(false);
+
     }
   };
 
@@ -1320,6 +1578,16 @@ export const StoreProvider = ({ children }) => {
         updateProduct,
         deleteProduct,
         restockProduct,
+
+        // Attributes (Categories - 3 Types Only & Concentrations from DB)
+        attributes,
+        categories,
+        concentrations,
+        attributeStats,
+        addAttribute,
+        updateAttribute,
+        deleteAttribute,
+
 
         // Filters & Search
         searchQuery,

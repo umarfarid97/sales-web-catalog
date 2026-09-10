@@ -15,7 +15,9 @@ import { ProductFormModal } from './components/admin/ProductFormModal';
 import { OrderManager } from './components/admin/OrderManager';
 import { OrderDetailModal } from './components/admin/OrderDetailModal';
 import { InventoryAlerts } from './components/admin/InventoryAlerts';
+import { AttributesManager } from './components/admin/AttributesManager';
 import { Shield, ArrowLeft } from 'lucide-react';
+
 
 // Styles
 import './index.css';
@@ -98,7 +100,9 @@ const AdminLayout = () => {
             {adminTab === 'products' && <ProductManager />}
             {adminTab === 'orders' && <OrderManager />}
             {adminTab === 'inventory' && <InventoryAlerts />}
+            {adminTab === 'attributes' && <AttributesManager />}
           </div>
+
         </div>
       </main>
 
