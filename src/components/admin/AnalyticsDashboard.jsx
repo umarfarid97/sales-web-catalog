@@ -122,7 +122,7 @@ export const AnalyticsDashboard = () => {
   }, [orders]);
 
   // --- Real-time Olfactory Family Demand (Calculated from Real Order Items) ---
-  const categoryStats = useMemo(() => {
+  const { categoryStats, totalBottlesSold } = useMemo(() => {
     const familyCounts = {
       'Woody & Smoky': 0,
       'Amber & Oriental': 0,
@@ -139,13 +139,13 @@ export const AnalyticsDashboard = () => {
       'Discovery Sets': '#0891b2'
     };
 
-    let totalBottlesSold = 0;
+    let totalSold = 0;
 
     (orders || []).forEach((ord) => {
-      if (ord.status === 'Cancelled' || ord.status === 'Refunded') return;
+      if (!isSettled(ord)) return;
       (ord.items || []).forEach((it) => {
         const qty = Number(it.quantity) || 1;
-        totalBottlesSold += qty;
+        totalSold += qty;
 
         const p = products.find((prod) => prod.id === it.productId || prod.id === it.id || prod.name === it.name);
         const family = it.olfactoryFamily || p?.olfactoryFamily || p?.category || '';
@@ -168,40 +168,17 @@ export const AnalyticsDashboard = () => {
       });
     });
 
-    // If no orders placed yet in this store, distribute from active product catalog
-    const hasOrderData = totalBottlesSold > 0;
-    if (!hasOrderData && products.length > 0) {
-      products.forEach((p) => {
-        const family = p.olfactoryFamily || p.category || '';
-        const char = (p.character || '').toLowerCase();
-        const name = (p.name || '').toLowerCase();
-
-        if (name.includes('discovery') || name.includes('set')) {
-          familyCounts['Discovery Sets'] += 1;
-        } else if (family.includes('Wood') || char.includes('wood') || char.includes('smoky')) {
-          familyCounts['Woody & Smoky'] += 1;
-        } else if (family.includes('Amber') || family.includes('Orient') || char.includes('amber')) {
-          familyCounts['Amber & Oriental'] += 1;
-        } else if (family.includes('Flor') || char.includes('flor')) {
-          familyCounts['Floral & Romantic'] += 1;
-        } else {
-          familyCounts['Fresh & Citrus'] += 1;
-        }
-        totalBottlesSold += 1;
-      });
-    }
-
-    const divisor = totalBottlesSold || 1;
-    return Object.entries(familyCounts).map(([name, count]) => {
-      const share = Math.round((count / divisor) * 100);
+    const stats = Object.entries(familyCounts).map(([name, count]) => {
+      const share = totalSold > 0 ? Math.round((count / totalSold) * 100) : 0;
       return {
         name,
         count,
         share,
-        color: colorMap[name] || '#b38e44',
-        isCatalogFallback: !hasOrderData
+        color: colorMap[name] || '#b38e44'
       };
     });
+
+    return { categoryStats: stats, totalBottlesSold: totalSold };
   }, [orders, products]);
 
   // --- Real-time Top Performing Perfumes (Ranked by Bottles Sold & Revenue) ---
@@ -481,7 +458,7 @@ export const AnalyticsDashboard = () => {
                 Olfactory Family Demand
               </h3>
               <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>
-                {categoryStats[0]?.isCatalogFallback ? 'Catalog collection breakdown' : 'Actual volume purchased by fragrance family'}
+                Actual volume purchased by fragrance family
               </p>
             </div>
             {unpaidCount > 0 && (
@@ -491,21 +468,38 @@ export const AnalyticsDashboard = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {categoryStats.map((cat, i) => (
-              <div key={i}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                  <span style={{ fontWeight: 600, color: '#111827' }}>
-                    {cat.name} <span style={{ fontSize: '0.74rem', color: '#6b7280', fontWeight: 400 }}>({cat.count} {cat.isCatalogFallback ? 'creations' : 'sold'})</span>
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: cat.color, fontWeight: 700 }}>{cat.share}%</span>
+          {totalBottlesSold === 0 ? (
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '42px 18px', 
+              background: '#fcfcfc', 
+              borderRadius: '6px', 
+              border: '1px dashed #e5e7eb' 
+            }}>
+              <p style={{ fontSize: '0.9rem', color: '#374151', fontWeight: 600, margin: '0 0 6px' }}>
+                No fragrance sales recorded yet
+              </p>
+              <p style={{ fontSize: '0.8rem', color: '#9ca3af', margin: 0, maxWidth: '290px', marginInline: 'auto', lineHeight: 1.5 }}>
+                Fragrance demand breakdown will automatically populate here as customer orders are settled.
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {categoryStats.map((cat, i) => (
+                <div key={i}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
+                    <span style={{ fontWeight: 600, color: '#111827' }}>
+                      {cat.name} <span style={{ fontSize: '0.74rem', color: '#6b7280', fontWeight: 400 }}>({cat.count} sold)</span>
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-mono)', color: cat.color, fontWeight: 700 }}>{cat.share}%</span>
+                  </div>
+                  <div style={{ width: '100%', height: '6px', background: '#f3f4f6', borderRadius: '9999px', overflow: 'hidden' }}>
+                    <div style={{ width: `${cat.share}%`, height: '100%', background: cat.color, borderRadius: '9999px', transition: 'width 0.4s ease' }} />
+                  </div>
                 </div>
-                <div style={{ width: '100%', height: '6px', background: '#f3f4f6', borderRadius: '9999px', overflow: 'hidden' }}>
-                  <div style={{ width: `${cat.share}%`, height: '100%', background: cat.color, borderRadius: '9999px', transition: 'width 0.4s ease' }} />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
