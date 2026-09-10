@@ -133,6 +133,12 @@ export const CheckoutModal = () => {
         paymentMethod: formData.paymentMethod
       });
 
+      if (payResult && !payResult.success) {
+        showToast(payResult.error || 'Payment initialization failed. Please try again.', 'error');
+        setIsSubmitting(false);
+        return;
+      }
+
       if (payResult.redirectUrl) {
         window.location.href = payResult.redirectUrl;
         return;

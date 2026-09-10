@@ -61,20 +61,28 @@ export const initiatePayment = async ({ orderId, amount, customer, paymentMethod
           ? '/toyyib-api/index.php/api/createBill'
           : `${toyyibHost}/index.php/api/createBill`;
 
+        // Strictly enforce ToyyibPay character limits
+        const safeBillName = `Valenszo ${orderId}`.slice(0, 30); // Max 30 chars
+        const safeBillDesc = `Valenszo Order ${orderId}`.slice(0, 100); // Max 100 chars
+        const safeRef = String(orderId).slice(0, 20); // Max 20 chars
+        const safeTo = (customer.name || 'Valenszo Client').slice(0, 50); // Max 50 chars
+        const safeEmail = (customer.email || 'client@valenszo.com').slice(0, 50); // Max 50 chars
+        const safePhone = (customer.phone || '0123456789').replace(/\D/g, '').slice(0, 15) || '0123456789';
+
         const billData = new URLSearchParams({
           userSecretKey: toyyibKey,
           categoryCode: toyyibCategory,
-          billName: `Maison Valenszo Order ${orderId}`,
-          billDescription: `Luxury Fragrance Order ${orderId} for ${customer.name || 'Valenszo Client'}`,
+          billName: safeBillName,
+          billDescription: safeBillDesc,
           billPriceSetting: '1',
           billPayorInfo: '1',
           billAmount: Math.max(100, Math.round(amount * 100)).toString(), // In Cents (e.g. RM150.00 = 15000)
           billReturnUrl: `${window.location.origin}/checkout?orderId=${orderId}&status=success`,
           billCallbackUrl: `${window.location.origin}/api/payment-webhook`,
-          billExternalReferenceNo: orderId,
-          billTo: customer.name || 'Valenszo Client',
-          billEmail: customer.email || 'client@valenszo.com',
-          billPhone: customer.phone || '0123456789'
+          billExternalReferenceNo: safeRef,
+          billTo: safeTo,
+          billEmail: safeEmail,
+          billPhone: safePhone
         });
 
         try {
@@ -96,12 +104,22 @@ export const initiatePayment = async ({ orderId, amount, customer, paymentMethod
               environment: isSandbox ? 'sandbox' : 'production'
             };
           } else {
-            console.warn('[PaymentService] ToyyibPay did not return a valid BillCode:', data);
+            console.error('[PaymentService] ToyyibPay did not return a valid BillCode:', data);
+            const errorMsg = (Array.isArray(data) ? data[0]?.msg : data?.msg) || JSON.stringify(data);
+            return {
+              success: false,
+              error: `ToyyibPay Error: ${errorMsg}`
+            };
           }
         } catch (fetchErr) {
           console.error('[PaymentService] ToyyibPay API request failed:', fetchErr);
+          return {
+            success: false,
+            error: `ToyyibPay Connection Error: ${fetchErr.message}`
+          };
         }
       }
+
 
 
       // Development / Testing Mode Simulation
