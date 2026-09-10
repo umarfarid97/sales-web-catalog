@@ -6,7 +6,6 @@ import {
   Search, 
   Edit, 
   Trash2, 
-  RefreshCw, 
   X
 } from 'lucide-react';
 
@@ -14,7 +13,6 @@ export const ProductManager = () => {
   const { 
     products, 
     deleteProduct, 
-    restockProduct, 
     setIsProductFormOpen, 
     setEditingProduct
   } = useStore();
@@ -226,14 +224,6 @@ export const ProductManager = () => {
                         <div style={{ display: 'inline-flex', gap: '6px' }}>
                           <button
                             className="btn-icon"
-                            onClick={() => restockProduct(prod.id, 10)}
-                            title="Restock +10 bottles"
-                          >
-                            <RefreshCw size={13} color="#b38e44" />
-                          </button>
-
-                          <button
-                            className="btn-icon"
                             onClick={() => handleEdit(prod)}
                             title="Edit perfume"
                           >
@@ -299,13 +289,6 @@ export const ProductManager = () => {
                   </div>
 
                   <div className="admin-mobile-card-actions">
-                    <button
-                      className="admin-mobile-action-btn"
-                      onClick={() => restockProduct(prod.id, 10)}
-                    >
-                      <RefreshCw size={13} color="#b38e44" />
-                      <span>+10 Bottles</span>
-                    </button>
                     <button
                       className="admin-mobile-action-btn"
                       onClick={() => handleEdit(prod)}
