@@ -758,8 +758,20 @@ export const StoreProvider = ({ children }) => {
     const trackingNumber = '';
     const courierName = '';
 
+    // Extract & normalize complimentary samples and gifting data
+    const samples = customerOrOrderData?.samples || customerData?.samples || customerData?.selectedSamples || [];
+    const gifting = customerOrOrderData?.gifting || customerData?.gifting || {
+      giftBox: Boolean(customerData?.isGiftBox ?? customerData?.giftBox ?? true),
+      giftNote: (customerData?.giftNote || '').trim()
+    };
+
     const customerWithUser = {
       ...customerData,
+      samples,
+      selectedSamples: samples,
+      gifting,
+      isGiftBox: Boolean(gifting.giftBox),
+      giftNote: gifting.giftNote || '',
       userId: currentUser?.id || 'guest',
       userEmail: currentUser?.email || customerData.email || ''
     };
@@ -779,7 +791,9 @@ export const StoreProvider = ({ children }) => {
       placedAt: new Date().toISOString(),
       trackingNumber,
       courierName,
-      dispatchedAt: null
+      dispatchedAt: null,
+      samples,
+      gifting
     };
 
     // 1. Snapshot cart into sessionStorage so it is preserved if payment fails/cancels

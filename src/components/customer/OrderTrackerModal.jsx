@@ -539,6 +539,18 @@ export const OrderTrackerModal = () => {
                   </div>
                 ))}
 
+                {/* Included Complimentary Samples */}
+                {((Array.isArray(selectedOrder.samples) && selectedOrder.samples.length > 0) ||
+                  (Array.isArray(selectedOrder.customer?.samples) && selectedOrder.customer.samples.length > 0) ||
+                  (Array.isArray(selectedOrder.customer?.selectedSamples) && selectedOrder.customer.selectedSamples.length > 0)) && (
+                  <div style={{ marginTop: '12px', padding: '10px 12px', background: '#fafaf9', borderRadius: '4px', border: '1px solid #e7e5e4', fontSize: '0.8rem' }}>
+                    <span style={{ fontWeight: 700, color: '#926917' }}>Complimentary Samples Included: </span>
+                    <span style={{ color: '#44403c', fontWeight: 500 }}>
+                      {(selectedOrder.samples || selectedOrder.customer?.samples || selectedOrder.customer?.selectedSamples || []).join(', ')}
+                    </span>
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', marginTop: '10px', borderTop: '1px solid #e5e7eb', fontWeight: 800, fontSize: '0.95rem' }}>
                   <span>Total Settled</span>
                   <span style={{ fontFamily: 'var(--font-mono)' }}>RM {Number(selectedOrder.total || 0).toFixed(2)}</span>

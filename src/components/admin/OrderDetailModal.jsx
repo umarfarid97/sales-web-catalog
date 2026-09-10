@@ -67,6 +67,33 @@ export const OrderDetailModal = () => {
   if (!viewingOrder) return null;
 
   const order = viewingOrder;
+  const customerObj = order.customer || {};
+
+  // Resolve samples list safely from order root or customer object
+  const samplesList = Array.isArray(order.samples) && order.samples.length > 0
+    ? order.samples
+    : Array.isArray(customerObj.samples) && customerObj.samples.length > 0
+      ? customerObj.samples
+      : Array.isArray(customerObj.selectedSamples) && customerObj.selectedSamples.length > 0
+        ? customerObj.selectedSamples
+        : [];
+
+  // Resolve gift box packaging status
+  const hasGiftBox = Boolean(
+    order.gifting?.giftBox ??
+    customerObj.gifting?.giftBox ??
+    customerObj.isGiftBox ??
+    customerObj.giftPackaging ??
+    true
+  );
+
+  // Resolve handwritten gift card note
+  const giftNoteText = (
+    order.gifting?.giftNote ||
+    customerObj.gifting?.giftNote ||
+    customerObj.giftNote ||
+    ''
+  ).trim();
 
   const copyTracking = () => {
     if (order.trackingNumber) {
@@ -407,23 +434,25 @@ export const OrderDetailModal = () => {
                 </p>
               </div>
 
-              {/* Gift & Engraving Callout */}
-              {order.customer.giftPackaging && (
-                <div style={{ marginTop: '14px', padding: '12px 14px', background: '#fffbeb', borderRadius: '6px', border: '1px solid #fde68a', fontSize: '0.82rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b45309', fontWeight: 700, marginBottom: '4px' }}>
+              {/* Gift & Samples Callout */}
+              {hasGiftBox && (
+                <div style={{ marginTop: '14px', padding: '10px 12px', background: '#fffbeb', borderRadius: '6px', border: '1px solid #fde68a', fontSize: '0.82rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b45309', fontWeight: 700, marginBottom: '2px' }}>
                     <Gift size={13} />
-                    <span>Luxury Gift Presentation &amp; Calligraphy Card</span>
+                    <span>Signature Gift Box Packaging</span>
                   </div>
-                  {order.customer.giftNote && (
-                    <p style={{ color: '#92400e', fontStyle: 'italic' }}>&quot;{order.customer.giftNote}&quot;</p>
+                  {giftNoteText && (
+                    <p style={{ color: '#92400e', fontStyle: 'italic', margin: '4px 0 0 0', fontSize: '0.8rem', whiteSpace: 'pre-wrap' }}>
+                      Card Note: &quot;{giftNoteText}&quot;
+                    </p>
                   )}
                 </div>
               )}
 
               {/* Included Samples */}
-              {order.customer.samples && order.customer.samples.length > 0 && (
+              {samplesList.length > 0 && (
                 <div style={{ marginTop: '10px', fontSize: '0.8rem', color: '#4b5563' }}>
-                  <strong style={{ color: '#111827' }}>Included Samples:</strong> {order.customer.samples.join(', ')}
+                  <strong style={{ color: '#111827' }}>Included Samples:</strong> {samplesList.join(', ')}
                 </div>
               )}
             </div>
@@ -529,6 +558,84 @@ export const OrderDetailModal = () => {
               </div>
             </div>
 
+          </div>
+
+          {/* Fulfillment Packing & Gifting Checklist */}
+          <div style={{
+            background: '#faf5ea',
+            border: '1px solid #e7d8b8',
+            borderRadius: '8px',
+            padding: '18px 20px',
+            marginTop: '20px',
+            marginBottom: '24px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Gift size={18} color="#926917" />
+                <h4 style={{ margin: 0, fontSize: '0.96rem', fontWeight: 800, color: '#451a03', letterSpacing: '-0.01em' }}>
+                  Packing &amp; Gifting Checklist
+                </h4>
+              </div>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#926917', background: '#fef3c7', padding: '3px 10px', borderRadius: '999px', border: '1px solid #fde68a', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Fulfillment Instructions
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+              
+              {/* Box 1: Complimentary 2ml Samples to Pack */}
+              <div style={{ background: '#ffffff', border: '1px solid #f3e8d2', borderRadius: '6px', padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#926917', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <CheckCircle2 size={14} color="#059669" />
+                  <span>2x Free 2ml Samples to Pack</span>
+                </div>
+                {samplesList.length > 0 ? (
+                  <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '0.86rem', color: '#1f2937', lineHeight: '1.6' }}>
+                    {samplesList.map((sampleName, sIdx) => (
+                      <li key={sIdx} style={{ fontWeight: 600 }}>
+                        {sampleName}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#6b7280', fontStyle: 'italic' }}>
+                    Pack default complimentary discovery sample duo (2 vials)
+                  </p>
+                )}
+              </div>
+
+              {/* Box 2: Gift Presentation & Handwritten Card */}
+              <div style={{ background: '#ffffff', border: '1px solid #f3e8d2', borderRadius: '6px', padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#926917', fontWeight: 700, fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <Gift size={14} color="#926917" />
+                  <span>Packaging &amp; Handwritten Card</span>
+                </div>
+                
+                <div style={{ fontSize: '0.85rem', marginBottom: '6px', color: '#374151' }}>
+                  <strong>Gift Box Packaging:</strong>{' '}
+                  <span style={{ color: hasGiftBox ? '#059669' : '#6b7280', fontWeight: 600 }}>
+                    {hasGiftBox ? 'Yes, pack in Signature Magnetic Gift Box' : 'Standard Eco Mailer'}
+                  </span>
+                </div>
+
+                {giftNoteText ? (
+                  <div style={{ marginTop: '8px', padding: '10px 12px', background: '#fffbeb', borderRadius: '6px', border: '1px dashed #f59e0b' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.74rem', fontWeight: 700, color: '#b45309', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      <Feather size={12} />
+                      <span>Message to Handwrite on Card:</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.86rem', color: '#78350f', fontStyle: 'italic', whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>
+                      &ldquo;{giftNoteText}&rdquo;
+                    </p>
+                  </div>
+                ) : (
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#9ca3af', fontStyle: 'italic' }}>
+                    No handwritten card message requested.
+                  </p>
+                )}
+              </div>
+
+            </div>
           </div>
 
           {/* Items Table */}

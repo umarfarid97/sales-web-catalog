@@ -136,9 +136,23 @@ export const formatProductToDb = (product) => {
 // Helper: Format DB order row to JS camelCase
 export const formatOrderFromDb = (row) => {
   if (!row) return null;
+  const customer = row.customer || {};
+  const samples = row.samples || customer.samples || customer.selectedSamples || [];
+  const gifting = row.gifting || customer.gifting || {
+    giftBox: Boolean(customer.isGiftBox ?? customer.giftBox ?? true),
+    giftNote: customer.giftNote || ''
+  };
+
   return {
     id: row.id,
-    customer: row.customer || {},
+    customer: {
+      ...customer,
+      samples,
+      selectedSamples: samples,
+      gifting,
+      isGiftBox: Boolean(gifting.giftBox),
+      giftNote: gifting.giftNote || ''
+    },
     items: Array.isArray(row.items) ? row.items : [],
     subtotal: Number(row.subtotal),
     discount: Number(row.discount || 0),
@@ -150,19 +164,33 @@ export const formatOrderFromDb = (row) => {
     placedAt: row.placed_at || row.created_at,
     deliveredAt: row.delivered_at || null,
     trackingNumber: row.tracking_number || '',
-    courierName: row.courier_name || row.customer?.courierName || '',
-    dispatchedAt: row.dispatched_at || row.customer?.dispatchedAt || null
+    courierName: row.courier_name || customer.courierName || '',
+    dispatchedAt: row.dispatched_at || customer.dispatchedAt || null,
+    samples,
+    gifting
   };
 };
 
 // Helper: Format JS camelCase to DB order row
 export const formatOrderToDb = (order) => {
+  const customer = order.customer || {};
+  const samples = order.samples || customer.samples || customer.selectedSamples || [];
+  const gifting = order.gifting || customer.gifting || {
+    giftBox: Boolean(customer.isGiftBox ?? customer.giftBox ?? true),
+    giftNote: (customer.giftNote || '').trim()
+  };
+
   return {
     id: order.id,
     customer: {
-      ...(order.customer || {}),
-      courierName: order.courierName || order.customer?.courierName || '',
-      dispatchedAt: order.dispatchedAt || order.customer?.dispatchedAt || null
+      ...customer,
+      samples,
+      selectedSamples: samples,
+      gifting,
+      isGiftBox: Boolean(gifting.giftBox),
+      giftNote: gifting.giftNote || '',
+      courierName: order.courierName || customer.courierName || '',
+      dispatchedAt: order.dispatchedAt || customer.dispatchedAt || null
     },
     items: order.items,
     subtotal: order.subtotal,

@@ -97,13 +97,21 @@ export const CheckoutModal = () => {
     setIsSubmitting(true);
 
     try {
+      const chosenSamples = selectedSamples.map((id) => COMPLIMENTARY_SAMPLES.find((s) => s.id === id)?.name).filter(Boolean);
+      const chosenGifting = {
+        giftBox: isGiftBoxSelected,
+        giftNote: isGiftBoxSelected ? giftNote.trim() : ''
+      };
+
       const orderData = {
         customer: {
           ...formData,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
-          selectedSamples: selectedSamples.map((id) => COMPLIMENTARY_SAMPLES.find((s) => s.id === id)?.name),
+          samples: chosenSamples,
+          selectedSamples: chosenSamples,
+          gifting: chosenGifting,
           isGiftBox: isGiftBoxSelected,
-          giftNote: isGiftBoxSelected ? giftNote : null
+          giftNote: isGiftBoxSelected ? giftNote.trim() : ''
         },
         items: cart.map((item) => ({
           productId: item.id,
@@ -120,7 +128,9 @@ export const CheckoutModal = () => {
         discountCode: appliedPromo?.code || null,
         shipping: cartShipping,
         total: cartTotal,
-        paymentMethod: formData.paymentMethod
+        paymentMethod: formData.paymentMethod,
+        samples: chosenSamples,
+        gifting: chosenGifting
       };
 
       const newOrder = await createOrder(orderData, formData.paymentMethod, { silent: true });
