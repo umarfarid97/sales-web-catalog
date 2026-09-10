@@ -85,7 +85,7 @@ export const CheckoutPageContent = () => {
         title: 'Payment Verified via ToyyibPay FPX',
         message: `Your payment has been approved and confirmed. Reference Bill Code: ${statusResult.billCode || 'Confirmed'}.`
       });
-      showToast('Payment verified successfully! Your atelier order is confirmed.', 'success');
+      showToast('Payment verified successfully! Your order is confirmed.', 'success');
     } else if (statusResult.isFailed) {
       // --- SCENARIO B: PAYMENT CANCELLED OR DECLINED AT BANK ---
       cancelOrderAndRestoreStock(orderId);
@@ -156,7 +156,7 @@ export const CheckoutPageContent = () => {
     setSubmitStateText(
       formData.paymentMethod === 'fpx' 
         ? 'Connecting to ToyyibPay Secure FPX...' 
-        : 'Securing Atelier Order...'
+        : 'Processing Order...'
     );
 
     const orderData = {
@@ -171,7 +171,7 @@ export const CheckoutPageContent = () => {
         productId: item.id,
         name: item.name,
         sku: item.sku,
-        size: item.selectedSize || '100 ml Grand Flacon',
+        size: item.selectedSize || '100 ml Bottle',
         engraving: item.engravingText || null,
         price: Number(item.price) || 150,
         quantity: Number(item.quantity) || 1,
@@ -225,14 +225,14 @@ export const CheckoutPageContent = () => {
       if (formData.paymentMethod === 'bank-transfer') {
         setPlacedOrder(order);
         setStep(3);
-        showToast('Order received with Maison Concierge! Please proceed with bank transfer.', 'success');
+        showToast('Order received! Please proceed with bank transfer.', 'success');
         return;
       }
 
       // 3. Fallback
       setPlacedOrder(order);
       setStep(3);
-      showToast('Order received with Maison Atelier.', 'success');
+      showToast('Order received! We are preparing your order.', 'success');
     } catch (err) {
       console.error('Order creation error:', err);
       showToast('There was an issue finalizing your order. Please retry.', 'error');
@@ -253,7 +253,7 @@ export const CheckoutPageContent = () => {
             Your Shopping Bag is Empty
           </h2>
           <p style={{ color: '#786558', marginBottom: '2rem', lineHeight: 1.6, fontSize: '0.9rem' }}>
-            Select a signature extrait de parfum from our atelier to proceed to white-glove checkout.
+            Select a perfume from our collection to proceed to checkout.
           </p>
           <a
             href="/collection"
@@ -275,7 +275,7 @@ export const CheckoutPageContent = () => {
         {/* Header Title */}
         <div style={{ textAlign: 'center', marginBottom: 'clamp(1.75rem, 4vw, 2.75rem)' }}>
           <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', color: '#d97706', fontWeight: 800, background: '#fbf3e6', padding: '4px 12px', borderRadius: '9999px', border: '1px solid #f3d99d' }}>
-            Maison Valenszo Haute Parfumerie
+            Valenszo Perfumes
           </span>
           <h1 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', marginTop: '0.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#231710' }}>
             {step === 1 && 'The Art of Gifting & Samples'}
@@ -302,10 +302,10 @@ export const CheckoutPageContent = () => {
           <div className="checkout-step-grid">
               <div>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                  Complimentary Atelier Discovery Sprays
+                  Free Discovery Samples
                 </h3>
                 <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
-                  Select up to 2 complimentary 2ml deluxe extrait vials with your order.
+                  Select up to 2 free 2ml sample sprays with your order.
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
@@ -340,10 +340,10 @@ export const CheckoutPageContent = () => {
                 </div>
 
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                  The Maison Valenszo Gift Experience
+                  Gift Box & Personalized Note
                 </h3>
                 <p style={{ color: '#6b7280', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
-                  All orders arrive in our signature midnight packaging with ribbon and wax seal.
+                  All orders arrive in our signature gift packaging with ribbon.
                 </p>
 
                 <div style={{ border: '1px solid #e5e7eb', borderRadius: '6px', padding: '1.25rem', background: '#faf9f6' }}>
@@ -400,7 +400,7 @@ export const CheckoutPageContent = () => {
               {/* Order Summary Sidebar */}
               <div className="checkout-summary-sidebar" style={{ background: '#faf9f6', border: '1px solid #ebd9c8', borderRadius: '16px', padding: 'clamp(1.25rem, 3vw, 1.75rem)' }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '1rem', borderBottom: '1px solid #ebd9c8', paddingBottom: '0.5rem' }}>
-                  Order Summary ({cart.length} creations)
+                  Order Summary ({cart.length} {cart.length === 1 ? 'item' : 'items'})
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                   {cart.map((item, idx) => (
@@ -421,8 +421,8 @@ export const CheckoutPageContent = () => {
                     <span>RM{cartSubtotal.toFixed(2)}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>White-Glove Shipping</span>
-                    <span>{cartShipping === 0 ? 'COMPLIMENTARY' : `RM${cartShipping.toFixed(2)}`}</span>
+                    <span>Express Delivery</span>
+                    <span>{cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, borderTop: '1px solid #ebd9c8', paddingTop: '8px' }}>
                     <span>Total</span>
@@ -573,7 +573,7 @@ export const CheckoutPageContent = () => {
                     boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
                   }}
                 >
-                  {isSubmitting ? (submitStateText || 'Securing Atelier Order...') : `Authorize & Place Order — RM${cartTotal.toFixed(2)}`}
+                  {isSubmitting ? (submitStateText || 'Processing Order...') : `Authorize & Place Order — RM${cartTotal.toFixed(2)}`}
                 </button>
 
               </div>
@@ -584,7 +584,7 @@ export const CheckoutPageContent = () => {
                   Order Total
                 </h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
-                  <span>Creations Subtotal</span>
+                  <span>Subtotal</span>
                   <span style={{ fontWeight: 600 }}>RM{cartSubtotal.toFixed(2)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
@@ -613,7 +613,7 @@ export const CheckoutPageContent = () => {
                 Order Confirmed
               </h2>
               <p style={{ color: '#6b7280', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
-                Thank you for your patronage. Your atelier creation has entered bespoke cold-maceration inspection.
+                Thank you for your purchase. Your perfume order has been received and is being prepared for dispatch.
               </p>
               
               {paymentNotice && (
@@ -674,7 +674,7 @@ export const CheckoutPageContent = () => {
                 <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: '6px', padding: '1.25rem', marginBottom: '2rem', textAlign: 'left' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', color: '#854d0e', fontWeight: 700 }}>
                     <Landmark size={18} />
-                    <span>Maison Valenszo Bank Transfer Information</span>
+                    <span>Valenszo Bank Transfer Details</span>
                   </div>
                   <div style={{ fontSize: '0.85rem', color: '#713f12', lineHeight: 1.6 }}>
                     <div><strong>Bank:</strong> {MAISON_BANK_DETAILS.bankName}</div>
@@ -693,7 +693,7 @@ export const CheckoutPageContent = () => {
                 className="btn-pill btn-pill-espresso"
                 style={{ display: 'inline-block', padding: '14px 28px', textDecoration: 'none', fontWeight: 800, letterSpacing: '0.04em' }}
               >
-                Return to Boutique Storefront
+                Return to Store
               </a>
             </div>
           )}

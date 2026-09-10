@@ -109,7 +109,7 @@ export const CheckoutModal = () => {
           productId: item.id,
           name: item.name,
           sku: item.sku,
-          size: item.selectedSize || '100 ml Grand Flacon',
+          size: item.selectedSize || '100 ml Bottle',
           engraving: item.engravingText || null,
           price: Number(item.price) || 150,
           quantity: Number(item.quantity) || 1,
@@ -154,13 +154,13 @@ export const CheckoutModal = () => {
       if (formData.paymentMethod === 'bank-transfer') {
         setPlacedOrder(newOrder);
         setStep(3);
-        showToast('Order received with Maison Concierge! Please proceed with bank transfer.', 'success');
+        showToast('Order received! Please proceed with bank transfer.', 'success');
         return;
       }
 
       setPlacedOrder(newOrder);
       setStep(3);
-      showToast('Order received with Maison Atelier.', 'success');
+      showToast('Order received! We are preparing your order.', 'success');
 
     } catch (err) {
       console.error('Order creation failed:', err);
@@ -199,10 +199,10 @@ export const CheckoutModal = () => {
         {/* Modal Header */}
         <div style={{ padding: '24px 28px', borderBottom: '1px solid #e5e7eb', textAlign: 'center' }}>
           <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: '#926917', fontWeight: 700 }}>
-            Maison Valenszo &bull; Atelier Checkout
+            Valenszo &bull; Checkout
           </span>
           <h3 className="couture-title" style={{ fontSize: '1.4rem', margin: '4px 0 0', color: '#000000', fontWeight: 800 }}>
-            {step === 1 && 'The Art of Gifting & Samples'}
+            {step === 1 && 'Complimentary Samples & Gift Box'}
             {step === 2 && 'Delivery Details & Secure Payment'}
             {step === 3 && 'Order Confirmed'}
           </h3>
@@ -233,11 +233,11 @@ export const CheckoutModal = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <Sparkles size={16} color="#926917" />
                   <h4 className="couture-sub" style={{ color: '#000000', margin: 0, fontWeight: 700 }}>
-                    Select 2 Complimentary Deluxe Samples
+                    Select 2 Free Deluxe Samples
                   </h4>
                 </div>
                 <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0 0 16px' }}>
-                  Each Maison Valenszo creation order includes two complimentary 2ml extrait sprays of your choice.
+                  Each Valenszo perfume order includes two free 2ml sample sprays of your choice.
                 </p>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
@@ -289,7 +289,7 @@ export const CheckoutModal = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                       <Gift size={16} color="#926917" />
                       <span style={{ fontWeight: 700, fontSize: '0.92rem', color: '#000000' }}>
-                        Signature Maison Valenszo Gift Box
+                        Signature Valenszo Gift Box
                       </span>
                     </div>
                     <p style={{ fontSize: '0.82rem', color: '#6b7280', margin: 0 }}>
@@ -425,7 +425,7 @@ export const CheckoutModal = () => {
                   {/* Summary */}
                   <div style={{ padding: '16px', background: '#f3f4f6', borderRadius: '4px', border: '1px solid #e5e7eb' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#4b5563', marginBottom: '6px' }}>
-                      <span>Subtotal ({cart.length} flacons)</span>
+                      <span>Subtotal ({cart.length} {cart.length === 1 ? 'bottle' : 'bottles'})</span>
                       <span style={{ color: '#000000', fontWeight: 600 }}>RM {cartSubtotal.toFixed(2)}</span>
                     </div>
                     {cartDiscountAmount > 0 && (
@@ -479,13 +479,13 @@ export const CheckoutModal = () => {
               </div>
 
               <div className="couture-sub" style={{ color: '#926917', marginBottom: '6px', fontWeight: 600 }}>
-                Votre Commande est Confirmée
+                Your Order is Confirmed
               </div>
               <h2 className="couture-title" style={{ fontSize: '1.8rem', color: '#000000', fontWeight: 800, marginBottom: '12px' }}>
                 Thank You, {formData.firstName}
               </h2>
               <p style={{ color: '#4b5563', fontSize: '0.92rem', maxWidth: '580px', margin: '0 auto 24px' }}>
-                Your Valenszo fragrance order has been transmitted to our Atelier. Your parcel is being carefully prepared in our signature luxury presentation box.
+                Your Valenszo perfume order has been received. Your parcel is being carefully prepared in our signature gift box.
               </p>
 
               {/* Order Tracking Card */}
@@ -521,7 +521,7 @@ export const CheckoutModal = () => {
                 <div style={{ background: '#fefce8', border: '1px solid #fef08a', borderRadius: '6px', padding: '18px', maxWidth: '520px', margin: '0 auto 28px', textAlign: 'left' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', color: '#854d0e', fontWeight: 700, fontSize: '0.85rem' }}>
                     <Landmark size={18} />
-                    <span>Maison Valenszo Bank Transfer Details</span>
+                    <span>Valenszo Bank Transfer Details</span>
                   </div>
                   <div style={{ fontSize: '0.82rem', color: '#713f12', lineHeight: 1.6 }}>
                     <div><strong>Bank:</strong> {MAISON_BANK_DETAILS.bankName}</div>

@@ -99,8 +99,8 @@ export const ProductFormModal = () => {
         baseNotes: formData.baseNotes.split(',').map((s) => s.trim()).filter(Boolean)
       },
       sizes: [
-        { label: '50 ml Classic Flacon', ml: 50, priceMultiplier: 0.72 },
-        { label: '100 ml Grand Flacon', ml: 100, priceMultiplier: 1.0 },
+        { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.72 },
+        { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0 },
         { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
       ],
       images: [formData.imageUrl]
@@ -133,10 +133,10 @@ export const ProductFormModal = () => {
 
         <div style={{ padding: 'clamp(18px, 4vw, 28px)', borderBottom: '1px solid #e5e7eb' }}>
           <h2 className="font-serif-title" style={{ fontSize: 'clamp(1.2rem, 4vw, 1.4rem)', fontWeight: 700, color: '#0b0c10' }}>
-            {editingProduct ? 'Edit Fragrance Creation' : 'Formulate New Fragrance Creation'}
+            {editingProduct ? 'Edit Perfume' : 'Add New Perfume'}
           </h2>
           <p style={{ fontSize: '0.82rem', color: '#6b7280', marginTop: '4px' }}>
-            Configure olfactory pyramid notes, flacon inventory, and perfume specifications.
+            Configure fragrance notes, inventory, and perfume specifications.
           </p>
         </div>
 
@@ -209,7 +209,7 @@ export const ProductFormModal = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="admin-form-label">Flacons in Stock *</label>
+                  <label className="admin-form-label">Bottles in Stock *</label>
                   <input
                     type="number"
                     required
@@ -232,7 +232,7 @@ export const ProductFormModal = () => {
               </div>
 
               <div className="form-group">
-                <label className="admin-form-label">Poetic Description</label>
+                <label className="admin-form-label">Description</label>
                 <textarea
                   rows={3}
                   value={formData.description}
@@ -284,7 +284,7 @@ export const ProductFormModal = () => {
               </div>
 
               <div className="form-group">
-                <label className="admin-form-label">Flacon Image URL</label>
+                <label className="admin-form-label">Product Image URL</label>
                 <input
                   type="url"
                   value={formData.imageUrl}
@@ -322,7 +322,7 @@ export const ProductFormModal = () => {
                   onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                   style={{ accentColor: '#000000', width: '16px', height: '16px' }}
                 />
-                <span>Feature on Boutique Hero Showcase</span>
+                <span>Feature on Home Page Showcase</span>
               </label>
             </div>
 
@@ -338,7 +338,7 @@ export const ProductFormModal = () => {
             </button>
             <button type="submit" className="admin-btn-primary">
               <Save size={16} />
-              <span>{editingProduct ? 'Update Creation' : 'Publish Fragrance'}</span>
+              <span>{editingProduct ? 'Update Perfume' : 'Save Perfume'}</span>
             </button>
           </div>
 

@@ -106,7 +106,7 @@ export const Navbar = () => {
           lineHeight: 1.4
         }}>
           <span>
-            Receive a Complimentary Maison Valenszo Deluxe Sample with any order over RM200 &bull; Free Express Delivery Across Malaysia
+            Receive a Free Valenszo Deluxe Sample with any order over RM200 &bull; Free Express Delivery Across Malaysia
           </span>
           <button
             onClick={() => setShowAnnouncement(false)}
@@ -154,8 +154,8 @@ export const Navbar = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', zIndex: 2 }}>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Open Boutique Menu"
-              title="Boutique Menu"
+              aria-label="Open Menu"
+              title="Menu"
               style={{
                 background: 'transparent',
                 border: 'none',
@@ -212,7 +212,7 @@ export const Navbar = () => {
             }}
           >
             <a href="/collection" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
-              All Creations
+              All Perfumes
             </a>
             <a href="/men" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
               Men
@@ -244,7 +244,7 @@ export const Navbar = () => {
                   }
                 }}
                 aria-label="Track Orders & Account"
-                title={isAuthenticated ? `Maison Account: ${currentUser.name}` : "Maison Client Sign In"}
+                title={isAuthenticated ? `Account: ${currentUser.name}` : "Customer Sign In"}
                 style={{
                   background: 'transparent',
                   border: 'none',
@@ -292,7 +292,7 @@ export const Navbar = () => {
                 >
                   <div style={{ padding: '4px 16px 10px', borderBottom: '1px solid #f3f4f6' }}>
                     <div style={{ fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
-                      Maison Client
+                      Customer Account
                     </div>
                     <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#000000', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {currentUser.name}
@@ -302,7 +302,7 @@ export const Navbar = () => {
                     </div>
                     {isAdmin && (
                       <span style={{ display: 'inline-block', marginTop: '6px', padding: '2px 6px', background: '#fef3c7', color: '#92400e', borderRadius: '3px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Atelier Administrator
+                        Store Admin
                       </span>
                     )}
                   </div>
@@ -354,7 +354,7 @@ export const Navbar = () => {
                         }}
                       >
                         <Shield size={15} color="#926917" />
-                        <span>{role === 'admin' ? 'Return to Boutique' : 'Atelier Portal'}</span>
+                        <span>{role === 'admin' ? 'Back to Store' : 'Admin Portal'}</span>
                       </button>
                     )}
                   </div>
@@ -364,7 +364,7 @@ export const Navbar = () => {
                       onClick={() => {
                         logout();
                         setIsAccountMenuOpen(false);
-                        showToast('Signed out of Maison Valenszo.', 'info');
+                        showToast('Signed out successfully.', 'info');
                       }}
                       style={{
                         width: '100%',
@@ -521,7 +521,7 @@ export const Navbar = () => {
                       marginTop: '3px',
                       display: 'block'
                     }}>
-                      HAUTE PARFUMERIE
+                      LUXURY PERFUMES
                     </span>
                   </div>
                 </div>
@@ -634,7 +634,7 @@ export const Navbar = () => {
                     >
                       <div>
                         <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Men&apos;s Collection</div>
-                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{menCount} Fragrance Creations</div>
+                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{menCount} Men&apos;s Perfumes</div>
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Men' ? '#000000' : '#9ca3af'} />
                     </a>
@@ -660,7 +660,7 @@ export const Navbar = () => {
                     >
                       <div>
                         <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Women&apos;s Collection</div>
-                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{womenCount} Fragrance Creations</div>
+                        <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '2px' }}>{womenCount} Women&apos;s Perfumes</div>
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
                     </a>
@@ -701,7 +701,7 @@ export const Navbar = () => {
                   {isAuthenticated ? (
                     <div style={{ padding: '12px 14px', background: '#f9fafb', borderRadius: '4px', border: '1px solid #e5e7eb', marginBottom: '14px' }}>
                       <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
-                        {isAdmin ? '👑 Atelier Administrator' : '✨ Privilege Member'}
+                        {isAdmin ? '👑 Store Admin' : '✨ Member'}
                       </div>
                       <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#000000', marginTop: '2px' }}>
                         {currentUser.name}
@@ -713,7 +713,7 @@ export const Navbar = () => {
                         onClick={() => {
                           logout();
                           setIsMenuOpen(false);
-                          showToast('Signed out of Maison Valenszo.', 'info');
+                          showToast('Signed out successfully.', 'info');
                         }}
                         style={{
                           marginTop: '8px',
@@ -733,10 +733,10 @@ export const Navbar = () => {
                   ) : (
                     <div style={{ padding: '12px 14px', background: '#fafaf9', borderRadius: '4px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
                       <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#000000', marginBottom: '2px' }}>
-                        Maison Valenszo Privilege
+                        Valenszo Member Account
                       </div>
                       <div style={{ fontSize: '0.74rem', color: '#6b7280', marginBottom: '8px' }}>
-                        Sign in or register to track deliveries and access exclusive privileges.
+                        Sign in or register to track your orders and enjoy member benefits.
                       </div>
                       <button
                         onClick={() => {
@@ -757,7 +757,7 @@ export const Navbar = () => {
                           cursor: 'pointer'
                         }}
                       >
-                        Client Sign In / Register
+                        Sign In / Register
                       </button>
                     </div>
                   )}
@@ -771,7 +771,7 @@ export const Navbar = () => {
                     marginBottom: '10px',
                     fontFamily: 'var(--font-couture)'
                   }}>
-                    Maison Services
+                    Customer Services
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -850,7 +850,7 @@ export const Navbar = () => {
                           cursor: 'pointer'
                         }}
                       >
-                        Boutique
+                        Store
                       </button>
                       <button
                         onClick={() => { setRole('admin'); setIsMenuOpen(false); }}
@@ -866,7 +866,7 @@ export const Navbar = () => {
                           cursor: 'pointer'
                         }}
                       >
-                        Atelier Admin
+                        Admin
                       </button>
                     </div>
 

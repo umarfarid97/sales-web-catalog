@@ -104,7 +104,7 @@ export const ProductCatalog = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
             <Clock size={18} color="#d97706" strokeWidth={2.4} />
             <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              12h+ Extra Sillage
+              12h+ Long Lasting
             </span>
           </div>
           <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center', textDecoration: 'none', color: '#2b1810' }}>
@@ -164,7 +164,7 @@ export const ProductCatalog = () => {
                 letterSpacing: '-0.02em'
               }}
             >
-              Newly Crafted Creations
+              New Releases
             </h2>
             <p 
               style={{ 
@@ -175,7 +175,7 @@ export const ProductCatalog = () => {
                 lineHeight: 1.5 
               }}
             >
-              Hand-blended artisanal extraits formulated with 35% oil concentration for captivating, all-day presence.
+              Premium long-lasting perfumes formulated with 35% oil concentration for all-day scent.
             </p>
           </div>
 
@@ -304,7 +304,7 @@ export const ProductCatalog = () => {
                     marginBottom: '8px'
                   }}
                 >
-                  POUR HOMME COUTURE
+                  MEN'S PERFUMES
                 </span>
                 <h3 
                   style={{ 
@@ -400,7 +400,7 @@ export const ProductCatalog = () => {
                       marginBottom: '6px'
                     }}
                   >
-                    POUR FEMME
+                    WOMEN'S PERFUMES
                   </span>
                   <h3 
                     style={{ 

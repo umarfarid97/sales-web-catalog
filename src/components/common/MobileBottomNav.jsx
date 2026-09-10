@@ -15,7 +15,7 @@ export const MobileBottomNav = () => {
 
   const handleAccountClick = () => {
     if (!isAuthenticated) {
-      openAuthModal({ mode: 'signin', title: 'Maison Client Account' });
+      openAuthModal({ mode: 'signin', title: 'Customer Account' });
     } else {
       setIsOrderTrackerOpen(true);
     }

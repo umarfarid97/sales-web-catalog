@@ -16,7 +16,7 @@ const CURATED_FEATURED_SLIDES = [
     title: 'VALENSZO SAUVAGE ABSOLU',
     inspiration: 'Inspired by Sauvage Elixir',
     tier: 'Tier S Launch Icon',
-    category: 'Pour Homme',
+    category: 'Men',
     concentration: 'Extrait de Parfum (30%)',
     olfactoryFamily: 'Fresh / Spicy / Woody Amber',
     price: 45,
@@ -30,7 +30,7 @@ const CURATED_FEATURED_SLIDES = [
       'https://images.unsplash.com/photo-1597714026733-4700d1c9fa9c?w=800&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80'
     ],
-    imageLabels: ['Flagship Flacon', 'Noir Twilight', 'Calabrian Bergamot', 'Ambergris & Woods']
+    imageLabels: ['Flagship Bottle', 'Noir Twilight', 'Calabrian Bergamot', 'Ambergris & Woods']
   },
   {
     id: 'vlz-women-172',
@@ -39,13 +39,13 @@ const CURATED_FEATURED_SLIDES = [
     title: 'VALENSZO DELINA IMPÉRIALE',
     inspiration: 'Inspired by Parfums de Marly Delina',
     tier: 'Tier S Launch Icon',
-    category: 'Pour Femme',
+    category: 'Women',
     concentration: 'Extrait de Parfum (30%)',
     olfactoryFamily: 'Fruity-Floral / Damask Rose',
     price: 45,
     originalPrice: 60,
     status: 'Now Available',
-    badge: 'Boutique Favorite',
+    badge: 'Customer Favorite',
     tagline: 'Sensual Turkish rose enveloped in velvety lychee and incandescent vanilla.',
     images: [
       'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=1200&auto=format&fit=crop&q=80',
@@ -76,7 +76,7 @@ const CURATED_FEATURED_SLIDES = [
       'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80'
     ],
-    imageLabels: ['Crystal Flacon', 'Liquid Gold', 'Warm Ambergris', 'Atelier Craft']
+    imageLabels: ['Crystal Bottle', 'Liquid Gold', 'Warm Ambergris', 'Master Craft']
   },
   {
     id: 'vlz-men-12',
@@ -85,7 +85,7 @@ const CURATED_FEATURED_SLIDES = [
     title: 'VALENSZO AVENTUS MILLÉSIME',
     inspiration: 'Inspired by Creed Aventus',
     tier: 'Tier S Launch Icon',
-    category: 'Pour Homme',
+    category: 'Men',
     concentration: 'Extrait de Parfum (30%)',
     olfactoryFamily: 'Smoky Birch / Fruity Chypre',
     price: 45,
@@ -99,7 +99,7 @@ const CURATED_FEATURED_SLIDES = [
       'https://images.unsplash.com/photo-1597714026733-4700d1c9fa9c?w=800&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80'
     ],
-    imageLabels: ['Heritage Flacon', 'Smoky Birch', 'Italian Bergamot', 'Sensual Oakmoss']
+    imageLabels: ['Heritage Bottle', 'Smoky Birch', 'Italian Bergamot', 'Sensual Oakmoss']
   },
   {
     id: 'vlz-women-227',
@@ -379,7 +379,7 @@ export const HeroBanner = () => {
               margin: 0,
               fontWeight: 500
             }}>
-              Handcrafted haute perfumerie &bull; Extrait de Parfum (30% pure oil concentration)
+              Luxury Long-Lasting Perfume &bull; 30% Pure Oil Concentration
             </p>
           </div>
 
@@ -395,7 +395,7 @@ export const HeroBanner = () => {
               borderRadius: '9999px',
               border: '1px solid rgba(245, 158, 11, 0.4)'
             }}>
-              Maison Icons
+              Featured Perfumes
             </span>
             <span style={{ fontSize: '0.76rem', color: '#b8aba0', fontWeight: 600 }}>
               {currentSlideIndex + 1} / {slides.length}
@@ -410,7 +410,7 @@ export const HeroBanner = () => {
           <button
             type="button"
             onClick={handlePrev}
-            aria-label="Previous Featured Creation"
+            aria-label="Previous Featured Perfume"
             className="hero-nav-arrow hero-nav-arrow-left"
             style={{
               position: 'absolute',
@@ -446,7 +446,7 @@ export const HeroBanner = () => {
           <button
             type="button"
             onClick={handleNext}
-            aria-label="Next Featured Creation"
+            aria-label="Next Featured Perfume"
             className="hero-nav-arrow hero-nav-arrow-right"
             style={{
               position: 'absolute',
@@ -708,7 +708,7 @@ export const HeroBanner = () => {
                           transition: 'transform 0.15s ease, background 0.15s ease'
                         }}
                       >
-                        <span>Shop Creation</span>
+                        <span>Shop Perfume</span>
                         <ArrowRight size={16} strokeWidth={2.4} />
                       </div>
                     </div>

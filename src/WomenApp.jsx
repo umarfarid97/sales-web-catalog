@@ -439,7 +439,7 @@ export const WomenCollectionContent = () => {
               <input
                 type="text"
                 autoFocus
-                placeholder="Search women's creations by name, brand inspiration, notes (e.g. Delina, Rose, Vanilla)..."
+                placeholder="Search women's perfumes by name, brand inspiration, notes (e.g. Delina, Rose, Vanilla)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -506,7 +506,7 @@ export const WomenCollectionContent = () => {
 
           {filteredProducts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
-              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No creations match your selected filters.</p>
+              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No perfumes match your selected filters.</p>
               <button
                 type="button"
                 className="dior-btn"

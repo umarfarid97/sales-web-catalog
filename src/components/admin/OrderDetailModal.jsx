@@ -187,7 +187,7 @@ export const OrderDetailModal = () => {
                     style={{ padding: '8px 14px', fontSize: '0.82rem' }}
                     onClick={() => handleStatusChange('Processing')}
                   >
-                    Start Atelier Packing
+                    Start Packing Order
                   </button>
                   <button 
                     className="admin-btn-primary"
@@ -524,8 +524,8 @@ export const OrderDetailModal = () => {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Flacon Creation</th>
-                  <th>Flacon Size</th>
+                  <th>Product Name</th>
+                  <th>Bottle Size</th>
                   <th>Custom Engraving</th>
                   <th>Quantity</th>
                   <th>Unit Price</th>
@@ -541,7 +541,7 @@ export const OrderDetailModal = () => {
                         <span className="font-serif-title" style={{ fontWeight: 700, color: '#111827' }}>{item.name}</span>
                       </div>
                     </td>
-                    <td style={{ color: '#4b5563' }}>{item.size || '100 ml Grand Flacon'}</td>
+                    <td style={{ color: '#4b5563' }}>{item.size || '100 ml Bottle'}</td>
                     <td>
                       {item.engraving ? (
                         <span style={{ color: '#b45309', fontStyle: 'italic', fontSize: '0.8rem' }}>

@@ -31,10 +31,10 @@ export const formatProductFromDb = (row) => {
   }
 
   // Safe gender resolution
-  const resolvedCategory = row.category || 'Pour Homme';
+  const resolvedCategory = row.category || 'Men';
   let resolvedGender = specs.gender;
   if (!resolvedGender) {
-    if (resolvedCategory === 'Pour Femme' || (row.sku && row.sku.startsWith('VLZ-W')) || (row.id && (row.id.startsWith('vlz-women') || row.id.startsWith('vlz-wom')))) {
+    if (resolvedCategory === 'Pour Femme' || resolvedCategory === 'Women' || (row.sku && row.sku.startsWith('VLZ-W')) || (row.id && (row.id.startsWith('vlz-women') || row.id.startsWith('vlz-wom')))) {
       resolvedGender = 'Women';
     } else {
       resolvedGender = 'Men';
@@ -51,7 +51,7 @@ export const formatProductFromDb = (row) => {
     id: String(row.id || `vlz-gen-${Date.now()}`),
     sku: String(row.sku || ''),
     catalogNo: parsedCatalogNo,
-    name: String(row.name || 'Maison Fragrance'),
+    name: String(row.name || 'Perfume'),
     brandInspiration: String(specs.brandInspiration || ''),
     originalListing: String(specs.originalListing || ''),
     gender: resolvedGender,
@@ -65,9 +65,9 @@ export const formatProductFromDb = (row) => {
     price: safePrice,
     originalPrice: safeOriginalPrice,
     discountPercent: Number(row.discount_percent || 0),
-    stock: Number(row.stock || 0),
-    rating: Number(row.rating || 5.0),
-    reviewsCount: Number(row.reviews_count || 124),
+    stock: parseInt(row.stock, 10) || 0,
+    rating: parseFloat(row.rating) || 4.95,
+    reviewsCount: parseInt(row.reviews_count, 10) || 12,
     badge: String(row.badge || ''),
     isFeatured: Boolean(row.is_featured),
     concentration: String(specs.concentration || 'Extrait de Parfum (30%)'),
@@ -82,9 +82,9 @@ export const formatProductFromDb = (row) => {
       baseNotes: Array.isArray(specs.pyramid?.baseNotes) ? specs.pyramid.baseNotes : ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
     },
     sizes: Array.isArray(specs.sizes) && specs.sizes.length > 0 ? specs.sizes : [
-      { label: '30 ml Travel Atomizer', ml: 30, priceMultiplier: 0.55, isRefillable: true },
-      { label: '50 ml Haute Flacon', ml: 50, priceMultiplier: 0.78, isRefillable: true },
-      { label: '100 ml Collector Flacon', ml: 100, priceMultiplier: 1.0, isRefillable: true }
+      { label: '30 ml Travel Spray', ml: 30, priceMultiplier: 0.55, isRefillable: true },
+      { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.78, isRefillable: true },
+      { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0, isRefillable: true }
     ],
     features: Array.isArray(row.features) ? row.features : [],
     specs,

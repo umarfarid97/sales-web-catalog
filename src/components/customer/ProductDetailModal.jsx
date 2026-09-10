@@ -125,7 +125,7 @@ export const ProductDetailModal = () => {
                   }}
                 >
                   <RefreshCw size={12} />
-                  <span>Refillable Flacon</span>
+                  <span>Refillable Bottle</span>
                 </div>
               )}
             </div>
@@ -283,7 +283,7 @@ export const ProductDetailModal = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', fontWeight: 700, color: '#926917', fontFamily: 'var(--font-couture)', letterSpacing: '0.08em' }}>
                   <Feather size={14} />
-                  <span>Complimentary Flacon Engraving</span>
+                  <span>Free Bottle Engraving</span>
                 </div>
                 <button
                   type="button"

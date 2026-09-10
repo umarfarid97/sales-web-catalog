@@ -67,7 +67,7 @@ export const OrderTrackerModal = () => {
         setSelectedOrder(dbMatch);
       } else {
         setSelectedOrder(null);
-        setSearchError(`No dispatch record found in the Maison database for "${searchId.trim()}".`);
+        setSearchError(`No order record found for "${searchId.trim()}".`);
       }
     } catch (err) {
       console.error('Order search error:', err);
@@ -143,7 +143,7 @@ export const OrderTrackerModal = () => {
             </div>
             <div>
               <div style={{ fontSize: '0.68rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
-                Maison Valenszo Logistics
+                Valenszo Delivery
               </div>
               <h3 style={{ fontFamily: 'var(--font-couture, serif)', fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>
                 Express Delivery Tracker
@@ -336,7 +336,7 @@ export const OrderTrackerModal = () => {
 
               {/* Progress Steps Timeline */}
               <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', margin: '28px 0 24px' }}>
-                {['Pending', 'Atelier Packing', 'In Transit', 'Delivered'].map((stepName, i) => {
+                {['Pending', 'Packing Order', 'In Transit', 'Delivered'].map((stepName, i) => {
                   const stepNumber = i + 1;
                   const isDone = currentStep >= stepNumber;
                   return (
@@ -400,7 +400,7 @@ export const OrderTrackerModal = () => {
                           Assigned Courier Partner
                         </div>
                         <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111827' }}>
-                          {selectedOrder.courierName || 'White-Glove Express Courier'}
+                          {selectedOrder.courierName || 'Express Courier'}
                         </div>
                       </div>
                     </div>
@@ -492,11 +492,11 @@ export const OrderTrackerModal = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                     <Clock size={16} color="#b38e44" />
                     <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1f2937' }}>
-                      Courier Tracking: Awaiting Atelier Dispatch
+                      Courier Tracking: Preparing for Dispatch
                     </span>
                   </div>
                   <p style={{ margin: 0, fontSize: '0.82rem', color: '#4b5563', lineHeight: 1.5 }}>
-                    Your luxury creation is being carefully prepared and packaged by our atelier. The courier name and tracking consignment number will be registered here as soon as our fulfillment team completes the dispatch process.
+                    Your perfume order is being carefully prepared and packaged. The courier name and tracking consignment number will be updated here once dispatched.
                   </p>
                 </div>
               )}
@@ -513,10 +513,10 @@ export const OrderTrackerModal = () => {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#000000', marginBottom: '6px' }}>
                   <MapPin size={15} color="#b38e44" />
-                  <span>White-Glove Express Destination</span>
+                  <span>Delivery Address</span>
                 </div>
-                <div>{selectedOrder.customer?.name || (selectedOrder.customer?.firstName ? `${selectedOrder.customer.firstName} ${selectedOrder.customer.lastName || ''}` : 'Maison Client')}</div>
-                <div>{selectedOrder.customer?.address || 'Kuala Lumpur Central Atelier'}</div>
+                <div>{selectedOrder.customer?.name || (selectedOrder.customer?.firstName ? `${selectedOrder.customer.firstName} ${selectedOrder.customer.lastName || ''}` : 'Customer')}</div>
+                <div>{selectedOrder.customer?.address || 'Kuala Lumpur'}</div>
                 <div>{selectedOrder.customer?.city || 'Kuala Lumpur'}, {selectedOrder.customer?.postalCode || selectedOrder.customer?.zip || '50250'}, {selectedOrder.customer?.country || 'Malaysia'}</div>
                 <div style={{ color: '#6b7280', marginTop: '4px', fontSize: '0.78rem' }}>
                   Contact: {selectedOrder.customer?.phone || selectedOrder.customer?.email}
@@ -526,7 +526,7 @@ export const OrderTrackerModal = () => {
               {/* Items in this Order */}
               <div style={{ paddingTop: '14px', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ fontSize: '0.78rem', color: '#b38e44', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
-                  Creations in this Dispatch ({selectedOrder.items?.length || 0})
+                  Items in this Order ({selectedOrder.items?.length || 0})
                 </div>
                 {selectedOrder.items?.map((it, idx) => (
                   <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', margin: '6px 0' }}>

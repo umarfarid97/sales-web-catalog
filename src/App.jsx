@@ -89,27 +89,27 @@ const MainLayout = () => {
                     Restricted Administrator Area
                   </h2>
                   <p style={{ color: '#4b5563', fontSize: '0.88rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
-                    You are signed in as <strong style={{ color: '#b45309' }}>{currentUser?.email}</strong>. This account does not have Maison Valenszo atelier administrator privileges.
+                    You are signed in as <strong style={{ color: '#b45309' }}>{currentUser?.email}</strong>. This account does not have administrator privileges.
                   </p>
                   <a
                     href="/"
                     className="admin-btn-primary"
                     style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '14px', borderRadius: '4px', textDecoration: 'none' }}
                   >
-                    Return to Boutique Storefront
+                    Return to Store
                   </a>
                 </>
               ) : (
                 <>
                   <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.6rem', color: '#0b0c10', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
-                    Atelier Administrator Access
+                    Store Admin Access
                   </h2>
                   <p style={{ color: '#4b5563', fontSize: '0.9rem', marginBottom: '1.75rem', lineHeight: 1.6 }}>
-                    Authentication required. Please sign in with Maison Valenszo administrative credentials to manage inventory and client orders.
+                    Authentication required. Please sign in with administrator credentials to manage inventory and customer orders.
                   </p>
                   <button
                     className="admin-btn-primary"
-                    onClick={() => openAuthModal({ mode: 'signin', title: 'Atelier Administrator Sign In' })}
+                    onClick={() => openAuthModal({ mode: 'signin', title: 'Store Admin Sign In' })}
                     style={{ width: '100%', padding: '14px', borderRadius: '4px', marginBottom: '1rem', cursor: 'pointer' }}
                   >
                     Sign In as Administrator
@@ -118,7 +118,7 @@ const MainLayout = () => {
                     href="/"
                     style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#6b7280', fontSize: '0.84rem', textDecoration: 'none', marginTop: '0.5rem' }}
                   >
-                    <ArrowLeft size={14} /> Return to Customer Storefront
+                    <ArrowLeft size={14} /> Return to Store
                   </a>
                 </>
               )}

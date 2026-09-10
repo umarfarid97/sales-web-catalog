@@ -4,8 +4,8 @@
 // ==========================================================================
 
 export const MEN_CLUSTERS = [
-  "All Men's Creations",
-  "★ Tier S (Launch Icons)",
+  "All Men's Perfumes",
+  "★ Best Sellers",
   "Fresh / Aquatic / Citrus",
   "Blue / Aromatic / Fresh-Woody",
   "Sweet / Amber / Gourmand",
@@ -19,8 +19,8 @@ export const MEN_CLUSTERS = [
 ];
 
 export const WOMEN_CLUSTERS = [
-  "All Women's Creations",
-  "★ Tier S (Launch Icons)",
+  "All Women's Perfumes",
+  "★ Best Sellers",
   "Fruity-Floral / Mass Appeal",
   "Sweet / Gourmand / Vanilla",
   "Fruity / Juicy / Tropical",
@@ -34,10 +34,10 @@ export const WOMEN_CLUSTERS = [
 ];
 
 export const OLFACTORY_FAMILIES = [
-  'All Creations',
-  'Tier S (Launch Icons)',
-  'Pour Homme',
-  'Pour Femme',
+  'All Perfumes',
+  'Best Sellers',
+  'Men',
+  'Women',
   'Niche & Unisex',
   'Blue / Aromatic / Fresh-Woody',
   'Sweet / Amber / Gourmand',
@@ -130,7 +130,7 @@ export const SAVOIR_FAIRE_RAW_MATERIALS = [
   {
     id: 'mat-4',
     name: 'Royal Amberwood & Ambroxan',
-    origin: 'Artisanal French Atelier',
+    origin: 'France & Grasse Oils',
     role: 'Base Endless Sillage',
     description: 'A precious distillation releasing ocean driftwood accords, noble cedarwood facets, and a velvety magnetic trail that endures over 16 hours.',
     image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop&q=80'
@@ -142,7 +142,7 @@ export const PROMO_CODES = [
   { code: 'VALENSZO10', discountPercent: 10, description: '10% Off Entire Fragrance Order' },
   { code: 'SAUVAGE25', discountPercent: 25, description: '25% Off Valenszo First Purchase' },
   { code: 'DIOR10', discountPercent: 10, description: '10% Off Entire Fragrance Order' },
-  { code: 'PRIVEE20', discountPercent: 20, description: '20% Off La Collection Privée' }
+  { code: 'PRIVEE20', discountPercent: 20, description: '20% Off Private Collection' }
 ];
 
 export const COMPLIMENTARY_SAMPLES = [

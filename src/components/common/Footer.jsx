@@ -53,7 +53,7 @@ export const Footer = () => {
               <RefreshCw size={20} />
             </div>
             <h4 style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.04em' }}>35% Oil Concentration</h4>
-            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Hand-blended artisanal extraits formulated for all-day sillage.</p>
+            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Hand-blended luxury perfumes formulated for an all-day scent trail.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '12px' }}>
@@ -80,7 +80,7 @@ export const Footer = () => {
               <ValenszoLogo size="md" layout="horizontal" subtitle="FRAGRANCE MALAYSIA" style={{ alignItems: 'flex-start' }} />
             </div>
             <p style={{ fontSize: '0.84rem', color: '#b5a498', lineHeight: '1.6', marginBottom: '14px' }}>
-              Valenszo is an act of creation inspired by noble essences and rare raw materials. Handcrafted luxury fragrances with timeless elegance.
+              Valenszo crafts long-lasting luxury perfumes using high-grade fragrance oils. Premium scents made for everyday elegance in Malaysia.
             </p>
             <div style={{ fontSize: '0.72rem', color: '#d97706', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               Kuala Lumpur &bull; Paris &bull; Express Delivery
@@ -98,7 +98,7 @@ export const Footer = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
                 >
-                  All Creations
+                  All Perfumes
                 </a>
               </li>
               <li>
@@ -108,7 +108,7 @@ export const Footer = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
                 >
-                  Men's Haute Collection
+                  Men's Perfumes
                 </a>
               </li>
               <li>
@@ -118,7 +118,7 @@ export const Footer = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
                 >
-                  Women's Haute Collection
+                  Women's Perfumes
                 </a>
               </li>
               <li>
@@ -128,7 +128,7 @@ export const Footer = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
                 >
-                  Signature Bundle Wardrobes (Save 25%)
+                  Perfume Bundles (Save 25%)
                 </a>
               </li>
             </ul>
@@ -136,13 +136,13 @@ export const Footer = () => {
 
           {/* Client Care */}
           <div>
-            <h4 style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.06em' }}>Client Services</h4>
+            <h4 style={{ color: '#ffffff', marginBottom: '16px', fontSize: '0.88rem', fontWeight: 800, letterSpacing: '0.06em' }}>Customer Care</h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#b5a498', padding: 0 }}>
-              <li>Complimentary Bottle Presentation</li>
-              <li>The Valenszo Art of Gifting</li>
+              <li>Free Gift Packaging</li>
+              <li>Gift Box & Greeting Card</li>
               <li>Scent Finder Quiz</li>
               <li>Track Your Delivery</li>
-              <li>Contact Maison Concierge</li>
+              <li>Contact Customer Support</li>
             </ul>
           </div>
 

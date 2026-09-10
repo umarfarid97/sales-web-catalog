@@ -227,7 +227,7 @@ export const OrderManager = () => {
 
                 <div className="admin-mobile-order-summary">
                   <span style={{ color: '#4b5563' }}>
-                    {ord.items?.length || 1} Flacon{(ord.items?.length || 1) > 1 ? 's' : ''}
+                    {ord.items?.length || 1} Bottle{(ord.items?.length || 1) > 1 ? 's' : ''}
                     {ord.customer?.giftPackaging ? ' • 🎁 Gift' : ''}
                   </span>
                   <span className="admin-mobile-order-total">

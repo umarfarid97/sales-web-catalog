@@ -197,13 +197,13 @@ export const ProductDetailPage = () => {
 
     const uniqueImages = Array.from(new Set(rawList.filter(Boolean)));
     if (uniqueImages.length === 0) {
-      return [{ type: 'image', url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80', label: 'Flacon Front' }];
+      return [{ type: 'image', url: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80', label: 'Front View' }];
     }
 
     return uniqueImages.map((imgUrl, idx) => ({
       type: 'image',
       url: imgUrl,
-      label: idx === 0 ? 'Flacon Front' : `Gallery View ${idx + 1}`
+      label: idx === 0 ? 'Front View' : `Gallery View ${idx + 1}`
     }));
   }, [product]);
 
@@ -262,13 +262,13 @@ export const ProductDetailPage = () => {
     return (
       <div className="pdp-page-container" style={{ textAlign: 'center', padding: '5rem 1rem' }}>
         <h2>Fragrance Not Found</h2>
-        <p style={{ color: '#6b7280', margin: '1rem 0 2rem' }}>The requested creation may have been archived or is temporarily unavailable.</p>
+        <p style={{ color: '#6b7280', margin: '1rem 0 2rem' }}>The requested perfume is temporarily unavailable.</p>
         <button 
           className="dior-btn dior-btn-primary" 
           onClick={() => navigateToCatalog()}
           style={{ background: '#000', color: '#fff', padding: '12px 24px' }}
         >
-          Return to Boutique Catalog
+          Return to All Perfumes
         </button>
       </div>
     );
@@ -668,7 +668,7 @@ export const ProductDetailPage = () => {
                     <div className="pdp-spec-text-block">
                       <span className="pdp-spec-title">Occasion</span>
                       <span className="pdp-spec-value">
-                        {product.category === 'Pour Femme' ? 'Evening, Gala, Dates' : 'Night Out, Special Events'}
+                        {product.category === 'Pour Femme' || product.category === 'Women' ? 'Evening, Gala, Dates' : 'Night Out, Special Events'}
                       </span>
                     </div>
                   </div>
@@ -754,7 +754,7 @@ export const ProductDetailPage = () => {
 
               <div className="pdp-pyramid-col">
                 <h4>Base Notes</h4>
-                <p className="timing">Eternal Sillage (4 - 16+ Hours)</p>
+                <p className="timing">Long-Lasting Base (4 - 16+ Hours)</p>
                 <ul>
                   {(product.pyramid?.baseNotes || ['Rich Ambroxan', 'Lacquered Woods', 'Bourbon Vanilla']).map((note, i) => (
                     <li key={i}>{note}</li>
@@ -772,20 +772,20 @@ export const ProductDetailPage = () => {
               </p>
               <p style={{ marginBottom: '1.25rem' }}>
                 Formulated using {product.concentration || 'Extrait de Parfum (25%)'} grade European oils. 
-                Hand-blended and cold-macerated for 60 days to allow every olfactory facet to achieve maximum richness, depth, and projection.
+                Hand-blended and aged for 60 days to allow every scent note to achieve maximum richness, depth, and long-lasting projection.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '1.5rem', background: '#faf9f6', padding: '1.5rem', borderRadius: '6px' }}>
                 <div>
-                  <strong>Atelier:</strong> Grasse / Kuala Lumpur
+                  <strong>Crafted:</strong> Grasse / Kuala Lumpur
                 </div>
                 <div>
-                  <strong>Maceration:</strong> 60 Days Minimum
+                  <strong>Aging & Blending:</strong> 60 Days Minimum
                 </div>
                 <div>
                   <strong>Atomizer:</strong> High-Dispersion Micro-Mist
                 </div>
                 <div>
-                  <strong>Refillable:</strong> Yes (Maison Eco-Pledge)
+                  <strong>Refillable:</strong> Yes (Eco-Friendly Bottle)
                 </div>
               </div>
             </div>
@@ -794,9 +794,9 @@ export const ProductDetailPage = () => {
           {/* TAB 4: LAYERING RITUAL */}
           {activeTab === 'layering' && (
             <div style={{ maxWidth: '820px', lineHeight: 1.7, color: '#374151' }}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem', color: '#111827' }}>The Art of Bespoke Layering</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem', color: '#111827' }}>The Art of Fragrance Layering</h4>
               <p style={{ marginBottom: '1rem' }}>
-                In French haute parfumerie, layering is the ultimate expression of personal individuality. By combining contrasting accords, you craft an unmistakable sillage that belongs solely to you.
+                Fragrance layering lets you create a unique signature scent. By combining complementary scents, you craft a long-lasting aroma tailored just for you.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
                 <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
@@ -944,7 +944,7 @@ export const ProductDetailPage = () => {
           </button>
           <img 
             src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
-            alt="Enlarged flacon view" 
+            alt="Enlarged bottle view" 
             className="pdp-lightbox-image"
             onClick={(e) => e.stopPropagation()} 
           />
@@ -987,7 +987,7 @@ export const ProductDetailPage = () => {
                   {product.name}
                 </h3>
                 <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
-                  Cinematic Haute Parfumerie Experience · Maceration & Atomization
+                  Cinematic Fragrance Experience · Fine Atomization & Scent Trail
                 </p>
               </div>
             </div>
@@ -1152,7 +1152,7 @@ export const ProductDetailPage = () => {
                   Curate a 3 or 5-Bottle Scent Wardrobe
                 </div>
                 <p style={{ fontSize: '0.74rem', color: '#9ca3af', margin: 0 }}>
-                  Pick your favorite fragrances, save up to 25%, and receive free luxury discovery coffret packaging.
+                  Pick your favorite fragrances, save up to 25%, and receive free luxury gift box packaging.
                 </p>
                 <a
                   href="/bundle"

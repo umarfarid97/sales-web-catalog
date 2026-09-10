@@ -17,7 +17,7 @@ export const InventoryAlerts = () => {
     lowStockItems.forEach((p) => {
       restockProduct(p.id, 15);
     });
-    showToast(`Batch replenished ${lowStockItems.length} fragrance creations (+15 flacons each)!`, 'success');
+    showToast(`Batch restocked ${lowStockItems.length} perfumes (+15 bottles each)!`, 'success');
   };
 
   return (
@@ -32,10 +32,10 @@ export const InventoryAlerts = () => {
             </div>
             <div>
               <h3 className="font-serif-title" style={{ fontSize: '1.15rem', fontWeight: 700, color: '#991b1b' }}>
-                {lowStockItems.length} Fragrance Creations Require Atelier Maceration &amp; Flacon Restock
+                {lowStockItems.length} Perfumes Need Restocking
               </h3>
               <p style={{ fontSize: '0.85rem', color: '#7f1d1d' }}>
-                {outOfStockItems.length} creations are completely depleted / sold out.
+                {outOfStockItems.length} perfumes are completely out of stock.
               </p>
             </div>
           </div>
@@ -46,7 +46,7 @@ export const InventoryAlerts = () => {
             style={{ padding: '10px 20px', fontSize: '0.88rem' }}
           >
             <RefreshCw size={16} />
-            <span>Batch Restock All (+15 Flacons Each)</span>
+            <span>Batch Restock All (+15 Bottles Each)</span>
           </button>
         </div>
       ) : (
@@ -66,9 +66,9 @@ export const InventoryAlerts = () => {
             <CheckCircle2 size={24} />
           </div>
           <div>
-            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#065f46' }}>Flacon Vault Inventory Healthy</h3>
+            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#065f46' }}>Inventory Healthy</h3>
             <p style={{ fontSize: '0.85rem', color: '#047857' }}>
-              All signature fragrance creations have sufficient safety reserves (&gt; 5 flacons).
+              All perfumes have sufficient stock reserves (&gt; 5 bottles).
             </p>
           </div>
         </div>
@@ -88,10 +88,10 @@ export const InventoryAlerts = () => {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Fragrance Creation</th>
-                  <th>Olfactory Family</th>
-                  <th>Current Reserve</th>
-                  <th style={{ textAlign: 'right' }}>Replenish Action</th>
+                  <th>Perfume Name</th>
+                  <th>Category / Scent</th>
+                  <th>Current Stock</th>
+                  <th style={{ textAlign: 'right' }}>Restock Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,7 +108,7 @@ export const InventoryAlerts = () => {
                     </td>
                     <td>
                       <span className={`badge ${prod.stock === 0 ? 'badge-danger' : 'badge-warning'}`}>
-                        {prod.stock === 0 ? 'Depleted (0 flacons)' : `${prod.stock} flacons left`}
+                        {prod.stock === 0 ? 'Out of Stock (0)' : `${prod.stock} bottles left`}
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
@@ -150,7 +150,7 @@ export const InventoryAlerts = () => {
                     onClick={() => restockProduct(prod.id, 10)}
                   >
                     <Plus size={14} />
-                    <span>Replenish +10 Flacons</span>
+                    <span>Restock +10 Bottles</span>
                   </button>
                 </div>
               </div>

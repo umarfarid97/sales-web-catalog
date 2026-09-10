@@ -41,8 +41,8 @@ export const StoreProvider = ({ children }) => {
       if (!isAdmin) {
         openAuthModal({
           mode: 'signin',
-          title: 'Atelier Administrator Access',
-          subtitle: 'Please sign in with Maison Atelier administrator credentials to manage boutique operations.'
+          title: 'Store Admin Access',
+          subtitle: 'Please sign in with administrator credentials to manage store operations.'
         });
         return;
       }
@@ -85,7 +85,7 @@ export const StoreProvider = ({ children }) => {
   });
 
   // Search, Filter & Sort State
-  const [selectedCategory, setSelectedCategory] = useState("All Men's Creations");
+  const [selectedCategory, setSelectedCategory] = useState("All Men's Perfumes");
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [inStockOnly, setInStockOnly] = useState(false);
@@ -265,7 +265,7 @@ export const StoreProvider = ({ children }) => {
       setActiveGender(detectedGender);
       localStorage.setItem('valenszo_active_gender', detectedGender);
       if (!categoryParam) {
-        setSelectedCategory(detectedGender === 'Men' ? "All Men's Creations" : "All Women's Creations");
+        setSelectedCategory(detectedGender === 'Men' ? "All Men's Perfumes" : "All Women's Perfumes");
       }
     }
 
@@ -804,7 +804,7 @@ export const StoreProvider = ({ children }) => {
     if (!isSilent && !isGateway) {
       clearCart();
       setIsCheckoutOpen(false);
-      showToast(`Order ${orderId} received with Maison Atelier!`, 'success');
+      showToast(`Order ${orderId} received! We are preparing your order.`, 'success');
     }
 
     return newOrder;
@@ -1002,10 +1002,10 @@ export const StoreProvider = ({ children }) => {
       },
       sizes: productData.sizes || [
         { label: '30 ml Travel Spray', ml: 30, priceMultiplier: 0.55 },
-        { label: '50 ml Signature Flacon', ml: 50, priceMultiplier: 0.78 },
-        { label: '100 ml Collector Flacon', ml: 100, priceMultiplier: 1.0 }
+        { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.78 },
+        { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0 }
       ],
-      features: productData.features || ['Maison Valenszo Haute Parfumerie', 'Infinite Refillable Flacon'],
+      features: productData.features || ['Valenszo Luxury Perfume', 'Eco-Friendly Refillable Bottle'],
       specs: productData.specs || { concentration: 'Extrait de Parfum (30%)', longevity: '14+ Hours' },
       images: productData.images && productData.images.length > 0
         ? productData.images
@@ -1117,7 +1117,11 @@ export const StoreProvider = ({ children }) => {
     // 2. Category / Cluster Filter within that gender
     const cat = selectedCategory || 'All';
     const isAll = 
+      !cat || 
       cat === 'All' || 
+      cat === 'All Perfumes' ||
+      cat === "All Men's Perfumes" ||
+      cat === "All Women's Perfumes" ||
       cat === 'All Creations' || 
       cat === "All Men's Creations" || 
       cat === "All Women's Creations" ||

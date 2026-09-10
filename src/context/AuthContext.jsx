@@ -121,8 +121,8 @@ export const AuthProvider = ({ children }) => {
   const openAuthModal = useCallback(({ mode = 'signin', onComplete = null, title = null, subtitle = null } = {}) => {
     setAuthModalMode(mode);
     setAuthModalConfig({
-      title: title || (mode === 'signin' ? 'Maison Valenszo Sign In' : 'Create Maison Account'),
-      subtitle: subtitle || (mode === 'signin' ? 'Sign in to access your personal fragrance portfolio and tracked orders.' : 'Join Maison Valenszo to curate your olfactory collection and track deliveries.'),
+      title: title || (mode === 'signin' ? 'Valenszo Sign In' : 'Create Valenszo Account'),
+      subtitle: subtitle || (mode === 'signin' ? 'Sign in to access your account and tracked orders.' : 'Create an account to save your favorite perfumes and track orders.'),
       onComplete
     });
     setIsAuthModalOpen(true);
@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: userObj };
       }
 
-      return { success: false, error: 'Failed to authenticate with Maison Atelier.' };
+      return { success: false, error: 'Failed to sign in. Please check your email and password.' };
     } catch (err) {
       console.error('Login error:', err);
       return { success: false, error: err.message || 'An unexpected error occurred during sign in.' };
@@ -198,7 +198,7 @@ export const AuthProvider = ({ children }) => {
         password: userData.password,
         options: {
           data: {
-            full_name: userData.name?.trim() || 'Maison Client',
+            full_name: userData.name?.trim() || 'Valenszo Customer',
             phone: userData.phone?.trim() || '',
             address: userData.address?.trim() || '',
             city: userData.city?.trim() || 'Kuala Lumpur',
@@ -235,7 +235,7 @@ export const AuthProvider = ({ children }) => {
         const newUser = {
           id: data.user.id,
           email: cleanEmail,
-          name: userData.name?.trim() || 'Maison Client',
+          name: userData.name?.trim() || 'Valenszo Customer',
           phone: userData.phone?.trim() || '',
           address: userData.address?.trim() || '',
           city: userData.city?.trim() || 'Kuala Lumpur',

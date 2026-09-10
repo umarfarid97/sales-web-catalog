@@ -10,13 +10,13 @@ export const SavoirFaireSection = () => {
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto' }}>
           <div className="couture-sub" style={{ color: '#e5e7eb', marginBottom: '8px' }}>
-            French Savoir-Faire &bull; Sustainable Sourcing
+            Master Perfumery &bull; Quality Ingredients
           </div>
           <h2 className="couture-title" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', color: '#ffffff' }}>
-            The Art of Raw Materials
+            The Art of Premium Ingredients
           </h2>
           <p style={{ fontSize: '0.95rem', color: '#9ca3af', lineHeight: '1.7', marginTop: '12px' }}>
-            Valenszo is an act of creation dictated by exceptional raw materials. Each ingredient is carefully selected from sustainable, long-standing partner harvests around the world.
+            Valenszo perfumes are crafted with exceptional fragrance oils. Each ingredient is carefully selected from sustainable, trusted harvests around the world.
           </p>
         </div>
 

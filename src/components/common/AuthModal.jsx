@@ -121,7 +121,7 @@ export const AuthModal = () => {
               color: '#b38e44', 
               fontWeight: 700 
             }}>
-              Maison Valenszo &bull; Client Privilege
+              Valenszo &bull; Member Account
             </span>
             <h3 style={{ 
               fontFamily: 'var(--font-couture, serif)', 
@@ -130,7 +130,7 @@ export const AuthModal = () => {
               color: '#000000',
               margin: '4px 0 0'
             }}>
-              {authModalMode === 'signin' ? 'Maison Client Sign In' : 'Create Maison Account'}
+              {authModalMode === 'signin' ? 'Sign In' : 'Create Account'}
             </h3>
           </div>
           <button
@@ -550,7 +550,7 @@ export const AuthModal = () => {
           color: '#6b7280'
         }}>
           <ShieldCheck size={14} color="#16a34a" />
-          <span>Encrypted Client Database &bull; Maison Valenszo Privacy Protected</span>
+          <span>Secure & Encrypted &bull; Valenszo Privacy Protected</span>
         </div>
       </div>
     </div>

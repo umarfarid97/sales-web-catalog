@@ -1,5 +1,5 @@
 // ============================================================================
-// VALENSZO HAUTE PARFUMERIE - PAYMENT GATEWAY INTEGRATION SERVICE
+// VALENSZO PERFUMES - PAYMENT GATEWAY INTEGRATION SERVICE
 // Supports Malaysian FPX (ToyyibPay/Curlec/Billplz), Cards (Stripe), and DuitNow QR
 // ============================================================================
 
@@ -21,15 +21,15 @@ export const PAYMENT_METHODS = [
   {
     id: 'bank-transfer',
     name: 'Direct Bank Transfer / DuitNow QR',
-    badge: 'Atelier Concierge',
-    description: 'Manual instant transfer to Maison Valenszo commercial account with reference tracking.',
+    badge: 'Direct Transfer',
+    description: 'Manual instant transfer to Valenszo bank account with reference tracking.',
     icon: 'QrCode'
   }
 ];
 
 export const MAISON_BANK_DETAILS = {
   bankName: 'Maybank Islamic Berhad',
-  accountName: 'MAISON VALENSZO SDN. BHD.',
+  accountName: 'VALENSZO SDN. BHD.',
   accountNumber: '5142 7189 3302',
   swiftCode: 'MBBEMYKL',
   duitNowId: '202601004921',

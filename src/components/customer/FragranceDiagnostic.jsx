@@ -36,21 +36,21 @@ export const QUESTIONS = [
       {
         id: 'men',
         label: "Men's Collection",
-        desc: 'Bold, refined, and confident masculine creations',
+        desc: 'Bold, fresh, and confident perfumes for men',
         icon: User,
         gender: 'Men'
       },
       {
         id: 'women',
         label: "Women's Collection",
-        desc: 'Elegant, radiant, and feminine floral bouquets',
+        desc: 'Elegant, sweet, and floral perfumes for women',
         icon: Sparkles,
         gender: 'Women'
       },
       {
         id: 'unisex',
         label: 'Shared & Unisex',
-        desc: 'Artisanal, borderless, and niche Haute Parfumerie',
+        desc: 'Unique and versatile niche perfumes',
         icon: Compass,
         gender: 'Unisex'
       }
@@ -163,7 +163,7 @@ export const QUESTIONS = [
   {
     id: 'sillage',
     title: 'How do you want your fragrance to project?',
-    subtitle: 'Choose your preferred presence and sillage trail.',
+    subtitle: 'Choose your preferred scent trail and projection.',
     teaser: 'Next, what impression do you want to project?',
     isMulti: false,
     gridCols: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -432,8 +432,8 @@ export const FragranceDiagnostic = () => {
     if (!anchor?.product) return;
     const sizeObj = {
       '30ml': { label: '30ml Travel Spray', price: 45 },
-      '50ml': { label: '50ml Signature Flacon', price: 75 },
-      '100ml': { label: '100ml Grand Flacon', price: 125 }
+      '50ml': { label: '50ml Bottle', price: 75 },
+      '100ml': { label: '100ml Bottle', price: 125 }
     }[selectedAnchorFormat] || { label: '30ml Travel Spray', price: 45 };
 
     addToCart(anchor.product, 1, sizeObj.label, null, sizeObj.price);
@@ -841,8 +841,8 @@ export const FragranceDiagnostic = () => {
                     <div style={{ display: 'flex', gap: '8px' }}>
                       {[
                         { key: '30ml', label: '30ml Travel', price: 'RM45' },
-                        { key: '50ml', label: '50ml Flacon', price: 'RM75' },
-                        { key: '100ml', label: '100ml Grand', price: 'RM125' }
+                        { key: '50ml', label: '50ml Bottle', price: 'RM75' },
+                        { key: '100ml', label: '100ml Bottle', price: 'RM125' }
                       ].map((fmt) => (
                         <button
                           key={fmt.key}
@@ -978,7 +978,7 @@ export const FragranceDiagnostic = () => {
               Build Your 3-Bottle Signature Wardrobe & Save 15%
             </h3>
             <p style={{ color: '#D1D5DB', fontSize: '0.9rem', maxWidth: '540px', margin: '0 auto 24px', lineHeight: 1.5 }}>
-              Add any 2 layering recommendations to your anchor flacon to unlock exclusive bundle pricing and receive complimentary collector gift presentation.
+              Add any 2 layering recommendations to your main bottle to unlock bundle savings and receive a free gift box.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>

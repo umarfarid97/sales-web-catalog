@@ -62,7 +62,7 @@ const BUNDLE_TIERS = {
       { id: 1, title: 'Fresh Citrus / Aquatic', role: 'High-energy morning boost' },
       { id: 2, title: 'Woody / Amber Companion', role: 'Sophisticated boardroom presence' },
       { id: 3, title: 'Sensual Date Night', role: 'Intimate evening warmth' },
-      { id: 4, title: 'Avant-Garde Wildcard', role: 'Exotic & head-turning sillage' },
+      { id: 4, title: 'Avant-Garde Wildcard', role: 'Exotic & head-turning scent trail' },
     ]
   }
 };
@@ -237,7 +237,7 @@ export const BundleBuilderContent = () => {
           >
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(217, 119, 6, 0.2)', color: '#fbbf24', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', width: 'fit-content', marginBottom: '0.75rem' }}>
               <Sparkles size={13} />
-              <span>THE MAISON WARDROBE</span>
+              <span>PERFUME WARDROBE BUNDLE</span>
             </div>
             <h1 
               style={{ 
@@ -252,7 +252,7 @@ export const BundleBuilderContent = () => {
               Curate Your Scent Wardrobe
             </h1>
             <p style={{ color: '#ede8e1', fontSize: 'clamp(0.82rem, 1.8vw, 0.95rem)', margin: 0, maxWidth: '560px', lineHeight: 1.45 }}>
-              Layer complimentary notes to create your bespoke presence. Save up to 25% with complimentary presentation coffret.
+              Layer complimentary notes to create your signature scent. Save up to 25% with a complimentary luxury gift box.
             </p>
           </div>
 
@@ -420,7 +420,7 @@ export const BundleBuilderContent = () => {
                           {isActive && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#d97706' }} />}
                         </div>
 
-                        {/* Flacon Visual */}
+                        {/* Bottle Visual */}
                         <div className="bundle-slot-visual" style={{ width: '64px', height: '76px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', margin: '0.25rem 0' }}>
                           {item ? (
                             <>

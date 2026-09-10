@@ -115,7 +115,7 @@ export const CartDrawer = () => {
               fontWeight: 700,
               letterSpacing: '0.08em'
             }}>
-              {cartItemCount || 0} {cartItemCount === 1 ? 'creation' : 'creations'}
+              {cartItemCount || 0} {cartItemCount === 1 ? 'item' : 'items'}
             </span>
           </div>
 
@@ -135,8 +135,8 @@ export const CartDrawer = () => {
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: isFreeShipping ? '#059669' : '#111827' }}>
               <Truck size={16} color={isFreeShipping ? '#059669' : '#000000'} />
               {isFreeShipping 
-                ? 'Unlocked Free White-Glove Climate Delivery!' 
-                : `Add $${amountToFreeShipping.toFixed(2)} more for Complimentary Delivery`}
+                ? 'Unlocked Free Express Delivery!' 
+                : `Add RM${amountToFreeShipping.toFixed(2)} more for Free Express Delivery`}
             </span>
             <span style={{ color: isFreeShipping ? '#059669' : '#000000', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
               {Math.round(freeShippingProgress)}%
@@ -202,7 +202,7 @@ export const CartDrawer = () => {
                     className="cart-item-card"
                     style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '14px', display: 'flex', gap: '14px' }}
                   >
-                    <img src={itemImg} alt={item.name || 'Creation'} style={{ width: '76px', height: '76px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #f3f4f6' }} />
+                    <img src={itemImg} alt={item.name || 'Perfume'} style={{ width: '76px', height: '76px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #f3f4f6' }} />
                     
                     <div className="cart-item-info" style={{ flex: 1 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -211,7 +211,7 @@ export const CartDrawer = () => {
                             {item.name}
                           </h4>
                           <div style={{ fontSize: '0.78rem', color: '#926917', fontWeight: 600, marginBottom: '4px' }}>
-                            {item.selectedSize || item.size || '100 ml Grand Flacon'}
+                            {item.selectedSize || item.size || '100 ml Bottle'}
                           </div>
                           {item.engravingText && (
                             <div style={{ fontSize: '0.74rem', color: '#059669', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
@@ -316,9 +316,9 @@ export const CartDrawer = () => {
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#4b5563' }}>
-                <span>White-Glove Climate Shipping</span>
+                <span>Express Delivery</span>
                 <span style={{ color: cartShipping === 0 ? '#059669' : '#000000', fontWeight: 600 }}>
-                  {cartShipping === 0 ? 'COMPLIMENTARY' : `RM${cartShipping.toFixed(2)}`}
+                  {cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.25rem', fontWeight: 800, color: '#000000', paddingTop: '10px', borderTop: '1px solid #e5e7eb' }}>
@@ -330,7 +330,7 @@ export const CartDrawer = () => {
             {/* 2 Complimentary Samples Note */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: '#fdf8eb', border: '1px solid #f3d99d', borderRadius: '4px', marginBottom: '18px', fontSize: '0.78rem', color: '#926917' }}>
               <Gift size={15} color="#926917" />
-              <span>Includes 2 complimentary 2ml deluxe spray samples at checkout.</span>
+              <span>Includes 2 free 2ml deluxe spray samples at checkout.</span>
             </div>
 
             {/* Proceed to Checkout CTA */}
@@ -352,7 +352,7 @@ export const CartDrawer = () => {
                 boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
               }}
             >
-              <span>Proceed to White-Glove Checkout</span>
+              <span>Proceed to Checkout</span>
               <ArrowRight size={16} />
             </button>
 

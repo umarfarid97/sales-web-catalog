@@ -86,11 +86,11 @@ export class ErrorBoundary extends React.Component {
             </div>
 
             <div style={{ fontSize: '0.72rem', letterSpacing: '0.36em', color: 'var(--dior-gold, #c5a059)', textTransform: 'uppercase', marginBottom: '8px', fontWeight: 700 }}>
-              Maison Valenszo &bull; Concierge
+              Valenszo &bull; Support
             </div>
 
             <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', letterSpacing: '0.12em', marginBottom: '14px', color: '#ffffff' }}>
-              Boutique Display Refresh
+              Store Refresh Required
             </h2>
 
             <p style={{ color: '#9ca3af', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '28px' }}>
@@ -119,7 +119,7 @@ export class ErrorBoundary extends React.Component {
               }}
             >
               <RotateCcw size={15} />
-              <span>Refresh Boutique</span>
+              <span>Refresh Page</span>
             </button>
 
             {/* Diagnostic Details Toggle for Admin / Development */}

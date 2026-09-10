@@ -62,7 +62,7 @@ export const CategoryFilter = () => {
         <div className="dior-lineup-scroll-wrap" style={{ flex: 1 }}>
           {clusters.map((cat) => {
             const currentCat = selectedCategory || '';
-            const isAll = cat.startsWith('All') && (currentCat.startsWith('All') || currentCat === 'All' || currentCat === 'All Creations' || !currentCat);
+            const isAll = cat.startsWith('All') && (currentCat.startsWith('All') || currentCat === 'All' || currentCat === 'All Perfumes' || currentCat === 'All Creations' || !currentCat);
             const isActive = selectedCategory === cat || isAll;
             return (
               <button

@@ -139,11 +139,11 @@ export const AdminHeader = () => {
               setRole('customer');
               window.location.href = '/';
             }}
-            title="Return to Customer Boutique Storefront"
+            title="Return to Store"
             style={{ background: '#f9fafb', color: '#111827' }}
           >
             <ArrowLeft size={16} />
-            <span>Boutique</span>
+            <span>Store</span>
           </button>
         </div>
 

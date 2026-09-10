@@ -103,8 +103,8 @@ export const ProductManager = () => {
               className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="all">All Flacon Stock Levels</option>
-              <option value="low">Low Inventory (&lt; 5 flacons)</option>
+              <option value="all">All Stock Levels</option>
+              <option value="low">Low Stock (&lt; 5 bottles)</option>
               <option value="out">Depleted / Out of Stock</option>
             </select>
           </div>
@@ -116,7 +116,7 @@ export const ProductManager = () => {
               style={{ padding: '8px 16px', fontSize: '0.85rem' }}
             >
               <Plus size={16} />
-              <span>Formulate Fragrance</span>
+              <span>Add Perfume</span>
             </button>
           </div>
 
@@ -127,12 +127,12 @@ export const ProductManager = () => {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Fragrance Creation</th>
+                <th>Perfume Name</th>
                 <th>SKU</th>
                 <th>Olfactory Family</th>
                 <th>Concentration</th>
                 <th>Base Price</th>
-                <th>Flacon Stock</th>
+                <th>Stock (Bottles)</th>
                 <th>Sillage Rating</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
@@ -209,7 +209,7 @@ export const ProductManager = () => {
                             isOutOfStock ? 'badge-danger' :
                             isLow ? 'badge-warning' : 'badge-success'
                           }`}>
-                            {prod.stock} flacons
+                            {prod.stock} bottles
                           </span>
                         </div>
                       </td>
@@ -227,7 +227,7 @@ export const ProductManager = () => {
                           <button
                             className="btn-icon"
                             onClick={() => restockProduct(prod.id, 10)}
-                            title="Restock +10 flacons"
+                            title="Restock +10 bottles"
                           >
                             <RefreshCw size={13} color="#b38e44" />
                           </button>
@@ -235,7 +235,7 @@ export const ProductManager = () => {
                           <button
                             className="btn-icon"
                             onClick={() => handleEdit(prod)}
-                            title="Edit creation"
+                            title="Edit perfume"
                           >
                             <Edit size={13} color="#2563eb" />
                           </button>
@@ -243,7 +243,7 @@ export const ProductManager = () => {
                           <button
                             className="btn-icon"
                             onClick={() => handleDelete(prod.id, prod.name)}
-                            title="Delete creation"
+                            title="Delete perfume"
                           >
                             <Trash2 size={13} color="#dc2626" />
                           </button>
@@ -262,7 +262,7 @@ export const ProductManager = () => {
         <div className="admin-mobile-cards-view">
           {tableItems.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '36px 16px', color: '#6b7280', fontSize: '0.88rem' }}>
-              No fragrance records found matching your filters.
+              No perfume records found matching your filters.
             </div>
           ) : (
             tableItems.map((prod) => {
@@ -292,7 +292,7 @@ export const ProductManager = () => {
                           isOutOfStock ? 'badge-danger' :
                           isLow ? 'badge-warning' : 'badge-success'
                         }`} style={{ fontSize: '0.72rem' }}>
-                          {prod.stock} flacons
+                          {prod.stock} bottles
                         </span>
                       </div>
                     </div>
@@ -304,7 +304,7 @@ export const ProductManager = () => {
                       onClick={() => restockProduct(prod.id, 10)}
                     >
                       <RefreshCw size={13} color="#b38e44" />
-                      <span>+10 Flacons</span>
+                      <span>+10 Bottles</span>
                     </button>
                     <button
                       className="admin-mobile-action-btn"

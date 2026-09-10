@@ -405,7 +405,7 @@ export const CollectionPageContent = () => {
 
           {filteredProducts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
-              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No creations match your selected filters.</p>
+              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No perfumes match your selected filters.</p>
               <button
                 type="button"
                 className="dior-btn"

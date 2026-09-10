@@ -50,7 +50,7 @@ export const AnalyticsDashboard = () => {
         {/* KPI 1: Revenue */}
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-title">Maison Gross Revenue</span>
+            <span className="kpi-title">Total Revenue</span>
             <div className="kpi-icon-box" style={{ background: '#fef3c7', color: '#b45309' }}>
               <Wallet size={20} />
             </div>
@@ -65,7 +65,7 @@ export const AnalyticsDashboard = () => {
         {/* KPI 2: Total Orders */}
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-title">Fragrance Orders</span>
+            <span className="kpi-title">Total Orders</span>
             <div className="kpi-icon-box" style={{ background: '#ecfdf5', color: '#059669' }}>
               <ShoppingCart size={20} />
             </div>
@@ -73,14 +73,14 @@ export const AnalyticsDashboard = () => {
           <div className="kpi-value">{totalOrdersCount}</div>
           <div className="kpi-trend trend-up">
             <ArrowUpRight size={14} />
-            <span>{pendingOrdersCount} pending atelier fulfillment</span>
+            <span>{pendingOrdersCount} pending fulfillment</span>
           </div>
         </div>
 
         {/* KPI 3: Average Order Value */}
         <div className="kpi-card">
           <div className="kpi-header">
-            <span className="kpi-title">Avg Flacon Cart (AOV)</span>
+            <span className="kpi-title">Average Order Value (AOV)</span>
             <div className="kpi-icon-box" style={{ background: '#fffbeb', color: '#d97706' }}>
               <TrendingUp size={20} />
             </div>
@@ -88,7 +88,7 @@ export const AnalyticsDashboard = () => {
           <div className="kpi-value">RM {averageOrderValue.toFixed(2)}</div>
           <div className="kpi-trend trend-up">
             <ArrowUpRight size={14} />
-            <span>High luxury flacon basket size</span>
+            <span>Healthy basket size</span>
           </div>
         </div>
 
@@ -115,8 +115,8 @@ export const AnalyticsDashboard = () => {
         <div className="admin-card-panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '8px' }}>
             <div>
-              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Weekly Fragrance Demand Velocity</h3>
-              <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Daily boutique sales breakdown</p>
+              <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Weekly Perfume Sales</h3>
+              <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Daily store sales breakdown</p>
             </div>
             <span className="badge badge-gold">7-Day Realtime</span>
           </div>
@@ -177,8 +177,8 @@ export const AnalyticsDashboard = () => {
       <div className="admin-card-panel" style={{ marginTop: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Top Signature Fragrances</h3>
-            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Highest velocity creations by customer rating</p>
+            <h3 className="font-serif-title" style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0b0c10' }}>Top Performing Perfumes</h3>
+            <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>Best-selling and top-rated perfumes</p>
           </div>
           <button 
             className="admin-btn-secondary"
