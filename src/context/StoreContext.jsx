@@ -1125,6 +1125,35 @@ export const StoreProvider = ({ children }) => {
     showToast('Catalog and orders synchronized with live database', 'info');
   };
 
+  const refreshStoreData = async () => {
+    setIsLoadingFromCloud(true);
+    try {
+      if (isSupabaseConfigured) {
+        const [freshProducts, freshOrders] = await Promise.all([
+          fetchProductsFromSupabase(),
+          fetchOrdersFromSupabase()
+        ]);
+        if (freshProducts && freshProducts.length > 0) {
+          setProducts(freshProducts);
+          localStorage.setItem('valenszo_products_cache', JSON.stringify(freshProducts));
+        }
+        if (freshOrders) {
+          const realOrders = freshOrders.filter((o) => !o.items?.some((it) => it.category === 'Audio'));
+          setOrders(realOrders);
+          localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
+        }
+        showToast('Live store data synchronized with Supabase', 'success');
+      } else {
+        showToast('Running in local storage mode', 'info');
+      }
+    } catch (e) {
+      console.error('Refresh store data error:', e);
+      showToast('Failed to refresh data from cloud', 'error');
+    } finally {
+      setIsLoadingFromCloud(false);
+    }
+  };
+
   // --- Computed Filtered Products for Customer Catalog (Crash-proof) ---
   const filteredProducts = (products || []).filter((product) => {
     if (!product || typeof product !== 'object' || !product.id) return false;
@@ -1211,13 +1240,33 @@ export const StoreProvider = ({ children }) => {
     return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
   });
 
-  // --- Admin KPI Analytics Data (Safe) ---
-  const totalRevenue = (orders || []).reduce((sum, ord) => sum + (ord && ord.status !== 'Cancelled' ? (Number(ord.total) || 0) : 0), 0);
+  // --- Admin KPI Analytics Data (Live, Real-Time & Accurate) ---
+  const isSettledOrder = useCallback((ord) => {
+    if (!ord) return false;
+    if (ord.status === 'Cancelled' || ord.status === 'Refunded') return false;
+    // Explicitly paid orders
+    if (ord.paymentStatus === 'Paid') return true;
+    // Orders progressing through fulfillment are confirmed & paid
+    if (['Processing', 'Shipped', 'Delivered'].includes(ord.status)) return true;
+    // Exclude unconfirmed Pending Payment / Unpaid gateway checkouts
+    if (ord.status === 'Pending Payment' || ord.paymentStatus === 'Unpaid') return false;
+    // Pending COD or direct invoice orders
+    return ord.status === 'Pending';
+  }, []);
+
+  const settledOrders = useMemo(() => {
+    return (orders || []).filter(isSettledOrder);
+  }, [orders, isSettledOrder]);
+
+  const totalRevenue = useMemo(() => {
+    return settledOrders.reduce((sum, ord) => sum + (Number(ord.total) || 0), 0);
+  }, [settledOrders]);
+
   const totalOrdersCount = (orders || []).length;
   const pendingOrdersCount = (orders || []).filter((o) => o && (o.status === 'Pending' || o.status === 'Processing')).length;
   const lowStockCount = (products || []).filter((p) => p && (Number(p.stock) || 0) < 5).length;
   const outOfStockCount = (products || []).filter((p) => p && (Number(p.stock) || 0) === 0).length;
-  const averageOrderValue = totalOrdersCount > 0 ? totalRevenue / totalOrdersCount : 0;
+  const averageOrderValue = settledOrders.length > 0 ? totalRevenue / settledOrders.length : 0;
 
   // --- Dynamic Live Category Counts (Safe) ---
   const menCount = useMemo(() => {
@@ -1350,8 +1399,10 @@ export const StoreProvider = ({ children }) => {
         showToast,
         removeToast,
 
-        // Dev Utilities
-        resetToDemoData
+        // Dev Utilities & Live Sync
+        resetToDemoData,
+        refreshStoreData,
+        isSettledOrder
       }}
     >
       {children}
