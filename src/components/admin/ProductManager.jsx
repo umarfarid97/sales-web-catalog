@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
-import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
 import { 
   Plus, 
   Search, 
@@ -11,14 +10,15 @@ import {
 
 export const ProductManager = () => {
   const { 
-    products, 
+    products = [], 
+    categories = [],
     deleteProduct, 
     setIsProductFormOpen, 
     setEditingProduct
   } = useStore();
 
   const [searchTable, setSearchTable] = useState('');
-  const [filterGenderCategory, setFilterGenderCategory] = useState('All'); // 'All', 'Women', 'Men', 'Unisex'
+  const [filterGender, setFilterGender] = useState('All'); // 'All', 'Women', 'Men', 'Unisex'
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterStockStatus, setFilterStockStatus] = useState('all'); // 'all', 'low', 'out'
 
@@ -39,17 +39,20 @@ export const ProductManager = () => {
   };
 
   // Filtered Table Items
-  const tableItems = products.filter((p) => {
+  const tableItems = (products || []).filter((p) => {
+    if (!p) return false;
     const pGender = p.gender || p.specs?.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
-    if (filterGenderCategory !== 'All' && pGender !== filterGenderCategory) return false;
+    if (filterGender !== 'All' && pGender !== filterGender) return false;
 
-    const pFamily = p.olfactoryFamily || p.specs?.olfactoryFamily || p.category;
-    if (filterCategory !== 'All' && pFamily !== filterCategory && p.category !== filterCategory) return false;
+    const pCat = p.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(p.category)
+      ? p.category
+      : (p.olfactoryFamily || p.specs?.olfactoryFamily || p.character || p.specs?.character);
+    if (filterCategory !== 'All' && pCat !== filterCategory && p.category !== filterCategory) return false;
     if (filterStockStatus === 'low' && (p.stock >= 5 || p.stock === 0)) return false;
     if (filterStockStatus === 'out' && p.stock > 0) return false;
     if (searchTable.trim()) {
       const q = searchTable.toLowerCase();
-      const matchName = p.name.toLowerCase().includes(q);
+      const matchName = p.name?.toLowerCase().includes(q);
       const matchSku = p.sku?.toLowerCase().includes(q);
       if (!matchName && !matchSku) return false;
     }
@@ -87,32 +90,31 @@ export const ProductManager = () => {
               )}
             </div>
 
-            {/* Category (Gender Taxonomy) Filter */}
+            {/* Gender Filter (3 Types Only) */}
             <select
-              value={filterGenderCategory}
-              onChange={(e) => setFilterGenderCategory(e.target.value)}
+              value={filterGender}
+              onChange={(e) => setFilterGender(e.target.value)}
               className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="All">All Categories (3 Types)</option>
+              <option value="All">All Genders (3 Types)</option>
               <option value="Women">Women</option>
               <option value="Men">Men</option>
               <option value="Unisex">Unisex</option>
             </select>
 
-            {/* Olfactory Family Filter */}
+            {/* Category (Fragrance Family) Filter */}
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
               className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="All">All Olfactory Families</option>
-              {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
-                <option key={fam} value={fam}>{fam}</option>
+              <option value="All">All Categories</option>
+              {(categories || []).map((cat) => (
+                <option key={cat.id} value={cat.name}>{cat.name}</option>
               ))}
             </select>
-
 
             {/* Stock Level Filter */}
             <select
@@ -147,8 +149,8 @@ export const ProductManager = () => {
               <tr>
                 <th>Perfume Name</th>
                 <th>SKU</th>
+                <th>Gender</th>
                 <th>Category</th>
-                <th>Olfactory Family</th>
                 <th>Concentration</th>
                 <th>Base Price</th>
                 <th>Stock (Bottles)</th>
@@ -201,7 +203,7 @@ export const ProductManager = () => {
                         </span>
                       </td>
 
-                      {/* Category (3 Types Only) */}
+                      {/* Gender (3 Types Only) */}
                       <td>
                         <span style={{ 
                           fontSize: '0.72rem', 
@@ -217,10 +219,12 @@ export const ProductManager = () => {
                         </span>
                       </td>
 
-                      {/* Olfactory Family */}
+                      {/* Category (Fragrance Family) */}
                       <td>
                         <span className="badge badge-neutral">
-                          {prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.category}
+                          {prod.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(prod.category)
+                            ? prod.category
+                            : (prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.character || prod.specs?.character || 'General')}
                         </span>
                       </td>
 
@@ -298,6 +302,11 @@ export const ProductManager = () => {
               const isOutOfStock = prod.stock === 0;
               const isLow = prod.stock > 0 && prod.stock < 5;
 
+              const resolvedGender = prod.gender || prod.specs?.gender || (prod.category === 'Pour Femme' || prod.category === 'Women' ? 'Women' : (prod.category === 'Niche & Unisex' || prod.category === 'Unisex' ? 'Unisex' : 'Men'));
+              const resolvedCat = prod.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(prod.category)
+                ? prod.category
+                : (prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.character || prod.specs?.character || 'General');
+
               return (
                 <div key={prod.id} className="admin-mobile-card">
                   <div className="admin-mobile-card-header">
@@ -310,7 +319,8 @@ export const ProductManager = () => {
                       <div className="admin-mobile-card-title">{prod.name}</div>
                       <div className="admin-mobile-card-meta">
                         <span className="admin-mobile-card-sku">{prod.sku || 'N/A'}</span>
-                        <span className="badge badge-neutral" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>{prod.category}</span>
+                        <span className="badge badge-neutral" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>{resolvedGender}</span>
+                        <span className="badge badge-neutral" style={{ fontSize: '0.68rem', padding: '1px 6px' }}>{resolvedCat}</span>
                         {prod.badge && (
                           <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 5px' }}>{prod.badge}</span>
                         )}

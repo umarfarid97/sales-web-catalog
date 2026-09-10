@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
-import { OLFACTORY_FAMILIES } from '../../data/initialProducts';
 import { X, Save } from 'lucide-react';
 
 export const ProductFormModal = () => {
@@ -10,22 +9,31 @@ export const ProductFormModal = () => {
     editingProduct, 
     addProduct, 
     updateProduct,
+    genders,
     categories,
     concentrations
   } = useStore();
 
-  const resolveInitialCategory = (product) => {
+  const resolveInitialGender = (product) => {
     if (!product) return 'Men';
-    if (product.gender === 'Women' || product.category === 'Women' || product.category === 'Pour Femme') return 'Women';
-    if (product.gender === 'Unisex' || product.category === 'Unisex' || product.category === 'Niche & Unisex') return 'Unisex';
+    if (product.gender === 'Women' || product.specs?.gender === 'Women' || product.category === 'Women' || product.category === 'Pour Femme') return 'Women';
+    if (product.gender === 'Unisex' || product.specs?.gender === 'Unisex' || product.category === 'Unisex' || product.category === 'Niche & Unisex') return 'Unisex';
     return 'Men';
+  };
+
+  const resolveInitialCategory = (product, defaultCat) => {
+    if (!product) return defaultCat;
+    const directCat = product.olfactoryFamily || product.specs?.olfactoryFamily || product.character || product.specs?.character;
+    if (directCat && directCat !== 'Pour Femme' && directCat !== 'Pour Homme') return directCat;
+    if (product.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(product.category)) return product.category;
+    return defaultCat;
   };
 
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
-    category: 'Men',
-    olfactoryFamily: 'Woody & Smoky',
+    gender: 'Men',
+    category: 'Fresh / Aquatic / Citrus',
     concentration: 'Extrait de Parfum (30%)',
     price: '',
     originalPrice: '',
@@ -46,13 +54,14 @@ export const ProductFormModal = () => {
 
   useEffect(() => {
     const defaultConc = concentrations && concentrations.length > 0 ? concentrations[0].name : 'Extrait de Parfum (30%)';
+    const defaultCat = categories && categories.length > 0 ? categories[0].name : 'Fresh / Aquatic / Citrus';
     
     if (editingProduct) {
       setFormData({
         name: editingProduct.name || '',
         sku: editingProduct.sku || '',
-        category: resolveInitialCategory(editingProduct),
-        olfactoryFamily: editingProduct.olfactoryFamily || editingProduct.specs?.olfactoryFamily || 'Woody & Smoky',
+        gender: resolveInitialGender(editingProduct),
+        category: resolveInitialCategory(editingProduct, defaultCat),
         concentration: editingProduct.concentration || editingProduct.specs?.concentration || defaultConc,
         price: editingProduct.price?.toString() || '',
         originalPrice: editingProduct.originalPrice?.toString() || '',
@@ -74,8 +83,8 @@ export const ProductFormModal = () => {
       setFormData({
         name: '',
         sku: `VAL-PAR-${Math.floor(100 + Math.random() * 900)}`,
-        category: 'Men',
-        olfactoryFamily: 'Woody & Smoky',
+        gender: 'Men',
+        category: defaultCat,
         concentration: defaultConc,
         price: '45.00',
         originalPrice: '55.00',
@@ -94,7 +103,7 @@ export const ProductFormModal = () => {
         isFeatured: false
       });
     }
-  }, [editingProduct, isProductFormOpen, concentrations]);
+  }, [editingProduct, isProductFormOpen, concentrations, categories]);
 
   if (!isProductFormOpen) return null;
 
@@ -102,9 +111,10 @@ export const ProductFormModal = () => {
     e.preventDefault();
     const productPayload = {
       ...formData,
+      gender: formData.gender,
       category: formData.category,
-      gender: formData.category,
-      olfactoryFamily: formData.olfactoryFamily,
+      character: formData.category,
+      olfactoryFamily: formData.category,
       concentration: formData.concentration,
       price: parseFloat(formData.price) || 0,
       originalPrice: parseFloat(formData.originalPrice) || parseFloat(formData.price) || 0,
@@ -113,9 +123,10 @@ export const ProductFormModal = () => {
       reviewsCount: parseInt(formData.reviewsCount, 10) || 0,
       specs: {
         ...(editingProduct?.specs || {}),
-        gender: formData.category,
+        gender: formData.gender,
         category: formData.category,
-        olfactoryFamily: formData.olfactoryFamily,
+        character: formData.category,
+        olfactoryFamily: formData.category,
         concentration: formData.concentration
       },
       pyramid: {
@@ -186,14 +197,14 @@ export const ProductFormModal = () => {
 
               <div className="admin-form-row-2col">
                 <div className="form-group">
-                  <label className="admin-form-label">Category (Gender Taxonomy) *</label>
+                  <label className="admin-form-label">Gender (3 Types Only) *</label>
                   <select
-                    value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    value={formData.gender}
+                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                     className="admin-form-select"
                   >
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    {(genders || []).map((gen) => (
+                      <option key={gen.id} value={gen.name}>{gen.name}</option>
                     ))}
                   </select>
                 </div>
@@ -205,7 +216,7 @@ export const ProductFormModal = () => {
                     onChange={(e) => setFormData({ ...formData, concentration: e.target.value })}
                     className="admin-form-select"
                   >
-                    {concentrations.map((conc) => (
+                    {(concentrations || []).map((conc) => (
                       <option key={conc.id} value={conc.name}>{conc.name}</option>
                     ))}
                   </select>
@@ -213,14 +224,14 @@ export const ProductFormModal = () => {
               </div>
 
               <div className="form-group">
-                <label className="admin-form-label">Olfactory Family *</label>
+                <label className="admin-form-label">Category (Fragrance Family) *</label>
                 <select
-                  value={formData.olfactoryFamily}
-                  onChange={(e) => setFormData({ ...formData, olfactoryFamily: e.target.value })}
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="admin-form-select"
                 >
-                  {OLFACTORY_FAMILIES.filter((f) => f !== 'All').map((fam) => (
-                    <option key={fam} value={fam}>{fam}</option>
+                  {(categories || []).map((cat) => (
+                    <option key={cat.id} value={cat.name}>{cat.name}</option>
                   ))}
                 </select>
               </div>

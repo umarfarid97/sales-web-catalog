@@ -535,8 +535,11 @@ export const formatAttributeFromDb = (row) => {
 };
 
 export const formatAttributeToDb = (attr) => {
+  let prefix = 'conc';
+  if (attr.type === 'gender') prefix = 'gen';
+  else if (attr.type === 'category') prefix = 'cat';
   return {
-    id: attr.id || `${attr.type === 'category' ? 'cat' : 'conc'}-${Date.now()}`,
+    id: attr.id || `${prefix}-${Date.now()}`,
     type: attr.type,
     name: attr.name,
     value: attr.value || attr.name,

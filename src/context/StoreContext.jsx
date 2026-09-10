@@ -24,29 +24,72 @@ const StoreContext = createContext();
 
 // Helper to derive attributes directly from real products in database
 const deriveAttributesFromProducts = (productsList) => {
+  // 1. Genders (Strictly 3 types only: Women, Men, Unisex)
+  const genders = [
+    { id: 'gen-women', type: 'gender', name: 'Women', value: 'Women', displayOrder: 1 },
+    { id: 'gen-men', type: 'gender', name: 'Men', value: 'Men', displayOrder: 2 },
+    { id: 'gen-unisex', type: 'gender', name: 'Unisex', value: 'Unisex', displayOrder: 3 }
+  ];
+
   if (!Array.isArray(productsList) || productsList.length === 0) {
-    return [
-      { id: 'cat-women', type: 'category', name: 'Women', value: 'Women', displayOrder: 1 },
-      { id: 'cat-men', type: 'category', name: 'Men', value: 'Men', displayOrder: 2 },
-      { id: 'cat-unisex', type: 'category', name: 'Unisex', value: 'Unisex', displayOrder: 3 },
-      { id: 'conc-extrait-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
-      { id: 'conc-edp-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
-      { id: 'conc-edp-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
-      { id: 'conc-extrait-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
+    const defaultCategories = [
+      'Fruity-Floral / Mass Appeal',
+      'Sweet / Gourmand / Vanilla',
+      'Fruity / Juicy / Tropical',
+      'Sweet / Amber / Gourmand',
+      'Floral / Bouquet',
+      'Fresh / Aquatic / Citrus',
+      'Dark / Seductive / Night',
+      'Fresh / Aquatic / Citrus / Green',
+      'Rose / Peony / Romantic Floral',
+      'Classic / Fougere / Heritage',
+      'Blue / Aromatic / Fresh-Woody',
+      'Clean / Musk / Powdery',
+      'Spicy / Warm / Tobacco',
+      'Niche / Woody / Unisex',
+      'Woody / Vetiver / Green',
+      'Oud / Oriental / Resinous',
+      'Floral / Fruity / Niche-Unisex',
+      'Amber / Warm / Oriental',
+      'Leather / Smoky / Dark'
+    ].map((fam, idx) => ({
+      id: `cat-${fam.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
+      type: 'category',
+      name: fam,
+      value: fam,
+      displayOrder: idx + 1
+    }));
+
+    const defaultConcentrations = [
+      { id: 'conc-extrait-de-parfum-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
+      { id: 'conc-eau-de-parfum-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
+      { id: 'conc-eau-de-parfum-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
+      { id: 'conc-extrait-de-parfum-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
     ];
+
+    return [...genders, ...defaultCategories, ...defaultConcentrations];
   }
 
-  // 1. Categories (3 types only: Women, Men, Unisex)
-  const categoryOrder = { Women: 1, Men: 2, Unisex: 3 };
-  const categories = ['Women', 'Men', 'Unisex'].map(name => ({
-    id: `cat-${name.toLowerCase()}`,
-    type: 'category',
-    name,
-    value: name,
-    displayOrder: categoryOrder[name] || 4
-  }));
+  // 2. Categories extracted by frequency from actual database products
+  const famCounts = {};
+  productsList.forEach(p => {
+    const fam = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
+    if (fam && typeof fam === 'string' && fam.trim() && fam !== 'Pour Femme' && fam !== 'Pour Homme') {
+      famCounts[fam.trim()] = (famCounts[fam.trim()] || 0) + 1;
+    }
+  });
 
-  // 2. Concentrations extracted by frequency from actual database products
+  const categories = Object.entries(famCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([fam, _count], idx) => ({
+      id: `cat-${fam.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
+      type: 'category',
+      name: fam,
+      value: fam,
+      displayOrder: idx + 1
+    }));
+
+  // 3. Concentrations extracted by frequency from actual database products
   const concCounts = {};
   productsList.forEach(p => {
     const conc = p.specs?.concentration || p.concentration;
@@ -58,14 +101,14 @@ const deriveAttributesFromProducts = (productsList) => {
   const concentrations = Object.entries(concCounts)
     .sort((a, b) => b[1] - a[1])
     .map(([conc, _count], idx) => ({
-      id: `conc-${idx + 1}-${conc.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`,
+      id: `conc-${conc.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
       type: 'concentration',
       name: conc,
       value: conc,
       displayOrder: idx + 1
     }));
 
-  return [...categories, ...concentrations];
+  return [...genders, ...categories, ...concentrations];
 };
 
 export const useStore = () => {
@@ -1203,61 +1246,154 @@ export const StoreProvider = ({ children }) => {
 
   // --- Attributes Management (Admin Operations Cloud + Local) ---
 
-  // Standardized categories: 3 types only (Men, Women, Unisex)
-  const categories = useMemo(() => {
-    const list = attributes.filter(a => a.type === 'category');
+  // 1. Genders: Strictly 3 types only (Women, Men, Unisex)
+  const genders = useMemo(() => {
+    const list = (attributes || []).filter(a => a && (a.type === 'gender' || (a.type === 'category' && ['Women', 'Men', 'Unisex'].includes(a.name))));
     const validNames = ['Women', 'Men', 'Unisex'];
-    const filtered = list.filter(c => validNames.includes(c.name));
-    
-    // Ensure all 3 exist in standard order
-    const map = new Map(filtered.map(c => [c.name, c]));
+    const map = new Map(list.map(c => [c.name, c]));
     return validNames.map((name, idx) => map.get(name) || {
-      id: `cat-${name.toLowerCase()}`,
-      type: 'category',
+      id: `gen-${name.toLowerCase()}`,
+      type: 'gender',
       name,
       value: name,
       displayOrder: idx + 1
     });
   }, [attributes]);
 
-  // Concentrations ordered by displayOrder (populated from real database)
-  const concentrations = useMemo(() => {
-    const list = attributes.filter(a => a.type === 'concentration');
+  // 2. Categories (Fragrance Families): Real scent families derived from products/attributes
+  const categories = useMemo(() => {
+    // Exclude gender rows even if legacy table had them under type === 'category'
+    const list = (attributes || []).filter(a => a && a.type === 'category' && !['Women', 'Men', 'Unisex'].includes(a.name));
     if (list.length > 0) {
       return [...list].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
     }
-    return [
-      { id: 'conc-extrait-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
-      { id: 'conc-edp-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
-      { id: 'conc-edp-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
-      { id: 'conc-extrait-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
-    ];
-  }, [attributes]);
 
-  // Real product distribution counts for Categories and Concentrations
+    // Dynamic fallback: extract distinct fragrance categories directly from products
+    const famCounts = {};
+    (products || []).forEach(p => {
+      const f = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
+      if (f && typeof f === 'string' && f.trim() && f !== 'Pour Femme' && f !== 'Pour Homme') {
+        famCounts[f.trim()] = (famCounts[f.trim()] || 0) + 1;
+      }
+    });
+
+    if (Object.keys(famCounts).length > 0) {
+      return Object.entries(famCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([fam, _count], idx) => ({
+          id: `cat-${fam.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
+          type: 'category',
+          name: fam,
+          value: fam,
+          displayOrder: idx + 1
+        }));
+    }
+
+    return [
+      'Fruity-Floral / Mass Appeal',
+      'Sweet / Gourmand / Vanilla',
+      'Fruity / Juicy / Tropical',
+      'Sweet / Amber / Gourmand',
+      'Floral / Bouquet',
+      'Fresh / Aquatic / Citrus',
+      'Dark / Seductive / Night',
+      'Fresh / Aquatic / Citrus / Green',
+      'Rose / Peony / Romantic Floral',
+      'Classic / Fougere / Heritage',
+      'Blue / Aromatic / Fresh-Woody',
+      'Clean / Musk / Powdery',
+      'Spicy / Warm / Tobacco',
+      'Niche / Woody / Unisex',
+      'Woody / Vetiver / Green',
+      'Oud / Oriental / Resinous',
+      'Floral / Fruity / Niche-Unisex',
+      'Amber / Warm / Oriental',
+      'Leather / Smoky / Dark'
+    ].map((fam, idx) => ({
+      id: `cat-${fam.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
+      type: 'category',
+      name: fam,
+      value: fam,
+      displayOrder: idx + 1
+    }));
+  }, [attributes, products]);
+
+  // 3. Concentrations ordered by displayOrder (populated from real database or products)
+  const concentrations = useMemo(() => {
+    const list = (attributes || []).filter(a => a && a.type === 'concentration');
+    if (list.length > 0) {
+      return [...list].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    }
+
+    // Fallback: extract distinct concentrations from products
+    const concCounts = {};
+    (products || []).forEach(p => {
+      const conc = p.specs?.concentration || p.concentration;
+      if (conc && typeof conc === 'string' && conc.trim()) {
+        concCounts[conc.trim()] = (concCounts[conc.trim()] || 0) + 1;
+      }
+    });
+
+    if (Object.keys(concCounts).length > 0) {
+      return Object.entries(concCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([conc, _count], idx) => ({
+          id: `conc-${conc.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
+          type: 'concentration',
+          name: conc,
+          value: conc,
+          displayOrder: idx + 1
+        }));
+    }
+
+    return [
+      { id: 'conc-extrait-de-parfum-30', type: 'concentration', name: 'Extrait de Parfum (30%)', value: 'Extrait de Parfum (30%)', displayOrder: 1 },
+      { id: 'conc-eau-de-parfum-intense-25', type: 'concentration', name: 'Eau de Parfum Intense (25%)', value: 'Eau de Parfum Intense (25%)', displayOrder: 2 },
+      { id: 'conc-eau-de-parfum-20', type: 'concentration', name: 'Eau de Parfum (20%)', value: 'Eau de Parfum (20%)', displayOrder: 3 },
+      { id: 'conc-extrait-de-parfum-35', type: 'concentration', name: 'Extrait de Parfum (35%)', value: 'Extrait de Parfum (35%)', displayOrder: 4 }
+    ];
+  }, [attributes, products]);
+
+  // Real product distribution counts for Genders, Categories and Concentrations (Guarded against undefined)
   const attributeStats = useMemo(() => {
-    const categoryCounts = { Women: 0, Men: 0, Unisex: 0 };
+    const genderCounts = { Women: 0, Men: 0, Unisex: 0 };
+    const categoryCounts = {};
     const concentrationCounts = {};
 
-    products.forEach(p => {
+    (products || []).forEach(p => {
+      if (!p) return;
       const g = p.specs?.gender || p.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
-      if (categoryCounts[g] !== undefined) {
-        categoryCounts[g]++;
+      if (g && genderCounts[g] !== undefined) {
+        genderCounts[g]++;
+      }
+
+      const cat = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
+      if (cat && typeof cat === 'string') {
+        const trimmed = cat.trim();
+        if (trimmed && trimmed !== 'Pour Femme' && trimmed !== 'Pour Homme') {
+          categoryCounts[trimmed] = (categoryCounts[trimmed] || 0) + 1;
+        }
       }
 
       const conc = p.specs?.concentration || p.concentration;
       if (conc && typeof conc === 'string') {
         const trimmed = conc.trim();
-        concentrationCounts[trimmed] = (concentrationCounts[trimmed] || 0) + 1;
+        if (trimmed) {
+          concentrationCounts[trimmed] = (concentrationCounts[trimmed] || 0) + 1;
+        }
       }
     });
 
-    return { categoryCounts, concentrationCounts };
+    return { genderCounts, categoryCounts, concentrationCounts };
   }, [products]);
 
   const addAttribute = useCallback(async (attrData) => {
+    let prefix = 'conc';
+    if (attrData.type === 'gender') prefix = 'gen';
+    else if (attrData.type === 'category') prefix = 'cat';
+
     const newAttr = {
-      id: attrData.id || `${attrData.type === 'category' ? 'cat' : 'conc'}-${Date.now()}`,
+      id: attrData.id || `${prefix}-${Date.now()}`,
       type: attrData.type,
       name: (attrData.name || '').trim(),
       value: (attrData.value || attrData.name || '').trim(),
@@ -1323,6 +1459,11 @@ export const StoreProvider = ({ children }) => {
 
   const deleteAttribute = useCallback(async (id) => {
     const target = attributes.find(a => a.id === id);
+    if (target && target.type === 'gender') {
+      showToast('Core gender categories (Men, Women, Unisex) cannot be deleted as they define the catalog taxonomy.', 'warning');
+      return;
+    }
+
     setAttributes(prev => {
       const updated = prev.filter(a => a.id !== id);
       localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
@@ -1579,8 +1720,9 @@ export const StoreProvider = ({ children }) => {
         deleteProduct,
         restockProduct,
 
-        // Attributes (Categories - 3 Types Only & Concentrations from DB)
+        // Attributes (Gender - 3 Types Only, Categories - Fragrance Families & Concentrations)
         attributes,
+        genders,
         categories,
         concentrations,
         attributeStats,
