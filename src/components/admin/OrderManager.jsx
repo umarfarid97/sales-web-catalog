@@ -4,8 +4,7 @@ import {
   Search, 
   Eye, 
   X,
-  Gift,
-  Feather
+  Gift
 } from 'lucide-react';
 
 export const OrderManager = () => {

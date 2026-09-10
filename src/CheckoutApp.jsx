@@ -4,7 +4,6 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { BrandValuesFooter } from './components/common/BrandValuesFooter';
-import { MobileBottomNav } from './components/common/MobileBottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AuthModal } from './components/common/AuthModal';
@@ -17,7 +16,6 @@ import {
   ArrowRight,
   ShoppingBag, 
   Landmark,
-  Gift,
   AlertCircle
 } from 'lucide-react';
 
@@ -71,7 +69,8 @@ export const CheckoutPageContent = () => {
       const savedOrders = JSON.parse(localStorage.getItem('valenszo_real_orders') || '[]');
       const matchedOrder = savedOrders.find((o) => o.id === orderId) || {
         id: orderId,
-        trackingNumber: `TRK-VAL-${Math.floor(1000000 + Math.random() * 9000000)}`,
+        trackingNumber: '',
+        courierName: '',
         paymentMethod: 'fpx',
         paymentStatus: 'Paid',
         billCode: statusResult.billCode
@@ -638,7 +637,16 @@ export const CheckoutPageContent = () => {
                   <strong>Order Reference:</strong> <span style={{ fontFamily: 'var(--font-mono)' }}>{placedOrder.id}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <strong>Tracking Number:</strong> <span style={{ fontFamily: 'var(--font-mono)', color: '#926917' }}>{placedOrder.trackingNumber}</span>
+                  <strong>Courier Tracking:</strong> 
+                  <span style={{ 
+                    fontSize: '0.82rem', 
+                    color: placedOrder.trackingNumber ? '#926917' : '#6b7280', 
+                    fontFamily: placedOrder.trackingNumber ? 'var(--font-mono)' : 'inherit', 
+                    fontWeight: placedOrder.trackingNumber ? 700 : 500,
+                    fontStyle: placedOrder.trackingNumber ? 'normal' : 'italic'
+                  }}>
+                    {placedOrder.trackingNumber ? `${placedOrder.courierName ? placedOrder.courierName + ' - ' : ''}${placedOrder.trackingNumber}` : 'Pending Dispatch'}
+                  </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <strong>Payment Method:</strong> <span style={{ textTransform: 'capitalize' }}>{placedOrder.paymentMethod}</span>
@@ -653,10 +661,13 @@ export const CheckoutPageContent = () => {
                   </span>
                 </div>
                 {placedOrder.billCode && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                     <strong>ToyyibPay Bill Code:</strong> <span style={{ fontFamily: 'var(--font-mono)', color: '#1e40af' }}>{placedOrder.billCode}</span>
                   </div>
                 )}
+                <div style={{ fontSize: '0.78rem', color: '#6b7280', fontStyle: 'italic', marginTop: '8px', borderTop: '1px dashed #e5e7eb', paddingTop: '8px' }}>
+                  * Official courier tracking number will be assigned by our fulfillment team upon parcel dispatch.
+                </div>
               </div>
 
               {placedOrder.paymentMethod === 'bank-transfer' && (

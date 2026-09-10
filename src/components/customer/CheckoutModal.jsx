@@ -495,8 +495,16 @@ export const CheckoutModal = () => {
                   <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#000000' }}>{placedOrder.id}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Tracking Code</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#926917' }}>{placedOrder.trackingNumber}</span>
+                  <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Courier Tracking</span>
+                  <span style={{ 
+                    fontSize: '0.82rem', 
+                    color: placedOrder.trackingNumber ? '#926917' : '#6b7280', 
+                    fontWeight: placedOrder.trackingNumber ? 700 : 500, 
+                    fontFamily: placedOrder.trackingNumber ? 'var(--font-mono)' : 'inherit',
+                    fontStyle: placedOrder.trackingNumber ? 'normal' : 'italic'
+                  }}>
+                    {placedOrder.trackingNumber ? `${placedOrder.courierName ? placedOrder.courierName + ' - ' : ''}${placedOrder.trackingNumber}` : 'Issued upon dispatch'}
+                  </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <span style={{ fontSize: '0.78rem', color: '#6b7280', textTransform: 'uppercase' }}>Payment Method</span>

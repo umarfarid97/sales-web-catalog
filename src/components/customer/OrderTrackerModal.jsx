@@ -9,17 +9,21 @@ import {
   CheckCircle2, 
   Package, 
   MapPin, 
-  UserCheck
+  UserCheck,
+  Copy,
+  Check,
+  Clock
 } from 'lucide-react';
 
 export const OrderTrackerModal = () => {
-  const { isOrderTrackerOpen, setIsOrderTrackerOpen, orders, userOrders } = useStore();
+  const { isOrderTrackerOpen, setIsOrderTrackerOpen, orders, userOrders, showToast } = useStore();
   const { currentUser, isAuthenticated, openAuthModal } = useAuth();
 
   const [searchId, setSearchId] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isSearchingDb, setIsSearchingDb] = useState(false);
   const [searchError, setSearchError] = useState('');
+  const [copied, setCopied] = useState(false);
 
   // When modal opens or userOrders changes, default to the user's latest real order
   useEffect(() => {
@@ -81,6 +85,14 @@ export const OrderTrackerModal = () => {
       case 'Delivered': return 4;
       default: return 1;
     }
+  };
+
+  const handleCopyTracking = (trackingCode) => {
+    if (!trackingCode) return;
+    navigator.clipboard.writeText(trackingCode);
+    setCopied(true);
+    if (showToast) showToast('Tracking number copied to clipboard', 'success');
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const currentStep = selectedOrder ? getStatusStep(selectedOrder.status) : 1;
@@ -294,10 +306,10 @@ export const OrderTrackerModal = () => {
               }}>
                 <div>
                   <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                    Order Reference &bull; {selectedOrder.id}
+                    Order Reference
                   </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#926917', fontSize: '1.1rem', marginTop: '2px' }}>
-                    {selectedOrder.trackingNumber || 'TRK-PENDING'}
+                  <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#000000', fontSize: '1.25rem', marginTop: '2px' }}>
+                    {selectedOrder.id}
                   </div>
                 </div>
 
@@ -358,6 +370,136 @@ export const OrderTrackerModal = () => {
                   );
                 })}
               </div>
+
+              {/* DEDICATED COURIER DISPATCH & TRACKING BOX (INPUTTED BY ADMIN UPON DISPATCH) */}
+              {selectedOrder.trackingNumber ? (
+                <div style={{
+                  background: '#fafafa',
+                  border: '1.5px solid #000000',
+                  borderRadius: '8px',
+                  padding: '18px 20px',
+                  marginBottom: '20px',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ 
+                        width: '36px', 
+                        height: '36px', 
+                        borderRadius: '6px', 
+                        background: '#000000', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        color: '#ffffff' 
+                      }}>
+                        <Truck size={18} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                          Assigned Courier Partner
+                        </div>
+                        <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111827' }}>
+                          {selectedOrder.courierName || 'White-Glove Express Courier'}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <span style={{
+                      background: '#dcfce7',
+                      color: '#15803d',
+                      border: '1px solid #bbf7d0',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      padding: '4px 10px',
+                      borderRadius: '999px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
+                    }}>
+                      Dispatched by Admin
+                    </span>
+                  </div>
+
+                  {/* Tracking Number Inputted By Admin */}
+                  <div style={{
+                    background: '#ffffff',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '6px',
+                    padding: '14px 16px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '12px',
+                    flexWrap: 'wrap',
+                    gap: '10px'
+                  }}>
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: '#6b7280', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em' }}>
+                        Courier Consignment Tracking Number
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 800, color: '#926917', letterSpacing: '0.05em', marginTop: '2px' }}>
+                        {selectedOrder.trackingNumber}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCopyTracking(selectedOrder.trackingNumber)}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '8px 16px',
+                        background: copied ? '#ecfdf5' : '#000000',
+                        color: copied ? '#065f46' : '#ffffff',
+                        border: copied ? '1px solid #a7f3d0' : 'none',
+                        borderRadius: '4px',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {copied ? <Check size={14} /> : <Copy size={14} />}
+                      <span>{copied ? 'Copied' : 'Copy Tracking'}</span>
+                    </button>
+                  </div>
+
+                  {/* Admin Input Attribution & Instructions */}
+                  <div style={{ fontSize: '0.8rem', color: '#4b5563', lineHeight: 1.5, background: '#f9fafb', padding: '10px 12px', borderRadius: '4px', border: '1px solid #f3f4f6' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, color: '#111827', marginBottom: '2px' }}>
+                      <CheckCircle2 size={13} color="#059669" />
+                      <span>Official Courier Consignment</span>
+                    </div>
+                    <div>
+                      This official tracking number was registered by our fulfillment team upon parcel handover to <strong>{selectedOrder.courierName || 'the courier'}</strong>.
+                    </div>
+                    {selectedOrder.dispatchedAt && (
+                      <div style={{ fontSize: '0.74rem', color: '#6b7280', marginTop: '4px' }}>
+                        Handover recorded on: {new Date(selectedOrder.dispatchedAt).toLocaleString('en-MY')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div style={{
+                  background: '#fafaf9',
+                  border: '1px dashed #d6d3d1',
+                  borderRadius: '8px',
+                  padding: '16px 18px',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                    <Clock size={16} color="#b38e44" />
+                    <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1f2937' }}>
+                      Courier Tracking: Awaiting Atelier Dispatch
+                    </span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#4b5563', lineHeight: 1.5 }}>
+                    Your luxury creation is being carefully prepared and packaged by our atelier. The courier name and tracking consignment number will be registered here as soon as our fulfillment team completes the dispatch process.
+                  </p>
+                </div>
+              )}
 
               {/* Delivery Address & Customer Details */}
               <div style={{ 

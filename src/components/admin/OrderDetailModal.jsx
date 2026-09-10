@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   X, 
@@ -7,14 +7,62 @@ import {
   CreditCard, 
   CheckCircle2, 
   Copy, 
-  Check,
-  Gift,
-  Feather
+  Check, 
+  Gift, 
+  Feather,
+  Edit3,
+  Send,
+  AlertCircle
 } from 'lucide-react';
 
+const POPULAR_COURIERS = [
+  'J&T Express',
+  'Ninja Van',
+  'Pos Laju',
+  'DHL eCommerce',
+  'SPX Express',
+  'Flash Express',
+  'Lalamove (Same-Day)',
+  'GrabExpress',
+  'Other'
+];
+
 export const OrderDetailModal = () => {
-  const { viewingOrder, setViewingOrder, updateOrderStatus, showToast } = useStore();
-  const [copied, setCopied] = React.useState(false);
+  const { 
+    viewingOrder, 
+    setViewingOrder, 
+    updateOrderStatus, 
+    dispatchOrder, 
+    updateOrderTracking, 
+    showToast 
+  } = useStore();
+
+  const [copied, setCopied] = useState(false);
+  const [isDispatchFormOpen, setIsDispatchFormOpen] = useState(false);
+  const [courierName, setCourierName] = useState('J&T Express');
+  const [customCourier, setCustomCourier] = useState('');
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [dispatchError, setDispatchError] = useState('');
+
+  // Sync state whenever viewingOrder changes
+  useEffect(() => {
+    if (viewingOrder) {
+      setTrackingNumber(viewingOrder.trackingNumber || '');
+      const currentCourier = viewingOrder.courierName || '';
+      if (POPULAR_COURIERS.includes(currentCourier)) {
+        setCourierName(currentCourier);
+        setCustomCourier('');
+      } else if (currentCourier) {
+        setCourierName('Other');
+        setCustomCourier(currentCourier);
+      } else {
+        setCourierName('J&T Express');
+        setCustomCourier('');
+      }
+      setIsDispatchFormOpen(false);
+      setDispatchError('');
+    }
+  }, [viewingOrder]);
 
   if (!viewingOrder) return null;
 
@@ -24,7 +72,7 @@ export const OrderDetailModal = () => {
     if (order.trackingNumber) {
       navigator.clipboard.writeText(order.trackingNumber);
       setCopied(true);
-      showToast('Tracking number copied', 'success');
+      showToast('Tracking number copied to clipboard', 'success');
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -33,6 +81,66 @@ export const OrderDetailModal = () => {
     updateOrderStatus(order.id, newStatus);
     setViewingOrder({ ...order, status: newStatus });
   };
+
+  const getEffectiveCourier = () => {
+    if (courierName === 'Other') {
+      return customCourier.trim() || 'Courier Express';
+    }
+    return courierName;
+  };
+
+  const handleConfirmDispatch = async (e) => {
+    e?.preventDefault();
+    if (!trackingNumber.trim()) {
+      setDispatchError('Please enter the courier tracking number.');
+      return;
+    }
+    setDispatchError('');
+    const effectiveCourier = getEffectiveCourier();
+    const cleanTracking = trackingNumber.trim();
+    const dispatchedAt = new Date().toISOString();
+
+    await dispatchOrder(order.id, {
+      trackingNumber: cleanTracking,
+      courierName: effectiveCourier
+    });
+
+    setViewingOrder({
+      ...order,
+      status: 'Shipped',
+      trackingNumber: cleanTracking,
+      courierName: effectiveCourier,
+      dispatchedAt
+    });
+
+    setIsDispatchFormOpen(false);
+  };
+
+  const handleSaveTrackingEdit = async (e) => {
+    e?.preventDefault();
+    if (!trackingNumber.trim()) {
+      setDispatchError('Tracking number cannot be blank.');
+      return;
+    }
+    setDispatchError('');
+    const effectiveCourier = getEffectiveCourier();
+    const cleanTracking = trackingNumber.trim();
+
+    await updateOrderTracking(order.id, {
+      trackingNumber: cleanTracking,
+      courierName: effectiveCourier
+    });
+
+    setViewingOrder({
+      ...order,
+      trackingNumber: cleanTracking,
+      courierName: effectiveCourier
+    });
+
+    setIsDispatchFormOpen(false);
+  };
+
+  const isShippedOrDelivered = order.status === 'Shipped' || order.status === 'Delivered';
 
   return (
     <div 
@@ -73,36 +181,197 @@ export const OrderDetailModal = () => {
             {/* Quick Status Workflow Buttons */}
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: 'auto' }}>
               {order.status === 'Pending' && (
-                <button 
-                  className="admin-btn-primary"
-                  style={{ padding: '8px 14px', fontSize: '0.82rem' }}
-                  onClick={() => handleStatusChange('Processing')}
-                >
-                  Start Atelier Packing
-                </button>
+                <>
+                  <button 
+                    className="admin-btn-secondary"
+                    style={{ padding: '8px 14px', fontSize: '0.82rem' }}
+                    onClick={() => handleStatusChange('Processing')}
+                  >
+                    Start Atelier Packing
+                  </button>
+                  <button 
+                    className="admin-btn-primary"
+                    style={{ padding: '8px 14px', fontSize: '0.82rem' }}
+                    onClick={() => setIsDispatchFormOpen(true)}
+                  >
+                    <Truck size={14} />
+                    <span>Dispatch Courier...</span>
+                  </button>
+                </>
               )}
               {order.status === 'Processing' && (
                 <button 
                   className="admin-btn-primary"
                   style={{ padding: '8px 14px', fontSize: '0.82rem' }}
-                  onClick={() => handleStatusChange('Shipped')}
+                  onClick={() => setIsDispatchFormOpen(true)}
                 >
                   <Truck size={14} />
-                  <span>Dispatch White-Glove Courier</span>
+                  <span>Dispatch Courier...</span>
                 </button>
               )}
               {order.status === 'Shipped' && (
+                <>
+                  <button 
+                    className="admin-btn-secondary"
+                    style={{ padding: '8px 14px', fontSize: '0.82rem' }}
+                    onClick={() => setIsDispatchFormOpen(true)}
+                  >
+                    <Edit3 size={13} />
+                    <span>Edit Tracking</span>
+                  </button>
+                  <button 
+                    className="admin-btn-primary"
+                    style={{ padding: '8px 14px', fontSize: '0.82rem', background: '#059669', borderColor: '#059669' }}
+                    onClick={() => handleStatusChange('Delivered')}
+                  >
+                    <CheckCircle2 size={14} />
+                    <span>Mark Delivered</span>
+                  </button>
+                </>
+              )}
+              {order.status === 'Delivered' && (
                 <button 
-                  className="admin-btn-primary"
-                  style={{ padding: '8px 14px', fontSize: '0.82rem', background: '#059669', borderColor: '#059669' }}
-                  onClick={() => handleStatusChange('Delivered')}
+                  className="admin-btn-secondary"
+                  style={{ padding: '8px 14px', fontSize: '0.82rem' }}
+                  onClick={() => setIsDispatchFormOpen(true)}
                 >
-                  <CheckCircle2 size={14} />
-                  <span>Mark Delivered</span>
+                  <Edit3 size={13} />
+                  <span>Edit Tracking</span>
                 </button>
               )}
             </div>
           </div>
+
+          {/* Inline Courier Dispatch & Tracking Form Modal / Drawer */}
+          {isDispatchFormOpen && (
+            <div style={{
+              background: '#f8fafc',
+              border: '1px solid #cbd5e1',
+              borderRadius: '8px',
+              padding: '20px',
+              marginBottom: '24px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Truck size={18} color="#926917" />
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>
+                    {isShippedOrDelivered ? 'Edit Courier Consignment Tracking' : 'Dispatch Order & Assign Courier Tracking'}
+                  </h4>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsDispatchFormOpen(false)}
+                  style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <p style={{ fontSize: '0.82rem', color: '#475569', marginTop: 0, marginBottom: '14px' }}>
+                Enter the official tracking consignment details issued by the courier partner. This will immediately update customer tracking view.
+              </p>
+
+              {dispatchError && (
+                <div style={{
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  color: '#991b1b',
+                  padding: '8px 12px',
+                  borderRadius: '4px',
+                  fontSize: '0.8rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  marginBottom: '12px'
+                }}>
+                  <AlertCircle size={14} />
+                  <span>{dispatchError}</span>
+                </div>
+              )}
+
+              <form onSubmit={isShippedOrDelivered ? handleSaveTrackingEdit : handleConfirmDispatch}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '14px' }}>
+                  
+                  {/* Courier Selector */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#334155', marginBottom: '6px' }}>
+                      Courier Partner
+                    </label>
+                    <select
+                      value={courierName}
+                      onChange={(e) => setCourierName(e.target.value)}
+                      className="admin-form-input"
+                      style={{ width: '100%', height: '38px', background: '#ffffff', borderRadius: '4px', fontSize: '0.85rem' }}
+                    >
+                      {POPULAR_COURIERS.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Custom Courier Input if 'Other' */}
+                  {courierName === 'Other' && (
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#334155', marginBottom: '6px' }}>
+                        Custom Courier Name
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. CityLink Express, Aramex..."
+                        value={customCourier}
+                        onChange={(e) => setCustomCourier(e.target.value)}
+                        className="admin-form-input"
+                        style={{ width: '100%', height: '38px', background: '#ffffff', borderRadius: '4px', fontSize: '0.85rem' }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Tracking Number Input */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#334155', marginBottom: '6px' }}>
+                      Courier Consignment Tracking # *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. JNT192837465MY or 6001928374"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      className="admin-form-input"
+                      style={{ 
+                        width: '100%', 
+                        height: '38px', 
+                        background: '#ffffff', 
+                        borderRadius: '4px', 
+                        fontSize: '0.88rem', 
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: 600
+                      }}
+                      autoFocus
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsDispatchFormOpen(false)}
+                    className="admin-btn-secondary"
+                    style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="admin-btn-primary"
+                    style={{ padding: '8px 18px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <Send size={13} />
+                    <span>{isShippedOrDelivered ? 'Save Tracking Changes' : 'Confirm Dispatch & Assign Tracking'}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           {/* Grid Layout: Client & Delivery Info */}
           <div className="admin-order-modal-grid">
@@ -150,20 +419,10 @@ export const OrderDetailModal = () => {
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#b38e44' }}>Payment &amp; Courier</h4>
               </div>
 
-              <div style={{ fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <div>
-                  <span style={{ color: '#6b7280' }}>Payment: </span>
-                  <span style={{ fontWeight: 600, color: '#111827' }}>{order.paymentMethod}</span>
-                </div>
-
-                <div>
-                  <span style={{ color: '#6b7280' }}>Tracking Number: </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', color: '#b38e44', fontWeight: 700 }}>
-                    {order.trackingNumber}
-                  </span>
-                  <button onClick={copyTracking} style={{ background: 'none', border: 'none', color: '#b38e44', marginLeft: '6px', cursor: 'pointer' }}>
-                    {copied ? <Check size={13} color="#059669" /> : <Copy size={13} />}
-                  </button>
+                  <span style={{ color: '#6b7280' }}>Payment Method: </span>
+                  <span style={{ fontWeight: 600, color: '#111827', textTransform: 'capitalize' }}>{order.paymentMethod}</span>
                 </div>
 
                 <div>
@@ -172,6 +431,85 @@ export const OrderDetailModal = () => {
                     {order.status}
                   </span>
                 </div>
+
+                {/* Courier & Tracking Section */}
+                <div style={{ marginTop: '4px', borderTop: '1px solid #e5e7eb', paddingTop: '10px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#6b7280', marginBottom: '6px' }}>
+                    Courier Consignment Tracking
+                  </div>
+
+                  {order.trackingNumber ? (
+                    <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '10px 12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Courier Partner:</span>
+                        <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.85rem' }}>{order.courierName || 'Standard Express'}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>Tracking #:</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', color: '#926917', fontWeight: 800, fontSize: '0.92rem' }}>
+                            {order.trackingNumber}
+                          </span>
+                          <button 
+                            onClick={copyTracking} 
+                            style={{ background: 'none', border: 'none', color: '#926917', cursor: 'pointer', padding: '2px' }}
+                            title="Copy tracking code"
+                          >
+                            {copied ? <Check size={14} color="#059669" /> : <Copy size={14} />}
+                          </button>
+                        </div>
+                      </div>
+                      {order.dispatchedAt && (
+                        <div style={{ fontSize: '0.74rem', color: '#94a3b8', marginTop: '4px', textAlign: 'right' }}>
+                          Dispatched: {new Date(order.dispatchedAt).toLocaleString()}
+                        </div>
+                      )}
+                      <div style={{ marginTop: '8px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0', textAlign: 'right' }}>
+                        <button
+                          type="button"
+                          onClick={() => setIsDispatchFormOpen(true)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#475569',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <Edit3 size={11} />
+                          <span>Edit Courier / Tracking Number</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ 
+                      background: '#fffbeb', 
+                      border: '1px dashed #fcd34d', 
+                      borderRadius: '6px', 
+                      padding: '10px 12px',
+                      fontSize: '0.8rem',
+                      color: '#92400e'
+                    }}>
+                      <div style={{ marginBottom: '6px' }}>
+                        No courier tracking number assigned yet. (Pending Admin dispatch)
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsDispatchFormOpen(true)}
+                        className="admin-btn-secondary"
+                        style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                      >
+                        <Truck size={12} style={{ marginRight: '4px' }} />
+                        <span>Input Courier Tracking Now</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
               </div>
             </div>
 

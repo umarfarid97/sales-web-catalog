@@ -149,7 +149,9 @@ export const formatOrderFromDb = (row) => {
     paymentMethod: row.payment_method || 'credit-card',
     placedAt: row.placed_at || row.created_at,
     deliveredAt: row.delivered_at || null,
-    trackingNumber: row.tracking_number || ''
+    trackingNumber: row.tracking_number || '',
+    courierName: row.courier_name || row.customer?.courierName || '',
+    dispatchedAt: row.dispatched_at || row.customer?.dispatchedAt || null
   };
 };
 
@@ -157,7 +159,11 @@ export const formatOrderFromDb = (row) => {
 export const formatOrderToDb = (order) => {
   return {
     id: order.id,
-    customer: order.customer,
+    customer: {
+      ...(order.customer || {}),
+      courierName: order.courierName || order.customer?.courierName || '',
+      dispatchedAt: order.dispatchedAt || order.customer?.dispatchedAt || null
+    },
     items: order.items,
     subtotal: order.subtotal,
     discount: order.discount,
@@ -168,7 +174,7 @@ export const formatOrderToDb = (order) => {
     payment_method: order.paymentMethod,
     placed_at: order.placedAt,
     delivered_at: order.deliveredAt,
-    tracking_number: order.trackingNumber
+    tracking_number: order.trackingNumber || ''
   };
 };
 
@@ -347,6 +353,31 @@ export const updateOrderStatusInSupabase = async (orderId, status, deliveredAt =
     return true;
   } catch (err) {
     console.error('Error updating order status in Supabase:', err);
+    return false;
+  }
+};
+
+export const updateOrderDispatchInSupabase = async (orderId, { trackingNumber, courierName, status = 'Shipped', dispatchedAt }) => {
+  if (!isSupabaseConfigured || !supabase) return false;
+  try {
+    const { data: existing } = await supabase.from('orders').select('customer').eq('id', orderId).maybeSingle();
+    const updatedCustomer = {
+      ...(existing?.customer || {}),
+      courierName: courierName || 'Standard Express',
+      dispatchedAt: dispatchedAt || new Date().toISOString()
+    };
+
+    const updates = {
+      status,
+      tracking_number: trackingNumber,
+      customer: updatedCustomer
+    };
+
+    const { error } = await supabase.from('orders').update(updates).eq('id', orderId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.error('Error updating order dispatch in Supabase:', err);
     return false;
   }
 };
