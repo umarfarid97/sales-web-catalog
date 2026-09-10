@@ -188,8 +188,8 @@ export const ProductManager = () => {
 
                       {/* Concentration */}
                       <td>
-                        <span style={{ fontSize: '0.82rem', color: '#4b5563' }}>
-                          {prod.concentration?.split(' ')[0] || 'Extrait'}
+                        <span style={{ fontSize: '0.82rem', color: '#4b5563', whiteSpace: 'nowrap' }}>
+                          {prod.concentration || prod.specs?.concentration || 'N/A'}
                         </span>
                       </td>
 
