@@ -433,28 +433,6 @@ export const OrderDetailModal = () => {
                   {order.customer.address}, {order.customer.city}, {order.customer.state} {order.customer.zip}, {order.customer.country}
                 </p>
               </div>
-
-              {/* Gift & Samples Callout */}
-              {hasGiftBox && (
-                <div style={{ marginTop: '14px', padding: '10px 12px', background: '#fffbeb', borderRadius: '6px', border: '1px solid #fde68a', fontSize: '0.82rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b45309', fontWeight: 700, marginBottom: '2px' }}>
-                    <Gift size={13} />
-                    <span>Signature Gift Box Packaging</span>
-                  </div>
-                  {giftNoteText && (
-                    <p style={{ color: '#92400e', fontStyle: 'italic', margin: '4px 0 0 0', fontSize: '0.8rem', whiteSpace: 'pre-wrap' }}>
-                      Card Note: &quot;{giftNoteText}&quot;
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Included Samples */}
-              {samplesList.length > 0 && (
-                <div style={{ marginTop: '10px', fontSize: '0.8rem', color: '#4b5563' }}>
-                  <strong style={{ color: '#111827' }}>Included Samples:</strong> {samplesList.join(', ')}
-                </div>
-              )}
             </div>
 
             {/* Tracking & Payment Details */}
