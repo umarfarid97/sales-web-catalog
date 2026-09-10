@@ -1,0 +1,45 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/men",
+      "destination": "/men.html"
+    },
+    {
+      "source": "/women",
+      "destination": "/women.html"
+    },
+    {
+      "source": "/collection",
+      "destination": "/collection.html"
+    },
+    {
+      "source": "/product",
+      "destination": "/product.html"
+    },
+    {
+      "source": "/product/(.*)",
+      "destination": "/product.html"
+    },
+    {
+      "source": "/bundle",
+      "destination": "/bundle.html"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/checkout.html"
+    },
+    {
+      "source": "/diagnostic",
+      "destination": "/diagnostic.html"
+    }
+  ]
+}

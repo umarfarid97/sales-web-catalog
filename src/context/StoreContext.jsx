@@ -236,8 +236,21 @@ export const StoreProvider = ({ children }) => {
     setCustomerView('catalog');
   };
 
-  // Admin Active Tab: 'analytics' | 'products' | 'orders' | 'inventory'
-  const [adminTab, setAdminTab] = useState('analytics');
+  // Admin Active Tab: 'analytics' | 'products' | 'orders' | 'inventory' | 'attributes'
+  const [adminTab, setAdminTab] = useState(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+        if (tab && ['analytics', 'products', 'orders', 'inventory', 'attributes'].includes(tab)) {
+          return tab;
+        }
+      }
+    } catch {
+      // fallback
+    }
+    return 'analytics';
+  });
 
   // Cloud Sync Status Indicator
   const [isCloudConnected, setIsCloudConnected] = useState(isSupabaseConfigured);

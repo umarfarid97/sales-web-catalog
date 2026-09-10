@@ -886,3 +886,5 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, dis
     </div>
   );
 };
+
+export default AttributesManager;
