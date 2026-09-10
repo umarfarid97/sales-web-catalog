@@ -1,11 +1,5 @@
 import React from 'react';
-import { 
-  ShieldCheck, 
-  Gift, 
-  RefreshCw, 
-  Feather, 
-  ArrowRight
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -14,57 +8,13 @@ export const Footer = () => {
 
   const handleNewsletter = (e) => {
     e.preventDefault();
-    showToast('Merci! You have been subscribed to Valenszo Fragrance previews.', 'success');
+    showToast('Thank you! You have been subscribed to Valenszo Fragrance updates.', 'success');
   };
 
   return (
     <footer style={{ background: '#1e130c', borderTop: '1px solid #332016', padding: '50px 0 80px', color: '#e8ded4' }}>
       <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 24px)' }}>
         
-        {/* Valenszo 4 Pillars */}
-        <div 
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '20px',
-            paddingBottom: '40px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            marginBottom: '40px'
-          }}
-        >
-          <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.12)', border: '1px solid rgba(217, 119, 6, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#d97706' }}>
-              <Gift size={20} />
-            </div>
-            <h4 style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.04em' }}>Art of Gifting</h4>
-            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Complimentary iconic gift box with signature satin presentation.</p>
-          </div>
-
-          <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.12)', border: '1px solid rgba(217, 119, 6, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#d97706' }}>
-              <Feather size={20} />
-            </div>
-            <h4 style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.04em' }}>Deluxe Miniatures</h4>
-            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Choose 2 complimentary travel spray miniatures at checkout.</p>
-          </div>
-
-          <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.12)', border: '1px solid rgba(217, 119, 6, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#d97706' }}>
-              <RefreshCw size={20} />
-            </div>
-            <h4 style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.04em' }}>35% Oil Concentration</h4>
-            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Hand-blended luxury perfumes formulated for an all-day scent trail.</p>
-          </div>
-
-          <div style={{ textAlign: 'center', padding: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(217, 119, 6, 0.12)', border: '1px solid rgba(217, 119, 6, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', color: '#d97706' }}>
-              <ShieldCheck size={20} />
-            </div>
-            <h4 style={{ color: '#ffffff', marginBottom: '4px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.04em' }}>Express Dispatch</h4>
-            <p style={{ fontSize: '0.8rem', color: '#a8978b', margin: 0 }}>Doorstep courier delivery on all orders nationwide.</p>
-          </div>
-        </div>
-
         {/* Footer Navigation & Newsletter */}
         <div 
           style={{
@@ -213,7 +163,7 @@ export const Footer = () => {
           <div style={{ display: 'flex', gap: '20px' }}>
             <span>Privacy Policy</span>
             <span>Legal Notice</span>
-            <span>Terms of Savoir-Faire</span>
+            <span>Terms of Service</span>
           </div>
         </div>
 
