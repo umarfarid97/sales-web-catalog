@@ -156,6 +156,12 @@ export const OrderDetailModal = () => {
           className="modal-close-btn"
           onClick={() => setViewingOrder(null)}
           aria-label="Close Order Details"
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            zIndex: 30
+          }}
         >
           <X size={18} />
         </button>
@@ -163,7 +169,17 @@ export const OrderDetailModal = () => {
         <div style={{ padding: 'clamp(18px, 4vw, 28px)' }}>
           
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #e5e7eb', paddingBottom: '20px', marginBottom: '24px', flexWrap: 'wrap', gap: '14px' }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'flex-start', 
+            borderBottom: '1px solid #e5e7eb', 
+            paddingBottom: '20px', 
+            marginBottom: '24px', 
+            flexWrap: 'wrap', 
+            gap: '14px',
+            paddingRight: '56px' /* Prevents buttons from clashing with the close button */
+          }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                 <h3 className="font-serif-title" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)', fontWeight: 800, color: '#0b0c10' }}>
@@ -179,7 +195,7 @@ export const OrderDetailModal = () => {
             </div>
 
             {/* Quick Status Workflow Buttons */}
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', width: 'auto' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
               {order.status === 'Pending' && (
                 <>
                   <button 
