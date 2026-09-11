@@ -117,19 +117,51 @@ export const CheckoutPageContent = () => {
 
 
   const [formData, setFormData] = useState(() => {
-    const parts = (currentUser?.name || '').split(' ');
+    const defAddr = (currentUser?.addresses && currentUser.addresses.length > 0)
+      ? (currentUser.addresses.find(a => a.isDefault) || currentUser.addresses[0])
+      : null;
+    const parts = (defAddr?.recipientName || currentUser?.name || '').split(' ');
+    const fullAddr = defAddr
+      ? (defAddr.addressLine1 + (defAddr.addressLine2 ? `, ${defAddr.addressLine2}` : ''))
+      : (currentUser?.address || '18 Jalan Sultan Ismail');
+
     return {
       firstName: parts[0] || '',
       lastName: parts.slice(1).join(' ') || '',
       email: currentUser?.email || '',
-      phone: currentUser?.phone || '+60 12-345 6789',
-      address: currentUser?.address || '18 Jalan Sultan Ismail',
-      city: currentUser?.city || 'Kuala Lumpur',
-      postalCode: currentUser?.zip || '50250',
-      country: 'Malaysia',
-      paymentMethod: 'fpx'
+      phone: defAddr?.phone || currentUser?.phone || '+60 12-345 6789',
+      address: fullAddr,
+      city: defAddr?.city || currentUser?.city || 'Kuala Lumpur',
+      postalCode: defAddr?.zip || currentUser?.zip || '50250',
+      country: defAddr?.country || currentUser?.country || 'Malaysia',
+      paymentMethod: currentUser?.paymentPreferences?.preferredMethod || 'fpx'
     };
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      const defAddr = (currentUser.addresses && currentUser.addresses.length > 0)
+        ? (currentUser.addresses.find(a => a.isDefault) || currentUser.addresses[0])
+        : null;
+      const parts = (defAddr?.recipientName || currentUser.name || '').split(' ');
+      const fullAddr = defAddr
+        ? (defAddr.addressLine1 + (defAddr.addressLine2 ? `, ${defAddr.addressLine2}` : ''))
+        : (currentUser.address || '');
+
+      setFormData(prev => ({
+        ...prev,
+        firstName: parts[0] || prev.firstName,
+        lastName: parts.slice(1).join(' ') || prev.lastName,
+        email: currentUser.email || prev.email,
+        phone: defAddr?.phone || currentUser.phone || prev.phone,
+        address: fullAddr || prev.address,
+        city: defAddr?.city || currentUser.city || prev.city,
+        postalCode: defAddr?.zip || currentUser.zip || prev.postalCode,
+        country: defAddr?.country || currentUser.country || 'Malaysia',
+        paymentMethod: currentUser.paymentPreferences?.preferredMethod || prev.paymentMethod
+      }));
+    }
+  }, [currentUser]);
 
   const toggleSample = (sampleId) => {
     if (selectedSamples.includes(sampleId)) {
@@ -487,9 +519,61 @@ export const CheckoutPageContent = () => {
                   </div>
                 )}
 
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '1rem' }}>
-                  Delivery Address (Malaysia & International)
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0 }}>
+                    Delivery Address (Malaysia & International)
+                  </h3>
+                  {currentUser && (
+                    <a href="/account?tab=addresses" target="_blank" rel="noreferrer" style={{ fontSize: '0.8rem', color: '#b38e44', fontWeight: 600, textDecoration: 'none' }}>
+                      Manage Addresses &rarr;
+                    </a>
+                  )}
+                </div>
+
+                {/* Saved Address Quick Selector */}
+                {currentUser?.addresses && currentUser.addresses.length > 0 && (
+                  <div style={{ marginBottom: '1.25rem', padding: '12px 14px', background: '#fafaf9', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+                    <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                      📍 Select from Saved Addresses:
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {currentUser.addresses.map((addr) => {
+                        const isSelected = formData.address.includes(addr.addressLine1);
+                        return (
+                          <button
+                            key={addr.id}
+                            type="button"
+                            onClick={() => {
+                              const parts = (addr.recipientName || '').split(' ');
+                              setFormData((prev) => ({
+                                ...prev,
+                                firstName: parts[0] || prev.firstName,
+                                lastName: parts.slice(1).join(' ') || prev.lastName,
+                                phone: addr.phone || prev.phone,
+                                address: addr.addressLine1 + (addr.addressLine2 ? `, ${addr.addressLine2}` : ''),
+                                city: addr.city || prev.city,
+                                postalCode: addr.zip || prev.postalCode
+                              }));
+                              showToast(`Using address: ${addr.label}`, 'info');
+                            }}
+                            style={{
+                              padding: '6px 12px',
+                              borderRadius: '4px',
+                              border: isSelected ? '2px solid #000000' : '1px solid #d1d5db',
+                              background: isSelected ? '#ffffff' : '#f3f4f6',
+                              color: isSelected ? '#000000' : '#4b5563',
+                              fontSize: '0.78rem',
+                              fontWeight: isSelected ? 700 : 500,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {addr.label} {addr.isDefault && '★'}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <div className="checkout-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                   <div>

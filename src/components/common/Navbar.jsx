@@ -302,6 +302,29 @@ export const Navbar = () => {
                   </div>
 
                   <div style={{ padding: '6px 0' }}>
+                    <a
+                      href="/account"
+                      onClick={() => setIsAccountMenuOpen(false)}
+                      style={{
+                        width: '100%',
+                        padding: '9px 16px',
+                        background: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        color: '#111827',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <User size={15} color="#926917" />
+                      <span>My Account & Addresses</span>
+                    </a>
+
                     <button
                       onClick={() => {
                         setIsOrderTrackerOpen(true);
@@ -676,26 +699,49 @@ export const Navbar = () => {
                       <div style={{ fontSize: '0.74rem', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {currentUser.email}
                       </div>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsMenuOpen(false);
-                          showToast('Signed out successfully.', 'info');
-                        }}
-                        style={{
-                          marginTop: '8px',
-                          padding: '5px 10px',
-                          background: '#ffffff',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '3px',
-                          fontSize: '0.72rem',
-                          color: '#dc2626',
-                          fontWeight: 600,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Sign Out
-                      </button>
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                        <a
+                          href="/account"
+                          onClick={() => setIsMenuOpen(false)}
+                          style={{
+                            flex: 1,
+                            padding: '6px 10px',
+                            background: '#000000',
+                            color: '#ffffff',
+                            borderRadius: '3px',
+                            fontSize: '0.74rem',
+                            fontWeight: 700,
+                            textDecoration: 'none',
+                            textAlign: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <User size={13} />
+                          <span>My Account</span>
+                        </a>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setIsMenuOpen(false);
+                            showToast('Signed out successfully.', 'info');
+                          }}
+                          style={{
+                            padding: '6px 10px',
+                            background: '#ffffff',
+                            border: '1px solid #d1d5db',
+                            borderRadius: '3px',
+                            fontSize: '0.74rem',
+                            color: '#dc2626',
+                            fontWeight: 600,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Sign Out
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <div style={{ padding: '12px 14px', background: '#fafaf9', borderRadius: '4px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
@@ -742,6 +788,27 @@ export const Navbar = () => {
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <a 
+                      href="/account"
+                      onClick={() => setIsMenuOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '11px 14px',
+                        background: 'transparent',
+                        border: 'none',
+                        borderRadius: '3px',
+                        color: '#374151',
+                        fontSize: '0.84rem',
+                        fontWeight: 600,
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <User size={17} color="#926917" />
+                      <span>My Account & Delivery Addresses</span>
+                    </a>
+
                     <button 
                       onClick={() => { setIsOrderTrackerOpen(true); setIsMenuOpen(false); }}
                       style={{

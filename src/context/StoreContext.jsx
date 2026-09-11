@@ -592,8 +592,13 @@ export const StoreProvider = ({ children }) => {
         if (cloudOrders !== null && isMounted) {
           // Filter out any legacy audio orders if present
           const realOrders = cloudOrders.filter((o) => !o.items?.some((it) => it.category === 'Audio'));
-          setOrders(realOrders);
-          localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
+          setOrders((prev) => {
+            if (realOrders.length > 0) return realOrders;
+            return prev;
+          });
+          if (realOrders.length > 0) {
+            localStorage.setItem('valenszo_real_orders', JSON.stringify(realOrders));
+          }
         }
 
         // 3. Attributes Sync (Categories & Concentrations) directly from Supabase

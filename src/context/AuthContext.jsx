@@ -32,6 +32,45 @@ export const AuthProvider = ({ children }) => {
         if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase().trim())) {
           parsed.role = 'admin';
         }
+
+        // Ensure addresses array
+        if (!Array.isArray(parsed.addresses)) {
+          let localAddrs = [];
+          try {
+            const savedAddrs = localStorage.getItem(`valenszo_addresses_${parsed.id}`);
+            if (savedAddrs) localAddrs = JSON.parse(savedAddrs);
+          } catch {}
+          parsed.addresses = (Array.isArray(localAddrs) && localAddrs.length > 0)
+            ? localAddrs
+            : parsed.address ? [{
+                id: 'addr-default-1',
+                label: 'Home',
+                recipientName: parsed.name || '',
+                phone: parsed.phone || '',
+                addressLine1: parsed.address || '',
+                addressLine2: '',
+                city: parsed.city || 'Kuala Lumpur',
+                state: parsed.state || 'Wilayah Persekutuan',
+                zip: parsed.zip || '50250',
+                country: parsed.country || 'Malaysia',
+                isDefault: true
+              }] : [];
+        }
+
+        // Ensure paymentPreferences object
+        if (!parsed.paymentPreferences) {
+          let localPrefs = null;
+          try {
+            const savedPrefs = localStorage.getItem(`valenszo_payment_prefs_${parsed.id}`);
+            if (savedPrefs) localPrefs = JSON.parse(savedPrefs);
+          } catch {}
+          parsed.paymentPreferences = localPrefs || {
+            preferredMethod: 'fpx',
+            preferredBank: 'MB2U0227',
+            bankName: 'Maybank2u'
+          };
+        }
+
         return parsed;
       }
       return null;
@@ -65,6 +104,48 @@ export const AuthProvider = ({ children }) => {
       profile = await fetchProfileByEmail(cleanEmail);
     }
 
+    // Resolve saved addresses from local cache, metadata or profile
+    let localAddresses = [];
+    try {
+      const savedAddrs = localStorage.getItem(`valenszo_addresses_${authUser.id}`);
+      if (savedAddrs) localAddresses = JSON.parse(savedAddrs);
+    } catch {}
+
+    const defaultInitialAddress = (profile?.address || authUser.user_metadata?.address) ? [{
+      id: 'addr-default-1',
+      label: 'Home',
+      recipientName: profile?.name || authUser.user_metadata?.full_name || cleanEmail.split('@')[0],
+      phone: profile?.phone || authUser.user_metadata?.phone || '',
+      addressLine1: profile?.address || authUser.user_metadata?.address || '',
+      addressLine2: '',
+      city: profile?.city || authUser.user_metadata?.city || 'Kuala Lumpur',
+      state: profile?.state || authUser.user_metadata?.state || 'Wilayah Persekutuan',
+      zip: profile?.zip || authUser.user_metadata?.zip || '50250',
+      country: profile?.country || 'Malaysia',
+      isDefault: true
+    }] : [];
+
+    const resolvedAddresses = (Array.isArray(localAddresses) && localAddresses.length > 0)
+      ? localAddresses
+      : (Array.isArray(authUser.user_metadata?.addresses) && authUser.user_metadata.addresses.length > 0)
+      ? authUser.user_metadata.addresses
+      : (Array.isArray(profile?.addresses) && profile.addresses.length > 0)
+      ? profile.addresses
+      : defaultInitialAddress;
+
+    // Resolve payment preferences
+    let localPaymentPrefs = null;
+    try {
+      const savedPrefs = localStorage.getItem(`valenszo_payment_prefs_${authUser.id}`);
+      if (savedPrefs) localPaymentPrefs = JSON.parse(savedPrefs);
+    } catch {}
+
+    const resolvedPaymentPreferences = localPaymentPrefs || authUser.user_metadata?.paymentPreferences || profile?.paymentPreferences || {
+      preferredMethod: 'fpx',
+      preferredBank: 'MB2U0227',
+      bankName: 'Maybank2u'
+    };
+
     const resolved = {
       id: authUser.id,
       email: authUser.email,
@@ -75,7 +156,9 @@ export const AuthProvider = ({ children }) => {
       state: profile?.state || authUser.user_metadata?.state || 'Wilayah Persekutuan',
       zip: profile?.zip || authUser.user_metadata?.zip || '50250',
       country: profile?.country || 'Malaysia',
-      role: (isWhitelisted || profile?.role === 'admin') ? 'admin' : (profile?.role || authUser.user_metadata?.role || 'customer')
+      role: (isWhitelisted || profile?.role === 'admin') ? 'admin' : (profile?.role || authUser.user_metadata?.role || 'customer'),
+      addresses: resolvedAddresses,
+      paymentPreferences: resolvedPaymentPreferences
     };
 
     if (isWhitelisted && profile?.role !== 'admin') {
@@ -300,6 +383,138 @@ export const AuthProvider = ({ children }) => {
     await saveProfileToSupabase(updated).catch(err => console.warn('Profile update warning:', err));
   };
 
+  // Address Management
+  const persistAddresses = async (addressesList) => {
+    if (!currentUser) return;
+    const updated = { ...currentUser, addresses: addressesList };
+    setCurrentUser(updated);
+    try {
+      localStorage.setItem('valenszo_auth_user', JSON.stringify(updated));
+      localStorage.setItem(`valenszo_addresses_${currentUser.id}`, JSON.stringify(addressesList));
+    } catch (e) {
+      console.warn('Failed saving addresses to localStorage', e);
+    }
+
+    // Sync with Supabase user_metadata if online
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.auth.updateUser({
+          data: { addresses: addressesList }
+        });
+      } catch (e) {
+        console.warn('Supabase auth metadata update skipped', e);
+      }
+    }
+  };
+
+  const addAddress = async (newAddress) => {
+    if (!currentUser) return null;
+    const currentAddresses = Array.isArray(currentUser.addresses) ? currentUser.addresses : [];
+    const isFirst = currentAddresses.length === 0;
+    const shouldBeDefault = isFirst || Boolean(newAddress.isDefault);
+
+    const addressEntry = {
+      id: newAddress.id || `addr-${Date.now()}`,
+      label: newAddress.label || 'Home',
+      recipientName: newAddress.recipientName || currentUser.name || '',
+      phone: newAddress.phone || currentUser.phone || '',
+      addressLine1: newAddress.addressLine1 || '',
+      addressLine2: newAddress.addressLine2 || '',
+      city: newAddress.city || 'Kuala Lumpur',
+      state: newAddress.state || 'Wilayah Persekutuan',
+      zip: newAddress.zip || '',
+      country: newAddress.country || 'Malaysia',
+      isDefault: shouldBeDefault
+    };
+
+    let updatedList;
+    if (shouldBeDefault) {
+      updatedList = [
+        addressEntry,
+        ...currentAddresses.map(a => ({ ...a, isDefault: false }))
+      ];
+    } else {
+      updatedList = [...currentAddresses, addressEntry];
+    }
+
+    await persistAddresses(updatedList);
+    return addressEntry;
+  };
+
+  const updateAddress = async (addressId, addressFields) => {
+    if (!currentUser) return false;
+    const currentAddresses = Array.isArray(currentUser.addresses) ? currentUser.addresses : [];
+    const shouldBeDefault = Boolean(addressFields.isDefault);
+
+    const updatedList = currentAddresses.map(addr => {
+      if (addr.id === addressId) {
+        return {
+          ...addr,
+          ...addressFields,
+          id: addressId,
+          isDefault: shouldBeDefault ? true : addr.isDefault
+        };
+      }
+      return shouldBeDefault ? { ...addr, isDefault: false } : addr;
+    });
+
+    await persistAddresses(updatedList);
+    return true;
+  };
+
+  const deleteAddress = async (addressId) => {
+    if (!currentUser) return false;
+    const currentAddresses = Array.isArray(currentUser.addresses) ? currentUser.addresses : [];
+    const target = currentAddresses.find(a => a.id === addressId);
+    let updatedList = currentAddresses.filter(a => a.id !== addressId);
+
+    // If we deleted the default address, make the first remaining address default
+    if (target?.isDefault && updatedList.length > 0) {
+      updatedList[0] = { ...updatedList[0], isDefault: true };
+    }
+
+    await persistAddresses(updatedList);
+    return true;
+  };
+
+  const setDefaultAddress = async (addressId) => {
+    if (!currentUser) return false;
+    const currentAddresses = Array.isArray(currentUser.addresses) ? currentUser.addresses : [];
+    const updatedList = currentAddresses.map(a => ({
+      ...a,
+      isDefault: a.id === addressId
+    }));
+
+    await persistAddresses(updatedList);
+    return true;
+  };
+
+  // Payment Preferences
+  const updatePaymentPreferences = async (newPreferences) => {
+    if (!currentUser) return;
+    const currentPrefs = currentUser.paymentPreferences || {};
+    const updatedPrefs = { ...currentPrefs, ...newPreferences };
+    const updated = { ...currentUser, paymentPreferences: updatedPrefs };
+    setCurrentUser(updated);
+
+    try {
+      localStorage.setItem('valenszo_auth_user', JSON.stringify(updated));
+      localStorage.setItem(`valenszo_payment_prefs_${currentUser.id}`, JSON.stringify(updatedPrefs));
+    } catch (e) {
+      console.warn('Failed saving payment preferences to localStorage', e);
+    }
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.auth.updateUser({
+          data: { paymentPreferences: updatedPrefs }
+        });
+      } catch (e) {
+        console.warn('Supabase auth metadata update skipped', e);
+      }
+    }
+  };
+
   const userEmail = currentUser?.email?.toLowerCase().trim() || '';
   const isWhitelistedAdmin = ADMIN_EMAILS.includes(userEmail);
   const isAdmin = currentUser?.role === 'admin' || isWhitelistedAdmin;
@@ -322,7 +537,12 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
-        updateProfile
+        updateProfile,
+        addAddress,
+        updateAddress,
+        deleteAddress,
+        setDefaultAddress,
+        updatePaymentPreferences
       }}
     >
       {children}

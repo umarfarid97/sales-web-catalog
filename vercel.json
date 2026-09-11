@@ -40,6 +40,14 @@
     {
       "source": "/diagnostic",
       "destination": "/diagnostic.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/account.html"
+    },
+    {
+      "source": "/account/(.*)",
+      "destination": "/account.html"
     }
   ]
 }

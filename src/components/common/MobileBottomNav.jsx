@@ -7,17 +7,18 @@ export const MobileBottomNav = () => {
   const { isAuthenticated, openAuthModal } = useAuth();
   const { setIsOrderTrackerOpen } = useStore();
 
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '/';
 
   const isHome = currentPath === '/' || currentPath.endsWith('index.html') || currentPath === '';
   const isShop = currentPath.includes('collection');
   const isQuiz = currentPath.includes('diagnostic');
+  const isAccount = currentPath.includes('account');
 
   const handleAccountClick = () => {
     if (!isAuthenticated) {
       openAuthModal({ mode: 'signin', title: 'Customer Account' });
     } else {
-      setIsOrderTrackerOpen(true);
+      window.location.href = '/account';
     }
   };
 
@@ -106,14 +107,14 @@ export const MobileBottomNav = () => {
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: '#8c7d72',
+          color: isAccount ? '#2b1810' : '#8c7d72',
           fontSize: '0.68rem',
-          fontWeight: 500,
+          fontWeight: isAccount ? 800 : 500,
           padding: 0,
           letterSpacing: '0.04em'
         }}
       >
-        <User size={20} strokeWidth={1.7} color="#8c7d72" />
+        <User size={20} strokeWidth={isAccount ? 2.4 : 1.7} color={isAccount ? '#2b1810' : '#8c7d72'} />
         <span>Account</span>
       </button>
     </nav>

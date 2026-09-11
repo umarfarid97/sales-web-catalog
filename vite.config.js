@@ -10,7 +10,7 @@ const mpaRewritePlugin = () => {
   const rewrite = (req, res, next) => {
     const rawUrl = req.url || '';
     const cleanPath = rawUrl.split('?')[0];
-    const pages = ['product', 'men', 'women', 'collection', 'checkout', 'diagnostic', 'admin'];
+    const pages = ['product', 'men', 'women', 'collection', 'checkout', 'diagnostic', 'admin', 'account'];
     if (cleanPath === '/bundle' || cleanPath === '/bundle/') {
       const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
       req.url = `/collection.html${query}`;
@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
         diagnostic: resolve(__dirname, 'diagnostic.html'),
         admin: resolve(__dirname, 'admin.html'),
         checkout: resolve(__dirname, 'checkout.html'),
+        account: resolve(__dirname, 'account.html'),
       },
     },
   },

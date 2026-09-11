@@ -24,6 +24,7 @@ import { MenCollectionContent } from './MenApp';
 import { WomenCollectionContent } from './WomenApp';
 import { CollectionPageContent } from './CollectionApp';
 import { CheckoutPageContent } from './CheckoutApp';
+import { AccountPageContent } from './AccountApp';
 
 // Admin Components
 import { AdminHeader } from './components/admin/AdminHeader';
@@ -65,6 +66,7 @@ const MainLayout = () => {
   const isCollection = !isProduct && (pathname.includes('collection') || customerView === 'collection');
   const isDiagnostic = !isProduct && (pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic');
   const isCheckout = pathname.includes('checkout') || customerView === 'checkout';
+  const isAccount = pathname.includes('account') || customerView === 'account';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -142,6 +144,8 @@ const MainLayout = () => {
           <div className="customer-store-view">
             {isCheckout ? (
               <CheckoutPageContent />
+            ) : isAccount ? (
+              <AccountPageContent />
             ) : isProduct ? (
               <ProductDetailPage />
             ) : isWomen ? (
