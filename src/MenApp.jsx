@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
@@ -12,6 +12,7 @@ import { AuthModal } from './components/common/AuthModal';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { ProductCard } from './components/customer/ProductCard';
+import { Pagination } from './components/common/Pagination';
 import { 
   SlidersHorizontal, 
   ChevronRight, 
@@ -150,6 +151,19 @@ export const MenCollectionContent = () => {
   };
 
   const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0) + (searchQuery.trim() ? 1 : 0);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 24;
+
+  // Reset to first page when filtering or searching
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedChip, selectedAccords, selectedOccasions, selectedIntensities, priceMax, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <>
@@ -493,16 +507,28 @@ export const MenCollectionContent = () => {
 
           {/* Product Grid (Matching Picture 2: 2 columns mobile, 4 columns desktop) */}
           <div 
+            id="men-catalog-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(145px, 22vw, 260px), 1fr))',
               gap: 'clamp(0.85rem, 2.5vw, 1.75rem)'
             }}
           >
-            {filteredProducts.map((product) => (
+            {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
+
+          {/* Luxury Pagination Controls */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredProducts.length}
+            pageSize={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
+            itemLabel="men's creations"
+            scrollTargetId="men-catalog-grid"
+          />
 
           {filteredProducts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>

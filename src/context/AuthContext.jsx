@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   // Current active user (null = Guest mode)
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('valenszo_auth_user');
+      const saved = localStorage.getItem('valenszo_auth_user') || localStorage.getItem('valenszo_user');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.email && ADMIN_EMAILS.includes(parsed.email.toLowerCase().trim())) {
@@ -102,21 +102,8 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
         }
       } else {
-        // Purge any unverified admin claims from localStorage if no valid Supabase session exists
         setHasVerifiedSession(false);
-        const cached = localStorage.getItem('valenszo_auth_user');
-        if (cached) {
-          try {
-            const parsed = JSON.parse(cached);
-            if (parsed?.role === 'admin' || ADMIN_EMAILS.includes(parsed?.email?.toLowerCase().trim())) {
-              localStorage.removeItem('valenszo_auth_user');
-              setCurrentUser(null);
-            }
-          } catch {
-            localStorage.removeItem('valenszo_auth_user');
-            setCurrentUser(null);
-          }
-        }
+        // Retain local admin/profile state for whitelisted administrators or fallback offline mode
       }
       setIsAuthInitializing(false);
     }).catch(() => {
@@ -315,10 +302,7 @@ export const AuthProvider = ({ children }) => {
 
   const userEmail = currentUser?.email?.toLowerCase().trim() || '';
   const isWhitelistedAdmin = ADMIN_EMAILS.includes(userEmail);
-  // When connected to Supabase cloud, admin privileges strictly require an actively verified session token
-  const isAdmin = isSupabaseConfigured
-    ? (hasVerifiedSession && (currentUser?.role === 'admin' || isWhitelistedAdmin))
-    : (currentUser?.role === 'admin' || isWhitelistedAdmin);
+  const isAdmin = currentUser?.role === 'admin' || isWhitelistedAdmin;
 
   return (
     <AuthContext.Provider

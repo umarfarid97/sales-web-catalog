@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   Search, 
   Eye, 
   X,
-  Gift
+  Gift,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 export const OrderManager = () => {
@@ -31,6 +33,19 @@ export const OrderManager = () => {
     if (status === 'All') return orders.length;
     return orders.filter((o) => o.status === status).length;
   };
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 25;
+
+  // Reset to first page when filtering or searching
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStatusTab, orderSearch]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / PAGE_SIZE));
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const paginatedOrders = filteredOrders.slice(startIndex, startIndex + PAGE_SIZE);
 
   return (
     <div>
@@ -127,7 +142,7 @@ export const OrderManager = () => {
                   </td>
                 </tr>
               ) : (
-                filteredOrders.map((ord) => (
+                paginatedOrders.map((ord) => (
                   <tr key={ord.id}>
                     
                     {/* Order ID */}
@@ -211,7 +226,7 @@ export const OrderManager = () => {
               No luxury fragrance orders found matching your search.
             </div>
           ) : (
-            filteredOrders.map((ord) => (
+            paginatedOrders.map((ord) => (
               <div key={ord.id} className="admin-mobile-order-card">
                 <div className="admin-mobile-order-top">
                   <span className="admin-mobile-order-id">{ord.id}</span>
@@ -252,6 +267,64 @@ export const OrderManager = () => {
             ))
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {filteredOrders.length > PAGE_SIZE && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            flexWrap: 'wrap', 
+            gap: '12px', 
+            padding: '16px 20px', 
+            background: '#fafafa', 
+            borderTop: '1px solid #e5e7eb',
+            borderRadius: '0 0 8px 8px'
+          }}>
+            <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+              Showing <strong>{startIndex + 1}</strong>–<strong>{Math.min(startIndex + PAGE_SIZE, filteredOrders.length)}</strong> of <strong>{filteredOrders.length}</strong> orders
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                type="button"
+                className="admin-btn-secondary"
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '4px', 
+                  padding: '6px 12px', 
+                  fontSize: '0.8rem',
+                  opacity: currentPage <= 1 ? 0.5 : 1,
+                  cursor: currentPage <= 1 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                <ChevronLeft size={14} /> Previous
+              </button>
+              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#374151', padding: '0 8px' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                type="button"
+                className="admin-btn-secondary"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '4px', 
+                  padding: '6px 12px', 
+                  fontSize: '0.8rem',
+                  opacity: currentPage >= totalPages ? 0.5 : 1,
+                  cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Next <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
 
