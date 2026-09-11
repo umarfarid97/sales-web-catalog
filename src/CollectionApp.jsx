@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
@@ -160,6 +160,24 @@ export const CollectionPageContent = () => {
   };
 
   const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);
+  const moreDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moreDropdownRef.current && !moreDropdownRef.current.contains(event.target)) {
+        setIsMoreAccordsOpen(false);
+      }
+    };
+    if (isMoreAccordsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMoreAccordsOpen]);
+
   const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
   const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Floral', 'Sweet', 'Aquatic'];
 
@@ -219,8 +237,8 @@ export const CollectionPageContent = () => {
           </div>
 
           {/* Quick Accord Pill Filter Chips (Matching Picture 2: All, Fresh, Woody, Spicy, Leather, More v) */}
-          <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none' }}>
+          <div style={{ position: 'relative', zIndex: 40, marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               {/* All Chip */}
               <button
                 type="button"
@@ -276,10 +294,12 @@ export const CollectionPageContent = () => {
               })}
 
               {/* More v Dropdown Chip */}
-              <div style={{ position: 'relative' }}>
+              <div ref={moreDropdownRef} style={{ position: 'relative' }}>
                 <button
                   type="button"
                   onClick={() => setIsMoreAccordsOpen(prev => !prev)}
+                  aria-haspopup="true"
+                  aria-expanded={isMoreAccordsOpen}
                   style={{
                     padding: '7px 18px',
                     borderRadius: '999px',
@@ -310,11 +330,11 @@ export const CollectionPageContent = () => {
                       left: 0,
                       background: '#ffffff',
                       borderRadius: '8px',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.14)',
+                      boxShadow: '0 10px 25px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                       border: '1px solid #e5e7eb',
                       padding: '6px',
                       zIndex: 50,
-                      minWidth: '150px',
+                      minWidth: '160px',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '2px'
@@ -331,7 +351,7 @@ export const CollectionPageContent = () => {
                         style={{
                           padding: '8px 14px',
                           border: 'none',
-                          borderRadius: '4px',
+                          borderRadius: '6px',
                           background: selectedChip === acc ? '#f3f4f6' : 'transparent',
                           color: selectedChip === acc ? '#000000' : '#374151',
                           fontWeight: selectedChip === acc ? 700 : 500,
@@ -340,7 +360,14 @@ export const CollectionPageContent = () => {
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between'
+                          justifyContent: 'space-between',
+                          transition: 'background 0.15s'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (selectedChip !== acc) e.currentTarget.style.background = '#f9fafb';
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedChip !== acc) e.currentTarget.style.background = 'transparent';
                         }}
                       >
                         <span>{acc}</span>
