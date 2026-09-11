@@ -211,9 +211,6 @@ export const Navbar = () => {
               listStyle: 'none'
             }}
           >
-            <a href="/collection" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
-              All Perfumes
-            </a>
             <a href="/men" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
               Men
             </a>
