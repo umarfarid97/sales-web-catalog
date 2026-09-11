@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { COMPLIMENTARY_SAMPLES } from '../../data/initialProducts';
 import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment } from '../../services/paymentService';
+import { MALAYSIAN_STATES } from './AccountPage';
 import { 
   X, 
   Check, 
   ShieldCheck, 
   Gift, 
-  Sparkles,
+  Sparkles, 
   CheckCircle2,
   Landmark
 } from 'lucide-react';
@@ -36,12 +37,25 @@ export const CheckoutModal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
 
+  const sortedAddresses = useMemo(() => {
+    if (!currentUser?.addresses) return [];
+    return [...currentUser.addresses].sort((a, b) => (a.label || '').localeCompare(b.label || ''));
+  }, [currentUser?.addresses]);
+
+  const [selectedAddressId, setSelectedAddressId] = useState(() => {
+    if (currentUser?.addresses && currentUser.addresses.length > 0) {
+      const def = currentUser.addresses.find(a => a.isDefault) || currentUser.addresses[0];
+      return def.id;
+    }
+    return 'new';
+  });
+
   // Form State (Auto-populated with authenticated user profile & default address)
   const [formData, setFormData] = useState(() => {
     const defAddr = (currentUser?.addresses && currentUser.addresses.length > 0)
       ? (currentUser.addresses.find(a => a.isDefault) || currentUser.addresses[0])
       : null;
-    const parts = (defAddr?.recipientName || currentUser?.name || '').split(' ');
+    const parts = (defAddr?.recipientName || currentUser?.name || '').trim().split(' ');
     const fullAddr = defAddr
       ? (defAddr.addressLine1 + (defAddr.addressLine2 ? `, ${defAddr.addressLine2}` : ''))
       : (currentUser?.address || '18 Jalan Sultan Ismail');
@@ -53,34 +67,73 @@ export const CheckoutModal = () => {
       phone: defAddr?.phone || currentUser?.phone || '+60 12-345 6789',
       address: fullAddr,
       city: defAddr?.city || currentUser?.city || 'Kuala Lumpur',
+      state: defAddr?.state || 'Wilayah Persekutuan Kuala Lumpur',
       postalCode: defAddr?.zip || currentUser?.zip || '50250',
       country: defAddr?.country || currentUser?.country || 'Malaysia',
       paymentMethod: currentUser?.paymentPreferences?.preferredMethod || 'fpx'
     };
   });
 
+  const handleChooseAddress = (addrId) => {
+    setSelectedAddressId(addrId);
+    if (addrId === 'new') {
+      setFormData(prev => ({
+        ...prev,
+        address: '',
+        city: '',
+        postalCode: '',
+        state: 'Wilayah Persekutuan Kuala Lumpur'
+      }));
+      showToast('Enter new delivery address details below.', 'info');
+      return;
+    }
+
+    const addr = currentUser?.addresses?.find(a => a.id === addrId);
+    if (addr) {
+      const parts = (addr.recipientName || '').trim().split(' ');
+      const fName = parts[0] || '';
+      const lName = parts.slice(1).join(' ') || '';
+      const fullAddr = addr.addressLine1 + (addr.addressLine2 ? `, ${addr.addressLine2}` : '');
+
+      setFormData(prev => ({
+        ...prev,
+        firstName: fName || prev.firstName,
+        lastName: lName,
+        phone: addr.phone || prev.phone,
+        address: fullAddr,
+        city: addr.city || prev.city,
+        state: addr.state || 'Wilayah Persekutuan Kuala Lumpur',
+        postalCode: addr.zip || prev.postalCode,
+        country: addr.country || 'Malaysia'
+      }));
+      showToast(`Selected address: ${addr.label}`, 'success');
+    }
+  };
+
   useEffect(() => {
     if (currentUser) {
       const defAddr = (currentUser.addresses && currentUser.addresses.length > 0)
         ? (currentUser.addresses.find(a => a.isDefault) || currentUser.addresses[0])
         : null;
-      const parts = (defAddr?.recipientName || currentUser.name || '').split(' ');
-      const fullAddr = defAddr
-        ? (defAddr.addressLine1 + (defAddr.addressLine2 ? `, ${defAddr.addressLine2}` : ''))
-        : (currentUser.address || '');
+      if (defAddr) {
+        setSelectedAddressId(defAddr.id);
+        const parts = (defAddr.recipientName || currentUser.name || '').trim().split(' ');
+        const fullAddr = defAddr.addressLine1 + (defAddr.addressLine2 ? `, ${defAddr.addressLine2}` : '');
 
-      setFormData(prev => ({
-        ...prev,
-        firstName: parts[0] || prev.firstName,
-        lastName: parts.slice(1).join(' ') || prev.lastName,
-        email: currentUser.email || prev.email,
-        phone: defAddr?.phone || currentUser.phone || prev.phone,
-        address: fullAddr || prev.address,
-        city: defAddr?.city || currentUser.city || prev.city,
-        postalCode: defAddr?.zip || currentUser.zip || prev.postalCode,
-        country: defAddr?.country || currentUser.country || 'Malaysia',
-        paymentMethod: currentUser.paymentPreferences?.preferredMethod || prev.paymentMethod
-      }));
+        setFormData(prev => ({
+          ...prev,
+          firstName: parts[0] || prev.firstName,
+          lastName: parts.slice(1).join(' '),
+          email: currentUser.email || prev.email,
+          phone: defAddr.phone || currentUser.phone || prev.phone,
+          address: fullAddr || prev.address,
+          city: defAddr.city || prev.city,
+          state: defAddr.state || 'Wilayah Persekutuan Kuala Lumpur',
+          postalCode: defAddr.zip || prev.postalCode,
+          country: defAddr.country || 'Malaysia',
+          paymentMethod: currentUser.paymentPreferences?.preferredMethod || prev.paymentMethod
+        }));
+      }
     }
   }, [currentUser]);
 
@@ -346,7 +399,23 @@ export const CheckoutModal = () => {
                 )}
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsCheckoutOpen(false)}
+                  style={{
+                    padding: '10px 18px',
+                    fontSize: '0.85rem',
+                    background: 'transparent',
+                    color: '#6b7280',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontWeight: 600
+                  }}
+                >
+                  &larr; Return to Shopping
+                </button>
                 <button
                   type="button"
                   className="btn btn-dior-solid"
@@ -377,82 +446,138 @@ export const CheckoutModal = () => {
 
                   {/* Saved Address Quick Selector */}
                   {currentUser?.addresses && currentUser.addresses.length > 0 && (
-                    <div style={{ marginBottom: '14px', padding: '10px 12px', background: '#fafaf9', border: '1px solid #e5e7eb', borderRadius: '4px' }}>
-                      <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
-                        📍 Select from Saved Addresses:
+                    <div style={{ marginBottom: '14px', padding: '12px 14px', background: '#fafaf9', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#1f2937', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          📍 Choose Saved Address:
+                        </span>
+                        <span style={{ fontSize: '0.7rem', color: '#6b7280' }}>
+                          {sortedAddresses.length} saved
+                        </span>
                       </div>
+
+                      {/* Dropdown */}
+                      <select
+                        value={selectedAddressId}
+                        onChange={(e) => handleChooseAddress(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '8px 10px',
+                          borderRadius: '4px',
+                          border: '1.5px solid #231710',
+                          background: '#ffffff',
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          color: '#111827',
+                          marginBottom: '8px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {sortedAddresses.map((addr) => (
+                          <option key={addr.id} value={addr.id}>
+                            {addr.label.toUpperCase()} {addr.isDefault ? '★ (DEFAULT)' : ''} — {addr.recipientName || 'Recipient'}, {addr.addressLine1}
+                          </option>
+                        ))}
+                        <option value="new">+ Enter a different / new address</option>
+                      </select>
+
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {currentUser.addresses.map((addr) => {
-                          const isSelected = formData.address.includes(addr.addressLine1);
+                        {sortedAddresses.map((addr) => {
+                          const isChosen = selectedAddressId === addr.id;
                           return (
                             <button
                               key={addr.id}
                               type="button"
-                              onClick={() => {
-                                const parts = (addr.recipientName || '').split(' ');
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  firstName: parts[0] || prev.firstName,
-                                  lastName: parts.slice(1).join(' ') || prev.lastName,
-                                  phone: addr.phone || prev.phone,
-                                  address: addr.addressLine1 + (addr.addressLine2 ? `, ${addr.addressLine2}` : ''),
-                                  city: addr.city || prev.city,
-                                  postalCode: addr.zip || prev.postalCode
-                                }));
-                                showToast(`Using address: ${addr.label}`, 'info');
-                              }}
+                              onClick={() => handleChooseAddress(addr.id)}
                               style={{
-                                padding: '5px 10px',
-                                borderRadius: '3px',
-                                border: isSelected ? '1.5px solid #000000' : '1px solid #d1d5db',
-                                background: isSelected ? '#ffffff' : '#f3f4f6',
-                                color: isSelected ? '#000000' : '#4b5563',
-                                fontSize: '0.74rem',
-                                fontWeight: isSelected ? 700 : 500,
-                                cursor: 'pointer'
+                                padding: '6px 10px',
+                                borderRadius: '4px',
+                                border: isChosen ? '2px solid #231710' : '1px solid #d1d5db',
+                                background: isChosen ? '#f5f0eb' : '#ffffff',
+                                color: isChosen ? '#231710' : '#4b5563',
+                                fontSize: '0.75rem',
+                                fontWeight: isChosen ? 700 : 500,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px'
                               }}
                             >
-                              {addr.label} {addr.isDefault && '★'}
+                              <span>{isChosen ? '●' : '○'}</span>
+                              <span>{addr.label}</span>
+                              {addr.isDefault && <span style={{ fontSize: '0.65rem' }}>★</span>}
                             </button>
                           );
                         })}
+                        <button
+                          type="button"
+                          onClick={() => handleChooseAddress('new')}
+                          style={{
+                            padding: '6px 10px',
+                            borderRadius: '4px',
+                            border: selectedAddressId === 'new' ? '2px solid #231710' : '1px dashed #d1d5db',
+                            background: selectedAddressId === 'new' ? '#f5f0eb' : '#ffffff',
+                            color: '#4b5563',
+                            fontSize: '0.75rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          + New Address
+                        </button>
                       </div>
                     </div>
                   )}
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>First Name</label>
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>First Name *</label>
                       <input type="text" name="firstName" required value={formData.firstName} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Last Name</label>
-                      <input type="text" name="lastName" required value={formData.lastName} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Last Name (Optional)</label>
+                      <input type="text" name="lastName" placeholder="Optional" value={formData.lastName} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Email Address (for tracking)</label>
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Email Address (for tracking) *</label>
                     <input type="email" name="email" required value={formData.email} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Phone (for express courier)</label>
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Phone (for express courier) *</label>
                     <input type="tel" name="phone" required value={formData.phone} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Delivery Street Address</label>
+                    <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Delivery Street Address *</label>
                     <input type="text" name="address" required value={formData.address} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 0.8fr', gap: '10px' }}>
                     <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>City</label>
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>City *</label>
                       <input type="text" name="city" required value={formData.city} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Postcode</label>
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>State *</label>
+                      <select
+                        name="state"
+                        required
+                        value={formData.state}
+                        onChange={handleInputChange}
+                        className="form-input"
+                        style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db', fontSize: '0.85rem' }}
+                      >
+                        {MALAYSIAN_STATES.map((st) => (
+                          <option key={st} value={st}>
+                            {st}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" style={{ color: '#000000', fontWeight: 600 }}>Postcode *</label>
                       <input type="text" name="postalCode" required value={formData.postalCode} onChange={handleInputChange} className="form-input" style={{ background: '#ffffff', color: '#000000', border: '1px solid #d1d5db' }} />
                     </div>
                   </div>

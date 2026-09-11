@@ -116,9 +116,9 @@ export const ProductManager = () => {
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
               <option value="All">All Genders (3 Types)</option>
-              <option value="Women">Women</option>
               <option value="Men">Men</option>
               <option value="Unisex">Unisex</option>
+              <option value="Women">Women</option>
             </select>
 
             {/* Category (Fragrance Family) Filter */}
@@ -129,7 +129,7 @@ export const ProductManager = () => {
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
               <option value="All">All Categories</option>
-              {(categories || []).map((cat) => (
+              {[...(categories || [])].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((cat) => (
                 <option key={cat.id} value={cat.name}>{cat.name}</option>
               ))}
             </select>

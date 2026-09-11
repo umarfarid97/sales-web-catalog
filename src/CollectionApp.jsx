@@ -179,7 +179,7 @@ export const CollectionPageContent = () => {
   }, [isMoreAccordsOpen]);
 
   const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
-  const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Floral', 'Sweet', 'Aquatic'];
+  const MORE_ACCORDS = ['Amber', 'Aquatic', 'Aromatic', 'Citrus', 'Floral', 'Oud', 'Sweet'];
 
   return (
     <>

@@ -32,7 +32,7 @@ import './styles/pdp.css';
 import './styles/admin.css';
 
 const PRIMARY_ACCORDS = ['Fresh', 'Woody', 'Spicy', 'Leather'];
-const MORE_ACCORDS = ['Citrus', 'Amber', 'Aromatic', 'Oud', 'Aquatic', 'Sweet'];
+const MORE_ACCORDS = ['Amber', 'Aquatic', 'Aromatic', 'Citrus', 'Oud', 'Sweet'];
 
 export const MenCollectionContent = () => {
   const { products, favorites, toggleFavorite } = useStore();

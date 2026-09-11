@@ -193,7 +193,7 @@ export const ProductFormModal = () => {
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                     className="admin-form-select"
                   >
-                    {(genders || []).map((gen) => (
+                    {[...(genders || [])].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((gen) => (
                       <option key={gen.id} value={gen.name}>{gen.name}</option>
                     ))}
                   </select>
@@ -206,7 +206,7 @@ export const ProductFormModal = () => {
                     onChange={(e) => setFormData({ ...formData, concentration: e.target.value })}
                     className="admin-form-select"
                   >
-                    {(concentrations || []).map((conc) => (
+                    {[...(concentrations || [])].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((conc) => (
                       <option key={conc.id} value={conc.name}>{conc.name}</option>
                     ))}
                   </select>
@@ -220,7 +220,7 @@ export const ProductFormModal = () => {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="admin-form-select"
                 >
-                  {(categories || []).map((cat) => (
+                  {[...(categories || [])].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((cat) => (
                     <option key={cat.id} value={cat.name}>{cat.name}</option>
                   ))}
                 </select>

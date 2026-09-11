@@ -16,14 +16,14 @@ import {
 } from 'lucide-react';
 
 const POPULAR_COURIERS = [
+  'DHL eCommerce',
+  'Flash Express',
+  'GrabExpress',
   'J&T Express',
+  'Lalamove (Same-Day)',
   'Ninja Van',
   'Pos Laju',
-  'DHL eCommerce',
   'SPX Express',
-  'Flash Express',
-  'Lalamove (Same-Day)',
-  'GrabExpress',
   'Other'
 ];
 

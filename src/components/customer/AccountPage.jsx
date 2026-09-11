@@ -29,35 +29,35 @@ import {
 } from 'lucide-react';
 
 export const MALAYSIAN_STATES = [
-  'Wilayah Persekutuan Kuala Lumpur',
-  'Wilayah Persekutuan Putrajaya',
-  'Wilayah Persekutuan Labuan',
-  'Selangor',
   'Johor',
-  'Pulau Pinang (Penang)',
-  'Perak',
-  'Pahang',
-  'Negeri Sembilan',
-  'Melaka',
   'Kedah',
-  'Terengganu',
   'Kelantan',
+  'Melaka',
+  'Negeri Sembilan',
+  'Pahang',
+  'Perak',
   'Perlis',
+  'Pulau Pinang (Penang)',
   'Sabah',
-  'Sarawak'
+  'Sarawak',
+  'Selangor',
+  'Terengganu',
+  'Wilayah Persekutuan Kuala Lumpur',
+  'Wilayah Persekutuan Labuan',
+  'Wilayah Persekutuan Putrajaya'
 ];
 
 export const FPX_BANKS = [
-  { code: 'MB2U0227', name: 'Maybank2u' },
-  { code: 'BCBB0235', name: 'CIMB Clicks' },
-  { code: 'PBB0233', name: 'Public Bank' },
-  { code: 'RHB0218', name: 'RHB Now' },
-  { code: 'HLB0224', name: 'Hong Leong Connect' },
+  { code: 'ABB0233', name: 'Affin Bank' },
   { code: 'AMBB0209', name: 'AmBank' },
   { code: 'BIMB0340', name: 'Bank Islam' },
-  { code: 'ABB0233', name: 'Affin Bank' },
   { code: 'BKRM0602', name: 'Bank Rakyat' },
-  { code: 'BSN0601', name: 'BSN (Bank Simpanan Nasional)' }
+  { code: 'BSN0601', name: 'BSN (Bank Simpanan Nasional)' },
+  { code: 'BCBB0235', name: 'CIMB Clicks' },
+  { code: 'HLB0224', name: 'Hong Leong Connect' },
+  { code: 'MB2U0227', name: 'Maybank2u' },
+  { code: 'PBB0233', name: 'Public Bank' },
+  { code: 'RHB0218', name: 'RHB Now' }
 ];
 
 export const AccountPage = () => {
@@ -592,28 +592,8 @@ export const AccountPage = () => {
             </div>
           </div>
 
-          {/* Quick Metrics & Logout */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', gap: '16px' }}>
-              <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827' }}>
-                  {activeOrders.length}
-                </div>
-                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Active Orders
-                </div>
-              </div>
-
-              <div style={{ textAlign: 'center', padding: '8px 16px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827' }}>
-                  {savedAddresses.length}
-                </div>
-                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Addresses
-                </div>
-              </div>
-            </div>
-
+          {/* Logout Action */}
+          <div>
             <button
               onClick={() => {
                 logout();
@@ -629,6 +609,14 @@ export const AccountPage = () => {
                 color: '#6b7280',
                 cursor: 'pointer',
                 transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#111827';
+                e.currentTarget.style.color = '#111827';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e5e7eb';
+                e.currentTarget.style.color = '#6b7280';
               }}
             >
               Sign Out
@@ -686,130 +674,137 @@ export const AccountPage = () => {
         {/* TAB 1: OVERVIEW & PROFILE */}
         {/* ================================================================= */}
         {activeTab === 'overview' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-            
-            {/* Personal Details Card */}
-            <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <User size={18} color="#b38e44" />
-                  <span>Personal Details</span>
-                </h2>
-                <button
-                  onClick={() => setIsEditingProfile(!isEditingProfile)}
-                  style={{ background: 'none', border: 'none', color: '#b38e44', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <Edit3 size={14} />
-                  <span>{isEditingProfile ? 'Cancel' : 'Edit'}</span>
-                </button>
-              </div>
-
-              {isEditingProfile ? (
-                <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      value={profileForm.name}
-                      onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
-                      required
-                      style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.88rem' }}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={profileForm.phone}
-                      onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
-                      placeholder="+60 12-345 6789"
-                      style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.88rem' }}
-                    />
-                  </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* Symmetrical 2-Column Grid for Personal Details and Default Shipping Address */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+              gap: '24px',
+              alignItems: 'stretch'
+            }}>
+              {/* Personal Details Card */}
+              <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                  <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <User size={18} color="#b38e44" />
+                    <span>Personal Details</span>
+                  </h2>
                   <button
-                    type="submit"
-                    style={{ marginTop: '6px', padding: '10px', background: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                    onClick={() => setIsEditingProfile(!isEditingProfile)}
+                    style={{ background: 'none', border: 'none', color: '#b38e44', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                   >
-                    Save Changes
+                    <Edit3 size={14} />
+                    <span>{isEditingProfile ? 'Cancel' : 'Edit'}</span>
                   </button>
-                </form>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.name}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Email</div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.email}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Contact Phone</div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.phone || 'Not provided'}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Membership Tier</div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#b38e44' }}>
-                      {isAdmin ? 'Maison Administrator' : 'Valenszo Privé Member'}
+                </div>
+
+                {isEditingProfile ? (
+                  <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        value={profileForm.name}
+                        onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
+                        required
+                        style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.88rem' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={profileForm.phone}
+                        onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                        placeholder="+60 12-345 6789"
+                        style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '4px', fontSize: '0.88rem' }}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      style={{ marginTop: '6px', padding: '10px', background: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      Save Changes
+                    </button>
+                  </form>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Name</div>
+                      <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.name}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Email</div>
+                      <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.email}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Contact Phone</div>
+                      <div style={{ fontSize: '0.92rem', fontWeight: 600, color: '#111827' }}>{currentUser.phone || 'Not provided'}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Membership Tier</div>
+                      <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#b38e44' }}>
+                        {isAdmin ? 'Maison Administrator' : 'Valenszo Privé Member'}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* Default Shipping Address Snippet */}
-            <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <MapPin size={18} color="#b38e44" />
-                  <span>Default Shipping Address</span>
-                </h2>
-                <button
-                  onClick={() => setActiveTab('addresses')}
-                  style={{ background: 'none', border: 'none', color: '#b38e44', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer' }}
-                >
-                  Manage All
-                </button>
+                )}
               </div>
 
-              {defaultAddress ? (
-                <div style={{ background: '#fafaf9', border: '1px solid #f3f4f6', borderRadius: '6px', padding: '16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111827' }}>{defaultAddress.label}</span>
-                    <span style={{ fontSize: '0.62rem', fontWeight: 800, background: '#000000', color: '#ffffff', padding: '2px 6px', borderRadius: '3px', textTransform: 'uppercase' }}>
-                      Default
-                    </span>
-                  </div>
-                  <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#1f2937' }}>{defaultAddress.recipientName}</div>
-                  <div style={{ fontSize: '0.82rem', color: '#4b5563', marginTop: '2px' }}>{defaultAddress.phone}</div>
-                  <div style={{ fontSize: '0.84rem', color: '#374151', marginTop: '8px', lineHeight: 1.5 }}>
-                    {defaultAddress.addressLine1}
-                    {defaultAddress.addressLine2 && <>, {defaultAddress.addressLine2}</>}
-                    <br />
-                    {defaultAddress.zip} {defaultAddress.city}, {defaultAddress.state}
-                  </div>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '24px 16px', background: '#fafaf9', borderRadius: '6px' }}>
-                  <p style={{ fontSize: '0.86rem', color: '#6b7280', marginBottom: '14px' }}>
-                    No default shipping address saved yet.
-                  </p>
+              {/* Default Shipping Address Snippet */}
+              <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                  <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <MapPin size={18} color="#b38e44" />
+                    <span>Default Shipping Address</span>
+                  </h2>
                   <button
-                    onClick={handleOpenAddAddress}
-                    style={{ padding: '8px 16px', background: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                    onClick={() => setActiveTab('addresses')}
+                    style={{ background: 'none', border: 'none', color: '#b38e44', fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer' }}
                   >
-                    + Add Delivery Address
+                    Manage All
                   </button>
                 </div>
-              )}
+
+                {defaultAddress ? (
+                  <div style={{ background: '#fafaf9', border: '1px solid #f3f4f6', borderRadius: '6px', padding: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111827' }}>{defaultAddress.label}</span>
+                      <span style={{ fontSize: '0.62rem', fontWeight: 800, background: '#000000', color: '#ffffff', padding: '2px 6px', borderRadius: '3px', textTransform: 'uppercase' }}>
+                        Default
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#1f2937' }}>{defaultAddress.recipientName}</div>
+                    <div style={{ fontSize: '0.82rem', color: '#4b5563', marginTop: '2px' }}>{defaultAddress.phone}</div>
+                    <div style={{ fontSize: '0.84rem', color: '#374151', marginTop: '8px', lineHeight: 1.5 }}>
+                      {defaultAddress.addressLine1}
+                      {defaultAddress.addressLine2 && <>, {defaultAddress.addressLine2}</>}
+                      <br />
+                      {defaultAddress.zip} {defaultAddress.city}, {defaultAddress.state}
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '24px 16px', background: '#fafaf9', borderRadius: '6px' }}>
+                    <p style={{ fontSize: '0.86rem', color: '#6b7280', marginBottom: '14px' }}>
+                      No default shipping address saved yet.
+                    </p>
+                    <button
+                      onClick={handleOpenAddAddress}
+                      style={{ padding: '8px 16px', background: '#000000', color: '#ffffff', border: 'none', borderRadius: '4px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      + Add Delivery Address
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Latest Active Order Preview Card */}
-            <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', gridColumn: '1 / -1' }}>
+            <div style={{ background: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                 <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Package size={18} color="#b38e44" />
