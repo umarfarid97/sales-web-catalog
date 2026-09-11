@@ -18,7 +18,14 @@ import {
   deleteAttributeFromSupabase,
   formatAttributeFromDb
 } from '../services/supabaseService';
-
+import {
+  resolveProductGender,
+  resolveProductCategory,
+  resolveProductConcentration,
+  generateAttributeId,
+  TAXONOMY_TYPE,
+  CORE_GENDERS
+} from '../utils/taxonomy';
 
 const StoreContext = createContext();
 
@@ -73,17 +80,17 @@ const deriveAttributesFromProducts = (productsList) => {
   // 2. Categories extracted by frequency from actual database products
   const famCounts = {};
   productsList.forEach(p => {
-    const fam = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
-    if (fam && typeof fam === 'string' && fam.trim() && fam !== 'Pour Femme' && fam !== 'Pour Homme') {
-      famCounts[fam.trim()] = (famCounts[fam.trim()] || 0) + 1;
+    const fam = resolveProductCategory(p, null);
+    if (fam) {
+      famCounts[fam] = (famCounts[fam] || 0) + 1;
     }
   });
 
   const categories = Object.entries(famCounts)
     .sort((a, b) => b[1] - a[1])
     .map(([fam, _count], idx) => ({
-      id: `cat-${fam.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
-      type: 'category',
+      id: generateAttributeId(TAXONOMY_TYPE.CATEGORY, fam),
+      type: TAXONOMY_TYPE.CATEGORY,
       name: fam,
       value: fam,
       displayOrder: idx + 1
@@ -92,17 +99,17 @@ const deriveAttributesFromProducts = (productsList) => {
   // 3. Concentrations extracted by frequency from actual database products
   const concCounts = {};
   productsList.forEach(p => {
-    const conc = p.specs?.concentration || p.concentration;
-    if (conc && typeof conc === 'string' && conc.trim()) {
-      concCounts[conc.trim()] = (concCounts[conc.trim()] || 0) + 1;
+    const conc = resolveProductConcentration(p, null);
+    if (conc) {
+      concCounts[conc] = (concCounts[conc] || 0) + 1;
     }
   });
 
   const concentrations = Object.entries(concCounts)
     .sort((a, b) => b[1] - a[1])
     .map(([conc, _count], idx) => ({
-      id: `conc-${conc.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`,
-      type: 'concentration',
+      id: generateAttributeId(TAXONOMY_TYPE.CONCENTRATION, conc),
+      type: TAXONOMY_TYPE.CONCENTRATION,
       name: conc,
       value: conc,
       displayOrder: idx + 1
@@ -653,16 +660,23 @@ export const StoreProvider = ({ children }) => {
           if (updatedAttr) {
             setAttributes((prev) => {
               const idx = prev.findIndex((a) => a.id === updatedAttr.id);
+              let next;
               if (idx > -1) {
-                const next = [...prev];
+                next = [...prev];
                 next[idx] = updatedAttr;
-                return next;
+              } else {
+                next = [...prev, updatedAttr];
               }
-              return [...prev, updatedAttr];
+              localStorage.setItem('valenszo_attributes_cache', JSON.stringify(next));
+              return next;
             });
           }
         } else if (payload.eventType === 'DELETE' && payload.old?.id) {
-          setAttributes((prev) => prev.filter((a) => a.id !== payload.old.id));
+          setAttributes((prev) => {
+            const next = prev.filter((a) => a.id !== payload.old.id);
+            localStorage.setItem('valenszo_attributes_cache', JSON.stringify(next));
+            return next;
+          });
         }
       }
     );
@@ -1367,7 +1381,7 @@ export const StoreProvider = ({ children }) => {
     ];
   }, [attributes, products]);
 
-  // Real product distribution counts for Genders, Categories and Concentrations (Guarded against undefined)
+  // Real product distribution counts for Genders, Categories and Concentrations (Centralized Taxonomy)
   const attributeStats = useMemo(() => {
     const genderCounts = { Women: 0, Men: 0, Unisex: 0 };
     const categoryCounts = {};
@@ -1375,25 +1389,19 @@ export const StoreProvider = ({ children }) => {
 
     (products || []).forEach(p => {
       if (!p) return;
-      const g = p.specs?.gender || p.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
-      if (g && genderCounts[g] !== undefined) {
+      const g = resolveProductGender(p);
+      if (genderCounts[g] !== undefined) {
         genderCounts[g]++;
       }
 
-      const cat = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
-      if (cat && typeof cat === 'string') {
-        const trimmed = cat.trim();
-        if (trimmed && trimmed !== 'Pour Femme' && trimmed !== 'Pour Homme') {
-          categoryCounts[trimmed] = (categoryCounts[trimmed] || 0) + 1;
-        }
+      const cat = resolveProductCategory(p, null);
+      if (cat) {
+        categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
       }
 
-      const conc = p.specs?.concentration || p.concentration;
-      if (conc && typeof conc === 'string') {
-        const trimmed = conc.trim();
-        if (trimmed) {
-          concentrationCounts[trimmed] = (concentrationCounts[trimmed] || 0) + 1;
-        }
+      const conc = resolveProductConcentration(p, null);
+      if (conc) {
+        concentrationCounts[conc] = (concentrationCounts[conc] || 0) + 1;
       }
     });
 
@@ -1401,19 +1409,17 @@ export const StoreProvider = ({ children }) => {
   }, [products]);
 
   const addAttribute = useCallback(async (attrData) => {
-    let prefix = 'conc';
-    if (attrData.type === 'gender') prefix = 'gen';
-    else if (attrData.type === 'category') prefix = 'cat';
-
+    const previousAttributes = [...attributes];
     const newAttr = {
-      id: attrData.id || `${prefix}-${Date.now()}`,
+      id: attrData.id || generateAttributeId(attrData.type, attrData.name),
       type: attrData.type,
       name: (attrData.name || '').trim(),
-      value: (attrData.value || attrData.name || '').trim(),
+      value: (attrData.value !== undefined ? String(attrData.value) : (attrData.name || '')).trim(),
       displayOrder: Number(attrData.displayOrder) || (attributes.length + 1),
       createdAt: new Date().toISOString()
     };
 
+    // Optimistic UI Update
     setAttributes(prev => {
       const updated = [...prev, newAttr];
       localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
@@ -1423,27 +1429,40 @@ export const StoreProvider = ({ children }) => {
     try {
       const saved = await saveAttributeToSupabase(newAttr);
       if (saved) {
+        setAttributes(prev => {
+          const synced = prev.map(a => a.id === newAttr.id ? saved : a);
+          localStorage.setItem('valenszo_attributes_cache', JSON.stringify(synced));
+          return synced;
+        });
         showToast(`Saved "${newAttr.name}" to Supabase database`, 'success');
+        return saved;
       } else {
         showToast(`Saved "${newAttr.name}" locally`, 'info');
+        return newAttr;
       }
     } catch (e) {
-      console.error('Error saving attribute:', e);
-      showToast(`Saved "${newAttr.name}" locally (offline)`, 'info');
+      console.error('Error saving attribute to database:', e);
+      // Rollback optimistic state if failure occurs
+      setAttributes(previousAttributes);
+      localStorage.setItem('valenszo_attributes_cache', JSON.stringify(previousAttributes));
+      showToast(`Failed to save "${newAttr.name}": ${e.message || 'Database error'}`, 'error');
+      return null;
     }
-    return newAttr;
   }, [attributes, showToast]);
 
   const updateAttribute = useCallback(async (id, attrData) => {
+    const previousAttributes = [...attributes];
     let updatedAttr = null;
+
+    // Optimistic update
     setAttributes(prev => {
       const updated = prev.map(a => {
         if (a.id === id) {
           updatedAttr = {
             ...a,
             ...attrData,
-            name: attrData.name ? attrData.name.trim() : a.name,
-            value: attrData.value ? attrData.value.trim() : (attrData.name ? attrData.name.trim() : a.value),
+            name: attrData.name !== undefined ? attrData.name.trim() : a.name,
+            value: attrData.value !== undefined ? attrData.value.trim() : a.value,
             displayOrder: attrData.displayOrder !== undefined ? Number(attrData.displayOrder) : a.displayOrder,
             updatedAt: new Date().toISOString()
           };
@@ -1464,19 +1483,25 @@ export const StoreProvider = ({ children }) => {
           showToast(`Updated "${updatedAttr.name}" locally`, 'info');
         }
       } catch (e) {
-        console.error('Error updating attribute:', e);
-        showToast(`Updated "${updatedAttr.name}" locally`, 'info');
+        console.error('Error updating attribute in database:', e);
+        // Rollback on failure
+        setAttributes(previousAttributes);
+        localStorage.setItem('valenszo_attributes_cache', JSON.stringify(previousAttributes));
+        showToast(`Failed to update "${updatedAttr.name}": ${e.message || 'Database error'}`, 'error');
       }
     }
-  }, [showToast]);
+  }, [attributes, showToast]);
 
   const deleteAttribute = useCallback(async (id) => {
     const target = attributes.find(a => a.id === id);
     if (target && target.type === 'gender') {
       showToast('Core gender categories (Men, Women, Unisex) cannot be deleted as they define the catalog taxonomy.', 'warning');
-      return;
+      return false;
     }
 
+    const previousAttributes = [...attributes];
+
+    // Optimistic removal
     setAttributes(prev => {
       const updated = prev.filter(a => a.id !== id);
       localStorage.setItem('valenszo_attributes_cache', JSON.stringify(updated));
@@ -1487,12 +1512,18 @@ export const StoreProvider = ({ children }) => {
       const success = await deleteAttributeFromSupabase(id);
       if (success) {
         showToast(`Deleted "${target?.name || 'attribute'}" from database`, 'success');
+        return true;
       } else {
         showToast(`Deleted "${target?.name || 'attribute'}" locally`, 'info');
+        return true;
       }
     } catch (e) {
-      console.error('Error deleting attribute:', e);
-      showToast(`Deleted attribute locally`, 'info');
+      console.error('Error deleting attribute from database:', e);
+      // Rollback on failure
+      setAttributes(previousAttributes);
+      localStorage.setItem('valenszo_attributes_cache', JSON.stringify(previousAttributes));
+      showToast(`Failed to delete attribute: ${e.message || 'Database error'}`, 'error');
+      return false;
     }
   }, [attributes, showToast]);
 

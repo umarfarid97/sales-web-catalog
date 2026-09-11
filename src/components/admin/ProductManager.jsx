@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useDeferredValue, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { 
+  resolveProductGender, 
+  resolveProductCategory, 
+  resolveProductConcentration 
+} from '../../utils/taxonomy';
 import { 
   Plus, 
   Search, 
   Edit, 
   Trash2, 
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 export const ProductManager = () => {
@@ -18,9 +25,18 @@ export const ProductManager = () => {
   } = useStore();
 
   const [searchTable, setSearchTable] = useState('');
+  const deferredSearch = useDeferredValue(searchTable);
   const [filterGender, setFilterGender] = useState('All'); // 'All', 'Women', 'Men', 'Unisex'
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterStockStatus, setFilterStockStatus] = useState('all'); // 'all', 'low', 'out'
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 25;
+
+  // Reset to page 1 whenever search query or filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [deferredSearch, filterGender, filterCategory, filterStockStatus]);
 
   const handleEdit = (product) => {
     setEditingProduct(product);
@@ -38,26 +54,28 @@ export const ProductManager = () => {
     setIsProductFormOpen(true);
   };
 
-  // Filtered Table Items
-  const tableItems = (products || []).filter((p) => {
+  // Filtered Table Items using centralized taxonomy and deferred search
+  const filteredItems = (products || []).filter((p) => {
     if (!p) return false;
-    const pGender = p.gender || p.specs?.gender || (p.category === 'Pour Femme' || p.category === 'Women' ? 'Women' : (p.category === 'Niche & Unisex' || p.category === 'Unisex' ? 'Unisex' : 'Men'));
+    const pGender = resolveProductGender(p);
     if (filterGender !== 'All' && pGender !== filterGender) return false;
 
-    const pCat = p.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(p.category)
-      ? p.category
-      : (p.olfactoryFamily || p.specs?.olfactoryFamily || p.character || p.specs?.character);
+    const pCat = resolveProductCategory(p);
     if (filterCategory !== 'All' && pCat !== filterCategory && p.category !== filterCategory) return false;
     if (filterStockStatus === 'low' && (p.stock >= 5 || p.stock === 0)) return false;
     if (filterStockStatus === 'out' && p.stock > 0) return false;
-    if (searchTable.trim()) {
-      const q = searchTable.toLowerCase();
+    if (deferredSearch.trim()) {
+      const q = deferredSearch.toLowerCase();
       const matchName = p.name?.toLowerCase().includes(q);
       const matchSku = p.sku?.toLowerCase().includes(q);
       if (!matchName && !matchSku) return false;
     }
     return true;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const paginatedItems = filteredItems.slice(startIndex, startIndex + PAGE_SIZE);
 
 
   return (
@@ -159,17 +177,19 @@ export const ProductManager = () => {
               </tr>
             </thead>
             <tbody>
-              {tableItems.length === 0 ? (
+              {filteredItems.length === 0 ? (
                 <tr>
                   <td colSpan="9" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
                     No fragrance records found matching your filters.
                   </td>
                 </tr>
               ) : (
-                tableItems.map((prod) => {
+                paginatedItems.map((prod) => {
                   const isOutOfStock = prod.stock === 0;
                   const isLow = prod.stock > 0 && prod.stock < 5;
-                  const resolvedGender = prod.gender || prod.specs?.gender || (prod.category === 'Pour Femme' || prod.category === 'Women' ? 'Women' : (prod.category === 'Niche & Unisex' || prod.category === 'Unisex' ? 'Unisex' : 'Men'));
+                  const resolvedGender = resolveProductGender(prod);
+                  const resolvedCat = resolveProductCategory(prod);
+                  const resolvedConc = resolveProductConcentration(prod);
 
                   return (
                     <tr key={prod.id}>
@@ -177,7 +197,7 @@ export const ProductManager = () => {
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           <img
-                            src={prod.images[0]}
+                            src={prod.images?.[0] || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=120&q=80'}
                             alt={prod.name}
                             style={{
                               width: '42px',
@@ -222,24 +242,21 @@ export const ProductManager = () => {
                       {/* Category (Fragrance Family) */}
                       <td>
                         <span className="badge badge-neutral">
-                          {prod.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(prod.category)
-                            ? prod.category
-                            : (prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.character || prod.specs?.character || 'General')}
+                          {resolvedCat}
                         </span>
                       </td>
 
                       {/* Concentration */}
                       <td>
                         <span style={{ fontSize: '0.82rem', color: '#4b5563', whiteSpace: 'nowrap' }}>
-                          {prod.concentration || prod.specs?.concentration || 'N/A'}
+                          {resolvedConc}
                         </span>
                       </td>
-
 
                       {/* Price */}
                       <td>
                         <span style={{ fontWeight: 700, color: '#111827', fontFamily: 'var(--font-mono)' }}>
-                          RM {prod.price.toFixed(2)}
+                          RM {Number(prod.price || 0).toFixed(2)}
                         </span>
                       </td>
 
@@ -293,25 +310,22 @@ export const ProductManager = () => {
 
         {/* Mobile Cards View (Optimized for Smartphones) */}
         <div className="admin-mobile-cards-view">
-          {tableItems.length === 0 ? (
+          {filteredItems.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '36px 16px', color: '#6b7280', fontSize: '0.88rem' }}>
               No perfume records found matching your filters.
             </div>
           ) : (
-            tableItems.map((prod) => {
+            paginatedItems.map((prod) => {
               const isOutOfStock = prod.stock === 0;
               const isLow = prod.stock > 0 && prod.stock < 5;
-
-              const resolvedGender = prod.gender || prod.specs?.gender || (prod.category === 'Pour Femme' || prod.category === 'Women' ? 'Women' : (prod.category === 'Niche & Unisex' || prod.category === 'Unisex' ? 'Unisex' : 'Men'));
-              const resolvedCat = prod.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(prod.category)
-                ? prod.category
-                : (prod.olfactoryFamily || prod.specs?.olfactoryFamily || prod.character || prod.specs?.character || 'General');
+              const resolvedGender = resolveProductGender(prod);
+              const resolvedCat = resolveProductCategory(prod);
 
               return (
                 <div key={prod.id} className="admin-mobile-card">
                   <div className="admin-mobile-card-header">
                     <img
-                      src={prod.images[0]}
+                      src={prod.images?.[0] || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=120&q=80'}
                       alt={prod.name}
                       className="admin-mobile-card-img"
                     />
@@ -326,7 +340,7 @@ export const ProductManager = () => {
                         )}
                       </div>
                       <div className="admin-mobile-card-price-row">
-                        <span className="admin-mobile-card-price">RM {prod.price.toFixed(2)}</span>
+                        <span className="admin-mobile-card-price">RM {Number(prod.price || 0).toFixed(2)}</span>
                         <span className={`badge ${
                           isOutOfStock ? 'badge-danger' :
                           isLow ? 'badge-warning' : 'badge-success'
@@ -358,6 +372,64 @@ export const ProductManager = () => {
             })
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {filteredItems.length > PAGE_SIZE && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            flexWrap: 'wrap', 
+            gap: '12px', 
+            padding: '16px 20px', 
+            background: '#fafafa', 
+            borderTop: '1px solid #e5e7eb',
+            borderRadius: '0 0 8px 8px'
+          }}>
+            <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>
+              Showing <strong>{startIndex + 1}</strong>–<strong>{Math.min(startIndex + PAGE_SIZE, filteredItems.length)}</strong> of <strong>{filteredItems.length}</strong> fragrances
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                type="button"
+                className="admin-btn-secondary"
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '4px', 
+                  padding: '6px 12px', 
+                  fontSize: '0.8rem',
+                  opacity: currentPage <= 1 ? 0.5 : 1,
+                  cursor: currentPage <= 1 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                <ChevronLeft size={14} /> Previous
+              </button>
+              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#374151', padding: '0 8px' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                type="button"
+                className="admin-btn-secondary"
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '4px', 
+                  padding: '6px 12px', 
+                  fontSize: '0.8rem',
+                  opacity: currentPage >= totalPages ? 0.5 : 1,
+                  cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Next <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
 

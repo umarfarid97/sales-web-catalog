@@ -27,7 +27,18 @@ import './styles/admin.css';
 
 const AdminLayout = () => {
   const { adminTab } = useStore();
-  const { currentUser, isAuthenticated, isAdmin, openAuthModal } = useAuth();
+  const { currentUser, isAuthenticated, isAdmin, isAuthInitializing, openAuthModal } = useAuth();
+
+  if (isAuthInitializing) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fdfdfd' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: '36px', height: '36px', border: '3px solid #e5e7eb', borderTopColor: '#0b0c10', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 16px' }} />
+          <p style={{ fontSize: '0.82rem', color: '#6b7280', letterSpacing: '0.08em', fontWeight: 600 }}>VERIFYING ATELIER CREDENTIALS...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return (

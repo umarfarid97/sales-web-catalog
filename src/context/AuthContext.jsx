@@ -49,8 +49,10 @@ export const AuthProvider = ({ children }) => {
     onComplete: null
   });
 
-  // Loading state
+  // Loading and verification states
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [hasVerifiedSession, setHasVerifiedSession] = useState(false);
+  const [isAuthInitializing, setIsAuthInitializing] = useState(isSupabaseConfigured);
 
   // Helper to fetch and resolve user profile with admin privileges
   const resolveUserProfile = useCallback(async (authUser) => {
@@ -85,7 +87,10 @@ export const AuthProvider = ({ children }) => {
 
   // Sync Supabase Auth Session
   useEffect(() => {
-    if (!isSupabaseConfigured || !supabase) return;
+    if (!isSupabaseConfigured || !supabase) {
+      setIsAuthInitializing(false);
+      return;
+    }
 
     // 1. Initial Session Check
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -93,21 +98,43 @@ export const AuthProvider = ({ children }) => {
         const resolved = await resolveUserProfile(session.user);
         if (resolved) {
           setCurrentUser(resolved);
+          setHasVerifiedSession(true);
           localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
         }
+      } else {
+        // Purge any unverified admin claims from localStorage if no valid Supabase session exists
+        setHasVerifiedSession(false);
+        const cached = localStorage.getItem('valenszo_auth_user');
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached);
+            if (parsed?.role === 'admin' || ADMIN_EMAILS.includes(parsed?.email?.toLowerCase().trim())) {
+              localStorage.removeItem('valenszo_auth_user');
+              setCurrentUser(null);
+            }
+          } catch {
+            localStorage.removeItem('valenszo_auth_user');
+            setCurrentUser(null);
+          }
+        }
       }
+      setIsAuthInitializing(false);
+    }).catch(() => {
+      setIsAuthInitializing(false);
     });
 
     // 2. Auth State Change Listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
         const resolved = await resolveUserProfile(session.user);
         if (resolved) {
           setCurrentUser(resolved);
+          setHasVerifiedSession(true);
           localStorage.setItem('valenszo_auth_user', JSON.stringify(resolved));
         }
       } else if (event === 'SIGNED_OUT') {
         setCurrentUser(null);
+        setHasVerifiedSession(false);
         localStorage.removeItem('valenszo_auth_user');
       }
     });
@@ -288,7 +315,10 @@ export const AuthProvider = ({ children }) => {
 
   const userEmail = currentUser?.email?.toLowerCase().trim() || '';
   const isWhitelistedAdmin = ADMIN_EMAILS.includes(userEmail);
-  const isAdmin = currentUser?.role === 'admin' || isWhitelistedAdmin;
+  // When connected to Supabase cloud, admin privileges strictly require an actively verified session token
+  const isAdmin = isSupabaseConfigured
+    ? (hasVerifiedSession && (currentUser?.role === 'admin' || isWhitelistedAdmin))
+    : (currentUser?.role === 'admin' || isWhitelistedAdmin);
 
   return (
     <AuthContext.Provider
@@ -297,6 +327,8 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: Boolean(currentUser),
         isAdmin,
         isAuthenticating,
+        isAuthInitializing,
+        hasVerifiedSession,
         isAuthModalOpen,
         authModalMode,
         authModalConfig,

@@ -114,11 +114,13 @@ export const AttributesManager = () => {
       : (attributeStats?.concentrationCounts?.[attr.name] || 0);
 
     const typeLabel = attr.type === 'category' ? 'Category' : 'Concentration';
-    const confirmMessage = count > 0 
-      ? `"${attr.name}" is currently assigned to ${count} perfume(s). Deleting it will leave those products without a matching attribute. Proceed with deletion?`
-      : `Delete ${typeLabel.toLowerCase()} "${attr.name}"?`;
 
-    if (window.confirm(confirmMessage)) {
+    if (count > 0) {
+      showToast?.(`Cannot delete ${typeLabel.toLowerCase()} "${attr.name}" because it is currently assigned to ${count} active fragrance(s). Please reassign those fragrances before deleting.`, 'error');
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to delete ${typeLabel.toLowerCase()} "${attr.name}"?`)) {
       await deleteAttribute?.(attr.id);
     }
   };
@@ -148,12 +150,22 @@ ALTER TABLE public.attributes ADD CONSTRAINT attributes_type_check
 CREATE INDEX IF NOT EXISTS idx_attributes_type ON public.attributes(type);
 CREATE INDEX IF NOT EXISTS idx_attributes_order ON public.attributes(display_order);
 
--- 4. Enable RLS
+-- 4. Enable RLS (Hardened Admin Policy)
 ALTER TABLE public.attributes ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Attributes" ON public.attributes;
 CREATE POLICY "Public Read Attributes" ON public.attributes FOR SELECT USING (true);
 DROP POLICY IF EXISTS "Admin All Attributes" ON public.attributes;
-CREATE POLICY "Admin All Attributes" ON public.attributes FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Admin All Attributes" 
+  ON public.attributes FOR ALL 
+  TO authenticated
+  USING (
+    public.is_admin() 
+    OR (auth.jwt() ->> 'email') IN ('umarfarid90@gmail.com', 'admin@valenszo.my', 'atelier@valenszo.my')
+  ) 
+  WITH CHECK (
+    public.is_admin() 
+    OR (auth.jwt() ->> 'email') IN ('umarfarid90@gmail.com', 'admin@valenszo.my', 'atelier@valenszo.my')
+  );
 
 -- 5. Realtime Sync
 DO $$

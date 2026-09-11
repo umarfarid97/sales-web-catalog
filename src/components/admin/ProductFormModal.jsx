@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
+import { 
+  resolveProductGender, 
+  resolveProductCategory, 
+  resolveProductConcentration 
+} from '../../utils/taxonomy';
 import { X, Save } from 'lucide-react';
 
 export const ProductFormModal = () => {
@@ -13,21 +18,6 @@ export const ProductFormModal = () => {
     categories,
     concentrations
   } = useStore();
-
-  const resolveInitialGender = (product) => {
-    if (!product) return 'Men';
-    if (product.gender === 'Women' || product.specs?.gender === 'Women' || product.category === 'Women' || product.category === 'Pour Femme') return 'Women';
-    if (product.gender === 'Unisex' || product.specs?.gender === 'Unisex' || product.category === 'Unisex' || product.category === 'Niche & Unisex') return 'Unisex';
-    return 'Men';
-  };
-
-  const resolveInitialCategory = (product, defaultCat) => {
-    if (!product) return defaultCat;
-    const directCat = product.olfactoryFamily || product.specs?.olfactoryFamily || product.character || product.specs?.character;
-    if (directCat && directCat !== 'Pour Femme' && directCat !== 'Pour Homme') return directCat;
-    if (product.category && !['Men', 'Women', 'Unisex', 'Pour Homme', 'Pour Femme'].includes(product.category)) return product.category;
-    return defaultCat;
-  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -60,9 +50,9 @@ export const ProductFormModal = () => {
       setFormData({
         name: editingProduct.name || '',
         sku: editingProduct.sku || '',
-        gender: resolveInitialGender(editingProduct),
-        category: resolveInitialCategory(editingProduct, defaultCat),
-        concentration: editingProduct.concentration || editingProduct.specs?.concentration || defaultConc,
+        gender: resolveProductGender(editingProduct),
+        category: resolveProductCategory(editingProduct, defaultCat),
+        concentration: resolveProductConcentration(editingProduct, defaultConc),
         price: editingProduct.price?.toString() || '',
         originalPrice: editingProduct.originalPrice?.toString() || '',
         stock: editingProduct.stock?.toString() || '',
