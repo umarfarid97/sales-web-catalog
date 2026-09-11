@@ -220,9 +220,6 @@ export const Navbar = () => {
             <a href="/women" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
               Women
             </a>
-            <a href="/bundle" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
-              Bundles
-            </a>
             <a href="/diagnostic" style={{ textDecoration: 'none', color: '#f59e0b', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Sparkles size={13} />
               <span>Scent Quiz</span>
@@ -664,33 +661,6 @@ export const Navbar = () => {
                       </div>
                       <ArrowRight size={16} color={activeGender === 'Women' ? '#000000' : '#9ca3af'} />
                     </a>
-
-                    <button 
-                      onClick={() => { 
-                        window.location.href = '/bundle'; 
-                        setIsMenuOpen(false); 
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '14px 16px',
-                        borderLeft: '4px solid transparent',
-                        background: '#fafafa',
-                        borderTop: '1px solid #f3f4f6',
-                        borderRight: '1px solid #f3f4f6',
-                        borderBottom: '1px solid #f3f4f6',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#111827' }}>Signature Bundles</div>
-                        <div style={{ fontSize: '0.74rem', color: '#c5a059', marginTop: '2px', fontWeight: 600 }}>Save up to 25% on 3 or 5 Bottles</div>
-                      </div>
-                      <ArrowRight size={16} color="#9ca3af" />
-                    </button>
                   </div>
                 </div>
 

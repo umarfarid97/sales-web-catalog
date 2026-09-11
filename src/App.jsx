@@ -23,7 +23,6 @@ import { OrderTrackerModal } from './components/customer/OrderTrackerModal';
 import { MenCollectionContent } from './MenApp';
 import { WomenCollectionContent } from './WomenApp';
 import { CollectionPageContent } from './CollectionApp';
-import { BundleBuilderContent } from './BundleApp';
 import { CheckoutPageContent } from './CheckoutApp';
 
 // Admin Components
@@ -64,7 +63,6 @@ const MainLayout = () => {
   const isWomen = !isProduct && (pathname.includes('women') || (genderQuery?.toLowerCase() === 'women' && !productQuery));
   const isMen = !isProduct && !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || (genderQuery?.toLowerCase() === 'men' && !productQuery));
   const isCollection = !isProduct && (pathname.includes('collection') || customerView === 'collection');
-  const isBundle = !isProduct && (pathname.includes('bundle') || customerView === 'bundle');
   const isDiagnostic = !isProduct && (pathname.includes('diagnostic') || viewQuery === 'diagnostic' || customerView === 'diagnostic');
   const isCheckout = pathname.includes('checkout') || customerView === 'checkout';
 
@@ -152,8 +150,6 @@ const MainLayout = () => {
               <MenCollectionContent />
             ) : isCollection ? (
               <CollectionPageContent />
-            ) : isBundle ? (
-              <BundleBuilderContent />
             ) : isDiagnostic ? (
               <FragranceDiagnostic />
             ) : (

@@ -31,7 +31,7 @@
     },
     {
       "source": "/bundle",
-      "destination": "/bundle.html"
+      "destination": "/collection.html"
     },
     {
       "source": "/checkout",

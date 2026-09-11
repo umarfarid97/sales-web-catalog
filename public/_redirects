@@ -2,7 +2,7 @@
 /men /men.html 200
 /women /women.html 200
 /collection /collection.html 200
-/bundle /bundle.html 200
+/bundle /collection 301
 /diagnostic /diagnostic.html 200
 /admin /admin.html 200
 /checkout /checkout.html 200

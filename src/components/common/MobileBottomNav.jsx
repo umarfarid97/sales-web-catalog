@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Compass, Gift, User } from 'lucide-react';
+import { Home, Compass, Sparkles, User } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
 
@@ -11,7 +11,7 @@ export const MobileBottomNav = () => {
 
   const isHome = currentPath === '/' || currentPath.endsWith('index.html') || currentPath === '';
   const isShop = currentPath.includes('collection');
-  const isBundles = currentPath.includes('bundle');
+  const isQuiz = currentPath.includes('diagnostic');
 
   const handleAccountClick = () => {
     if (!isAuthenticated) {
@@ -78,21 +78,21 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="/bundle"
+        href="/diagnostic"
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '3px',
           textDecoration: 'none',
-          color: isBundles ? '#2b1810' : '#8c7d72',
-          fontWeight: isBundles ? 800 : 500,
+          color: isQuiz ? '#d97706' : '#8c7d72',
+          fontWeight: isQuiz ? 800 : 500,
           fontSize: '0.68rem',
           letterSpacing: '0.04em'
         }}
       >
-        <Gift size={20} strokeWidth={isBundles ? 2.4 : 1.7} color={isBundles ? '#2b1810' : '#8c7d72'} />
-        <span>Bundles</span>
+        <Sparkles size={20} strokeWidth={isQuiz ? 2.4 : 1.7} color={isQuiz ? '#d97706' : '#8c7d72'} />
+        <span>Quiz</span>
       </a>
 
       <button 

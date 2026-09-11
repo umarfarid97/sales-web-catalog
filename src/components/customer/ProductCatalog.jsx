@@ -107,12 +107,12 @@ export const ProductCatalog = () => {
               12h+ Long Lasting
             </span>
           </div>
-          <a href="/bundle" style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center', textDecoration: 'none', color: '#2b1810' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
             <Sparkles size={18} color="#d97706" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Save 25% Bundles
+            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              Extrait De Parfum
             </span>
-          </a>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
             <Truck size={18} color="#d97706" strokeWidth={2.4} />
             <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
@@ -443,9 +443,9 @@ export const ProductCatalog = () => {
                 </div>
               </a>
 
-              {/* Bottom Right Card: Collector Wardrobe Trio */}
+              {/* Bottom Right Card: Scent Diagnostic Finder */}
               <a
-                href="/bundle"
+                href="/diagnostic"
                 style={{
                   position: 'relative',
                   borderRadius: '16px',
@@ -486,7 +486,7 @@ export const ProductCatalog = () => {
                       marginBottom: '6px'
                     }}
                   >
-                    SCENT WARDROBE
+                    AI SCENT FINDER
                   </span>
                   <h3 
                     style={{ 
@@ -498,7 +498,7 @@ export const ProductCatalog = () => {
                       lineHeight: 1.2
                     }}
                   >
-                    Curate Your Trio & Save 25%
+                    Find Your Signature Profile
                   </h3>
                   <p 
                     style={{ 
@@ -509,7 +509,7 @@ export const ProductCatalog = () => {
                       maxWidth: '380px'
                     }}
                   >
-                    Select 3 or 5 full-sized extraits in custom luxury presentation packaging.
+                    Take our 60-second interactive diagnostic to discover your bespoke olfactory notes.
                   </p>
 
                   <div 
@@ -523,7 +523,7 @@ export const ProductCatalog = () => {
                       fontWeight: 700
                     }}
                   >
-                    <span>Build Your Bundle</span>
+                    <span>Take Scent Quiz</span>
                     <ArrowRight size={14} />
                   </div>
                 </div>

@@ -73,12 +73,12 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="/bundle" 
+                  href="/diagnostic" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
                 >
-                  Perfume Bundles (Save 25%)
+                  Scent Discovery Quiz
                 </a>
               </li>
             </ul>

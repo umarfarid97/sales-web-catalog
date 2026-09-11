@@ -960,7 +960,7 @@ export const FragranceDiagnostic = () => {
             </div>
           </div>
 
-          {/* 3. BUNDLE CALLOUT: ANY TWO CAN LAYER BEAUTIFULLY */}
+          {/* 3. COLLECTION CALLOUT */}
           <div 
             style={{
               background: 'linear-gradient(135deg, #111827 0%, #000000 100%)',
@@ -972,18 +972,18 @@ export const FragranceDiagnostic = () => {
             }}
           >
             <div style={{ fontSize: '0.74rem', letterSpacing: '0.18em', color: '#F59E0B', fontWeight: 800, textTransform: 'uppercase', marginBottom: '8px' }}>
-              ANY TWO CAN LAYER BEAUTIFULLY
+              BESPOKE PERFUMERY
             </div>
             <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', margin: '0 0 10px', color: '#FFFFFF' }}>
-              Build Your 3-Bottle Signature Wardrobe & Save 15%
+              Explore the Full Olfactory Collection
             </h3>
             <p style={{ color: '#D1D5DB', fontSize: '0.9rem', maxWidth: '540px', margin: '0 auto 24px', lineHeight: 1.5 }}>
-              Add any 2 layering recommendations to your main bottle to unlock bundle savings and receive a free gift box.
+              Discover our complete range of artisanal fragrances crafted with pure French oils and 12h+ long-lasting sillage.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
               <a
-                href="/bundle"
+                href="/collection"
                 style={{
                   padding: '14px 28px',
                   borderRadius: '4px',
@@ -999,7 +999,7 @@ export const FragranceDiagnostic = () => {
                   gap: '8px'
                 }}
               >
-                <span>Build Your Bundle</span>
+                <span>Shop All Fragrances</span>
                 <ArrowRight size={15} />
               </a>
 

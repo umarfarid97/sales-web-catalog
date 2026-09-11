@@ -1137,47 +1137,6 @@ export const ProductDetailPage = () => {
                   ))}
                 </div>
               </div>
-
-              {/* Upgrade to Bundle Callout Banner */}
-              <div style={{ background: 'linear-gradient(135deg, #18181b 0%, #09090b 100%)', color: '#ffffff', borderRadius: '8px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.72rem', color: '#c5a059', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Bundle Privilege
-                  </span>
-                  <span style={{ fontSize: '0.7rem', background: 'rgba(197, 160, 89, 0.2)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>
-                    SAVE UP TO 25%
-                  </span>
-                </div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700 }}>
-                  Curate a 3 or 5-Bottle Scent Wardrobe
-                </div>
-                <p style={{ fontSize: '0.74rem', color: '#9ca3af', margin: 0 }}>
-                  Pick your favorite fragrances, save up to 25%, and receive free luxury gift box packaging.
-                </p>
-                <a
-                  href="/bundle"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    marginTop: '4px',
-                    padding: '8px 14px',
-                    borderRadius: '4px',
-                    background: '#c5a059',
-                    color: '#000000',
-                    fontSize: '0.76rem',
-                    fontWeight: 800,
-                    textDecoration: 'none',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em'
-                  }}
-                >
-                  <span>Build Custom Bundle (From RM115)</span>
-                  <ChevronRight size={14} />
-                </a>
-              </div>
-
             </div>
 
             {/* Drawer Sticky Bottom Actions */}

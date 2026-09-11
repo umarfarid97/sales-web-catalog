@@ -10,7 +10,13 @@ const mpaRewritePlugin = () => {
   const rewrite = (req, res, next) => {
     const rawUrl = req.url || '';
     const cleanPath = rawUrl.split('?')[0];
-    const pages = ['product', 'men', 'women', 'collection', 'bundle', 'checkout', 'diagnostic', 'admin'];
+    const pages = ['product', 'men', 'women', 'collection', 'checkout', 'diagnostic', 'admin'];
+    if (cleanPath === '/bundle' || cleanPath === '/bundle/') {
+      const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
+      req.url = `/collection.html${query}`;
+      next();
+      return;
+    }
     for (const page of pages) {
       if (cleanPath === `/${page}` || cleanPath === `/${page}/`) {
         const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
@@ -57,7 +63,6 @@ export default defineConfig(({ mode }) => {
         collection: resolve(__dirname, 'collection.html'),
         men: resolve(__dirname, 'men.html'),
         women: resolve(__dirname, 'women.html'),
-        bundle: resolve(__dirname, 'bundle.html'),
         product: resolve(__dirname, 'product.html'),
         diagnostic: resolve(__dirname, 'diagnostic.html'),
         admin: resolve(__dirname, 'admin.html'),
