@@ -364,7 +364,7 @@ export const OrderDetailModal = () => {
                         value={customCourier}
                         onChange={(e) => setCustomCourier(e.target.value)}
                         className="admin-form-input"
-                        style={{ width: '100%', height: '38px', background: '#ffffff', borderRadius: '4px', fontSize: '0.85rem' }}
+                        style={{ width: '100%', height: '38px', background: '#ffffff', borderRadius: '4px', fontSize: '1rem' }}
                       />
                     </div>
                   )}
@@ -385,7 +385,7 @@ export const OrderDetailModal = () => {
                         height: '38px', 
                         background: '#ffffff', 
                         borderRadius: '4px', 
-                        fontSize: '0.88rem', 
+                        fontSize: '1rem', 
                         fontFamily: 'var(--font-mono)',
                         fontWeight: 600
                       }}

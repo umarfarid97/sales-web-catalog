@@ -277,7 +277,7 @@ export const CartDrawer = () => {
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                 className="form-input"
-                style={{ padding: '9px 12px', fontSize: '0.82rem', letterSpacing: '0.08em', flex: 1, background: '#ffffff', color: '#000000', border: '1px solid #d1d5db', borderRadius: '8px' }}
+                style={{ padding: '9px 12px', fontSize: '1rem', letterSpacing: '0.08em', flex: 1, background: '#ffffff', color: '#000000', border: '1px solid #d1d5db', borderRadius: '8px' }}
               />
               <button 
                 type="submit" 

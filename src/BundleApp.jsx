@@ -552,7 +552,7 @@ export const BundleBuilderContent = () => {
                       borderRadius: '9999px',
                       border: '1px solid #dfd7cc',
                       background: '#faf8f5',
-                      fontSize: '0.82rem',
+                      fontSize: '1rem',
                       color: '#2b1810',
                       outline: 'none'
                     }}

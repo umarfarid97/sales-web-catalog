@@ -109,7 +109,7 @@ export const Footer = () => {
                 placeholder="Enter email address"
                 style={{
                   padding: '10px 16px',
-                  fontSize: '0.82rem',
+                  fontSize: '1rem',
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.15)',
                   borderRadius: '9999px',

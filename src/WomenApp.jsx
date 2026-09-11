@@ -447,7 +447,7 @@ export const WomenCollectionContent = () => {
                   border: 'none',
                   outline: 'none',
                   background: 'transparent',
-                  fontSize: '0.86rem',
+                  fontSize: '1rem',
                   color: '#111827',
                   fontFamily: 'inherit'
                 }}

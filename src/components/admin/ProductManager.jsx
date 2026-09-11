@@ -78,7 +78,7 @@ export const ProductManager = () => {
                 value={searchTable}
                 onChange={(e) => setSearchTable(e.target.value)}
                 className="admin-form-input"
-                style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '0.85rem' }}
+                style={{ width: '100%', paddingLeft: '36px', height: '40px', fontSize: '1rem' }}
               />
               {searchTable && (
                 <button

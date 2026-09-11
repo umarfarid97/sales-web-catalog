@@ -476,7 +476,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-sm);
   color: #000000;
   font-family: var(--font-body);
-  font-size: 0.92rem;
+  font-size: 1rem; /* 16px - prevents iOS Safari auto-zoom on focus */
   transition: all var(--transition-fast);
   outline: none;
 }
@@ -644,6 +644,38 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 768px) {
   .valenszo-mobile-bottom-nav {
     display: flex !important;
+  }
+}
+
+/* ============================================================================
+   iOS SAFARI AUTO-ZOOM PREVENTION & TAP OPTIMIZATION
+   Safari on iOS automatically zooms in on any form input whose computed
+   font-size is less than 16px. Setting font-size to 16px (1rem) on touch
+   devices and form controls completely disables this unwanted behavior.
+   ============================================================================ */
+html, body, button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* Strict enforcement on mobile screens to override any inline or nested styles */
+@media screen and (max-width: 899px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+  select,
+  textarea,
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .nav-search-input,
+  .admin-form-input,
+  .admin-form-select,
+  .admin-form-textarea {
+    font-size: 16px !important;
   }
 }
 

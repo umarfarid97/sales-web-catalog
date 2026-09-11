@@ -244,7 +244,7 @@ export const OrderTrackerModal = () => {
                   color: '#000000', 
                   border: '1px solid #d1d5db',
                   borderRadius: '4px',
-                  fontSize: '0.85rem'
+                  fontSize: '1rem'
                 }}
               />
             </div>

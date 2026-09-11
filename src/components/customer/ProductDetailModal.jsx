@@ -303,7 +303,7 @@ export const ProductDetailModal = () => {
                     value={engravingText}
                     onChange={(e) => setEngravingText(e.target.value.toUpperCase())}
                     className="form-input"
-                    style={{ padding: '8px 12px', fontSize: '0.85rem' }}
+                    style={{ padding: '8px 12px', fontSize: '1rem' }}
                   />
                 </div>
               )}

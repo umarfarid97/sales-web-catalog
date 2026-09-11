@@ -273,7 +273,7 @@ export const AuthModal = () => {
                       padding: '11px 12px 11px 38px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.88rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -301,7 +301,7 @@ export const AuthModal = () => {
                       padding: '11px 12px 11px 38px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.88rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -356,7 +356,7 @@ export const AuthModal = () => {
                       padding: '10px 12px 10px 38px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.85rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -381,7 +381,7 @@ export const AuthModal = () => {
                       padding: '10px 12px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.85rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -403,7 +403,7 @@ export const AuthModal = () => {
                       padding: '10px 12px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.85rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -428,7 +428,7 @@ export const AuthModal = () => {
                       padding: '10px 12px 10px 38px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.85rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -453,7 +453,7 @@ export const AuthModal = () => {
                       padding: '10px 12px 10px 38px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.85rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       outline: 'none',
                       background: '#ffffff'
@@ -480,7 +480,7 @@ export const AuthModal = () => {
                       padding: '9px 10px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.82rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       background: '#ffffff'
                     }}
@@ -499,7 +499,7 @@ export const AuthModal = () => {
                       padding: '9px 10px',
                       border: '1px solid #d1d5db',
                       borderRadius: '4px',
-                      fontSize: '0.82rem',
+                      fontSize: '1rem',
                       color: '#000000',
                       background: '#ffffff'
                     }}
