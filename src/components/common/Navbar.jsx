@@ -23,7 +23,6 @@ export const Navbar = () => {
   } = useStore();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
 
   const { currentUser, isAuthenticated, isAdmin, openAuthModal, logout } = useAuth();
@@ -69,48 +68,6 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* 1. Sleek Announcement Banner (with dismissible 'X') */}
-      {showAnnouncement && (
-        <div style={{
-          background: '#000000',
-          color: '#ffffff',
-          fontSize: '0.72rem',
-          fontWeight: 600,
-          fontFamily: 'var(--font-couture, sans-serif)',
-          letterSpacing: '0.06em',
-          padding: '9px 42px 9px 24px',
-          textAlign: 'center',
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          lineHeight: 1.4
-        }}>
-          <span>
-            Receive a Free Valenszo Deluxe Sample with any order over RM200 &bull; Free Express Delivery Across Malaysia
-          </span>
-          <button
-            onClick={() => setShowAnnouncement(false)}
-            style={{
-              position: 'absolute',
-              right: '14px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255, 255, 255, 0.75)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '4px'
-            }}
-            aria-label="Dismiss announcement"
-          >
-            <X size={14} />
-          </button>
-        </div>
-      )}
-
       {/* 2. Artisanal Luxury Top Bar (Matching Craft & Cafe Header) */}
       <header className="site-header" style={{ 
         position: 'sticky', 
