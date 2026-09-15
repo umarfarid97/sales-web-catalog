@@ -3,9 +3,6 @@ import { useStore } from '../../context/StoreContext';
 import { 
   Heart, 
   Star, 
-  Truck, 
-  ShieldCheck, 
-  RotateCcw, 
   ChevronRight, 
   Maximize2, 
   X, 
@@ -491,34 +488,6 @@ export const ProductDetailPage = () => {
               <span>Inquire & Order via WhatsApp</span>
             </a>
           </div>
-
-          {/* Trust Badges */}
-          <div className="pdp-trust-row">
-            <div className="pdp-trust-badge">
-              <Truck size={20} className="pdp-trust-icon" />
-              <div className="pdp-trust-text-col">
-                <span className="pdp-trust-head">Free Shipping</span>
-                <span className="pdp-trust-sub">Orders RM150+</span>
-              </div>
-            </div>
-
-            <div className="pdp-trust-badge">
-              <ShieldCheck size={20} className="pdp-trust-icon" />
-              <div className="pdp-trust-text-col">
-                <span className="pdp-trust-head">100% Authentic</span>
-                <span className="pdp-trust-sub">Quality Assured</span>
-              </div>
-            </div>
-
-            <div className="pdp-trust-badge">
-              <RotateCcw size={20} className="pdp-trust-icon" />
-              <div className="pdp-trust-text-col">
-                <span className="pdp-trust-head">Easy Returns</span>
-                <span className="pdp-trust-sub">30-Day Policy</span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </section>
@@ -557,14 +526,6 @@ export const ProductDetailPage = () => {
             aria-selected={activeTab === 'layering'}
           >
             Layering
-          </button>
-          <button 
-            className={`pdp-tab-trigger ${activeTab === 'reviews' ? 'active' : ''}`}
-            onClick={() => setActiveTab('reviews')}
-            role="tab"
-            aria-selected={activeTab === 'reviews'}
-          >
-            Reviews ({product.reviewsCount || 124})
           </button>
         </div>
 
@@ -797,57 +758,6 @@ export const ProductDetailPage = () => {
                   <strong>Step 2: The Illuminating Accent</strong>
                   <p style={{ fontSize: '0.88rem', color: '#6b7280', margin: '4px 0 0' }}>Mist a brighter citrus or fresh aromatic partner directly over the chest to create radiant diffusion.</p>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: REVIEWS */}
-          {activeTab === 'reviews' && (
-            <div style={{ maxWidth: '820px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '1.5rem', background: '#faf9f6', borderRadius: '6px', marginBottom: '2rem' }}>
-                <div>
-                  <div style={{ fontSize: '3rem', fontWeight: 800, color: '#111827', lineHeight: 1 }}>
-                    {product.rating || '4.8'}
-                  </div>
-                  <div className="pdp-stars" style={{ margin: '4px 0' }}>
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={16} fill="#f59e0b" color="#f59e0b" />
-                    ))}
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Based on {product.reviewsCount || 124} reviews</div>
-                </div>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                    <span>5 ★</span>
-                    <div style={{ flex: 1, height: '6px', background: '#e5e7eb', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: '85%', height: '100%', background: '#f59e0b' }} />
-                    </div>
-                    <span>85%</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-                    <span>4 ★</span>
-                    <div style={{ flex: 1, height: '6px', background: '#e5e7eb', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: '12%', height: '100%', background: '#f59e0b' }} />
-                    </div>
-                    <span>12%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sample Verified Testimonial */}
-              <div style={{ borderBottom: '1px solid #e5e7eb', paddingBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>Faris A.</span>
-                  <span style={{ fontSize: '0.72rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 6px', borderRadius: '3px', fontWeight: 600 }}>Verified Connoisseur</span>
-                </div>
-                <div className="pdp-stars" style={{ marginBottom: '6px' }}>
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />
-                  ))}
-                </div>
-                <p style={{ fontSize: '0.9rem', color: '#4b5563', lineHeight: 1.5 }}>
-                  "Unbelievable longevity. Scent lasted well into the next morning on my suit jacket. The drydown into smoky amber and cedar is pure luxury."
-                </p>
               </div>
             </div>
           )}
