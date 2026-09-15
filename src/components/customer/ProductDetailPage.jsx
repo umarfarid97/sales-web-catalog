@@ -494,14 +494,6 @@ export const ProductDetailPage = () => {
           >
             Description
           </button>
-          <button 
-            className={`pdp-tab-trigger ${activeTab === 'layering' ? 'active' : ''}`}
-            onClick={() => setActiveTab('layering')}
-            role="tab"
-            aria-selected={activeTab === 'layering'}
-          >
-            Layering
-          </button>
         </div>
 
         <div className="pdp-tab-body">
@@ -712,26 +704,6 @@ export const ProductDetailPage = () => {
                 </div>
                 <div>
                   <strong>Refillable:</strong> Yes (Eco-Friendly Bottle)
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: LAYERING RITUAL */}
-          {activeTab === 'layering' && (
-            <div style={{ maxWidth: '820px', lineHeight: 1.7, color: '#374151' }}>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.75rem', color: '#111827' }}>The Art of Fragrance Layering</h4>
-              <p style={{ marginBottom: '1rem' }}>
-                Fragrance layering lets you create a unique signature scent. By combining complementary scents, you craft a long-lasting aroma tailored just for you.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
-                <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
-                  <strong>Step 1: The Anchor Base</strong>
-                  <p style={{ fontSize: '0.88rem', color: '#6b7280', margin: '4px 0 0' }}>Apply 2 sprays of {product.name} to warm pulse points (collarbones and wrists).</p>
-                </div>
-                <div style={{ padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '6px' }}>
-                  <strong>Step 2: The Illuminating Accent</strong>
-                  <p style={{ fontSize: '0.88rem', color: '#6b7280', margin: '4px 0 0' }}>Mist a brighter citrus or fresh aromatic partner directly over the chest to create radiant diffusion.</p>
                 </div>
               </div>
             </div>
