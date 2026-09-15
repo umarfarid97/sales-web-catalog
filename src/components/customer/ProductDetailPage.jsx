@@ -57,8 +57,6 @@ export const ProductDetailPage = () => {
     activeProduct,
     products,
     favorites = [],
-    openProductDetail,
-    navigateToCatalog,
     showToast
   } = useStore();
 
@@ -229,29 +227,6 @@ export const ProductDetailPage = () => {
       { name: 'Fresh', score: isFresh ? 8 : 3, pct: isFresh ? '80%' : '30%' }
     ];
   }, [product]);
-
-  // 4 Curated Fragrance Layering Suggestions ("Pairs Well With")
-  const layeringSuggestions = useMemo(() => {
-    if (!product || !products || products.length === 0) return [];
-    // Select 4 other fragrances with different traits
-    return products
-      .filter(p => p.id !== product.id)
-      .slice(0, 4)
-      .map((p) => {
-        // Curated fragrance layering companion title
-        const facets = p.traits && p.traits.length >= 2 
-          ? `${p.traits[0]} • ${p.traits[1]}` 
-          : p.olfactoryFamily?.split('/')?.slice(0, 2)?.join(' • ') || 'Citrus • Fresh';
-
-        return {
-          id: p.id,
-          name: p.name,
-          facets: facets,
-          image: p.images?.[0] || p.image,
-          fullProduct: p
-        };
-      });
-  }, [products, product]);
 
   if (!product) {
     if (!products || products.length === 0) {
@@ -761,51 +736,6 @@ export const ProductDetailPage = () => {
               </div>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ================= 4. PAIRS WELL WITH (LAYERING SUGGESTIONS) ================= */}
-      <section className="pdp-layering-container">
-        <div className="pdp-layering-header-row">
-          <div>
-            <h3 className="pdp-layering-heading">Pairs Well With (Layering Suggestions)</h3>
-            <p className="pdp-layering-subtitle">Any two can layer beautifully.</p>
-          </div>
-
-          <button 
-            className="pdp-layering-explore-link"
-            onClick={() => navigateToCatalog()}
-          >
-            View All Layering Combinations <ChevronRight size={15} />
-          </button>
-        </div>
-
-        <div className="pdp-layering-cards-grid">
-          {layeringSuggestions.map((item) => (
-            <div 
-              key={item.id} 
-              className="pdp-layer-card"
-              onClick={() => openProductDetail(item.fullProduct)}
-            >
-              <img 
-                src={item.image} 
-                alt={item.name} 
-                className="pdp-layer-bottle-thumb" 
-                loading="lazy"
-              />
-              <div className="pdp-layer-info">
-                <div className="pdp-layer-title">{item.name}</div>
-                <div className="pdp-layer-facets">{item.facets}</div>
-              </div>
-              <span 
-                className="pdp-layer-add-btn"
-                aria-label={`Explore ${item.name}`}
-                style={{ background: '#f3f4f6', color: '#111827' }}
-              >
-                <ChevronRight size={16} />
-              </span>
-            </div>
-          ))}
         </div>
       </section>
 
