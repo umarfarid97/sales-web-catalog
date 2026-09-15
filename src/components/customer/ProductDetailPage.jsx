@@ -59,6 +59,7 @@ export const ProductDetailPage = () => {
   const {
     activeProduct,
     products,
+    favorites = [],
     openProductDetail,
     navigateToCatalog,
     showToast
@@ -281,7 +282,7 @@ export const ProductDetailPage = () => {
     );
   }
 
-  const isFav = Array.isArray(favorites) ? favorites.includes(product.id) : false;
+  const isFav = Array.isArray(favorites) && product?.id ? favorites.includes(product.id) : false;
 
   // Safe pyramid notes for visual swatches
   const topNote = String(product.pyramid?.topNotes?.[0] || 'Calabrian Bergamot');

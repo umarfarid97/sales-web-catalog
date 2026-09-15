@@ -374,7 +374,7 @@ export const StoreProvider = ({ children }) => {
       if (found) {
         setActiveProduct(found);
         setCustomerView('product');
-        setRoleState('customer');
+        setRole('customer');
       }
     } else if (isProductPage && products.length > 0) {
       // Default to flagship creation if on product page without parameter
