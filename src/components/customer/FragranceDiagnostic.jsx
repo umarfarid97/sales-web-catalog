@@ -914,15 +914,28 @@ export const FragranceDiagnostic = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '14px' }}>
               {layeringRecommendations.map((comp) => (
-                <div 
+                <a 
                   key={comp.id}
+                  href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
                   style={{
+                    display: 'block',
+                    textDecoration: 'none',
                     background: '#FFFFFF',
                     border: '1px solid #E5E7EB',
                     borderRadius: '8px',
                     padding: '14px',
                     textAlign: 'center',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.03)';
                   }}
                 >
                   <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '10px' }}>
@@ -945,28 +958,10 @@ export const FragranceDiagnostic = () => {
                     {(comp.traits || []).slice(0, 3).join(' • ')}
                   </div>
 
-                  <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#111827', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#111827' }}>
                     RM{comp.price || 45}
                   </div>
-
-                  <a
-                    href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      padding: '10px 8px',
-                      borderRadius: '4px',
-                      background: '#111827',
-                      color: '#FFFFFF',
-                      fontSize: '0.74rem',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                      textAlign: 'center'
-                    }}
-                  >
-                    Explore Fragrance &rarr;
-                  </a>
-                </div>
+                </a>
               ))}
             </div>
           </div>

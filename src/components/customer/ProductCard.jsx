@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Star, ArrowRight } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
@@ -46,6 +46,14 @@ export const ProductCard = ({ product }) => {
         minWidth: 0,
         boxSizing: 'border-box',
         overflow: 'hidden'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(44, 26, 17, 0.1)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'none';
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(44, 26, 17, 0.05)';
       }}
     >
       {/* 1. Neutral Crisp Product Image Wrap */}
@@ -147,7 +155,7 @@ export const ProductCard = ({ product }) => {
         style={{ 
           fontSize: '0.78rem', 
           color: '#786558', 
-          margin: '0 0 12px',
+          margin: '0',
           lineHeight: 1.4,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -156,47 +164,6 @@ export const ProductCard = ({ product }) => {
       >
         {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : product.tagline || 'Extrait de Parfum • High Longevity'}
       </p>
-
-      {/* 5. Full-Width Luxury Button (Catalog Showcase) */}
-      <div 
-        className="artisan-card-actions"
-        style={{ 
-          marginTop: 'auto',
-          width: '100%'
-        }}
-      >
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpen();
-          }}
-          className="artisan-card-btn artisan-card-btn-view"
-          style={{
-            width: '100%',
-            background: '#2b1810',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '9999px',
-            padding: '10px 14px',
-            fontSize: '0.78rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
-            letterSpacing: '0.05em',
-            transition: 'background 0.15s ease',
-            boxSizing: 'border-box'
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#d97706'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = '#2b1810'; }}
-        >
-          <span>Explore Fragrance</span>
-          <ArrowRight size={14} />
-        </button>
-      </div>
 
     </div>
   );
