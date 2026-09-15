@@ -61,11 +61,6 @@ export const ProductDetailPage = () => {
     products,
     openProductDetail,
     navigateToCatalog,
-    addToCart,
-    favorites,
-    toggleFavorite,
-    cartSubtotal,
-    setIsCartOpen,
     showToast
   } = useStore();
 
@@ -296,16 +291,7 @@ export const ProductDetailPage = () => {
   // Visible accords based on accordion toggle
   const visibleAccords = showAllAccords ? accords : accords.slice(0, 5);
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize, null, currentUnitPrice);
-    setIsUpsellDrawerOpen(true);
-  };
 
-  const handleQuickAddLayer = (e, item) => {
-    e.stopPropagation();
-    const defaultPrice = item.fullProduct.price || 150;
-    addToCart(item.fullProduct, 1, '30ml', null, Math.round(defaultPrice * 0.63));
-  };
 
   const handleSelectThumbnail = (index) => {
     setActiveThumbIndex(index);
@@ -900,14 +886,13 @@ export const ProductDetailPage = () => {
                 <div className="pdp-layer-title">{item.name}</div>
                 <div className="pdp-layer-facets">{item.facets}</div>
               </div>
-              <button 
-                type="button" 
+              <span 
                 className="pdp-layer-add-btn"
-                onClick={(e) => handleQuickAddLayer(e, item)}
-                aria-label={`Add ${item.name} to bag`}
+                aria-label={`Explore ${item.name}`}
+                style={{ background: '#f3f4f6', color: '#111827' }}
               >
-                <Plus size={16} />
-              </button>
+                <ChevronRight size={16} />
+              </span>
             </div>
           ))}
         </div>

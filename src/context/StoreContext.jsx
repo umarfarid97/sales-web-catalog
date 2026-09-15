@@ -698,73 +698,12 @@ export const StoreProvider = ({ children }) => {
   const cartDiscountAmount = (cartSubtotal * discountPercent) / 100;
   const cartTotal = Math.max(0, cartSubtotal - cartDiscountAmount + cartShipping);
 
-  // --- Cart Actions ---
-  const addToCart = (product, arg2 = 1, arg3 = null, arg4 = null, arg5 = null) => {
+  // --- Cart Actions (Disabled for pure promotional catalog mode) ---
+  const addToCart = (product, arg2 = 1, arg3 = null) => {
     if (!product) return false;
-
-    let quantity = 1;
-    let selectedSize = '100 ml';
-    let engravingText = null;
-    let overridePrice = null;
-
-    if (typeof arg2 === 'number') {
-      quantity = Math.max(1, Math.round(arg2) || 1);
-      selectedSize = typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || '100 ml');
-      engravingText = typeof arg4 === 'string' ? arg4 : null;
-      overridePrice = typeof arg5 === 'number' ? arg5 : null;
-    } else if (typeof arg2 === 'string') {
-      selectedSize = arg2;
-      quantity = typeof arg3 === 'number' ? Math.max(1, arg3) : 1;
-      engravingText = typeof arg4 === 'string' ? arg4 : null;
-      overridePrice = typeof arg5 === 'number' ? arg5 : null;
-    }
-
-    const price = typeof overridePrice === 'number' ? overridePrice : (Number(product.price) || 0);
-    const cartItemId = `${product.id}-${selectedSize}-${engravingText || 'std'}`;
-    const firstImg = (Array.isArray(product.images) && product.images[0]) || product.image || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80';
-    const imagesList = Array.isArray(product.images) && product.images.length > 0 ? product.images : [firstImg];
-    const maxStock = typeof product.stock === 'number' ? product.stock : 99;
-
-    if (maxStock <= 0) {
-      showToast(`${product.name} is currently out of stock!`, 'error');
-      return false;
-    }
-
-    setCart((prevCart) => {
-      const existingIndex = prevCart.findIndex((item) => item.cartItemId === cartItemId || (item.id === product.id && item.selectedSize === selectedSize));
-      if (existingIndex > -1) {
-        const currentQty = Number(prevCart[existingIndex].quantity) || 1;
-        const newQty = Math.min(maxStock, currentQty + quantity);
-        if (newQty === currentQty && maxStock > 0) {
-          showToast(`Maximum stock limit (${maxStock}) reached for this item`, 'info');
-          return prevCart;
-        }
-        const updated = [...prevCart];
-        updated[existingIndex] = { ...updated[existingIndex], quantity: newQty };
-        return updated;
-      } else {
-        return [
-          ...prevCart,
-          {
-            cartItemId,
-            id: product.id,
-            name: product.name,
-            price: price,
-            originalPrice: product.originalPrice || price,
-            image: firstImg,
-            images: imagesList,
-            size: selectedSize,
-            selectedSize: selectedSize,
-            engravingText: engravingText,
-            category: product.category,
-            quantity: Math.min(maxStock, quantity),
-            maxStock: maxStock
-          }
-        ];
-      }
-    });
-
-    showToast(`Added ${quantity}x "${product.name}" to bag`, 'success');
+    const selectedSize = typeof arg2 === 'string' ? arg2 : (typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || 'Standard'));
+    const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am browsing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Size: ${selectedSize}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
     return true;
   };
 

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   X, 
-  ShoppingBag, 
-  Heart, 
+  MessageCircle, 
   RefreshCw, 
   Feather
 } from 'lucide-react';
@@ -40,17 +39,7 @@ export const ProductDetailModal = () => {
   const currentSizeObj = sizes[selectedSizeIndex] || sizes[0];
   const dynamicPrice = Math.round((Number(product.price) || 45) * (Number(currentSizeObj?.priceMultiplier) || 1.0));
 
-  const handleAddToCart = () => {
-    addToCart(
-      product, 
-      quantity, 
-      currentSizeObj.label, 
-      showEngraving && engravingText.trim() ? engravingText.trim() : null,
-      dynamicPrice
-    );
 
-    setSelectedProductModal(null);
-  };
 
   return (
     <div 
@@ -318,24 +307,46 @@ export const ProductDetailModal = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  className="btn btn-dior-black"
-                  onClick={handleAddToCart}
-                  style={{ padding: '14px 32px' }}
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <a
+                  href={`product.html?product=${encodeURIComponent(product.name || product.id)}`}
+                  className="btn"
+                  style={{
+                    padding: '12px 20px',
+                    background: '#ffffff',
+                    color: '#000000',
+                    border: '1px solid #000000',
+                    fontWeight: 700,
+                    textDecoration: 'none',
+                    fontSize: '0.82rem',
+                    borderRadius: '4px'
+                  }}
                 >
-                  <ShoppingBag size={16} />
-                  <span>Order Now</span>
-                </button>
+                  View Details
+                </a>
 
-                <button
-                  className="btn-icon"
-                  onClick={() => toggleFavorite(product.id)}
-                  aria-label="Wishlist"
-                  style={{ width: '48px', height: '48px', color: isFav ? '#ef4444' : '#000000' }}
+                <a
+                  href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am interested in ordering / inquiring about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${currentSizeObj.label}\n• Price: RM${(dynamicPrice * quantity).toFixed(2)}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                  style={{
+                    padding: '12px 24px',
+                    background: '#128C7E',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    fontSize: '0.82rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    borderRadius: '4px',
+                    boxShadow: '0 2px 10px rgba(18,140,126,0.25)'
+                  }}
                 >
-                  <Heart size={18} fill={isFav ? "currentColor" : "none"} />
-                </button>
+                  <MessageCircle size={16} />
+                  <span>Order via WhatsApp</span>
+                </a>
               </div>
             </div>
 

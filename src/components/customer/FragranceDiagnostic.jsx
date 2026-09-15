@@ -5,7 +5,7 @@ import {
   RotateCcw, 
   Check, 
   Sparkles, 
-  ShoppingBag, 
+  MessageCircle, 
   CheckCircle2, 
   User, 
   Droplets, 
@@ -428,20 +428,7 @@ export const FragranceDiagnostic = () => {
     };
   }, [products, answers]);
 
-  const handleAddAnchorToBag = () => {
-    if (!anchor?.product) return;
-    const sizeObj = {
-      '30ml': { label: '30ml Travel Spray', price: 45 },
-      '50ml': { label: '50ml Bottle', price: 75 },
-      '100ml': { label: '100ml Bottle', price: 125 }
-    }[selectedAnchorFormat] || { label: '30ml Travel Spray', price: 45 };
 
-    addToCart(anchor.product, 1, sizeObj.label, null, sizeObj.price);
-  };
-
-  const handleAddCompanionToBag = (prod) => {
-    addToCart(prod, 1, '30ml Travel Spray', null, 45);
-  };
 
   return (
     <div 
@@ -866,30 +853,54 @@ export const FragranceDiagnostic = () => {
                     </div>
                   </div>
 
-                  {/* Add to Bag Button */}
-                  <button
-                    type="button"
-                    onClick={handleAddAnchorToBag}
-                    style={{
-                      padding: '14px 32px',
-                      borderRadius: '4px',
-                      background: '#111827',
-                      color: '#FFFFFF',
-                      fontWeight: 800,
-                      fontSize: '0.85rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
-                    }}
-                  >
-                    <ShoppingBag size={16} />
-                    <span>Add Anchor to Bag</span>
-                  </button>
+                  {/* Promotional Inquiry & Explore CTAs */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+                    <a
+                      href={`product.html?product=${encodeURIComponent(anchor.product?.name || anchor.product?.id)}`}
+                      style={{
+                        padding: '14px 28px',
+                        borderRadius: '4px',
+                        background: '#111827',
+                        color: '#FFFFFF',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
+                      }}
+                    >
+                      <span>Explore Fragrance</span>
+                      <ArrowRight size={16} />
+                    </a>
+
+                    <a
+                      href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI just took your Scent Discovery Quiz and my signature match is:\n• Perfume: ${anchor.product?.name}\n• Format: ${selectedAnchorFormat}\n• Match Score: ${anchor.matchPercentage}%\n\nCould you please assist me with ordering / stock availability? Thank you!`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '14px 24px',
+                        borderRadius: '4px',
+                        background: '#128C7E',
+                        color: '#FFFFFF',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 14px rgba(18,140,126,0.25)'
+                      }}
+                    >
+                      <MessageCircle size={16} />
+                      <span>Order via WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -938,23 +949,23 @@ export const FragranceDiagnostic = () => {
                     RM{comp.price || 45}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleAddCompanionToBag(comp)}
+                  <a
+                    href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
                     style={{
+                      display: 'block',
                       width: '100%',
-                      padding: '8px',
+                      padding: '10px 8px',
                       borderRadius: '4px',
-                      background: '#FAF8F5',
-                      color: '#111827',
-                      border: '1px solid #D1D5DB',
+                      background: '#111827',
+                      color: '#FFFFFF',
                       fontSize: '0.74rem',
                       fontWeight: 700,
-                      cursor: 'pointer'
+                      textDecoration: 'none',
+                      textAlign: 'center'
                     }}
                   >
-                    + Add to Bag
-                  </button>
+                    Explore Fragrance &rarr;
+                  </a>
                 </div>
               ))}
             </div>
