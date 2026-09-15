@@ -90,9 +90,26 @@ export const Footer = () => {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#b5a498', padding: 0 }}>
               <li>Free Gift Packaging</li>
               <li>Gift Box & Greeting Card</li>
-              <li>Scent Finder Quiz</li>
-              <li>Track Your Delivery</li>
-              <li>Contact Customer Support</li>
+              <li>
+                <a 
+                  href="diagnostic.html" 
+                  style={{ color: '#b5a498', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
+                >
+                  Scent Finder Quiz
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20would%20like%20assistance%20with%20your%20perfume%20catalog." 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ color: '#d97706', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  WhatsApp Concierge (018-286 8402)
+                </a>
+              </li>
             </ul>
           </div>
 

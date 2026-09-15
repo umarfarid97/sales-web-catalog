@@ -708,11 +708,6 @@ export const MenCollectionLayout = () => {
       <BrandValuesFooter />
       <Footer />
       <MobileBottomNav />
-
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ToastContainer />
     </div>
   );

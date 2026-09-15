@@ -174,10 +174,6 @@ const MainLayout = () => {
 
       {/* Overlays & Modals */}
       <ProductDetailModal />
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ProductFormModal />
       <OrderDetailModal />
       <ToastContainer />

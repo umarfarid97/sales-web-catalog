@@ -708,11 +708,6 @@ export const WomenCollectionLayout = () => {
       <BrandValuesFooter />
       <Footer />
       <MobileBottomNav />
-
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ToastContainer />
     </div>
   );

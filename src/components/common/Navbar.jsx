@@ -11,7 +11,8 @@ import {
   ArrowRight,
   User,
   LogOut,
-  Shield
+  Shield,
+  MessageCircle
 } from 'lucide-react';
 import { ValenszoLogo } from './ValenszoLogo';
 
@@ -223,233 +224,35 @@ export const Navbar = () => {
             </a>
           </nav>
 
-          {/* Right Column: Account / Order Tracker & Shopping Bag */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', zIndex: 2 }}>
-            
-            {/* Account / Order Tracker with Status Dot & Dropdown */}
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!isAuthenticated) {
-                    openAuthModal({ mode: 'signin' });
-                  } else {
-                    setIsAccountMenuOpen(prev => !prev);
-                  }
-                }}
-                aria-label="Track Orders & Account"
-                title={isAuthenticated ? `Account: ${currentUser.name}` : "Customer Sign In"}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  padding: '6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
-                  position: 'relative',
-                  transition: 'opacity 0.2s ease'
-                }}
-              >
-                <User size={21} strokeWidth={1.75} />
-                {/* Status dot: Green when logged in, Orange when guest */}
-                <span style={{
-                  position: 'absolute',
-                  top: '4px',
-                  right: '4px',
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: isAuthenticated ? '#16a34a' : '#ea580c',
-                  boxShadow: '0 0 0 1.5px #ffffff'
-                }} />
-              </button>
-
-              {/* Account Dropdown Menu for Authenticated Users */}
-              {isAuthenticated && isAccountMenuOpen && (
-                <div 
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 12px)',
-                    right: 0,
-                    width: '260px',
-                    background: '#ffffff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '6px',
-                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.15)',
-                    zIndex: 100,
-                    padding: '12px 0',
-                    color: '#000000'
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div style={{ padding: '4px 16px 10px', borderBottom: '1px solid #f3f4f6' }}>
-                    <div style={{ fontSize: '0.65rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
-                      Customer Account
-                    </div>
-                    <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#000000', marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {currentUser.name}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {currentUser.email}
-                    </div>
-                    {isAdmin && (
-                      <span style={{ display: 'inline-block', marginTop: '6px', padding: '2px 6px', background: '#fef3c7', color: '#92400e', borderRadius: '3px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Store Admin
-                      </span>
-                    )}
-                  </div>
-
-                  <div style={{ padding: '6px 0' }}>
-                    <a
-                      href="/account"
-                      onClick={() => setIsAccountMenuOpen(false)}
-                      style={{
-                        width: '100%',
-                        padding: '9px 16px',
-                        background: 'transparent',
-                        border: 'none',
-                        textAlign: 'left',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        color: '#111827',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        textDecoration: 'none'
-                      }}
-                    >
-                      <User size={15} color="#926917" />
-                      <span>My Account & Addresses</span>
-                    </a>
-
-                    <button
-                      onClick={() => {
-                        setIsOrderTrackerOpen(true);
-                        setIsAccountMenuOpen(false);
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: '9px 16px',
-                        background: 'transparent',
-                        border: 'none',
-                        textAlign: 'left',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        color: '#374151',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}
-                    >
-                      <Compass size={15} color="#926917" />
-                      <span>My Orders & Tracker</span>
-                    </button>
-
-                    {isAdmin && (
-                      <button
-                        onClick={() => {
-                          setRole(role === 'admin' ? 'customer' : 'admin');
-                          setIsAccountMenuOpen(false);
-                        }}
-                        style={{
-                          width: '100%',
-                          padding: '9px 16px',
-                          background: 'transparent',
-                          border: 'none',
-                          textAlign: 'left',
-                          fontSize: '0.82rem',
-                          fontWeight: 600,
-                          color: '#374151',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px'
-                        }}
-                      >
-                        <Shield size={15} color="#926917" />
-                        <span>{role === 'admin' ? 'Back to Store' : 'Admin Portal'}</span>
-                      </button>
-                    )}
-                  </div>
-
-                  <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '6px' }}>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsAccountMenuOpen(false);
-                        showToast('Signed out successfully.', 'info');
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: '9px 16px',
-                        background: 'transparent',
-                        border: 'none',
-                        textAlign: 'left',
-                        fontSize: '0.82rem',
-                        fontWeight: 600,
-                        color: '#dc2626',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}
-                    >
-                      <LogOut size={15} />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Shopping Bag Button with Counter Badge */}
-            {role === 'customer' && (
-              <button
-                onClick={() => setIsCartOpen(true)}
-                aria-label={`Shopping Bag (${cartTotalItems} items)`}
-                title="Shopping Bag"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  padding: '6px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
-                  position: 'relative',
-                  transition: 'opacity 0.2s ease'
-                }}
-              >
-                <ShoppingBag size={21} strokeWidth={1.75} />
-                {cartTotalItems > 0 && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '2px',
-                    right: '2px',
-                    background: '#d97706',
-                    color: '#ffffff',
-                    borderRadius: '50%',
-                    width: '16px',
-                    height: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.62rem',
-                    fontWeight: 800,
-                    fontFamily: 'var(--font-couture)',
-                    lineHeight: 1
-                  }}>
-                    {cartTotalItems}
-                  </span>
-                )}
-              </button>
-            )}
-
+          {/* Right Column: Direct WhatsApp Concierge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 2 }}>
+            <a
+              href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp Concierge"
+              title="Chat with Fragrance Concierge"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                background: '#128C7E',
+                color: '#ffffff',
+                borderRadius: '9999px',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+                letterSpacing: '0.04em',
+                boxShadow: '0 2px 12px rgba(18, 140, 126, 0.3)',
+                transition: 'background 0.15s ease'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#075E54'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
+            >
+              <MessageCircle size={16} />
+              <span>WhatsApp Concierge</span>
+            </a>
           </div>
 
         </div>
@@ -684,151 +487,47 @@ export const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Maison Services Section */}
+                {/* Fragrance Concierge Section */}
                 <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px' }}>
-                  
-                  {/* Member Authentication Status Card */}
-                  {isAuthenticated ? (
-                    <div style={{ padding: '12px 14px', background: '#f9fafb', borderRadius: '4px', border: '1px solid #e5e7eb', marginBottom: '14px' }}>
-                      <div style={{ fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#b38e44', fontWeight: 700 }}>
-                        {isAdmin ? '👑 Store Admin' : '✨ Member'}
-                      </div>
-                      <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#000000', marginTop: '2px' }}>
-                        {currentUser.name}
-                      </div>
-                      <div style={{ fontSize: '0.74rem', color: '#6b7280', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {currentUser.email}
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                        <a
-                          href="/account"
-                          onClick={() => setIsMenuOpen(false)}
-                          style={{
-                            flex: 1,
-                            padding: '6px 10px',
-                            background: '#000000',
-                            color: '#ffffff',
-                            borderRadius: '3px',
-                            fontSize: '0.74rem',
-                            fontWeight: 700,
-                            textDecoration: 'none',
-                            textAlign: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '4px'
-                          }}
-                        >
-                          <User size={13} />
-                          <span>My Account</span>
-                        </a>
-                        <button
-                          onClick={() => {
-                            logout();
-                            setIsMenuOpen(false);
-                            showToast('Signed out successfully.', 'info');
-                          }}
-                          style={{
-                            padding: '6px 10px',
-                            background: '#ffffff',
-                            border: '1px solid #d1d5db',
-                            borderRadius: '3px',
-                            fontSize: '0.74rem',
-                            color: '#dc2626',
-                            fontWeight: 600,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          Sign Out
-                        </button>
-                      </div>
+                  <div style={{ padding: '16px', background: '#fafaf9', borderRadius: '8px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
+                    <div style={{ fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#128C7E', fontWeight: 800, marginBottom: '4px' }}>
+                      Bespoke Concierge
                     </div>
-                  ) : (
-                    <div style={{ padding: '12px 14px', background: '#fafaf9', borderRadius: '4px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
-                      <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#000000', marginBottom: '2px' }}>
-                        Valenszo Member Account
-                      </div>
-                      <div style={{ fontSize: '0.74rem', color: '#6b7280', marginBottom: '8px' }}>
-                        Sign in or register to track your orders and enjoy member benefits.
-                      </div>
-                      <button
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          openAuthModal({ mode: 'signin' });
-                        }}
-                        style={{
-                          width: '100%',
-                          padding: '8px 12px',
-                          background: '#000000',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '3px',
-                          fontSize: '0.76rem',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.06em',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Sign In / Register
-                      </button>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#000000', marginBottom: '4px' }}>
+                      Need Fragrance Recommendations?
                     </div>
-                  )}
-
-                  <div style={{
-                    fontSize: '0.68rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: '#c5a059',
-                    marginBottom: '10px',
-                    fontFamily: 'var(--font-couture)'
-                  }}>
-                    Customer Services
+                    <div style={{ fontSize: '0.76rem', color: '#6b7280', marginBottom: '12px', lineHeight: 1.4 }}>
+                      Speak directly with our fragrance specialists for personalized scent advice, notes breakdown, or custom inquiries.
+                    </div>
+                    <a
+                      href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        width: '100%',
+                        padding: '11px 14px',
+                        background: '#128C7E',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '0.8rem',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        boxShadow: '0 2px 8px rgba(18, 140, 126, 0.25)'
+                      }}
+                    >
+                      <MessageCircle size={16} />
+                      <span>Chat on WhatsApp</span>
+                    </a>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <a 
-                      href="/account"
-                      onClick={() => setIsMenuOpen(false)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '11px 14px',
-                        background: 'transparent',
-                        border: 'none',
-                        borderRadius: '3px',
-                        color: '#374151',
-                        fontSize: '0.84rem',
-                        fontWeight: 600,
-                        textDecoration: 'none'
-                      }}
-                    >
-                      <User size={17} color="#926917" />
-                      <span>My Account & Delivery Addresses</span>
-                    </a>
-
-                    <button 
-                      onClick={() => { setIsOrderTrackerOpen(true); setIsMenuOpen(false); }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '11px 14px',
-                        background: 'transparent',
-                        border: 'none',
-                        borderRadius: '3px',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        color: '#374151',
-                        fontSize: '0.84rem',
-                        fontWeight: 600
-                      }}
-                    >
-                      <Compass size={17} color="#926917" />
-                      <span>Track Fragrance Delivery</span>
-                    </button>
 
                     {isAdmin && (
                       <button 

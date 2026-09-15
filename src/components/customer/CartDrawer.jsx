@@ -74,7 +74,7 @@ export const CartDrawer = () => {
     
     const summary = `Hello Valenszo Fragrance Concierge! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
     
-    const waUrl = `https://wa.me/60123456789?text=${encodeURIComponent(summary)}`;
+    const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(summary)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 

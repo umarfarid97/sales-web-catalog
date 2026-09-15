@@ -1,22 +1,12 @@
 import React from 'react';
-import { Home, Compass, Sparkles, User } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { useStore } from '../../context/StoreContext';
+import { Home, Compass, Sparkles, MessageCircle } from 'lucide-react';
 
 export const MobileBottomNav = () => {
-  const { isAuthenticated, openAuthModal } = useAuth();
-  const { setIsOrderTrackerOpen } = useStore();
-
   const currentPath = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
 
   const isHome = currentPath === '' || currentPath === '/' || currentPath.endsWith('index.html') || currentPath.endsWith('/');
   const isShop = currentPath.includes('collection') || currentPath.includes('men') || currentPath.includes('women');
   const isQuiz = currentPath.includes('diagnostic');
-  const isAccount = currentPath.includes('account');
-
-  const handleAccountClick = () => {
-    openAuthModal({ mode: 'signin', title: 'Customer Account' });
-  };
 
   return (
     <nav 
@@ -92,27 +82,26 @@ export const MobileBottomNav = () => {
         <span>Quiz</span>
       </a>
 
-      <button 
-        type="button"
-        onClick={handleAccountClick}
+      <a 
+        href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+        target="_blank"
+        rel="noopener noreferrer"
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '3px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: isAccount ? '#2b1810' : '#8c7d72',
+          textDecoration: 'none',
+          color: '#128C7E',
           fontSize: '0.68rem',
-          fontWeight: isAccount ? 800 : 500,
+          fontWeight: 700,
           padding: 0,
           letterSpacing: '0.04em'
         }}
       >
-        <User size={20} strokeWidth={isAccount ? 2.4 : 1.7} color={isAccount ? '#2b1810' : '#8c7d72'} />
-        <span>Account</span>
-      </button>
+        <MessageCircle size={20} strokeWidth={2} color="#128C7E" />
+        <span>WhatsApp</span>
+      </a>
     </nav>
   );
 };

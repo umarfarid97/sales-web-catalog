@@ -383,15 +383,6 @@ export const ProductDetailPage = () => {
 
           {/* Main Stage Presentation */}
           <div className="pdp-main-stage">
-            {/* Mobile Wishlist Heart */}
-            <button 
-              className="pdp-mobile-heart-btn"
-              onClick={() => toggleFavorite(product.id)}
-              aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
-            >
-              <Heart size={20} fill={isFav ? "#111827" : "none"} color="#111827" />
-            </button>
-
             {/* Mobile Image Counter Pill - only when multiple images exist */}
             {galleryItems.length > 1 && (
               <div className="pdp-mobile-counter-pill">
@@ -403,7 +394,7 @@ export const ProductDetailPage = () => {
             <div className="pdp-flacon-inner-canvas">
               <img 
                 src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
-                alt={product.name}
+                alt={product.name} 
                 className="pdp-main-flacon-img"
               />
             </div>
@@ -427,14 +418,6 @@ export const ProductDetailPage = () => {
             <span className="pdp-badge-bestseller">
               {product.badge || 'BEST SELLER'}
             </span>
-
-            <button 
-              className="pdp-desktop-heart-btn"
-              onClick={() => toggleFavorite(product.id)}
-              aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
-            >
-              <Heart size={22} fill={isFav ? "#111827" : "none"} color="#111827" />
-            </button>
           </div>
 
           <h1 className="pdp-product-title">
@@ -489,41 +472,10 @@ export const ProductDetailPage = () => {
             </div>
           </div>
 
-          {/* Quantity Stepper & Add to Cart */}
-          <div className="pdp-cta-row" ref={mainCtaRef}>
-            <div className="pdp-stepper">
-              <button 
-                type="button" 
-                className="pdp-stepper-btn"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                aria-label="Decrease quantity"
-              >
-                <Minus size={14} />
-              </button>
-              <div className="pdp-stepper-value">{quantity}</div>
-              <button 
-                type="button" 
-                className="pdp-stepper-btn"
-                onClick={() => setQuantity(Math.min(10, quantity + 1))}
-                aria-label="Increase quantity"
-              >
-                <Plus size={14} />
-              </button>
-            </div>
-
-            <button 
-              type="button" 
-              className="pdp-add-to-cart-btn"
-              onClick={handleAddToCart}
-            >
-              ADD TO BAG — RM{totalPrice}
-            </button>
-          </div>
-
-          {/* Luxury WhatsApp Direct Concierge Order */}
-          <div style={{ marginTop: '10px' }}>
+          {/* Direct WhatsApp Concierge Order & Inquiry */}
+          <div className="pdp-cta-row" ref={mainCtaRef} style={{ marginTop: '16px' }}>
             <a
-              href={`https://wa.me/60123456789?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI would like to inquire / order:\n- Perfume: ${product.name} (${selectedSize})\n- Quantity: ${quantity}\n- Price: RM${totalPrice}\n\nCould you please assist me with availability & express shipping? Thank you!`)}`}
+              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -532,23 +484,24 @@ export const ProductDetailPage = () => {
                 justifyContent: 'center',
                 gap: '10px',
                 width: '100%',
-                padding: '14px 20px',
-                borderRadius: '4px',
+                padding: '16px 24px',
+                borderRadius: '8px',
                 background: '#128C7E',
                 color: '#ffffff',
                 fontWeight: 800,
-                fontSize: '0.84rem',
+                fontSize: '0.88rem',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
-                boxShadow: '0 4px 14px rgba(18, 140, 126, 0.22)',
-                transition: 'background 0.2s ease'
+                boxShadow: '0 6px 20px rgba(18, 140, 126, 0.28)',
+                transition: 'background 0.2s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#075E54'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
             >
-              <MessageCircle size={18} />
-              <span>Inquire / Order via WhatsApp</span>
+              <MessageCircle size={20} />
+              <span>Inquire & Order via WhatsApp</span>
             </a>
           </div>
 
@@ -960,25 +913,31 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
-      {/* ================= 5. MOBILE STICKY BOTTOM PURCHASE BAR ================= */}
+      {/* ================= 5. MOBILE STICKY BOTTOM INQUIRY BAR ================= */}
       <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
         <div className="pdp-sticky-bar-inner">
-          <button 
-            type="button" 
-            className="pdp-sticky-heart-btn"
-            onClick={() => toggleFavorite(product.id)}
-            aria-label="Wishlist"
-          >
-            <Heart size={20} fill={isFav ? "#111827" : "none"} color="#111827" />
-          </button>
-
-          <button 
-            type="button" 
+          <a 
+            href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="pdp-sticky-add-cart-btn"
-            onClick={handleAddToCart}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: '#128C7E',
+              color: '#ffffff',
+              textDecoration: 'none',
+              borderRadius: '6px',
+              fontWeight: 800,
+              fontSize: '0.85rem'
+            }}
           >
-            Add to Cart — RM{totalPrice}
-          </button>
+            <MessageCircle size={18} />
+            <span>Inquire via WhatsApp — RM{totalPrice}</span>
+          </a>
         </div>
       </div>
 
@@ -1052,203 +1011,6 @@ export const ProductDetailPage = () => {
         </div>
       )}
 
-      {/* ================= 8. POST-ADD UPSELL DRAWER (SCENT WARDROBE) ================= */}
-      {isUpsellDrawerOpen && (
-        <div 
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.5)',
-            zIndex: 9999,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            animation: 'fadeIn 0.2s ease-out'
-          }}
-          onClick={() => setIsUpsellDrawerOpen(false)}
-        >
-          <div 
-            style={{
-              width: '100%',
-              maxWidth: '420px',
-              height: '100%',
-              background: '#ffffff',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '-4px 0 30px rgba(0,0,0,0.15)',
-              overflowY: 'auto'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Drawer Header */}
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Check size={14} strokeWidth={3} />
-                </div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: '#111827' }}>
-                  Added to Cart!
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsUpsellDrawerOpen(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              
-              {/* Recently Added Item Card */}
-              <div style={{ display: 'flex', gap: '14px', background: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
-                <img
-                  src={galleryItems[0].url}
-                  alt={product.name}
-                  style={{ width: '64px', height: '74px', objectFit: 'contain', background: '#ffffff', borderRadius: '4px', padding: '4px', border: '1px solid #e5e7eb' }}
-                />
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', margin: 0 }}>
-                    {product.name}
-                  </h4>
-                  <div style={{ fontSize: '0.74rem', color: '#6b7280', margin: '2px 0 6px' }}>
-                    {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : 'Extrait de Parfum'}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.82rem' }}>
-                    <span style={{ color: '#4b5563' }}>Size: {selectedSize} &bull; Qty: {quantity}</span>
-                    <span style={{ fontWeight: 800, color: '#111827' }}>RM{totalPrice}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Complete Your Scent Wardrobe (Frequently Bought Together) */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                  <Sparkles size={14} color="#c5a059" />
-                  <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Complete Your Scent Wardrobe
-                  </h4>
-                </div>
-                <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '0 0 12px' }}>
-                  Frequently layered together for unforgettable presence and 16+ hours longevity:
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {layeringSuggestions.slice(0, 2).map((item) => (
-                    <div
-                      key={item.id}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '10px 12px',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '8px',
-                        background: '#ffffff'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          style={{ width: '42px', height: '50px', objectFit: 'contain' }}
-                        />
-                        <div>
-                          <div style={{ fontSize: '0.84rem', fontWeight: 800, color: '#111827', lineHeight: 1.2 }}>
-                            {item.name}
-                          </div>
-                          <div style={{ fontSize: '0.72rem', color: '#6b7280', marginTop: '2px' }}>
-                            {item.facets}
-                          </div>
-                          <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#c5a059', marginTop: '2px' }}>
-                            +RM45
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={(e) => handleQuickAddLayer(e, item)}
-                        style={{
-                          padding: '6px 12px',
-                          borderRadius: '4px',
-                          border: '1px solid #000000',
-                          background: '#ffffff',
-                          color: '#000000',
-                          fontSize: '0.74rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          whiteSpace: 'nowrap'
-                        }}
-                      >
-                        + Add
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Drawer Sticky Bottom Actions */}
-            <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #f3f4f6', background: '#fafafa' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontSize: '0.85rem', color: '#6b7280' }}>Estimated Subtotal</span>
-                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#111827' }}>
-                  RM{cartSubtotal > 0 ? cartSubtotal : totalPrice}
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsUpsellDrawerOpen(false);
-                    setIsCartOpen(true);
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '14px',
-                    borderRadius: '4px',
-                    background: '#000000',
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    fontSize: '0.84rem',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    textAlign: 'center',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'block',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-                  }}
-                >
-                  View Bag & Concierge Checkout
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsUpsellDrawerOpen(false)}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    borderRadius: '4px',
-                    background: 'transparent',
-                    border: '1px solid #d1d5db',
-                    color: '#374151',
-                    fontWeight: 600,
-                    fontSize: '0.8rem',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Continue Shopping
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-};
+      </div>
+    );
+  };

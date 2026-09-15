@@ -48,11 +48,6 @@ const DiagnosticLayout = () => {
       <Footer />
 
       <MobileBottomNav />
-
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ToastContainer />
     </div>
   );

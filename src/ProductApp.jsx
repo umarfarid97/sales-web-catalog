@@ -45,10 +45,6 @@ const ProductPageLayout = () => {
       <MobileBottomNav />
 
       {/* Universal Interactive Overlays & Modals */}
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ToastContainer />
     </div>
   );

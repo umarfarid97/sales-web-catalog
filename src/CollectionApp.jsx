@@ -618,11 +618,6 @@ export const CollectionPageLayout = () => {
       <BrandValuesFooter />
       <Footer />
       <MobileBottomNav />
-
-      <CartDrawer />
-      <CheckoutModal />
-      <OrderTrackerModal />
-      <AuthModal />
       <ToastContainer />
     </div>
   );

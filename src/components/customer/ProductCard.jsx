@@ -1,17 +1,12 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Heart, Star } from 'lucide-react';
+import { Star, ArrowRight } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
     openProductDetail,
-    setSelectedProductModal, 
-    addToCart, 
-    favorites, 
-    toggleFavorite
+    setSelectedProductModal
   } = useStore();
-
-  const isFav = favorites.includes(product.id);
 
   const handleOpen = () => {
     if (openProductDetail) {
@@ -19,14 +14,6 @@ export const ProductCard = ({ product }) => {
     } else {
       setSelectedProductModal(product);
     }
-  };
-
-  const handleQuickAdd = (e) => {
-    e.stopPropagation();
-    const defaultSize = product.sizes?.[1]?.label || product.sizes?.[0]?.label || '100 ml';
-    const finalPrice = product.price;
-
-    addToCart(product, 1, defaultSize, null, finalPrice);
   };
 
   const formattedPrice = Number(product.price || 45).toFixed(2);
@@ -87,35 +74,6 @@ export const ProductCard = ({ product }) => {
             transition: 'transform 0.25s ease'
           }}
         />
-
-        {/* Wishlist Heart Button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFavorite(product.id);
-          }}
-          aria-label={isFav ? "Remove from wishlist" : "Add to wishlist"}
-          style={{
-            position: 'absolute',
-            top: '8px',
-            right: '8px',
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.92)',
-            border: '1px solid rgba(0,0,0,0.06)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: isFav ? '#d97706' : '#786558',
-            backdropFilter: 'blur(4px)',
-            transition: 'all 0.15s ease'
-          }}
-        >
-          <Heart size={15} fill={isFav ? "currentColor" : "none"} />
-        </button>
 
         {/* Subtle Tier Pill Badge */}
         {product.tier && (
@@ -199,19 +157,14 @@ export const ProductCard = ({ product }) => {
         {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : product.tagline || 'Extrait de Parfum • High Longevity'}
       </p>
 
-      {/* 5. Dual Action Pill Buttons (Craft & Cafe Style) */}
+      {/* 5. Full-Width Luxury Button (Catalog Showcase) */}
       <div 
         className="artisan-card-actions"
         style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr', 
-          gap: '6px', 
           marginTop: 'auto',
-          width: '100%',
-          minWidth: 0
+          width: '100%'
         }}
       >
-        {/* Left: Warm Sand Pill Button (Quick View) */}
         <button
           type="button"
           onClick={(e) => {
@@ -220,74 +173,30 @@ export const ProductCard = ({ product }) => {
           }}
           className="artisan-card-btn artisan-card-btn-view"
           style={{
-            background: '#ebe5dc',
-            color: '#2b1810',
-            border: 'none',
-            borderRadius: '9999px',
-            padding: '8px 4px',
-            fontSize: '0.74rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            textAlign: 'center',
-            transition: 'background 0.15s ease',
-            whiteSpace: 'nowrap',
-            minWidth: 0,
-            boxSizing: 'border-box'
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#dfd7cc'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = '#ebe5dc'; }}
-        >
-          <span className="card-btn-desktop">Quick View</span>
-          <span className="card-btn-mobile">View</span>
-        </button>
-
-        {/* Right: Rich Espresso Pill Button (Add to Bag) */}
-        <button
-          type="button"
-          onClick={handleQuickAdd}
-          className="artisan-card-btn artisan-card-btn-add"
-          style={{
+            width: '100%',
             background: '#2b1810',
             color: '#ffffff',
             border: 'none',
             borderRadius: '9999px',
-            padding: '8px 4px',
-            fontSize: '0.74rem',
+            padding: '10px 14px',
+            fontSize: '0.78rem',
             fontWeight: 700,
             cursor: 'pointer',
-            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            letterSpacing: '0.05em',
             transition: 'background 0.15s ease',
-            whiteSpace: 'nowrap',
-            minWidth: 0,
             boxSizing: 'border-box'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = '#3e271e'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#d97706'; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = '#2b1810'; }}
         >
-          <span className="card-btn-desktop">Add to Bag</span>
-          <span className="card-btn-mobile">+ Bag</span>
+          <span>Explore Fragrance</span>
+          <ArrowRight size={14} />
         </button>
       </div>
-
-      <style>{`
-        .card-btn-desktop { display: inline; }
-        .card-btn-mobile { display: none; }
-        @media (max-width: 640px) {
-          .artisan-product-card {
-            padding: 10px !important;
-            border-radius: 14px !important;
-          }
-          .artisan-card-actions {
-            gap: 4px !important;
-          }
-          .artisan-card-btn {
-            padding: 7px 2px !important;
-            font-size: 0.68rem !important;
-          }
-          .card-btn-desktop { display: none !important; }
-          .card-btn-mobile { display: inline !important; }
-        }
-      `}</style>
 
     </div>
   );
