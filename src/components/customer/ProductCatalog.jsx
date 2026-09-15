@@ -7,8 +7,6 @@ import {
   ArrowRight,
   ShieldCheck,
   Clock,
-  Truck,
-  Award,
   ChevronRight
 } from 'lucide-react';
 
@@ -87,20 +85,14 @@ export const ProductCatalog = () => {
         <div 
           className="trust-ribbon-grid"
           style={{ 
-            maxWidth: '1280px', 
+            maxWidth: '680px', 
             margin: '0 auto',
             display: 'grid', 
-            gridTemplateColumns: 'repeat(4, 1fr)', 
-            gap: '12px',
+            gridTemplateColumns: 'repeat(2, 1fr)', 
+            gap: '16px',
             alignItems: 'center'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
-            <Award size={18} color="#d97706" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Authentic French Oils
-            </span>
-          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
             <Clock size={18} color="#d97706" strokeWidth={2.4} />
             <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
@@ -111,12 +103,6 @@ export const ProductCatalog = () => {
             <Sparkles size={18} color="#d97706" strokeWidth={2.4} />
             <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               Extrait De Parfum
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '9px', justifyContent: 'center' }}>
-            <Truck size={18} color="#d97706" strokeWidth={2.4} />
-            <span style={{ fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 800, color: '#2b1810', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Express Courier Dispatch
             </span>
           </div>
         </div>

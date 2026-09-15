@@ -31,16 +31,6 @@ export const Footer = () => {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', padding: 0 }}>
               <li>
                 <a 
-                  href="collection.html" 
-                  style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
-                >
-                  All Perfumes
-                </a>
-              </li>
-              <li>
-                <a 
                   href="men.html" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
