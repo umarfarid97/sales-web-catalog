@@ -83,7 +83,7 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+        href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20am%20browsing%20your%20online%20catalog."
         target="_blank"
         rel="noopener noreferrer"
         style={{

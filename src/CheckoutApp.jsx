@@ -320,7 +320,7 @@ export const CheckoutPageContent = () => {
         }
       }
 
-      // 2. Direct Bank Transfer / Concierge Pay
+      // 2. Direct Bank Transfer
       if (formData.paymentMethod === 'bank-transfer') {
         setPlacedOrder(order);
         setStep(3);

@@ -878,7 +878,7 @@ export const FragranceDiagnostic = () => {
                     </a>
 
                     <a
-                      href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI just took your Scent Discovery Quiz and my signature match is:\n• Perfume: ${anchor.product?.name}\n• Format: ${selectedAnchorFormat}\n• Match Score: ${anchor.matchPercentage}%\n\nCould you please assist me with ordering / stock availability? Thank you!`)}`}
+                      href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI just took your Scent Discovery Quiz and my signature match is:\n• Perfume: ${anchor.product?.name}\n• Format: ${selectedAnchorFormat}\n• Match Score: ${anchor.matchPercentage}%\n\nCould you please assist me with ordering / stock availability? Thank you!`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{

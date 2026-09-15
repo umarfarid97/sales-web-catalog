@@ -458,10 +458,10 @@ export const ProductDetailPage = () => {
             </div>
           </div>
 
-          {/* Direct WhatsApp Concierge Order & Inquiry */}
+          {/* Direct WhatsApp Order & Inquiry */}
           <div className="pdp-cta-row" ref={mainCtaRef} style={{ marginTop: '16px' }}>
             <a
-              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -902,7 +902,7 @@ export const ProductDetailPage = () => {
       <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
         <div className="pdp-sticky-bar-inner">
           <a 
-            href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+            href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="pdp-sticky-add-cart-btn"

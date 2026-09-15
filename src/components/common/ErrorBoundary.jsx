@@ -12,7 +12,7 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('[Maison Valenszo Concierge Catch]:', error, errorInfo);
+    console.error('[Maison Valenszo Error Catch]:', error, errorInfo);
 
     // Auto-recovery attempt: If this is the first error in the session, clear corrupt cache and retry once automatically
     try {
@@ -42,20 +42,12 @@ export class ErrorBoundary extends React.Component {
 
   handleReset = () => {
     try {
-      // Complete purge of all client-side cache keys to permanently resolve poisoned state
-      localStorage.removeItem('valenszo_products_cache');
-      localStorage.removeItem('lumina_products');
-      localStorage.removeItem('valenszo_cart');
-      localStorage.removeItem('lumina_cart');
-      localStorage.removeItem('valenszo_active_gender');
-      localStorage.removeItem('valenszo_real_orders');
-      localStorage.removeItem('valenszo_favorites');
-      localStorage.removeItem('valenszo_role');
-      sessionStorage.removeItem('valenszo_recovery_attempt');
+      localStorage.clear();
+      sessionStorage.clear();
     } catch (e) {
       console.error('Error clearing storage:', e);
     }
-    window.location.assign(window.location.origin);
+    window.location.reload();
   };
 
   render() {
@@ -69,7 +61,7 @@ export class ErrorBoundary extends React.Component {
           background: '#050811',
           color: '#ffffff',
           padding: '24px',
-          fontFamily: 'var(--font-couture, sans-serif)',
+          fontFamily: 'sans-serif',
           textAlign: 'center'
         }}>
           <div style={{
@@ -90,21 +82,21 @@ export class ErrorBoundary extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 20px',
-              color: 'var(--dior-gold, #c5a059)'
+              color: '#c5a059'
             }}>
               <AlertCircle size={28} />
             </div>
 
-            <div style={{ fontSize: '0.72rem', letterSpacing: '0.36em', color: 'var(--dior-gold, #c5a059)', textTransform: 'uppercase', marginBottom: '8px', fontWeight: 700 }}>
+            <div style={{ fontSize: '0.72rem', letterSpacing: '0.2em', color: '#c5a059', textTransform: 'uppercase', marginBottom: '8px', fontWeight: 700 }}>
               Valenszo &bull; Support
             </div>
 
-            <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', letterSpacing: '0.12em', marginBottom: '14px', color: '#ffffff' }}>
-              Store Refresh Required
+            <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.8rem', letterSpacing: '0.06em', marginBottom: '14px', color: '#ffffff' }}>
+              Please Refresh the Page
             </h2>
 
-            <p style={{ color: '#9ca3af', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '28px' }}>
-              We encountered a momentary display interruption. Click below to clear the temporary cache and refresh your shopping session.
+            <p style={{ color: '#9ca3af', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '28px' }}>
+              Something went wrong while loading. Click below to refresh and load the catalog.
             </p>
 
             <button
@@ -115,10 +107,9 @@ export class ErrorBoundary extends React.Component {
                 color: '#000000',
                 border: 'none',
                 padding: '12px 28px',
-                fontFamily: 'var(--font-couture, sans-serif)',
                 fontSize: '0.82rem',
                 fontWeight: 700,
-                letterSpacing: '0.14em',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 borderRadius: '4px',
                 cursor: 'pointer',

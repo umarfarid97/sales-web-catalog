@@ -330,7 +330,7 @@ export const ProductDetailModal = () => {
                 </a>
 
                 <a
-                  href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am interested in ordering / inquiring about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${currentSizeObj.label}\n• Price: RM${(dynamicPrice * quantity).toFixed(2)}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+                  href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am interested in ordering / inquiring about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${currentSizeObj.label}\n• Price: RM${(dynamicPrice * quantity).toFixed(2)}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn"

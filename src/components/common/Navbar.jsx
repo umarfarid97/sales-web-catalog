@@ -204,14 +204,14 @@ export const Navbar = () => {
             </a>
           </nav>
 
-          {/* Right Column: Direct WhatsApp Concierge */}
+          {/* Right Column: Direct WhatsApp */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 2 }}>
             <a
-              href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+              href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20am%20browsing%20your%20online%20catalog."
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="WhatsApp Concierge"
-              title="Chat with Fragrance Concierge"
+              aria-label="WhatsApp Us"
+              title="Chat with us on WhatsApp"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -231,7 +231,7 @@ export const Navbar = () => {
               onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
             >
               <MessageCircle size={16} />
-              <span>WhatsApp Concierge</span>
+              <span>WhatsApp Us</span>
             </a>
           </div>
 
@@ -464,20 +464,20 @@ export const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Fragrance Concierge Section */}
+                {/* WhatsApp Support Section */}
                 <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px' }}>
                   <div style={{ padding: '16px', background: '#fafaf9', borderRadius: '8px', border: '1px solid #e7e5e4', marginBottom: '14px' }}>
                     <div style={{ fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#128C7E', fontWeight: 800, marginBottom: '4px' }}>
-                      Bespoke Concierge
+                      Customer Support
                     </div>
                     <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#000000', marginBottom: '4px' }}>
-                      Need Fragrance Recommendations?
+                      Need Help Choosing?
                     </div>
                     <div style={{ fontSize: '0.76rem', color: '#6b7280', marginBottom: '12px', lineHeight: 1.4 }}>
-                      Speak directly with our fragrance specialists for personalized scent advice, notes breakdown, or custom inquiries.
+                      Chat directly with our team on WhatsApp for recommendations, perfume notes, or questions.
                     </div>
                     <a
-                      href="https://wa.me/60182868402?text=Hello%20Valenszo%20Fragrance%20Concierge!%20I%20am%20browsing%20your%20online%20catalog."
+                      href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20am%20browsing%20your%20online%20catalog."
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{

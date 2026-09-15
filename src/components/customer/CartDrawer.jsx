@@ -72,7 +72,7 @@ export const CartDrawer = () => {
       `${idx + 1}. ${item.name} (${item.size || '50ml'}) x${item.quantity} = RM${((Number(item.price) || 0) * item.quantity).toFixed(2)}`
     ).join('\n');
     
-    const summary = `Hello Valenszo Fragrance Concierge! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
+    const summary = `Hello Valenszo! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
     
     const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(summary)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
@@ -341,7 +341,7 @@ export const CartDrawer = () => {
               <span>Includes 2 free 2ml deluxe spray samples at checkout.</span>
             </div>
 
-            {/* Proceed to WhatsApp Concierge Order CTA */}
+            {/* Proceed to WhatsApp Order CTA */}
             <button
               onClick={handleProceedCheckout}
               style={{
@@ -366,7 +366,7 @@ export const CartDrawer = () => {
               onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
             >
               <MessageCircle size={18} />
-              <span>Order via WhatsApp Concierge</span>
+              <span>Order via WhatsApp</span>
               <ArrowRight size={16} />
             </button>
 

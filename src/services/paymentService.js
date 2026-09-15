@@ -217,7 +217,7 @@ export const initiatePayment = async ({ orderId, amount, customer, paymentMethod
       };
     }
 
-    // 3. Direct Bank Transfer / Concierge Pay
+    // 3. Direct Bank Transfer
     if (paymentMethod === 'bank-transfer') {
       return {
         success: true,

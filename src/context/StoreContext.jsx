@@ -702,7 +702,7 @@ export const StoreProvider = ({ children }) => {
   const addToCart = (product, arg2 = 1, arg3 = null) => {
     if (!product) return false;
     const selectedSize = typeof arg2 === 'string' ? arg2 : (typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || 'Standard'));
-    const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI am browsing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Size: ${selectedSize}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`;
+    const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am browsing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Size: ${selectedSize}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
     return true;
   };
