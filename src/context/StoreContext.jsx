@@ -143,46 +143,9 @@ export const StoreProvider = ({ children }) => {
     return deriveAttributesFromProducts([]);
   });
 
-  // Role Mode: 'customer' | 'admin'
-  const [role, setRoleState] = useState(() => {
-
-    if (typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('admin')) {
-      return 'admin';
-    }
-    return localStorage.getItem('valenszo_role') || localStorage.getItem('lumina_role') || 'customer';
-  });
-
-  const setRole = useCallback((newRole) => {
-    if (newRole === 'admin') {
-      if (!isAdmin) {
-        openAuthModal({
-          mode: 'signin',
-          title: 'Store Admin Access',
-          subtitle: 'Please sign in with administrator credentials to manage store operations.'
-        });
-        return;
-      }
-      setRoleState('admin');
-      localStorage.setItem('valenszo_role', 'admin');
-      if (typeof window !== 'undefined' && !window.location.pathname.toLowerCase().includes('admin')) {
-        window.location.href = '/admin';
-      }
-      return;
-    }
-    setRoleState('customer');
-    localStorage.setItem('valenszo_role', 'customer');
-    if (typeof window !== 'undefined' && window.location.pathname.toLowerCase().includes('admin')) {
-      window.location.href = '/';
-    }
-  }, [isAdmin, openAuthModal]);
-
-  // Auto revert from admin if logged out or unauthorized
-  useEffect(() => {
-    if (role === 'admin' && !isAdmin) {
-      setRoleState('customer');
-      localStorage.setItem('valenszo_role', 'customer');
-    }
-  }, [isAdmin, role]);
+  // Role Mode: Strictly locked to 'customer' for catalog mode
+  const role = 'customer';
+  const setRole = useCallback(() => {}, []);
 
   // Customer View: 'catalog' | 'diagnostic'
   const [customerView, setCustomerView] = useState('catalog');

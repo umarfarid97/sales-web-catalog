@@ -3,7 +3,6 @@ import { useStore } from '../../context/StoreContext';
 import { useAuth } from '../../context/AuthContext';
 import { 
   ShoppingBag, 
-  RotateCcw, 
   X, 
   Compass,
   Menu,
@@ -18,21 +17,12 @@ import { ValenszoLogo } from './ValenszoLogo';
 
 export const Navbar = () => {
   const { 
-    role, 
-    setRole, 
     customerView,
     activeGender,
     menCount,
-    womenCount,
-    cartTotalItems, 
-    setIsCartOpen, 
-    isCloudConnected,
-    resetToDemoData,
-    showToast,
-    setIsOrderTrackerOpen
+    womenCount
   } = useStore();
 
-  const [isResetting, setIsResetting] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
@@ -77,15 +67,6 @@ export const Navbar = () => {
       };
     }
   }, [isMenuOpen]);
-
-  const handleReset = async () => {
-    if (window.confirm('Reset catalog to the official Valenszo fragrance collection?')) {
-      setIsResetting(true);
-      await resetToDemoData();
-      setIsResetting(false);
-      showToast('Catalog refreshed with the official Valenszo collection!', 'success');
-    }
-  };
 
   return (
     <>
@@ -313,9 +294,6 @@ export const Navbar = () => {
                 <div 
                   style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
                   onClick={() => {
-                    if (role === 'admin') {
-                      setRole('customer');
-                    }
                     setIsMenuOpen(false);
                     window.location.href = 'index.html';
                   }}
@@ -526,88 +504,7 @@ export const Navbar = () => {
                       <span>Chat on WhatsApp</span>
                     </a>
                   </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-
-                    {isAdmin && (
-                      <button 
-                        onClick={() => { handleReset(); setIsMenuOpen(false); }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
-                          padding: '11px 14px',
-                          background: 'transparent',
-                          border: 'none',
-                          borderRadius: '3px',
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          color: '#374151',
-                          fontSize: '0.84rem',
-                          fontWeight: 600
-                        }}
-                      >
-                        <RotateCcw size={17} className={isResetting ? 'spin' : ''} />
-                        <span>Reset Valenszo Catalog</span>
-                      </button>
-                    )}
-                  </div>
                 </div>
-
-                {/* Experience Mode Switcher (Visible strictly to Atelier Admin) */}
-                {isAdmin && (
-                  <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '16px', marginTop: 'auto' }}>
-                    <div style={{
-                      fontSize: '0.68rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: '#9ca3af',
-                      marginBottom: '8px',
-                      fontFamily: 'var(--font-couture)'
-                    }}>
-                      Experience Mode
-                    </div>
-                    <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: '4px', padding: '3px', gap: '4px' }}>
-                      <button
-                        onClick={() => { setRole('customer'); setIsMenuOpen(false); }}
-                        style={{
-                          flex: 1,
-                          padding: '9px 12px',
-                          border: 'none',
-                          borderRadius: '3px',
-                          background: role === 'customer' ? '#000000' : 'transparent',
-                          color: role === 'customer' ? '#ffffff' : '#4b5563',
-                          fontWeight: 700,
-                          fontSize: '0.76rem',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Store
-                      </button>
-                      <button
-                        onClick={() => { setRole('admin'); setIsMenuOpen(false); }}
-                        style={{
-                          flex: 1,
-                          padding: '9px 12px',
-                          border: 'none',
-                          borderRadius: '3px',
-                          background: role === 'admin' ? '#000000' : 'transparent',
-                          color: role === 'admin' ? '#ffffff' : '#4b5563',
-                          fontWeight: 700,
-                          fontSize: '0.76rem',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Admin
-                      </button>
-                    </div>
-
-                    <div style={{ marginTop: '14px', textAlign: 'center', fontSize: '0.72rem', color: '#9ca3af' }}>
-                      {isCloudConnected ? '🟢 Connected to Supabase Cloud' : '⚪ Local Storage Mode'}
-                    </div>
-                  </div>
-                )}
 
               </div>
             </div>
