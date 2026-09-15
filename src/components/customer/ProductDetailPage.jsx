@@ -19,7 +19,8 @@ import {
   Sparkles, 
   Calendar, 
   GlassWater,
-  Check
+  Check,
+  MessageCircle
 } from 'lucide-react';
 import '../../styles/pdp.css';
 
@@ -64,6 +65,7 @@ export const ProductDetailPage = () => {
     favorites,
     toggleFavorite,
     cartSubtotal,
+    setIsCartOpen,
     showToast
   } = useStore();
 
@@ -259,14 +261,24 @@ export const ProductDetailPage = () => {
   }, [products, product]);
 
   if (!product) {
+    if (!products || products.length === 0) {
+      return (
+        <div className="pdp-page-container" style={{ textAlign: 'center', padding: '8rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '38px', height: '38px', border: '3px solid #ede8e1', borderTopColor: '#d97706', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }} />
+          <p style={{ color: '#8c7d72', marginTop: '1.5rem', fontSize: '0.85rem', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>
+            Preparing Valenszo Fragrance Presentation...
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="pdp-page-container" style={{ textAlign: 'center', padding: '5rem 1rem' }}>
         <h2>Fragrance Not Found</h2>
         <p style={{ color: '#6b7280', margin: '1rem 0 2rem' }}>The requested perfume is temporarily unavailable.</p>
         <button 
           className="dior-btn dior-btn-primary" 
-          onClick={() => navigateToCatalog()}
-          style={{ background: '#000', color: '#fff', padding: '12px 24px' }}
+          onClick={() => { window.location.href = 'collection.html'; }}
+          style={{ background: '#000', color: '#fff', padding: '12px 24px', cursor: 'pointer', border: 'none' }}
         >
           Return to All Perfumes
         </button>
@@ -307,14 +319,17 @@ export const ProductDetailPage = () => {
       
       {/* ================= 1. BREADCRUMBS ================= */}
       <nav className="pdp-breadcrumb" aria-label="Breadcrumb">
-        <button className="pdp-breadcrumb-item" onClick={() => { window.location.href = '/'; }}>
+        <button className="pdp-breadcrumb-item" onClick={() => { window.location.href = 'index.html'; }}>
           Home
         </button>
         <span className="pdp-breadcrumb-separator"><ChevronRight size={12} /></span>
         
         <button 
           className="pdp-breadcrumb-item" 
-          onClick={() => { window.location.href = `/collection?gender=${encodeURIComponent(product.gender || 'Men')}`; }}
+          onClick={() => { 
+            const isWomen = (product.gender || '').toLowerCase() === 'women';
+            window.location.href = isWomen ? 'women.html' : 'men.html'; 
+          }}
         >
           {product.gender === 'Women' ? 'Women' : 'Men'}
         </button>
@@ -323,8 +338,11 @@ export const ProductDetailPage = () => {
         <button 
           className="pdp-breadcrumb-item"
           onClick={() => { 
+            const isWomen = (product.gender || '').toLowerCase() === 'women';
             const fam = product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody';
-            window.location.href = `/collection?gender=${encodeURIComponent(product.gender || 'Men')}&category=${encodeURIComponent(fam)}`; 
+            window.location.href = isWomen 
+              ? `women.html?category=${encodeURIComponent(fam)}` 
+              : `men.html?category=${encodeURIComponent(fam)}`; 
           }}
         >
           {product.olfactoryFamily?.split('/')?.[0]?.trim() || 'Woody'}
@@ -498,8 +516,40 @@ export const ProductDetailPage = () => {
               className="pdp-add-to-cart-btn"
               onClick={handleAddToCart}
             >
-              ADD TO CART — RM{totalPrice}
+              ADD TO BAG — RM{totalPrice}
             </button>
+          </div>
+
+          {/* Luxury WhatsApp Direct Concierge Order */}
+          <div style={{ marginTop: '10px' }}>
+            <a
+              href={`https://wa.me/60123456789?text=${encodeURIComponent(`Hello Valenszo Fragrance Concierge! 🛍️\n\nI would like to inquire / order:\n- Perfume: ${product.name} (${selectedSize})\n- Quantity: ${quantity}\n- Price: RM${totalPrice}\n\nCould you please assist me with availability & express shipping? Thank you!`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                width: '100%',
+                padding: '14px 20px',
+                borderRadius: '4px',
+                background: '#128C7E',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '0.84rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                boxShadow: '0 4px 14px rgba(18, 140, 126, 0.22)',
+                transition: 'background 0.2s ease'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#075E54'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
+            >
+              <MessageCircle size={18} />
+              <span>Inquire / Order via WhatsApp</span>
+            </a>
           </div>
 
           {/* Trust Badges */}
@@ -1149,8 +1199,12 @@ export const ProductDetailPage = () => {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <a
-                  href="/checkout"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsUpsellDrawerOpen(false);
+                    setIsCartOpen(true);
+                  }}
                   style={{
                     width: '100%',
                     padding: '14px',
@@ -1162,13 +1216,14 @@ export const ProductDetailPage = () => {
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     textAlign: 'center',
-                    textDecoration: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
                     display: 'block',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
                   }}
                 >
-                  Proceed to Checkout
-                </a>
+                  View Bag & Concierge Checkout
+                </button>
 
                 <button
                   type="button"

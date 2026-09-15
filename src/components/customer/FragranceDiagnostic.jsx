@@ -290,7 +290,7 @@ export const FragranceDiagnostic = () => {
       setCurrentStep((prev) => prev - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      window.location.href = '/';
+      window.location.href = 'index.html';
     }
   };
 
@@ -983,7 +983,7 @@ export const FragranceDiagnostic = () => {
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
               <a
-                href="/collection"
+                href="collection.html"
                 style={{
                   padding: '14px 28px',
                   borderRadius: '4px',

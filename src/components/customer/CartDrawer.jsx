@@ -9,7 +9,8 @@ import {
   ArrowRight, 
   Gift, 
   Truck, 
-  Feather 
+  Feather,
+  MessageCircle
 } from 'lucide-react';
 
 export const CartDrawer = () => {
@@ -66,8 +67,15 @@ export const CartDrawer = () => {
   };
 
   const handleProceedCheckout = () => {
-    setIsCartOpen(false);
-    window.location.href = '/checkout';
+    if (!cart || cart.length === 0) return;
+    const itemsList = cart.map((item, idx) => 
+      `${idx + 1}. ${item.name} (${item.size || '50ml'}) x${item.quantity} = RM${((Number(item.price) || 0) * item.quantity).toFixed(2)}`
+    ).join('\n');
+    
+    const summary = `Hello Valenszo Fragrance Concierge! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
+    
+    const waUrl = `https://wa.me/60123456789?text=${encodeURIComponent(summary)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -333,26 +341,32 @@ export const CartDrawer = () => {
               <span>Includes 2 free 2ml deluxe spray samples at checkout.</span>
             </div>
 
-            {/* Proceed to Checkout CTA */}
+            {/* Proceed to WhatsApp Concierge Order CTA */}
             <button
-              className="btn-pill btn-pill-espresso"
               onClick={handleProceedCheckout}
               style={{
                 width: '100%',
                 padding: '16px 20px',
                 fontSize: '0.9rem',
                 border: 'none',
+                borderRadius: '4px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                gap: '10px',
                 letterSpacing: '0.06em',
                 fontWeight: 800,
-                boxShadow: '0 8px 24px rgba(35, 23, 16, 0.2)'
+                background: '#128C7E',
+                color: '#ffffff',
+                boxShadow: '0 8px 24px rgba(18, 140, 126, 0.28)',
+                transition: 'background 0.15s ease'
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#075E54'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
             >
-              <span>Proceed to Checkout</span>
+              <MessageCircle size={18} />
+              <span>Order via WhatsApp Concierge</span>
               <ArrowRight size={16} />
             </button>
 

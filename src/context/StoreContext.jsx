@@ -211,13 +211,13 @@ export const StoreProvider = ({ children }) => {
     const isMen = gender === 'Men';
     localStorage.setItem('valenszo_active_gender', gender);
     if (typeof window !== 'undefined') {
-      window.location.href = isMen ? '/men' : '/women';
+      window.location.href = isMen ? 'men.html' : 'women.html';
     }
   };
 
   const navigateToDiagnostic = () => {
     if (typeof window !== 'undefined') {
-      window.location.href = '/diagnostic';
+      window.location.href = 'diagnostic.html';
       return;
     }
     setRole('customer');
@@ -229,14 +229,14 @@ export const StoreProvider = ({ children }) => {
     const targetGender = gender || activeGender;
     if (typeof window !== 'undefined') {
       if (targetGender === 'Men') {
-        window.location.href = category ? `/men?category=${encodeURIComponent(category)}` : '/men';
+        window.location.href = category ? `men.html?category=${encodeURIComponent(category)}` : 'men.html';
         return;
       }
       if (targetGender === 'Women') {
-        window.location.href = category ? `/women?category=${encodeURIComponent(category)}` : '/women';
+        window.location.href = category ? `women.html?category=${encodeURIComponent(category)}` : 'women.html';
         return;
       }
-      window.location.href = '/collection';
+      window.location.href = 'collection.html';
       return;
     }
     setRole('customer');
@@ -294,14 +294,14 @@ export const StoreProvider = ({ children }) => {
   const openProductDetail = useCallback((product) => {
     if (!product) return;
     const targetId = typeof product === 'string' ? product : product.id;
-    // Multi-Page Application (MPA) full browser page navigation with Clean URL
-    window.location.href = `/product?product=${encodeURIComponent(targetId)}`;
+    // Static HTML navigation with URL parameter
+    window.location.href = `product.html?product=${encodeURIComponent(targetId)}`;
   }, []);
 
   const closeProductDetail = useCallback(() => {
     const isProductPage = typeof window !== 'undefined' && (window.location.pathname.includes('product.html') || window.location.pathname.includes('/product'));
     if (isProductPage) {
-      window.location.href = '/';
+      window.location.href = 'index.html';
       return;
     }
     setActiveProduct(null);

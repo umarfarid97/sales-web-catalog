@@ -199,7 +199,7 @@ export const ProductCatalog = () => {
           {/* Center CTA Button - "View Complete Collection" */}
           <div style={{ textAlign: 'center', marginTop: '12px' }}>
             <a
-              href="/collection"
+              href="collection.html"
               className="btn-pill btn-pill-oat"
               style={{
                 display: 'inline-flex',
@@ -262,7 +262,7 @@ export const ProductCatalog = () => {
             
             {/* Left Column: 1 Tall Vertical Card (Men's Signature) */}
             <a
-              href="/men"
+              href="men.html"
               className="bento-tall-card"
               style={{
                 position: 'relative',
@@ -359,7 +359,7 @@ export const ProductCatalog = () => {
               
               {/* Top Right Card: Women's Floral & Amber Alchemy */}
               <a
-                href="/women"
+                href="women.html"
                 style={{
                   position: 'relative',
                   borderRadius: '16px',
@@ -445,7 +445,7 @@ export const ProductCatalog = () => {
 
               {/* Bottom Right Card: Scent Diagnostic Finder */}
               <a
-                href="/diagnostic"
+                href="diagnostic.html"
                 style={{
                   position: 'relative',
                   borderRadius: '16px',

@@ -172,7 +172,7 @@ export const Navbar = () => {
             </button>
 
             <a 
-              href="/"
+              href="index.html"
               style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -211,13 +211,13 @@ export const Navbar = () => {
               listStyle: 'none'
             }}
           >
-            <a href="/men" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+            <a href="men.html" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
               Men
             </a>
-            <a href="/women" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+            <a href="women.html" style={{ textDecoration: 'none', color: '#e5ded6', fontSize: '0.82rem', fontWeight: 600, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
               Women
             </a>
-            <a href="/diagnostic" style={{ textDecoration: 'none', color: '#f59e0b', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <a href="diagnostic.html" style={{ textDecoration: 'none', color: '#f59e0b', fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Sparkles size={13} />
               <span>Scent Quiz</span>
             </a>
@@ -514,7 +514,7 @@ export const Navbar = () => {
                       setRole('customer');
                     }
                     setIsMenuOpen(false);
-                    window.location.href = '/';
+                    window.location.href = 'index.html';
                   }}
                 >
                   <ValenszoLogo size="sm" showMonogram={true} showBrandName={false} showSubtitle={false} />
@@ -580,7 +580,7 @@ export const Navbar = () => {
                 <div>
                     <button
                     onClick={() => {
-                      window.location.href = '/diagnostic';
+                      window.location.href = 'diagnostic.html';
                       setIsMenuOpen(false);
                     }}
                     style={{
@@ -631,7 +631,7 @@ export const Navbar = () => {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <a 
-                      href="/men"
+                      href="men.html"
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -657,7 +657,7 @@ export const Navbar = () => {
                     </a>
 
                     <a 
-                      href="/women"
+                      href="women.html"
                       style={{
                         display: 'flex',
                         alignItems: 'center',

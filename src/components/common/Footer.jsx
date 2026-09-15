@@ -43,7 +43,7 @@ export const Footer = () => {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', padding: 0 }}>
               <li>
                 <a 
-                  href="/collection" 
+                  href="collection.html" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
@@ -53,7 +53,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="/men" 
+                  href="men.html" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
@@ -63,7 +63,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="/women" 
+                  href="women.html" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}
@@ -73,7 +73,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="/diagnostic" 
+                  href="diagnostic.html" 
                   style={{ color: '#b5a498', fontSize: '0.84rem', textDecoration: 'none', transition: 'color 0.15s' }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#b5a498'; }}

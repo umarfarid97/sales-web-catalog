@@ -7,19 +7,15 @@ export const MobileBottomNav = () => {
   const { isAuthenticated, openAuthModal } = useAuth();
   const { setIsOrderTrackerOpen } = useStore();
 
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '/';
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
 
-  const isHome = currentPath === '/' || currentPath.endsWith('index.html') || currentPath === '';
-  const isShop = currentPath.includes('collection');
+  const isHome = currentPath === '' || currentPath === '/' || currentPath.endsWith('index.html') || currentPath.endsWith('/');
+  const isShop = currentPath.includes('collection') || currentPath.includes('men') || currentPath.includes('women');
   const isQuiz = currentPath.includes('diagnostic');
   const isAccount = currentPath.includes('account');
 
   const handleAccountClick = () => {
-    if (!isAuthenticated) {
-      openAuthModal({ mode: 'signin', title: 'Customer Account' });
-    } else {
-      window.location.href = '/account';
-    }
+    openAuthModal({ mode: 'signin', title: 'Customer Account' });
   };
 
   return (
@@ -43,7 +39,7 @@ export const MobileBottomNav = () => {
       }}
     >
       <a 
-        href="/"
+        href="index.html"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -61,7 +57,7 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="/collection"
+        href="collection.html"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -79,7 +75,7 @@ export const MobileBottomNav = () => {
       </a>
 
       <a 
-        href="/diagnostic"
+        href="diagnostic.html"
         style={{
           display: 'flex',
           flexDirection: 'column',

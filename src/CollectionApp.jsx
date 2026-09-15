@@ -188,7 +188,7 @@ export const CollectionPageContent = () => {
           
           {/* Breadcrumbs (Matching Picture 2) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
-            <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
+            <a href="index.html" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
             <ChevronRight size={12} />
             <span style={{ color: '#111827', fontWeight: 600 }}>{activeGender}</span>
           </div>

@@ -44,6 +44,7 @@ export default defineConfig(({ mode }) => {
   const toyyibTarget = isSandbox ? 'https://dev.toyyibpay.com' : 'https://toyyibpay.com';
 
   return {
+    base: './',
     plugins: [react(), mpaRewritePlugin()],
     server: {
       proxy: {
