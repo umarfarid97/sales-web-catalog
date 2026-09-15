@@ -19,8 +19,18 @@ export class ErrorBoundary extends React.Component {
       const alreadyAttempted = sessionStorage.getItem('valenszo_recovery_attempt');
       if (!alreadyAttempted) {
         sessionStorage.setItem('valenszo_recovery_attempt', 'true');
-        localStorage.removeItem('valenszo_products_cache');
-        localStorage.removeItem('lumina_products');
+        const keysToRemove = [
+          'valenszo_products_cache',
+          'lumina_products',
+          'valenszo_cart',
+          'lumina_cart',
+          'valenszo_active_gender',
+          'valenszo_real_orders',
+          'valenszo_favorites',
+          'valenszo_role',
+          'valenszo_attributes_cache'
+        ];
+        keysToRemove.forEach((k) => localStorage.removeItem(k));
         setTimeout(() => {
           window.location.reload();
         }, 150);

@@ -379,7 +379,7 @@ export const ProductDetailPage = () => {
             {/* Flacon Imagery */}
             <div className="pdp-flacon-inner-canvas">
               <img 
-                src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
+                src={galleryItems[activeThumbIndex]?.url || galleryItems[0]?.url || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80'} 
                 alt={product.name} 
                 className="pdp-main-flacon-img"
               />
@@ -937,7 +937,7 @@ export const ProductDetailPage = () => {
             <X size={24} />
           </button>
           <img 
-            src={galleryItems[activeThumbIndex]?.url || galleryItems[0].url} 
+            src={galleryItems[activeThumbIndex]?.url || galleryItems[0]?.url || product.image || ''} 
             alt="Enlarged bottle view" 
             className="pdp-lightbox-image"
             onClick={(e) => e.stopPropagation()} 

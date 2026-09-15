@@ -26,7 +26,11 @@ export const ProductDetailModal = () => {
 
   if (!product) return null;
 
-  const isFav = favorites.includes(product.id);
+  const isFav = Array.isArray(favorites) && product?.id ? favorites.includes(product.id) : false;
+  const productImages = Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : (product.image ? [product.image] : ['https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80']);
+
   const sizes = Array.isArray(product.sizes) && product.sizes.length > 0 
     ? product.sizes 
     : [
@@ -88,7 +92,7 @@ export const ProductDetailModal = () => {
               }}
             >
               <img 
-                src={product.images[activeImageIndex] || product.images[0]} 
+                src={productImages[activeImageIndex] || productImages[0]} 
                 alt={product.name}
                 style={{ width: '100%', height: 'clamp(260px, 38vh, 400px)', objectFit: 'contain' }}
               />
@@ -120,9 +124,9 @@ export const ProductDetailModal = () => {
             </div>
 
             {/* Thumbnails */}
-            {product.images.length > 1 && (
+            {productImages.length > 1 && (
               <div style={{ display: 'flex', gap: '10px' }}>
-                {product.images.map((img, idx) => (
+                {productImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}

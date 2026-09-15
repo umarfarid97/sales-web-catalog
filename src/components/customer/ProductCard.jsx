@@ -8,10 +8,12 @@ export const ProductCard = ({ product }) => {
     setSelectedProductModal
   } = useStore();
 
+  if (!product || !product.id) return null;
+
   const handleOpen = () => {
     if (openProductDetail) {
       openProductDetail(product);
-    } else {
+    } else if (setSelectedProductModal) {
       setSelectedProductModal(product);
     }
   };
