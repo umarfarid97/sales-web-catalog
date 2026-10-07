@@ -476,15 +476,7 @@ export const ProductDetailPage = () => {
             role="tab"
             aria-selected={activeTab === 'scent-profile'}
           >
-            Scent Profile
-          </button>
-          <button 
-            className={`pdp-tab-trigger ${activeTab === 'notes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('notes')}
-            role="tab"
-            aria-selected={activeTab === 'notes'}
-          >
-            Notes
+            Scent Profile & Notes
           </button>
           <button 
             className={`pdp-tab-trigger ${activeTab === 'description' ? 'active' : ''}`}
@@ -497,187 +489,190 @@ export const ProductDetailPage = () => {
         </div>
 
         <div className="pdp-tab-body">
-          {/* TAB 1: SCENT PROFILE (Flagship 3-block view from mockup) */}
+          {/* TAB 1: SCENT PROFILE & NOTES (All-in-one section) */}
           {activeTab === 'scent-profile' && (
-            <div className="pdp-scent-profile-layout">
-              
-              {/* Col 1: Fragrance Profile (Accord Bars) */}
-              <div>
-                <h3 className="pdp-section-card-title">Fragrance Profile</h3>
-                <div className="pdp-accords-list">
-                  {visibleAccords.map((accord, i) => (
-                    <div key={i} className="pdp-accord-row">
-                      <span className="pdp-accord-name">{accord.name}</span>
-                      <div className="pdp-accord-track">
-                        <div 
-                          className="pdp-accord-fill" 
-                          style={{ width: accord.pct }}
+            <div className="pdp-scent-profile-wrapper">
+              <div className="pdp-scent-profile-layout">
+                
+                {/* Col 1: Fragrance Profile (Accord Bars) */}
+                <div>
+                  <h3 className="pdp-section-card-title">Fragrance Profile</h3>
+                  <div className="pdp-accords-list">
+                    {visibleAccords.map((accord, i) => (
+                      <div key={i} className="pdp-accord-row">
+                        <span className="pdp-accord-name">{accord.name}</span>
+                        <div className="pdp-accord-track">
+                          <div 
+                            className="pdp-accord-fill" 
+                            style={{ width: accord.pct }}
+                          />
+                        </div>
+                        <span className="pdp-accord-score">{accord.score}/10</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {accords.length > 5 && (
+                    <button 
+                      type="button"
+                      className="pdp-accord-expand-btn"
+                      onClick={() => setShowAllAccords(!showAllAccords)}
+                    >
+                      {showAllAccords ? (
+                        <>View Less <ChevronUp size={14} /></>
+                      ) : (
+                        <>View More <ChevronDown size={14} /></>
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                {/* Col 2: Key Notes & Performance Specs */}
+                <div>
+                  <h3 className="pdp-section-card-title">Key Notes</h3>
+                  
+                  {/* 3 Visual Swatches */}
+                  <div className="pdp-note-swatches-row">
+                    <div className="pdp-swatch-box">
+                      <div className="pdp-swatch-image-frame">
+                        <img 
+                          src={getNotePhoto(topNote)} 
+                          alt={topNote} 
+                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
                         />
                       </div>
-                      <span className="pdp-accord-score">{accord.score}/10</span>
+                      <span className="pdp-swatch-name">{topNote.split(' ')?.[0] || 'Bergamot'}</span>
+                      <span className="pdp-swatch-stage">(Top)</span>
                     </div>
-                  ))}
+
+                    <div className="pdp-swatch-box">
+                      <div className="pdp-swatch-image-frame">
+                        <img 
+                          src={getNotePhoto(heartNote)} 
+                          alt={heartNote} 
+                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
+                        />
+                      </div>
+                      <span className="pdp-swatch-name">{heartNote.split(' ')?.[0] || 'Lavender'}</span>
+                      <span className="pdp-swatch-stage">(Heart)</span>
+                    </div>
+
+                    <div className="pdp-swatch-box">
+                      <div className="pdp-swatch-image-frame">
+                        <img 
+                          src={getNotePhoto(baseNote)} 
+                          alt={baseNote} 
+                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
+                        />
+                      </div>
+                      <span className="pdp-swatch-name">{baseNote.split(' ')?.[0] || 'Amber'}</span>
+                      <span className="pdp-swatch-stage">(Base)</span>
+                    </div>
+                  </div>
+
+                  {/* 4 Performance Metrics */}
+                  <div className="pdp-specs-grid">
+                    <div className="pdp-spec-cell">
+                      <div className="pdp-spec-icon-box">
+                        <GlassWater size={17} />
+                      </div>
+                      <div className="pdp-spec-text-block">
+                        <span className="pdp-spec-title">Occasion</span>
+                        <span className="pdp-spec-value">
+                          {product.category === 'Pour Femme' || product.category === 'Women' ? 'Evening, Gala, Dates' : 'Night Out, Special Events'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pdp-spec-cell">
+                      <div className="pdp-spec-icon-box">
+                        <Calendar size={17} />
+                      </div>
+                      <div className="pdp-spec-text-block">
+                        <span className="pdp-spec-title">Season</span>
+                        <span className="pdp-spec-value">{product.season || 'Fall, Winter'}</span>
+                      </div>
+                    </div>
+
+                    <div className="pdp-spec-cell">
+                      <div className="pdp-spec-icon-box">
+                        <Clock size={17} />
+                      </div>
+                      <div className="pdp-spec-text-block">
+                        <span className="pdp-spec-title">Longevity</span>
+                        <span className="pdp-spec-value">{product.longevity || '8–10 Hours'}</span>
+                      </div>
+                    </div>
+
+                    <div className="pdp-spec-cell">
+                      <div className="pdp-spec-icon-box">
+                        <Radio size={17} />
+                      </div>
+                      <div className="pdp-spec-text-block">
+                        <span className="pdp-spec-title">Projection</span>
+                        <span className="pdp-spec-value">{product.sillage?.split(' ')?.[0] || 'Strong'}</span>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
-                {accords.length > 5 && (
-                  <button 
-                    type="button"
-                    className="pdp-accord-expand-btn"
-                    onClick={() => setShowAllAccords(!showAllAccords)}
+                {/* Col 3: High Fashion Campaign Card */}
+                <div className="pdp-campaign-col">
+                  <div 
+                    className="pdp-campaign-card"
+                    style={{
+                      backgroundImage: product.gender === 'Women' 
+                        ? 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80)'
+                        : 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=80)'
+                    }}
                   >
-                    {showAllAccords ? (
-                      <>View Less <ChevronUp size={14} /></>
-                    ) : (
-                      <>View More <ChevronDown size={14} /></>
-                    )}
-                  </button>
-                )}
-              </div>
-
-              {/* Col 2: Key Notes & Performance Specs */}
-              <div>
-                <h3 className="pdp-section-card-title">Key Notes</h3>
-                
-                {/* 3 Visual Swatches */}
-                <div className="pdp-note-swatches-row">
-                  <div className="pdp-swatch-box">
-                    <div className="pdp-swatch-image-frame">
-                      <img 
-                        src={getNotePhoto(topNote)} 
-                        alt={topNote} 
-                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                      />
-                    </div>
-                    <span className="pdp-swatch-name">{topNote.split(' ')?.[0] || 'Bergamot'}</span>
-                    <span className="pdp-swatch-stage">(Top)</span>
-                  </div>
-
-                  <div className="pdp-swatch-box">
-                    <div className="pdp-swatch-image-frame">
-                      <img 
-                        src={getNotePhoto(heartNote)} 
-                        alt={heartNote} 
-                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                      />
-                    </div>
-                    <span className="pdp-swatch-name">{heartNote.split(' ')?.[0] || 'Lavender'}</span>
-                    <span className="pdp-swatch-stage">(Heart)</span>
-                  </div>
-
-                  <div className="pdp-swatch-box">
-                    <div className="pdp-swatch-image-frame">
-                      <img 
-                        src={getNotePhoto(baseNote)} 
-                        alt={baseNote} 
-                        onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                      />
-                    </div>
-                    <span className="pdp-swatch-name">{baseNote.split(' ')?.[0] || 'Amber'}</span>
-                    <span className="pdp-swatch-stage">(Base)</span>
-                  </div>
-                </div>
-
-                {/* 4 Performance Metrics */}
-                <div className="pdp-specs-grid">
-                  <div className="pdp-spec-cell">
-                    <div className="pdp-spec-icon-box">
-                      <GlassWater size={17} />
-                    </div>
-                    <div className="pdp-spec-text-block">
-                      <span className="pdp-spec-title">Occasion</span>
-                      <span className="pdp-spec-value">
-                        {product.category === 'Pour Femme' || product.category === 'Women' ? 'Evening, Gala, Dates' : 'Night Out, Special Events'}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="pdp-spec-cell">
-                    <div className="pdp-spec-icon-box">
-                      <Calendar size={17} />
-                    </div>
-                    <div className="pdp-spec-text-block">
-                      <span className="pdp-spec-title">Season</span>
-                      <span className="pdp-spec-value">{product.season || 'Fall, Winter'}</span>
-                    </div>
-                  </div>
-
-                  <div className="pdp-spec-cell">
-                    <div className="pdp-spec-icon-box">
-                      <Clock size={17} />
-                    </div>
-                    <div className="pdp-spec-text-block">
-                      <span className="pdp-spec-title">Longevity</span>
-                      <span className="pdp-spec-value">{product.longevity || '8–10 Hours'}</span>
-                    </div>
-                  </div>
-
-                  <div className="pdp-spec-cell">
-                    <div className="pdp-spec-icon-box">
-                      <Radio size={17} />
-                    </div>
-                    <div className="pdp-spec-text-block">
-                      <span className="pdp-spec-title">Projection</span>
-                      <span className="pdp-spec-value">{product.sillage?.split(' ')?.[0] || 'Strong'}</span>
+                    <div className="pdp-campaign-overlay" />
+                    <div className="pdp-campaign-content">
+                      <div className="pdp-campaign-slogan">CONFIDENCE HAS A SCENT</div>
+                      <div className="pdp-campaign-caption">
+                        {product.name}. For what's next.
+                      </div>
                     </div>
                   </div>
                 </div>
 
               </div>
 
-              {/* Col 3: High Fashion Campaign Card */}
-              <div className="pdp-campaign-col">
-                <div 
-                  className="pdp-campaign-card"
-                  style={{
-                    backgroundImage: product.gender === 'Women' 
-                      ? 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80)'
-                      : 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=80)'
-                  }}
-                >
-                  <div className="pdp-campaign-overlay" />
-                  <div className="pdp-campaign-content">
-                    <div className="pdp-campaign-slogan">CONFIDENCE HAS A SCENT</div>
-                    <div className="pdp-campaign-caption">
-                      {product.name}. For what's next.
-                    </div>
+              {/* Fragrance Notes Architecture (All-in-one section) */}
+              <div style={{ marginTop: '2.5rem' }}>
+                <h3 className="pdp-section-card-title">Fragrance Notes Architecture</h3>
+                <div className="pdp-pyramid-details">
+                  <div className="pdp-pyramid-col">
+                    <h4>Top Notes</h4>
+                    <p className="timing">Immediate Awakening (0 - 30 Mins)</p>
+                    <ul>
+                      {(product.pyramid?.topNotes || ['Calabrian Bergamot', 'Spiced Cardamom', 'Pink Peppercorn']).map((note, i) => (
+                        <li key={i}>{note}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pdp-pyramid-col">
+                    <h4>Heart Notes</h4>
+                    <p className="timing">The Soul (30 Mins - 4 Hours)</p>
+                    <ul>
+                      {(product.pyramid?.heartNotes || ['French Lavender', 'Tailored Damascena', 'Rare Cedar']).map((note, i) => (
+                        <li key={i}>{note}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pdp-pyramid-col">
+                    <h4>Base Notes</h4>
+                    <p className="timing">Long-Lasting Base (4 - 16+ Hours)</p>
+                    <ul>
+                      {(product.pyramid?.baseNotes || ['Rich Ambroxan', 'Lacquered Woods', 'Bourbon Vanilla']).map((note, i) => (
+                        <li key={i}>{note}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </div>
-
-            </div>
-          )}
-
-          {/* TAB 2: NOTES PYRAMID */}
-          {activeTab === 'notes' && (
-            <div className="pdp-pyramid-details">
-              <div className="pdp-pyramid-col">
-                <h4>Top Notes</h4>
-                <p className="timing">Immediate Awakening (0 - 30 Mins)</p>
-                <ul>
-                  {(product.pyramid?.topNotes || ['Calabrian Bergamot', 'Spiced Cardamom', 'Pink Peppercorn']).map((note, i) => (
-                    <li key={i}>{note}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="pdp-pyramid-col">
-                <h4>Heart Notes</h4>
-                <p className="timing">The Soul (30 Mins - 4 Hours)</p>
-                <ul>
-                  {(product.pyramid?.heartNotes || ['French Lavender', 'Tailored Damascena', 'Rare Cedar']).map((note, i) => (
-                    <li key={i}>{note}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="pdp-pyramid-col">
-                <h4>Base Notes</h4>
-                <p className="timing">Long-Lasting Base (4 - 16+ Hours)</p>
-                <ul>
-                  {(product.pyramid?.baseNotes || ['Rich Ambroxan', 'Lacquered Woods', 'Bourbon Vanilla']).map((note, i) => (
-                    <li key={i}>{note}</li>
-                  ))}
-                </ul>
               </div>
             </div>
           )}
