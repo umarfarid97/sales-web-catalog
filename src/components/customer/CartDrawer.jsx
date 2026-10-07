@@ -12,6 +12,7 @@ import {
   Feather,
   MessageCircle
 } from 'lucide-react';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const CartDrawer = () => {
   const {
@@ -69,7 +70,7 @@ export const CartDrawer = () => {
   const handleProceedCheckout = () => {
     if (!cart || cart.length === 0) return;
     const itemsList = cart.map((item, idx) => 
-      `${idx + 1}. ${item.name} (${item.size || '50ml'}) x${item.quantity} = RM${((Number(item.price) || 0) * item.quantity).toFixed(2)}`
+      `${idx + 1}. ${cleanPerfumeName(item.name)} (${item.size || '50ml'}) x${item.quantity} = RM${((Number(item.price) || 0) * item.quantity).toFixed(2)}`
     ).join('\n');
     
     const summary = `Hello Valenszo! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
@@ -210,13 +211,13 @@ export const CartDrawer = () => {
                     className="cart-item-card"
                     style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '14px', display: 'flex', gap: '14px' }}
                   >
-                    <img src={itemImg} alt={item.name || 'Perfume'} style={{ width: '76px', height: '76px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #f3f4f6' }} />
+                    <img src={itemImg} alt={cleanPerfumeName(item.name) || 'Perfume'} style={{ width: '76px', height: '76px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #f3f4f6' }} />
                     
                     <div className="cart-item-info" style={{ flex: 1 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
                           <h4 className="couture-title" style={{ fontSize: '0.92rem', color: '#000000', fontWeight: 700, marginBottom: '4px' }}>
-                            {item.name}
+                            {cleanPerfumeName(item.name)}
                           </h4>
                           <div style={{ fontSize: '0.78rem', color: '#926917', fontWeight: 600, marginBottom: '4px' }}>
                             {item.selectedSize || item.size || '100 ml Bottle'}

@@ -18,6 +18,7 @@ import {
   Check,
   MessageCircle
 } from 'lucide-react';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 import '../../styles/pdp.css';
 
 export const ProductDetailPage = () => {
@@ -204,6 +205,7 @@ export const ProductDetailPage = () => {
   }
 
   const isFav = Array.isArray(favorites) && product?.id ? favorites.includes(product.id) : false;
+  const displayName = cleanPerfumeName(product.name || 'Perfume');
   const handleSelectThumbnail = (index) => {
     setActiveThumbIndex(index);
     if (galleryItems[index].type === 'video') {
@@ -247,7 +249,7 @@ export const ProductDetailPage = () => {
         <span className="pdp-breadcrumb-separator"><ChevronRight size={12} /></span>
 
         <span className="pdp-breadcrumb-current">
-          {product.name}
+          {displayName}
         </span>
       </nav>
 
@@ -291,7 +293,7 @@ export const ProductDetailPage = () => {
             <div className="pdp-flacon-inner-canvas">
               <img 
                 src={galleryItems[activeThumbIndex]?.url || galleryItems[0]?.url || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80'} 
-                alt={product.name} 
+                alt={displayName} 
                 className="pdp-main-flacon-img"
               />
             </div>
@@ -318,7 +320,7 @@ export const ProductDetailPage = () => {
           </div>
 
           <h1 className="pdp-product-title">
-            {product.name}
+            {displayName}
           </h1>
 
           <div className="pdp-product-subtitle">
@@ -356,7 +358,7 @@ export const ProductDetailPage = () => {
           {/* Direct WhatsApp Order & Inquiry */}
           <div className="pdp-cta-row" ref={mainCtaRef} style={{ marginTop: '16px' }}>
             <a
-              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -589,7 +591,7 @@ export const ProductDetailPage = () => {
       <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
         <div className="pdp-sticky-bar-inner">
           <a 
-            href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+            href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="pdp-sticky-add-cart-btn"
@@ -665,7 +667,7 @@ export const ProductDetailPage = () => {
               <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)' }}>
                 <Sparkles size={48} color="#c5a059" style={{ marginBottom: '1rem', animation: 'pulse 2s infinite' }} />
                 <h3 style={{ fontFamily: 'var(--font-brand, serif)', letterSpacing: '0.15em', fontSize: '1.4rem' }}>
-                  {product.name}
+                  {displayName}
                 </h3>
                 <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginTop: '0.5rem', fontStyle: 'italic' }}>
                   Cinematic Fragrance Experience · Fine Atomization & Scent Trail

@@ -23,6 +23,7 @@ import {
   Compass,
   ArrowRight
 } from 'lucide-react';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const QUESTIONS = [
   {
@@ -760,7 +761,7 @@ export const FragranceDiagnostic = () => {
                   <div style={{ aspectRatio: '1', borderRadius: '8px', overflow: 'hidden', background: '#F4F4F5' }}>
                     <img 
                       src={anchor.product.images?.[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'}
-                      alt={anchor.product.name}
+                      alt={cleanPerfumeName(anchor.product.name)}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -794,7 +795,7 @@ export const FragranceDiagnostic = () => {
                   </div>
 
                   <h2 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '2rem', fontWeight: 800, margin: '0 0 6px', color: '#111827' }}>
-                    {anchor.product.name}
+                    {cleanPerfumeName(anchor.product.name)}
                   </h2>
 
                   {anchor.product.brandInspiration && (
@@ -856,7 +857,7 @@ export const FragranceDiagnostic = () => {
                   {/* Promotional Inquiry & Explore CTAs */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
                     <a
-                      href={`product.html?product=${encodeURIComponent(anchor.product?.name || anchor.product?.id)}`}
+                      href={`product.html?product=${encodeURIComponent(cleanPerfumeName(anchor.product?.name) || anchor.product?.id)}`}
                       style={{
                         padding: '14px 28px',
                         borderRadius: '4px',
@@ -878,7 +879,7 @@ export const FragranceDiagnostic = () => {
                     </a>
 
                     <a
-                      href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI just took your Scent Discovery Quiz and my signature match is:\n• Perfume: ${anchor.product?.name}\n• Format: ${selectedAnchorFormat}\n• Match Score: ${anchor.matchPercentage}%\n\nCould you please assist me with ordering / stock availability? Thank you!`)}`}
+                      href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI just took your Scent Discovery Quiz and my signature match is:\n• Perfume: ${cleanPerfumeName(anchor.product?.name)}\n• Format: ${selectedAnchorFormat}\n• Match Score: ${anchor.matchPercentage}%\n\nCould you please assist me with ordering / stock availability? Thank you!`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -916,7 +917,7 @@ export const FragranceDiagnostic = () => {
               {layeringRecommendations.map((comp) => (
                 <a 
                   key={comp.id}
-                  href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                  href={`product.html?product=${encodeURIComponent(cleanPerfumeName(comp.name) || comp.id)}`}
                   style={{
                     display: 'block',
                     textDecoration: 'none',
@@ -941,7 +942,7 @@ export const FragranceDiagnostic = () => {
                   <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '10px' }}>
                     <img 
                       src={comp.images?.[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'} 
-                      alt={comp.name}
+                      alt={cleanPerfumeName(comp.name)}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
@@ -951,7 +952,7 @@ export const FragranceDiagnostic = () => {
                   </div>
 
                   <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '4px 0 2px' }}>
-                    {comp.name}
+                    {cleanPerfumeName(comp.name)}
                   </div>
 
                   <div style={{ fontSize: '0.72rem', color: '#6B7280', marginBottom: '8px' }}>

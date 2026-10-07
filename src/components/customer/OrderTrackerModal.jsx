@@ -14,6 +14,7 @@ import {
   Check,
   Clock
 } from 'lucide-react';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const OrderTrackerModal = () => {
   const { isOrderTrackerOpen, setIsOrderTrackerOpen, orders, userOrders, showToast } = useStore();
@@ -531,7 +532,7 @@ export const OrderTrackerModal = () => {
                 {selectedOrder.items?.map((it, idx) => (
                   <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', margin: '6px 0' }}>
                     <span style={{ color: '#111827', fontWeight: 500 }}>
-                      {it.quantity}x {it.name} <span style={{ color: '#6b7280', fontSize: '0.8rem' }}>({it.size || '100 ml'})</span>
+                      {it.quantity}x {cleanPerfumeName(it.name)} <span style={{ color: '#6b7280', fontSize: '0.8rem' }}>({it.size || '100 ml'})</span>
                     </span>
                     <span style={{ color: '#000000', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                       RM {(Number(it.price) * Number(it.quantity)).toFixed(2)}

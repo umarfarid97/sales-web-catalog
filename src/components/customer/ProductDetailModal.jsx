@@ -6,6 +6,7 @@ import {
   RefreshCw, 
   Feather
 } from 'lucide-react';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const ProductDetailModal = () => {
   const { 
@@ -17,6 +18,7 @@ export const ProductDetailModal = () => {
   } = useStore();
 
   const product = selectedProductModal;
+  const displayName = cleanPerfumeName(product?.name || 'Perfume');
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(1);
   const [quantity] = useState(1);
@@ -90,7 +92,7 @@ export const ProductDetailModal = () => {
             >
               <img 
                 src={productImages[activeImageIndex] || productImages[0]} 
-                alt={product.name}
+                alt={displayName}
                 style={{ width: '100%', height: 'clamp(260px, 38vh, 400px)', objectFit: 'contain' }}
               />
 
@@ -170,7 +172,7 @@ export const ProductDetailModal = () => {
             </div>
 
             <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '4px', color: '#000000' }}>
-              {product.name}
+              {displayName}
             </h2>
 
             {product.brandInspiration && (
@@ -310,7 +312,7 @@ export const ProductDetailModal = () => {
 
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <a
-                  href={`product.html?product=${encodeURIComponent(product.name || product.id)}`}
+                  href={`product.html?product=${encodeURIComponent(displayName || product.id)}`}
                   className="btn"
                   style={{
                     padding: '12px 20px',
@@ -327,7 +329,7 @@ export const ProductDetailModal = () => {
                 </a>
 
                 <a
-                  href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am interested in ordering / inquiring about:\n• Perfume: ${product.name}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${currentSizeObj.label}\n• Price: RM${(dynamicPrice * quantity).toFixed(2)}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+                  href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am interested in ordering / inquiring about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${currentSizeObj.label}\n• Price: RM${(dynamicPrice * quantity).toFixed(2)}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn"

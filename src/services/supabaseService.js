@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
+import { cleanPerfumeName } from '../utils/taxonomy';
 
 // Helper: Format DB product row to JS camelCase with 100% defensive fallbacks
 export const formatProductFromDb = (row) => {
@@ -51,7 +52,7 @@ export const formatProductFromDb = (row) => {
     id: String(row.id || `vlz-gen-${Date.now()}`),
     sku: String(row.sku || ''),
     catalogNo: parsedCatalogNo,
-    name: String(row.name || 'Perfume'),
+    name: cleanPerfumeName(String(row.name || 'Perfume')),
     brandInspiration: String(specs.brandInspiration || ''),
     originalListing: String(specs.originalListing || ''),
     gender: resolvedGender,

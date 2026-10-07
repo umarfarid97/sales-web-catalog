@@ -132,3 +132,20 @@ export const generateAttributeId = (type, name) => {
 
   return `${prefix}-${slug || Date.now()}`;
 };
+
+/**
+ * Strips '(no. xx)', '(NO. 12)', '#12', etc. from perfume names for clean display.
+ * 
+ * @param {string} name
+ * @returns {string}
+ */
+export const cleanPerfumeName = (name) => {
+  if (!name || typeof name !== 'string') return '';
+  return name
+    .replace(/\s*\(\s*(?:no\.?|n[oº°]\.?|#)\s*\d+\s*\)/gi, '')
+    .replace(/\s+(?:no\.?|n[oº°]\.?|#)\s*\d+$/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+};
+
+

@@ -14,6 +14,7 @@ import {
   Heart,
   MessageCircle
 } from 'lucide-react';
+import { cleanPerfumeName } from './utils/taxonomy';
 import './styles/preview-home.css';
 
 // Fallback high-res photos if DB product image isn't loaded
@@ -213,7 +214,7 @@ const PreviewHomeContent = () => {
                 </div>
 
                 <div className="prv-card-info">
-                  <h3 className="prv-card-title">{prod.name}</h3>
+                  <h3 className="prv-card-title">{cleanPerfumeName(prod.name)}</h3>
                   <div className="prv-card-sub">
                     {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
                   </div>
@@ -311,7 +312,7 @@ const PreviewHomeContent = () => {
                 </div>
 
                 <div className="prv-card-info">
-                  <h3 className="prv-card-title">{prod.name}</h3>
+                  <h3 className="prv-card-title">{cleanPerfumeName(prod.name)}</h3>
                   <div className="prv-card-sub">
                     {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
                   </div>

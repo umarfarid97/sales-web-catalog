@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
+import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const ProductCard = ({ product }) => {
   const { 
@@ -17,6 +18,7 @@ export const ProductCard = ({ product }) => {
     }
   };
 
+  const displayName = cleanPerfumeName(product.name);
   const formattedPrice = Number(product.price || 45).toFixed(2);
 
   return (
@@ -25,7 +27,7 @@ export const ProductCard = ({ product }) => {
       onClick={handleOpen}
       tabIndex={0}
       role="button"
-      aria-label={`View ${product.name} details`}
+      aria-label={`View ${displayName} details`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -74,7 +76,7 @@ export const ProductCard = ({ product }) => {
       >
         <img 
           src={product.images?.[0] || product.image} 
-          alt={product.name} 
+          alt={displayName} 
           loading="lazy"
           style={{
             maxWidth: '82%',
@@ -113,49 +115,66 @@ export const ProductCard = ({ product }) => {
         )}
       </div>
 
-      {/* 2. Price Row */}
-      <div 
-        style={{ 
-          marginBottom: '6px'
-        }}
-      >
-        <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1f140e', fontFamily: 'var(--font-brand, serif)' }}>
-          RM{formattedPrice}
-        </div>
-      </div>
-
-      {/* 3. Product Title */}
+      {/* 2. Perfume Name First (Simple font, highly visible) */}
       <h3 
         style={{ 
           fontSize: '0.98rem', 
-          fontWeight: 800, 
-          color: '#1f140e', 
-          margin: '0 0 3px',
-          lineHeight: 1.28,
+          fontWeight: 700, 
+          fontFamily: 'var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif)',
+          color: '#1a1410', 
+          margin: '0 0 4px',
+          lineHeight: 1.3,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis'
+          textOverflow: 'ellipsis',
+          letterSpacing: '0.01em'
         }}
-        title={product.name}
+        title={displayName}
       >
-        {product.name}
+        {displayName}
       </h3>
 
-      {/* 4. Subtitle / Inspiration */}
+      {/* 3. Subtitle / Inspired By */}
       <p 
         style={{ 
-          fontSize: '0.78rem', 
+          fontSize: '0.80rem', 
           color: '#786558', 
-          margin: '0',
-          lineHeight: 1.4,
+          margin: '0 0 10px',
+          lineHeight: 1.35,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
-          textOverflow: 'ellipsis'
+          textOverflow: 'ellipsis',
+          fontFamily: 'var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif)'
+        }}
+        title={product.brandInspiration ? `Inspired by ${product.brandInspiration}` : ''}
+      >
+        {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
+      </p>
+
+      {/* 4. Price (Follows below inspired by, NOT bold text) */}
+      <div 
+        style={{ 
+          marginTop: 'auto',
+          paddingTop: '6px',
+          borderTop: '1px solid #f6f3ee',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
         }}
       >
-        {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : product.tagline || 'Extrait de Parfum • High Longevity'}
-      </p>
+        <span
+          style={{ 
+            fontSize: '0.96rem', 
+            fontWeight: 500, // Not bold text
+            color: '#2b211a', 
+            fontFamily: 'var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif)'
+          }}
+        >
+          RM{formattedPrice}
+        </span>
+      </div>
 
     </div>
   );
 };
+

@@ -455,10 +455,10 @@
 }
 
 .prv-card-price {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #111111;
-  font-family: var(--font-brand, serif);
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #2b211a;
+  font-family: var(--font-body, -apple-system, sans-serif);
 }
 
 .prv-card-cart-btn {
