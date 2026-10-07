@@ -348,7 +348,7 @@ const PreviewHomeContent = () => {
         <div className="prv-container">
           <div className="prv-footer-grid">
             
-            {/* Column 1: Brand Mark & Heritage */}
+            {/* Column 1: Brand Mark */}
             <div className="prv-footer-col prv-footer-brand-col">
               <a href="/preview-home.html" className="prv-footer-brand-mark">
                 <span className="prv-footer-monogram">VL</span>
@@ -357,15 +357,6 @@ const PreviewHomeContent = () => {
                   <span className="prv-footer-logo-sub">Fragrance Malaysia</span>
                 </div>
               </a>
-              <p className="prv-footer-brand-desc">
-                Valenszo crafts long-lasting luxury perfumes using high-grade fragrance oils. Premium scents created for everyday elegance and enduring presence in Malaysia.
-              </p>
-              <div className="prv-footer-badge">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="#111111" aria-hidden="true">
-                  <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
-                </svg>
-                <span>Curated with Precision</span>
-              </div>
             </div>
 
             {/* Column 2: Fragrance Collections */}
@@ -379,12 +370,9 @@ const PreviewHomeContent = () => {
               </ul>
             </div>
 
-            {/* Column 3: Customer Care & WhatsApp Concierge */}
+            {/* Column 3: Customer Care */}
             <div className="prv-footer-col">
               <h4 className="prv-footer-heading">Customer Care</h4>
-              <p className="prv-footer-care-text">
-                Speak directly with our fragrance concierge for order inquiries and scent advice.
-              </p>
               <a 
                 href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20would%20like%20assistance%20with%20your%20perfume%20catalog." 
                 target="_blank" 
@@ -394,32 +382,6 @@ const PreviewHomeContent = () => {
                 <MessageCircle size={16} />
                 <span>WhatsApp: 018-286 8402</span>
               </a>
-              <span className="prv-footer-hours">Daily Concierge Support • 9:00 AM – 10:00 PM</span>
-            </div>
-
-            {/* Column 4: Newsletter / Stay Connected */}
-            <div className="prv-footer-col">
-              <h4 className="prv-footer-heading">Join The Scent Circle</h4>
-              <p className="prv-footer-newsletter-text">
-                Receive private release alerts, olfactory notes, and bespoke member privileges.
-              </p>
-              <form 
-                className="prv-footer-form" 
-                onSubmit={(e) => { 
-                  e.preventDefault(); 
-                  showToast && showToast('Thank you for subscribing to Valenszo.'); 
-                }}
-              >
-                <input 
-                  type="email" 
-                  placeholder="Enter your email..." 
-                  className="prv-footer-input"
-                  required 
-                />
-                <button type="submit" className="prv-footer-submit" aria-label="Subscribe">
-                  <ArrowRight size={14} />
-                </button>
-              </form>
             </div>
 
           </div>
