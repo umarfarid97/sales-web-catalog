@@ -440,30 +440,41 @@
 }
 
 /* --------------------------------------------------------------------------
-   5. EDITORIAL COLLAGE / LIFESTYLE GALLERY
+   5. EDITORIAL COLLAGE / LIFESTYLE GALLERY (COMPACT)
    -------------------------------------------------------------------------- */
 .prv-collage-section {
-  padding: 3.5rem 0;
+  padding: 2rem 0 3.5rem;
+  position: relative;
+  overflow: hidden;
+  clear: both;
 }
 
 .prv-collage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  min-height: 520px;
+  grid-template-rows: 320px;
+  height: 320px;
+  max-height: 320px;
+  gap: 1.25rem;
+  box-sizing: border-box;
 }
 
 .prv-collage-tall-tile {
   position: relative;
+  width: 100%;
+  height: 320px;
+  max-height: 320px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .prv-collage-tall-tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
+  display: block;
   transition: transform 0.6s ease;
 }
 
@@ -472,23 +483,28 @@
 }
 
 .prv-collage-right-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.25rem;
+  height: 320px;
+  max-height: 320px;
 }
 
 .prv-collage-wide-tile {
   position: relative;
-  flex: 1;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .prv-collage-wide-tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   transition: transform 0.6s ease;
 }
 
@@ -498,19 +514,20 @@
 
 .prv-tile-overlay-btn {
   position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
+  bottom: 1rem;
+  left: 1rem;
   background: #000000;
   color: #ffffff;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 8px 18px;
+  letter-spacing: 0.05em;
+  padding: 6px 15px;
   border-radius: 9999px;
   text-decoration: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transition: all 0.2s ease;
   z-index: 2;
+  line-height: 1.2;
 }
 
 .prv-tile-overlay-btn:hover {
@@ -522,7 +539,7 @@
 /* --------------------------------------------------------------------------
    6. RESPONSIVE MEDIA QUERIES
    -------------------------------------------------------------------------- */
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .prv-hero-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -536,12 +553,21 @@
   }
   .prv-collage-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+    max-height: none;
   }
   .prv-collage-tall-tile {
-    min-height: 420px;
+    height: 240px;
+    max-height: 240px;
+  }
+  .prv-collage-right-stack {
+    height: auto;
+    max-height: none;
+    grid-template-rows: 150px 150px;
   }
   .prv-collage-wide-tile {
-    min-height: 240px;
+    height: 150px;
   }
 }
 
