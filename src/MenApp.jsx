@@ -201,8 +201,8 @@ export const MenCollectionContent = () => {
               backgroundPosition: 'center 20%'
             }}
           >
-            {/* Left Editorial Text Card */}
-            <div className="editorial-hero-glass-card">
+            {/* Left Editorial Text */}
+            <div className="editorial-hero-content">
               <h1 className="editorial-hero-title">
                 Men&apos;s
                 <br />

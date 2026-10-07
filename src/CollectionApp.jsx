@@ -296,8 +296,8 @@ export const CollectionPageContent = () => {
               backgroundPosition: bannerData.bgPosition || 'center 35%'
             }}
           >
-            {/* Left Editorial Text Card */}
-            <div className="editorial-hero-glass-card">
+            {/* Left Editorial Text */}
+            <div className="editorial-hero-content">
               <h1 className="editorial-hero-title">
                 {bannerData.title1}
                 <br />
