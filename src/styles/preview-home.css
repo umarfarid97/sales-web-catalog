@@ -195,36 +195,15 @@
 
 .prv-hero-headline {
   font-family: 'Rebound', serif;
-  font-size: clamp(3.6rem, 6.2vw, 5.8rem);
-  line-height: 1.05;
+  font-size: clamp(3.2rem, 5.6vw, 5.2rem);
+  line-height: 1.14;
   font-weight: 400;
   color: #000000;
   letter-spacing: -0.015em;
   margin: 0 0 1.75rem;
   text-transform: none !important;
-}
-
-.prv-hero-headline .hero-line-1 {
-  display: block;
-}
-
-.prv-hero-headline .hero-line-2 {
-  display: block;
-  font-size: 0.96em;
-  margin: 0.18rem 0;
-}
-
-.prv-hero-headline .hero-line-2 .dot-sep {
-  display: inline-block;
-  margin: 0 0.35em;
-  font-size: 0.75em;
-  vertical-align: middle;
-}
-
-.prv-hero-headline .hero-line-3 {
-  display: block;
-  font-size: 1.14em;
-  letter-spacing: -0.02em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .prv-hero-desc {

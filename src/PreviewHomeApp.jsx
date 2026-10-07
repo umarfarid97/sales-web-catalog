@@ -138,9 +138,7 @@ const PreviewHomeContent = () => {
 
 
             <h1 className="prv-hero-headline">
-              <span className="hero-line-1">Smell is a</span>
-              <span className="hero-line-2">word <span className="dot-sep">•</span> Perfume is</span>
-              <span className="hero-line-3">literature</span>
+              Smell is a word • Perfume is literature
             </h1>
 
             <p className="prv-hero-desc">
