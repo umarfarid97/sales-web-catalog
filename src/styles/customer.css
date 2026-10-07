@@ -730,6 +730,21 @@
   border: 1px solid #ede8e1;
 }
 
+/* Subtle dark tint to provide crisp contrast for white typography while keeping imagery vibrant */
+.editorial-hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg, 
+    rgba(0, 0, 0, 0.48) 0%, 
+    rgba(0, 0, 0, 0.32) 42%, 
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
 .editorial-hero-content,
 .editorial-hero-glass-card {
   position: relative;
