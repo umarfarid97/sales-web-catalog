@@ -21,37 +21,6 @@ import {
 } from 'lucide-react';
 import '../../styles/pdp.css';
 
-// Helper for note photography swatches
-const getNotePhoto = (noteName = '') => {
-  const lower = noteName.toLowerCase();
-  if (lower.includes('bergamot') || lower.includes('lime') || lower.includes('citrus') || lower.includes('lemon')) {
-    return 'https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('lavender') || lower.includes('violet') || lower.includes('iris')) {
-    return 'https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('amber') || lower.includes('ambroxan') || lower.includes('resin') || lower.includes('benzoin')) {
-    return 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('rose') || lower.includes('peony') || lower.includes('floral')) {
-    return 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('vanilla') || lower.includes('tonka') || lower.includes('gourmand')) {
-    return 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('oud') || lower.includes('wood') || lower.includes('cedar') || lower.includes('sandalwood') || lower.includes('vetiver')) {
-    return 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('pepper') || lower.includes('cardamom') || lower.includes('spice') || lower.includes('cinnamon')) {
-    return 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&auto=format&fit=crop&q=80';
-  }
-  if (lower.includes('leather') || lower.includes('suede') || lower.includes('tobacco')) {
-    return 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&auto=format&fit=crop&q=80';
-  }
-  // Default luxury macro botanical
-  return 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80';
-};
-
 export const ProductDetailPage = () => {
   const {
     activeProduct,
@@ -242,16 +211,6 @@ export const ProductDetailPage = () => {
   }
 
   const isFav = Array.isArray(favorites) && product?.id ? favorites.includes(product.id) : false;
-
-  // Safe pyramid notes for visual swatches
-  const topNote = String(product.pyramid?.topNotes?.[0] || 'Calabrian Bergamot');
-  const heartNote = String(product.pyramid?.heartNotes?.[0] || 'Damascena Rose');
-  const baseNote = String(product.pyramid?.baseNotes?.[0] || 'Royal Woods');
-
-
-
-
-
   const handleSelectThumbnail = (index) => {
     setActiveThumbIndex(index);
     if (galleryItems[index].type === 'video') {
@@ -507,48 +466,9 @@ export const ProductDetailPage = () => {
                   )}
                 </div>
 
-                {/* Col 2: Key Notes & Performance Specs */}
+                {/* Col 2: Characteristics & Wear */}
                 <div>
-                  <h3 className="pdp-section-card-title">Key Notes</h3>
-                  
-                  {/* 3 Visual Swatches */}
-                  <div className="pdp-note-swatches-row">
-                    <div className="pdp-swatch-box">
-                      <div className="pdp-swatch-image-frame">
-                        <img 
-                          src={getNotePhoto(topNote)} 
-                          alt={topNote} 
-                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                        />
-                      </div>
-                      <span className="pdp-swatch-name">{topNote.split(' ')?.[0] || 'Bergamot'}</span>
-                      <span className="pdp-swatch-stage">(Top)</span>
-                    </div>
-
-                    <div className="pdp-swatch-box">
-                      <div className="pdp-swatch-image-frame">
-                        <img 
-                          src={getNotePhoto(heartNote)} 
-                          alt={heartNote} 
-                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                        />
-                      </div>
-                      <span className="pdp-swatch-name">{heartNote.split(' ')?.[0] || 'Lavender'}</span>
-                      <span className="pdp-swatch-stage">(Heart)</span>
-                    </div>
-
-                    <div className="pdp-swatch-box">
-                      <div className="pdp-swatch-image-frame">
-                        <img 
-                          src={getNotePhoto(baseNote)} 
-                          alt={baseNote} 
-                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400&auto=format&fit=crop&q=80'; }}
-                        />
-                      </div>
-                      <span className="pdp-swatch-name">{baseNote.split(' ')?.[0] || 'Amber'}</span>
-                      <span className="pdp-swatch-stage">(Base)</span>
-                    </div>
-                  </div>
+                  <h3 className="pdp-section-card-title">Characteristics</h3>
 
                   {/* 4 Performance Metrics */}
                   <div className="pdp-specs-grid">
