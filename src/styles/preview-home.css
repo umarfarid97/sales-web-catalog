@@ -298,16 +298,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  opacity: 0.85;
+  height: 52px;
+  opacity: 0.88;
   transition: opacity 0.25s ease, transform 0.25s ease;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 0 6px;
 }
 
 .prv-brand-item:hover {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .prv-brand-logo {
@@ -321,12 +321,12 @@
   filter: brightness(0);
 }
 
-.prv-brand-dior { height: 25px; }
-.prv-brand-tom-ford { height: 16px; }
-.prv-brand-chanel { height: 28px; }
-.prv-brand-calvin-klein { height: 20px; }
-.prv-brand-clinique { height: 20px; }
-.prv-brand-dg { height: 23px; }
+.prv-brand-dior { height: 36px; }
+.prv-brand-tom-ford { height: 23px; }
+.prv-brand-chanel { height: 42px; }
+.prv-brand-calvin-klein { height: 28px; }
+.prv-brand-clinique { height: 28px; }
+.prv-brand-dg { height: 32px; }
 
 .prv-brand-name {
   font-family: 'Bodoni Moda', 'Playfair Display', serif;
@@ -654,11 +654,24 @@
     width: 28px;
     height: 28px;
   }
+  .prv-brands-strip {
+    padding: 2rem 0;
+  }
   .prv-brands-row {
-    gap: 1.25rem;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem 1.25rem;
+    align-items: center;
+    justify-items: center;
   }
   .prv-brand-item {
-    height: 32px;
+    height: 44px;
+    width: 100%;
   }
+  .prv-brand-dior { height: 32px; }
+  .prv-brand-tom-ford { height: 20px; }
+  .prv-brand-chanel { height: 36px; }
+  .prv-brand-calvin-klein { height: 24px; }
+  .prv-brand-clinique { height: 24px; }
+  .prv-brand-dg { height: 28px; }
 }

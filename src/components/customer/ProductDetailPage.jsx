@@ -496,38 +496,60 @@ export const ProductDetailPage = () => {
 
               </div>
 
-              {/* Fragrance Notes Architecture (All-in-one section) */}
+              {/* Fragrance Notes Architecture (Sleek Modern Olfactory Pyramid) */}
               <div style={{ marginTop: '2.5rem' }}>
-                <h3 className="pdp-section-card-title">Fragrance Notes Architecture</h3>
-                <div className="pdp-pyramid-details">
-                  <div className="pdp-pyramid-col">
-                    <h4>Top Notes</h4>
-                    <p className="timing">Immediate Awakening (0 - 30 Mins)</p>
-                    <ul>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <h3 className="pdp-section-card-title" style={{ margin: 0 }}>Fragrance Notes Architecture</h3>
+                  <span style={{ fontSize: '0.8rem', color: '#78716c' }}>Scent evolution across three distinct stages</span>
+                </div>
+
+                <div className="pdp-notes-pyramid-grid">
+                  {/* Top Notes */}
+                  <div className="pdp-note-tier-card">
+                    <div className="pdp-note-tier-header">
+                      <span className="pdp-note-tier-pill">01 · Opening</span>
+                      <h4 className="pdp-note-tier-name">Top Notes</h4>
+                      <span className="pdp-note-tier-timing">Immediate impression (0 – 30 mins)</span>
+                    </div>
+                    <div className="pdp-note-tags-wrap">
                       {(product.pyramid?.topNotes || ['Calabrian Bergamot', 'Spiced Cardamom', 'Pink Peppercorn']).map((note, i) => (
-                        <li key={i}>{note}</li>
+                        <span key={i} className="pdp-note-pill">
+                          {typeof note === 'string' ? note.replace(/\b\w/g, c => c.toUpperCase()) : note}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                   </div>
 
-                  <div className="pdp-pyramid-col">
-                    <h4>Heart Notes</h4>
-                    <p className="timing">The Soul (30 Mins - 4 Hours)</p>
-                    <ul>
+                  {/* Heart Notes */}
+                  <div className="pdp-note-tier-card">
+                    <div className="pdp-note-tier-header">
+                      <span className="pdp-note-tier-pill">02 · The Heart</span>
+                      <h4 className="pdp-note-tier-name">Heart Notes</h4>
+                      <span className="pdp-note-tier-timing">Core character (30 mins – 4 hours)</span>
+                    </div>
+                    <div className="pdp-note-tags-wrap">
                       {(product.pyramid?.heartNotes || ['French Lavender', 'Tailored Damascena', 'Rare Cedar']).map((note, i) => (
-                        <li key={i}>{note}</li>
+                        <span key={i} className="pdp-note-pill">
+                          {typeof note === 'string' ? note.replace(/\b\w/g, c => c.toUpperCase()) : note}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                   </div>
 
-                  <div className="pdp-pyramid-col">
-                    <h4>Base Notes</h4>
-                    <p className="timing">Long-Lasting Base (4 - 16+ Hours)</p>
-                    <ul>
+                  {/* Base Notes */}
+                  <div className="pdp-note-tier-card">
+                    <div className="pdp-note-tier-header">
+                      <span className="pdp-note-tier-pill">03 · Dry Down</span>
+                      <h4 className="pdp-note-tier-name">Base Notes</h4>
+                      <span className="pdp-note-tier-timing">Enduring foundation (4 – 16+ hours)</span>
+                    </div>
+                    <div className="pdp-note-tags-wrap">
                       {(product.pyramid?.baseNotes || ['Rich Ambroxan', 'Lacquered Woods', 'Bourbon Vanilla']).map((note, i) => (
-                        <li key={i}>{note}</li>
+                        <span key={i} className="pdp-note-pill">
+                          {typeof note === 'string' ? note.replace(/\b\w/g, c => c.toUpperCase()) : note}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 </div>
               </div>
