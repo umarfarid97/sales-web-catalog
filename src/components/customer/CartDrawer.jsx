@@ -13,6 +13,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { cleanPerfumeName } from '../../utils/taxonomy';
+import '../../styles/customer.css';
 
 export const CartDrawer = () => {
   const {
@@ -87,6 +88,11 @@ export const CartDrawer = () => {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
+        background: 'rgba(0, 0, 0, 0.55)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
+        display: 'flex',
+        justifyContent: 'flex-end',
         overscrollBehavior: 'contain',
         touchAction: 'none'
       }}
@@ -95,6 +101,13 @@ export const CartDrawer = () => {
         className="cart-drawer-panel"
         onClick={(e) => e.stopPropagation()}
         style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: '100%',
+          maxWidth: 'min(440px, 100vw)',
+          boxSizing: 'border-box',
           borderLeft: '1px solid #e5e7eb',
           background: '#ffffff',
           color: '#000000',
@@ -104,25 +117,53 @@ export const CartDrawer = () => {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          overscrollBehavior: 'contain'
+          overscrollBehavior: 'contain',
+          zIndex: 10000
         }}
       >
         
         {/* Drawer Header */}
-        <div className="cart-drawer-header" style={{ borderBottom: '1px solid #e5e7eb', padding: '20px 24px', background: '#ffffff', flexShrink: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <ShoppingBag size={20} color="#000000" />
-            <h3 className="couture-title" style={{ fontSize: '1.05rem', color: '#000000', fontWeight: 800, letterSpacing: '0.12em' }}>
+        <div 
+          className="cart-drawer-header" 
+          style={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            borderBottom: '1px solid #e5e7eb', 
+            padding: '16px 20px', 
+            background: '#ffffff', 
+            flexShrink: 0,
+            width: '100%',
+            boxSizing: 'border-box'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1, overflow: 'hidden' }}>
+            <ShoppingBag size={20} color="#000000" style={{ flexShrink: 0 }} />
+            <h3 
+              className="couture-title" 
+              style={{ 
+                fontSize: '1rem', 
+                color: '#000000', 
+                fontWeight: 800, 
+                letterSpacing: '0.08em',
+                margin: 0,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
               Shopping Bag
             </h3>
             <span style={{
               background: '#000000',
               color: '#ffffff',
-              padding: '3px 9px',
+              padding: '2px 8px',
               borderRadius: '2px',
-              fontSize: '0.7rem',
+              fontSize: '0.68rem',
               fontWeight: 700,
-              letterSpacing: '0.08em'
+              letterSpacing: '0.06em',
+              flexShrink: 0
             }}>
               {cartItemCount || 0} {cartItemCount === 1 ? 'item' : 'items'}
             </span>
@@ -131,7 +172,19 @@ export const CartDrawer = () => {
           <button
             onClick={() => setIsCartOpen(false)}
             className="btn-icon"
-            style={{ width: '36px', height: '36px', background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#000000', cursor: 'pointer' }}
+            style={{ 
+              width: '36px', 
+              height: '36px', 
+              borderRadius: '50%',
+              background: '#f3f4f6', 
+              border: '1px solid #e5e7eb', 
+              color: '#000000', 
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}
             aria-label="Close Bag"
           >
             <X size={18} />

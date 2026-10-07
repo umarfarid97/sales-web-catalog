@@ -19,7 +19,8 @@ import {
   Star, 
   X, 
   Check, 
-  ChevronDown
+  ChevronDown,
+  Search
 } from 'lucide-react';
 
 // Styles
@@ -51,6 +52,14 @@ export const CollectionPageContent = () => {
       return params.get('q') || '';
     }
     return '';
+  });
+
+  const [isSearchOpen, setIsSearchOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return Boolean(params.get('q'));
+    }
+    return false;
   });
 
   const [selectedChip, setSelectedChip] = useState('All');
@@ -522,6 +531,75 @@ export const CollectionPageContent = () => {
             </div>
           </div>
 
+          {/* Expandable Luxury Search Input Bar (Placed ABOVE Sort by) */}
+          {isSearchOpen && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 14px',
+              background: '#f9fafb',
+              border: '1px solid #111827',
+              borderRadius: '6px',
+              marginBottom: '1.25rem',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+            }}>
+              <Search size={16} color="#6b7280" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search collection by name, brand inspiration, notes (e.g. Aventus, Baccarat, Vanilla)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '0.92rem',
+                  color: '#111827',
+                  fontFamily: 'inherit'
+                }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: '#9ca3af',
+                    cursor: 'pointer',
+                    padding: '2px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  title="Clear search"
+                >
+                  <X size={15} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery('');
+                }}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  color: '#6b7280',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '2px 4px'
+                }}
+              >
+                Close
+              </button>
+            </div>
+          )}
+
           {/* Controls Bar: Sort & Filter Toggle */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -545,31 +623,61 @@ export const CollectionPageContent = () => {
               </select>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsFilterDrawerOpen(true)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 16px',
-                borderRadius: '4px',
-                border: '1px solid #d1d5db',
-                background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
-                color: '#111827',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              <SlidersHorizontal size={14} />
-              <span>Filter</span>
-              {activeFiltersCount > 0 && (
-                <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Search Button near Filter */}
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen((prev) => !prev)}
+                aria-label="Search Fragrance Collection"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 14px',
+                  borderRadius: '4px',
+                  border: isSearchOpen || searchQuery ? '1px solid #111827' : '1px solid #d1d5db',
+                  background: isSearchOpen || searchQuery ? '#f9fafb' : '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <Search size={14} />
+                <span>Search</span>
+                {searchQuery.trim() && (
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#000000' }} />
+                )}
+              </button>
+
+              {/* Filter Button */}
+              <button
+                type="button"
+                onClick={() => setIsFilterDrawerOpen(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 16px',
+                  borderRadius: '4px',
+                  border: '1px solid #d1d5db',
+                  background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
+                  color: '#111827',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                <SlidersHorizontal size={14} />
+                <span>Filter</span>
+                {activeFiltersCount > 0 && (
+                  <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Product Grid */}

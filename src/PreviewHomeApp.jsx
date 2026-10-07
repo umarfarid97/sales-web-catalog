@@ -15,6 +15,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { cleanPerfumeName } from './utils/taxonomy';
+import './styles/customer.css';
 import './styles/preview-home.css';
 
 // Fallback high-res photos if DB product image isn't loaded
@@ -140,7 +141,8 @@ const PreviewHomeContent = () => {
 
 
             <h1 className="prv-hero-headline">
-              Smell is a word • Perfume is literature
+              Smell is a word •<br />
+              Perfume is literature
             </h1>
 
             <p className="prv-hero-desc">

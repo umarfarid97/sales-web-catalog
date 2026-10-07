@@ -358,6 +358,75 @@ export const WomenCollectionContent = () => {
             </div>
           </div>
 
+          {/* Expandable Luxury Search Input Bar (Placed ABOVE Sort by) */}
+          {isSearchOpen && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '10px 14px',
+              background: '#f9fafb',
+              border: '1px solid #111827',
+              borderRadius: '6px',
+              marginBottom: '1.25rem',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+            }}>
+              <Search size={16} color="#6b7280" />
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search women's perfumes by name, brand inspiration, notes (e.g. Delina, Rose, Vanilla)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '0.92rem',
+                  color: '#111827',
+                  fontFamily: 'inherit'
+                }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: '#9ca3af',
+                    cursor: 'pointer',
+                    padding: '2px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                  title="Clear search"
+                >
+                  <X size={15} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery('');
+                }}
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  color: '#6b7280',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '2px 4px'
+                }}
+              >
+                Close
+              </button>
+            </div>
+          )}
+
           {/* Controls Bar: Sort & Filter Toggle */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -437,75 +506,6 @@ export const WomenCollectionContent = () => {
               </button>
             </div>
           </div>
-
-          {/* Expandable Luxury Search Input Bar */}
-          {isSearchOpen && (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '10px 14px',
-              background: '#f9fafb',
-              border: '1px solid #e5e7eb',
-              borderRadius: '6px',
-              marginBottom: '1.5rem',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
-            }}>
-              <Search size={16} color="#6b7280" />
-              <input
-                type="text"
-                autoFocus
-                placeholder="Search women's perfumes by name, brand inspiration, notes (e.g. Delina, Rose, Vanilla)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  flex: 1,
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  fontSize: '1rem',
-                  color: '#111827',
-                  fontFamily: 'inherit'
-                }}
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  style={{
-                    border: 'none',
-                    background: 'none',
-                    color: '#9ca3af',
-                    cursor: 'pointer',
-                    padding: '2px',
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                  title="Clear search"
-                >
-                  <X size={15} />
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSearchOpen(false);
-                  setSearchQuery('');
-                }}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  color: '#6b7280',
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  padding: '2px 4px'
-                }}
-              >
-                Close
-              </button>
-            </div>
-          )}
 
           {/* Product Grid (2 columns mobile, 4 columns desktop) */}
           <div 

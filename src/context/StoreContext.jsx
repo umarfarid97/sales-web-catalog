@@ -494,7 +494,12 @@ export const StoreProvider = ({ children }) => {
   const [appliedPromo, setAppliedPromo] = useState(null);
 
   // UI Modals & Drawers
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return new URLSearchParams(window.location.search).get('cart') === 'open';
+    }
+    return false;
+  });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedProductModal, setSelectedProductModal] = useState(null);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);

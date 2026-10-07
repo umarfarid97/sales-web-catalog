@@ -34,6 +34,8 @@
   color: #171717;
   font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 .prv-container {
@@ -604,6 +606,9 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
+  .prv-hero-headline {
+    font-size: clamp(2.3rem, 6vw, 3.6rem);
+  }
   .prv-hero-portrait-frame {
     max-width: 520px;
     margin: 0 auto;
@@ -634,13 +639,16 @@
 @media (max-width: 640px) {
   .prv-container {
     padding: 0 1rem;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   .prv-nav-links, .prv-search-box {
     display: none;
   }
   .prv-hero-headline {
-    font-size: clamp(2rem, 7.5vw, 2.35rem);
-    line-height: 1.08;
+    font-size: clamp(1.8rem, 6.8vw, 2.3rem);
+    line-height: 1.12;
+    word-break: break-word;
   }
   .prv-section {
     padding: 2.25rem 0;
