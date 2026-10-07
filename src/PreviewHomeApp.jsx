@@ -146,7 +146,7 @@ const PreviewHomeContent = () => {
               Discover the beauty of fragrance with our collection of premium perfumes to enrich your everyday smell
             </p>
 
-            <a href="/collection.html" className="prv-pill-cta">
+            <a href="collection.html" className="prv-pill-cta">
               <span>Shop Now</span>
               <div className="prv-pill-arrow">
                 <ArrowRight size={14} />
@@ -241,7 +241,7 @@ const PreviewHomeContent = () => {
           
           {/* Tile 1: 3rd picture -> Unisex Perfume Page */}
           <a 
-            href="/collection.html?gender=Unisex" 
+            href="collection.html?gender=Unisex" 
             className="prv-collage-tall-tile"
             aria-label="Shop Unisex Perfume Collection"
           >
@@ -258,7 +258,7 @@ const PreviewHomeContent = () => {
           <div className="prv-collage-right-stack">
             {/* Tile 2: 1st picture -> Men Perfume Page */}
             <a 
-              href="/men.html" 
+              href="men.html" 
               className="prv-collage-wide-tile"
               aria-label="Shop Men's Perfume Collection"
             >
@@ -273,7 +273,7 @@ const PreviewHomeContent = () => {
 
             {/* Tile 3: 2nd picture -> Women Perfume Page */}
             <a 
-              href="/women.html" 
+              href="women.html" 
               className="prv-collage-wide-tile"
               aria-label="Shop Women's Perfume Collection"
             >
@@ -361,7 +361,7 @@ const PreviewHomeContent = () => {
             
             {/* Column 1: Brand Mark */}
             <div className="prv-footer-col prv-footer-brand-col">
-              <a href="/index.html" className="prv-footer-brand-mark">
+              <a href="index.html" className="prv-footer-brand-mark">
                 <span className="prv-footer-monogram">VL</span>
                 <div className="prv-footer-brand-text">
                   <span className="prv-footer-logo-title">VALENSZO</span>
@@ -374,10 +374,11 @@ const PreviewHomeContent = () => {
             <div className="prv-footer-col">
               <h4 className="prv-footer-heading">Fragrance Collections</h4>
               <ul className="prv-footer-links">
-                <li><a href="/men.html" className="prv-footer-link">Men's Perfumes</a></li>
-                <li><a href="/women.html" className="prv-footer-link">Women's Perfumes</a></li>
-                <li><a href="/collection.html" className="prv-footer-link">All Collections</a></li>
-                <li><a href="/diagnostic.html" className="prv-footer-link">Scent Discovery Quiz</a></li>
+                <li><a href="collection.html" className="prv-footer-link">All Collections</a></li>
+                <li><a href="men.html" className="prv-footer-link">Men's Perfumes</a></li>
+                <li><a href="women.html" className="prv-footer-link">Women's Perfumes</a></li>
+                <li><a href="collection.html?gender=Unisex" className="prv-footer-link">Unisex Perfumes</a></li>
+                <li><a href="diagnostic.html" className="prv-footer-link">Scent Discovery Quiz</a></li>
               </ul>
             </div>
 

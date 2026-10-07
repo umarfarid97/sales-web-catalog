@@ -31,10 +31,13 @@ export const Navbar = () => {
   const cartCount = Array.isArray(cart) ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
 
   const pathname = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
+  const search = typeof window !== 'undefined' ? window.location.search.toLowerCase() : '';
   const isHome = pathname === '' || pathname === '/' || pathname.endsWith('index.html') || pathname.endsWith('/');
   const isWomen = pathname.includes('women');
   const isMen = !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || (pathname.includes('men') && !pathname.includes('women')));
+  const isUnisex = search.includes('gender=unisex');
   const isCollection = pathname.includes('collection');
+  const isAllCollection = isCollection && !isUnisex && !isMen && !isWomen;
   const isDiagnostic = pathname.includes('diagnostic');
 
   // Bulletproof body scroll lock when side drawer is open
@@ -167,16 +170,16 @@ export const Navbar = () => {
               href="collection.html" 
               style={{ 
                 textDecoration: 'none', 
-                color: (isCollection && !isMen && !isWomen) ? '#111111' : '#4b5563', 
+                color: isAllCollection ? '#111111' : '#4b5563', 
                 fontSize: '0.86rem', 
-                fontWeight: (isCollection && !isMen && !isWomen) ? 700 : 500, 
+                fontWeight: isAllCollection ? 700 : 500, 
                 letterSpacing: '0.04em',
                 transition: 'color 0.2s',
-                borderBottom: (isCollection && !isMen && !isWomen) ? '1.5px solid #111111' : '1.5px solid transparent',
+                borderBottom: isAllCollection ? '1.5px solid #111111' : '1.5px solid transparent',
                 paddingBottom: '2px'
               }}
             >
-              Collection
+              All Collections
             </a>
             <a 
               href="men.html" 
@@ -207,6 +210,21 @@ export const Navbar = () => {
               }}
             >
               Women
+            </a>
+            <a 
+              href="collection.html?gender=Unisex" 
+              style={{ 
+                textDecoration: 'none', 
+                color: isUnisex ? '#111111' : '#4b5563', 
+                fontSize: '0.86rem', 
+                fontWeight: isUnisex ? 700 : 500, 
+                letterSpacing: '0.04em',
+                transition: 'color 0.2s',
+                borderBottom: isUnisex ? '1.5px solid #111111' : '1.5px solid transparent',
+                paddingBottom: '2px'
+              }}
+            >
+              Unisex
             </a>
             <a 
               href="diagnostic.html" 
@@ -472,15 +490,15 @@ export const Navbar = () => {
                   style={{
                     padding: '12px 14px',
                     borderRadius: '6px',
-                    background: (isCollection && !isMen && !isWomen) ? '#ffffff' : 'transparent',
+                    background: isAllCollection ? '#ffffff' : 'transparent',
                     color: '#111111',
-                    fontWeight: (isCollection && !isMen && !isWomen) ? 700 : 500,
+                    fontWeight: isAllCollection ? 700 : 500,
                     textDecoration: 'none',
                     fontSize: '0.92rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    border: (isCollection && !isMen && !isWomen) ? '1px solid #eeebdf' : '1px solid transparent'
+                    border: isAllCollection ? '1px solid #eeebdf' : '1px solid transparent'
                   }}
                 >
                   <span>All Collections</span>
@@ -526,6 +544,27 @@ export const Navbar = () => {
                   }}
                 >
                   <span>Women's Fragrances</span>
+                  <ArrowRight size={14} color="#8c7d70" />
+                </a>
+
+                <a 
+                  href="collection.html?gender=Unisex" 
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    padding: '12px 14px',
+                    borderRadius: '6px',
+                    background: isUnisex ? '#ffffff' : 'transparent',
+                    color: '#111111',
+                    fontWeight: isUnisex ? 700 : 500,
+                    textDecoration: 'none',
+                    fontSize: '0.92rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: isUnisex ? '1px solid #eeebdf' : '1px solid transparent'
+                  }}
+                >
+                  <span>For Unisex Fragrance</span>
                   <ArrowRight size={14} color="#8c7d70" />
                 </a>
 

@@ -35,13 +35,22 @@ const OCCASION_OPTIONS = ['Daily', 'Work', 'Night Out', 'Special Occasion'];
 export const CollectionPageContent = () => {
   const { products, favorites, toggleFavorite } = useStore();
 
-  // Read URL query params on mount
+  // Read URL query params on mount - defaults to 'All' to show all categories
   const [activeGender, setActiveGender] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      return params.get('gender') || localStorage.getItem('valenszo_active_gender') || 'Men';
+      const g = params.get('gender');
+      if (g) return g;
     }
-    return 'Men';
+    return 'All';
+  });
+
+  const [searchQuery, setSearchQuery] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('q') || '';
+    }
+    return '';
   });
 
   const [selectedChip, setSelectedChip] = useState('All');
@@ -54,15 +63,63 @@ export const CollectionPageContent = () => {
   const [selectedOccasions, setSelectedOccasions] = useState([]);
   const [selectedIntensities, setSelectedIntensities] = useState([]);
 
+  // Sync state with URL changes (Back / Forward navigation)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    const syncFromUrl = () => {
       const params = new URLSearchParams(window.location.search);
       const g = params.get('gender');
-      if (g) setActiveGender(g);
+      setActiveGender(g || 'All');
       const cat = params.get('category');
       if (cat) setSelectedChip(cat);
-    }
+      const q = params.get('q');
+      if (q !== null) setSearchQuery(q);
+    };
+
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
   }, []);
+
+  const getProductGender = (p) => {
+    const pId = String(p.id || '').toLowerCase();
+    const pCat = String(p.category || '').toLowerCase();
+    const pGen = String(p.gender || '').toLowerCase();
+    if (pGen === 'women' || pCat.includes('femme') || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom')) {
+      return 'Women';
+    }
+    if (pGen === 'unisex' || pCat.includes('unisex') || pCat.includes('niche') || pId.startsWith('vlz-uni')) {
+      return 'Unisex';
+    }
+    return 'Men';
+  };
+
+  const categoryCounts = useMemo(() => {
+    if (!products) return { all: 0, men: 0, women: 0, unisex: 0 };
+    let all = 0, men = 0, women = 0, unisex = 0;
+    products.forEach(p => {
+      if (!p || typeof p !== 'object' || !p.id) return;
+      all++;
+      const g = getProductGender(p);
+      if (g === 'Women') women++;
+      else if (g === 'Unisex') unisex++;
+      else men++;
+    });
+    return { all, men, women, unisex };
+  }, [products]);
+
+  // Handle switching category tab
+  const handleGenderChange = (newGender) => {
+    setActiveGender(newGender);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (newGender.toLowerCase() === 'all') {
+        url.searchParams.delete('gender');
+      } else {
+        url.searchParams.set('gender', newGender);
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
 
   // Filter and Sort Products
   const filteredProducts = useMemo(() => {
@@ -72,17 +129,21 @@ export const CollectionPageContent = () => {
       if (!p || typeof p !== 'object' || !p.id) return false;
 
       // Gender filter
-      const pId = String(p.id || '');
-      const pCat = String(p.category || '');
-      const pGender = p.gender || (
-        pCat === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom')
-          ? 'Women'
-          : (pCat.toLowerCase().includes('unisex') || pCat.toLowerCase().includes('niche') || pId.startsWith('vlz-uni')
-            ? 'Unisex'
-            : 'Men')
-      );
+      const pGender = getProductGender(p);
       if (activeGender && activeGender.toLowerCase() !== 'all') {
         if (pGender.toLowerCase() !== activeGender.toLowerCase()) return false;
+      }
+
+      // Search query filter
+      if (searchQuery.trim()) {
+        const qLower = searchQuery.trim().toLowerCase();
+        const name = String(p.name || '').toLowerCase();
+        const brandInspiration = String(p.brandInspiration || '').toLowerCase();
+        const cat = String(p.category || '').toLowerCase();
+        const notes = Array.isArray(p.notes) ? p.notes.join(' ').toLowerCase() : '';
+        const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
+        const matches = name.includes(qLower) || brandInspiration.includes(qLower) || cat.includes(qLower) || notes.includes(qLower) || traits.includes(qLower);
+        if (!matches) return false;
       }
 
       // Quick chip accord filter
@@ -123,7 +184,7 @@ export const CollectionPageContent = () => {
       if (rankDiff !== 0) return rankDiff;
       return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
     });
-  }, [products, activeGender, selectedChip, selectedAccords, priceMax, sortBy]);
+  }, [products, activeGender, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
 
   const toggleAccord = (accord) => {
     setSelectedAccords((prev) => 
@@ -137,6 +198,12 @@ export const CollectionPageContent = () => {
     setSelectedIntensities([]);
     setPriceMax(250);
     setSelectedChip('All');
+    setSearchQuery('');
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('q');
+      window.history.replaceState({}, '', url.toString());
+    }
   };
 
   const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
@@ -148,15 +215,23 @@ export const CollectionPageContent = () => {
   // Reset to first page when filtering or switching gender
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeGender, selectedChip, selectedAccords, selectedOccasions, selectedIntensities, priceMax, sortBy]);
+  }, [activeGender, searchQuery, selectedChip, selectedAccords, selectedOccasions, selectedIntensities, priceMax, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const isUnisex = activeGender && activeGender.toLowerCase() === 'unisex';
-  const isWomen = activeGender && activeGender.toLowerCase() === 'women';
-  const bannerData = isWomen ? {
+  const isAll = !activeGender || activeGender.toLowerCase() === 'all';
+  const isUnisex = !isAll && activeGender.toLowerCase() === 'unisex';
+  const isWomen = !isAll && activeGender.toLowerCase() === 'women';
+  const isMen = !isAll && activeGender.toLowerCase() === 'men';
+
+  const bannerData = isAll ? {
+    title1: "All",
+    title2: "Collections",
+    subtitle: "Complete library of artisanal extrait de parfum across all categories.",
+    bgImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80"
+  } : isWomen ? {
     title1: "Women's",
     title2: "Collection",
     subtitle: "Elegant. Feminine. Unique.",
@@ -200,19 +275,19 @@ export const CollectionPageContent = () => {
       <main style={{ flex: 1, paddingBottom: '5rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1.25rem clamp(12px, 3.5vw, 24px)' }}>
           
-          {/* Breadcrumbs (Matching Picture 2) */}
+          {/* Breadcrumbs */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6b7280', marginBottom: '1.25rem' }}>
             <a href="index.html" style={{ color: '#6b7280', textDecoration: 'none' }}>Home</a>
             <ChevronRight size={12} />
-            <span style={{ color: '#111827', fontWeight: 600 }}>{activeGender}</span>
+            <span style={{ color: '#111827', fontWeight: 600 }}>
+              {isAll ? 'All Collections' : `${activeGender}'s Collection`}
+            </span>
           </div>
 
-          {/* Collection Hero Banner (Matching Picture 2) */}
+          {/* Collection Hero Banner */}
           <div className="editorial-hero-banner">
-            {/* Deep dark protective scrim preventing any camouflage with model portrait */}
             <div className="editorial-hero-scrim" />
 
-            {/* Ambient warm glow */}
             <div 
               style={{
                 position: 'absolute',
@@ -228,7 +303,7 @@ export const CollectionPageContent = () => {
               }}
             />
 
-            {/* Left Editorial Text Column (Matching Picture 2) */}
+            {/* Left Editorial Text Column */}
             <div className="editorial-hero-text">
               <h1 className="editorial-hero-title">
                 {bannerData.title1}
@@ -240,17 +315,86 @@ export const CollectionPageContent = () => {
               </p>
             </div>
 
-            {/* Right Visual: Model with smooth left fade (Matching Picture 2) */}
+            {/* Right Visual: Model / Perfume with smooth left fade */}
             <div 
               className="editorial-hero-media"
               style={{
                 backgroundImage: `url(${bannerData.bgImage})`,
-                backgroundPosition: 'center 15%'
+                backgroundPosition: isAll ? 'center center' : 'center 15%'
               }}
             />
           </div>
 
-          {/* Quick Accord Pill Filter Chips (Matching Picture 2: All, Fresh, Woody, Spicy, Leather, More v) */}
+          {/* Category Tabs: All Fragrances, Men's, Women's, Unisex */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px' }}>
+            {[
+              { id: 'All', label: 'All Fragrances', count: categoryCounts.all },
+              { id: 'Men', label: "Men's Collection", count: categoryCounts.men },
+              { id: 'Women', label: "Women's Collection", count: categoryCounts.women },
+              { id: 'Unisex', label: 'For Unisex Fragrance', count: categoryCounts.unisex }
+            ].map((tab) => {
+              const isSelected = (tab.id === 'All' && isAll) || (!isAll && activeGender.toLowerCase() === tab.id.toLowerCase());
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => handleGenderChange(tab.id)}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: '999px',
+                    border: '1.5px solid',
+                    borderColor: isSelected ? '#111111' : '#e5e7eb',
+                    background: isSelected ? '#111111' : '#ffffff',
+                    color: isSelected ? '#ffffff' : '#374151',
+                    fontSize: '0.82rem',
+                    fontWeight: isSelected ? 700 : 500,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: isSelected ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <span>{tab.label}</span>
+                  {tab.count > 0 && (
+                    <span style={{
+                      fontSize: '0.72rem',
+                      opacity: isSelected ? 0.85 : 0.6,
+                      fontWeight: 600
+                    }}>
+                      ({tab.count})
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Search Indicator */}
+          {searchQuery && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem', padding: '8px 14px', background: '#f5f3ef', borderRadius: '6px', width: 'fit-content' }}>
+              <span style={{ fontSize: '0.82rem', color: '#4b5563' }}>Showing results for <strong>"{searchQuery}"</strong> ({filteredProducts.length} items)</span>
+              <button 
+                type="button" 
+                onClick={() => {
+                  setSearchQuery('');
+                  if (typeof window !== 'undefined') {
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('q');
+                    window.history.replaceState({}, '', url.toString());
+                  }
+                }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', display: 'flex', alignItems: 'center', color: '#111' }}
+                title="Clear search"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Quick Accord Pill Filter Chips */}
           <div style={{ position: 'relative', zIndex: 40, marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               {/* All Chip */}
@@ -277,7 +421,7 @@ export const CollectionPageContent = () => {
                 All
               </button>
 
-              {/* Primary Accords (Fresh, Woody, Spicy, Leather) */}
+              {/* Primary Accords */}
               {PRIMARY_ACCORDS.map((accord) => {
                 const isActive = selectedChip === accord;
                 return (
@@ -348,7 +492,7 @@ export const CollectionPageContent = () => {
                       border: '1px solid #e5e7eb',
                       padding: '6px',
                       zIndex: 50,
-                      minWidth: '160px',
+                      minWidth: '150px',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '2px'
@@ -363,10 +507,10 @@ export const CollectionPageContent = () => {
                           setIsMoreAccordsOpen(false);
                         }}
                         style={{
-                          padding: '8px 14px',
-                          border: 'none',
-                          borderRadius: '6px',
                           background: selectedChip === acc ? '#f3f4f6' : 'transparent',
+                          border: 'none',
+                          borderRadius: '4px',
+                          padding: '8px 12px',
                           color: selectedChip === acc ? '#000000' : '#374151',
                           fontWeight: selectedChip === acc ? 700 : 500,
                           fontSize: '0.82rem',
@@ -394,7 +538,7 @@ export const CollectionPageContent = () => {
             </div>
           </div>
 
-          {/* Controls Bar: Sort & Filter Toggle (Matching Picture 2) */}
+          {/* Controls Bar: Sort & Filter Toggle */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>Sort by:</span>
@@ -444,7 +588,7 @@ export const CollectionPageContent = () => {
             </button>
           </div>
 
-          {/* Product Grid (4 columns desktop, 2 columns mobile) */}
+          {/* Product Grid */}
           <div 
             id="collection-catalog-grid"
             style={{
@@ -533,6 +677,41 @@ export const CollectionPageContent = () => {
               </div>
             </div>
 
+            {/* Collection Category Filter in Drawer */}
+            <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #f3f4f6' }}>
+              <h4 style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.75rem' }}>Collection Category</h4>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                {[
+                  { id: 'All', label: 'All Categories' },
+                  { id: 'Men', label: "Men's" },
+                  { id: 'Women', label: "Women's" },
+                  { id: 'Unisex', label: 'For Unisex' }
+                ].map(cat => {
+                  const isSelected = (cat.id === 'All' && isAll) || (!isAll && activeGender.toLowerCase() === cat.id.toLowerCase());
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => handleGenderChange(cat.id)}
+                      style={{
+                        padding: '8px 12px',
+                        borderRadius: '6px',
+                        border: '1.5px solid',
+                        borderColor: isSelected ? '#111111' : '#e5e7eb',
+                        background: isSelected ? '#111111' : '#ffffff',
+                        color: isSelected ? '#ffffff' : '#374151',
+                        fontSize: '0.82rem',
+                        fontWeight: isSelected ? 700 : 500,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Price Range Slider */}
             <div style={{ padding: '1.5rem 0', borderBottom: '1px solid #f3f4f6' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem' }}>
@@ -570,30 +749,13 @@ export const CollectionPageContent = () => {
                         />
                         <span>{accord}</span>
                       </div>
-                      <span style={{ color: '#9ca3af', fontSize: '0.75rem' }}>(30)</span>
                     </label>
                   );
                 })}
               </div>
             </div>
 
-            {/* Occasions */}
-            <div style={{ padding: '1.5rem 0', borderBottom: '1px solid #f3f4f6' }}>
-              <h4 style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '0.75rem' }}>Occasion</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {OCCASION_OPTIONS.map((occ) => (
-                  <label key={occ} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.84rem', color: '#374151', cursor: 'pointer' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <input type="checkbox" style={{ accentColor: '#000000' }} />
-                      <span>{occ}</span>
-                    </div>
-                    <span style={{ color: '#9ca3af', fontSize: '0.75rem' }}>(25)</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Apply Filters Button */}
+            {/* Apply Button */}
             <div style={{ marginTop: 'auto', paddingTop: '1.5rem' }}>
               <button
                 type="button"
@@ -630,6 +792,10 @@ export const CollectionPageLayout = () => {
       <CollectionPageContent />
       <BrandValuesFooter />
       <Footer />
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderTrackerModal />
+      <AuthModal />
       <ToastContainer />
     </div>
   );
