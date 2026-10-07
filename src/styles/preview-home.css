@@ -3,6 +3,14 @@
    Editorial Haute Parfumerie (Reference Style)
    ========================================================================== */
 
+@font-face {
+  font-family: 'Saitago';
+  src: url('/fonts/Saitago.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .prv-page {
   min-height: 100vh;
   background-color: #fcfbf9;
@@ -169,7 +177,8 @@
 }
 
 .prv-hero-headline {
-  font-family: 'Italiana', 'Cormorant Garamond', 'Bodoni Moda', serif;
+  font-family: 'Saitago', 'Italiana', 'Cormorant Garamond', serif;
+  font-feature-settings: 'liga' 1, 'dlig' 1;
   font-size: clamp(3.2rem, 5.8vw, 5.2rem);
   line-height: 1.05;
   font-weight: 400;
