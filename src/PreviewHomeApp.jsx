@@ -136,15 +136,19 @@ const PreviewHomeContent = () => {
           
           {/* Left Column: Editorial Headline & Subtitle */}
           <div className="prv-hero-content">
-            <div className="prv-hero-sparkle">
-              <Sparkles size={14} color="#926917" />
-              <span>Haute Parfumerie</span>
+            <div className="prv-hero-star-decor" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#000000">
+                <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
+              </svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#000000" style={{ marginBottom: '8px' }}>
+                <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
+              </svg>
             </div>
 
             <h1 className="prv-hero-headline">
-              Smell is a
-              <span className="sub-line">word • Perfume is</span>
-              <span className="bold-accent">literature</span>
+              <span className="hero-line-1">Smell is a</span>
+              <span className="hero-line-2">word <span className="dot-sep">•</span> Perfume is</span>
+              <span className="hero-line-3">literature</span>
             </h1>
 
             <p className="prv-hero-desc">
@@ -154,17 +158,17 @@ const PreviewHomeContent = () => {
             <a href="/collection.html" className="prv-pill-cta">
               <span>Shop Now</span>
               <div className="prv-pill-arrow">
-                <ArrowRight size={15} />
+                <ArrowRight size={14} />
               </div>
             </a>
           </div>
 
-          {/* Right Column: Hero Portrait Model */}
+          {/* Right Column: User Attached Luxury Fragrance Ritual Image */}
           <div className="prv-hero-image-col">
             <div className="prv-hero-portrait-frame">
               <img 
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&auto=format&fit=crop&q=85" 
-                alt="Haute Parfumerie Model" 
+                src="/images/hero-perfume-wrist.jpg" 
+                alt="Woman applying luxury fragrance to wrist" 
                 loading="eager"
               />
             </div>
