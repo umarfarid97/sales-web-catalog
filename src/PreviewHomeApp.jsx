@@ -194,9 +194,6 @@ const PreviewHomeContent = () => {
           <div className="prv-brand-item" title="Dolce & Gabbana">
             <img src="/brand-logos/dolce-gabbana.svg" alt="Dolce & Gabbana" className="prv-brand-logo prv-brand-dg" />
           </div>
-          <div className="prv-brand-item" title="Creed">
-            <img src="/brand-logos/creed.svg" alt="Creed" className="prv-brand-logo prv-brand-creed" />
-          </div>
         </div>
       </div>
 

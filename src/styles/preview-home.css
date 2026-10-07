@@ -321,13 +321,12 @@
   filter: brightness(0);
 }
 
-.prv-brand-dior { height: 23px; }
+.prv-brand-dior { height: 25px; }
 .prv-brand-tom-ford { height: 16px; }
-.prv-brand-chanel { height: 16px; }
-.prv-brand-calvin-klein { height: 17px; }
-.prv-brand-clinique { height: 18px; }
-.prv-brand-dg { height: 22px; }
-.prv-brand-creed { height: 26px; }
+.prv-brand-chanel { height: 28px; }
+.prv-brand-calvin-klein { height: 20px; }
+.prv-brand-clinique { height: 20px; }
+.prv-brand-dg { height: 23px; }
 
 .prv-brand-name {
   font-family: 'Bodoni Moda', 'Playfair Display', serif;
