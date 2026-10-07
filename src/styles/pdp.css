@@ -668,65 +668,64 @@
   letter-spacing: -0.01em;
 }
 
-/* Accord Bars */
-.pdp-dominant-accord-box {
-  background: #faf8f5;
-  border: 1px solid #ebdccb;
-  border-left: 3px solid #8c5319;
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
+/* Accords & Character Presentation (Minimalist Luxury - No Box) */
+.pdp-accords-column {
+  display: flex;
+  flex-direction: column;
 }
 
-.pdp-dominant-accord-label {
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #8c5319;
+.pdp-dominant-feature {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f0ede6;
+}
+
+.pdp-meta-label {
   display: block;
-  margin-bottom: 0.2rem;
-}
-
-.pdp-dominant-accord-value {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #111827;
-  font-family: var(--font-heading, sans-serif);
-  letter-spacing: -0.01em;
-}
-
-.pdp-main-accords-header {
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #6b7280;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.12em;
+  color: #8c5319;
+  margin-bottom: 0.4rem;
 }
 
-/* Main Accords Badges / Pills (No Bars) */
-.pdp-accords-pills-list {
+.pdp-dominant-heading {
+  font-family: var(--font-brand, 'Playfair Display', Georgia, serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.pdp-main-accords-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdp-accords-pills-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 0.2rem;
 }
 
-.pdp-accord-pill {
+.pdp-accord-chip {
   display: inline-flex;
   align-items: center;
   background: #faf8f5;
   color: #27272a;
   border: 1px solid #e7dfd5;
   padding: 6px 14px;
-  border-radius: 999px;
+  border-radius: 9999px;
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: all 0.2s ease;
 }
 
-.pdp-accord-pill:hover {
+.pdp-accord-chip:hover {
   background: #f0e9df;
   border-color: #d6c8b7;
   color: #111827;

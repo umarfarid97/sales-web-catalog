@@ -480,25 +480,25 @@ export const ProductDetailPage = () => {
             <div className="pdp-scent-profile-wrapper">
               <div className="pdp-scent-profile-layout">
                 
-                {/* Col 1: Dominant Accord & Main Accords */}
-                <div>
+                {/* Col 1: Dominant Accord & Main Accords (Clean & Unboxed) */}
+                <div className="pdp-accords-column">
                   <h3 className="pdp-section-card-title">Accords</h3>
                   
-                  {/* Dominant Accord Highlight Box */}
+                  {/* Dominant Accord (Unboxed Hero Heading) */}
                   {dominantAccord && (
-                    <div className="pdp-dominant-accord-box">
-                      <span className="pdp-dominant-accord-label">Dominant Accord</span>
-                      <div className="pdp-dominant-accord-value">{dominantAccord}</div>
+                    <div className="pdp-dominant-feature">
+                      <span className="pdp-meta-label">Dominant Accord</span>
+                      <div className="pdp-dominant-heading">{dominantAccord}</div>
                     </div>
                   )}
 
-                  {/* Main Accords Badges / Pills */}
+                  {/* Main Accords Badges / Chips */}
                   {mainAccords.length > 0 && (
-                    <div>
-                      <div className="pdp-main-accords-header">Main Accords</div>
-                      <div className="pdp-accords-pills-list">
+                    <div className="pdp-main-accords-section">
+                      <span className="pdp-meta-label">Main Accords</span>
+                      <div className="pdp-accords-pills-row">
                         {mainAccords.map((accordName, i) => (
-                          <span key={i} className="pdp-accord-pill">
+                          <span key={i} className="pdp-accord-chip">
                             {accordName}
                           </span>
                         ))}
