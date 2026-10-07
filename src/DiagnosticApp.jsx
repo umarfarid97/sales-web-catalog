@@ -4,7 +4,6 @@ import { StoreProvider } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { BrandValuesFooter } from './components/common/BrandValuesFooter';
-import { MobileBottomNav } from './components/common/MobileBottomNav';
 import { ToastContainer } from './components/common/ToastContainer';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AuthModal } from './components/common/AuthModal';
@@ -47,7 +46,6 @@ const DiagnosticLayout = () => {
 
       <Footer />
 
-      <MobileBottomNav />
       <ToastContainer />
     </div>
   );

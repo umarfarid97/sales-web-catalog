@@ -4,7 +4,6 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { BrandValuesFooter } from './components/common/BrandValuesFooter';
-import { MobileBottomNav } from './components/common/MobileBottomNav';
 import { CartDrawer } from './components/customer/CartDrawer';
 import { CheckoutModal } from './components/customer/CheckoutModal';
 import { OrderTrackerModal } from './components/customer/OrderTrackerModal';
@@ -631,7 +630,6 @@ export const CollectionPageLayout = () => {
       <CollectionPageContent />
       <BrandValuesFooter />
       <Footer />
-      <MobileBottomNav />
       <ToastContainer />
     </div>
   );
