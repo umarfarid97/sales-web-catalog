@@ -669,6 +669,42 @@
 }
 
 /* Accord Bars */
+.pdp-dominant-accord-box {
+  background: #faf8f5;
+  border: 1px solid #ebdccb;
+  border-left: 3px solid #8c5319;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.pdp-dominant-accord-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #8c5319;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.pdp-dominant-accord-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  font-family: var(--font-heading, sans-serif);
+  letter-spacing: -0.01em;
+}
+
+.pdp-main-accords-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+}
+
 .pdp-accords-list {
   display: flex;
   flex-direction: column;
@@ -677,15 +713,16 @@
 
 .pdp-accord-row {
   display: grid;
-  grid-template-columns: 85px 1fr 36px;
+  grid-template-columns: minmax(115px, max-content) 1fr;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   font-size: 0.84rem;
 }
 
 .pdp-accord-name {
   color: #374151;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .pdp-accord-track {

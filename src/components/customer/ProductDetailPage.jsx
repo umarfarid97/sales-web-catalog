@@ -200,32 +200,17 @@ export const ProductDetailPage = () => {
     }));
   }, [product]);
 
-  // Dynamic Accords Intensity Profile
-  const accords = useMemo(() => {
+  // Authentic Accords from DB / Excel
+  const dominantAccord = useMemo(() => {
+    return product?.dominantAccord || product?.specs?.dominantAccord || product?.character || '';
+  }, [product]);
+
+  const mainAccords = useMemo(() => {
     if (!product) return [];
-    const traits = Array.isArray(product.traits) ? product.traits : [];
-    const family = product.olfactoryFamily || '';
-
-    // Check key facets
-    const isWoody = traits.some(t => /wood|vetiver|cedar|oud/i.test(t)) || /wood|oud/i.test(family);
-    const isAmber = traits.some(t => /amber|oriental|balsam/i.test(t)) || /amber|oriental/i.test(family);
-    const isSpicy = traits.some(t => /spic|pepper|warm/i.test(t)) || /spic/i.test(family);
-    const isLeather = traits.some(t => /leather|smoke|smoky/i.test(t)) || /leather/i.test(family);
-    const isAromatic = traits.some(t => /aromatic|fougere|lavender/i.test(t)) || /blue|aromatic/i.test(family);
-    const isCitrus = traits.some(t => /citrus|bergamot|lemon/i.test(t)) || /citrus/i.test(family);
-    const isSweet = traits.some(t => /sweet|vanilla|gourmand/i.test(t)) || /sweet/i.test(family);
-    const isFresh = traits.some(t => /fresh|aquatic|clean/i.test(t)) || /fresh|aquatic/i.test(family);
-
-    return [
-      { name: 'Woody', score: isWoody ? 9 : 6, pct: isWoody ? '90%' : '60%' },
-      { name: 'Amber', score: isAmber ? 9 : isWoody ? 8 : 5, pct: isAmber ? '90%' : isWoody ? '80%' : '50%' },
-      { name: 'Spicy', score: isSpicy ? 9 : 8, pct: isSpicy ? '90%' : '80%' },
-      { name: 'Leather', score: isLeather ? 9 : 7, pct: isLeather ? '90%' : '70%' },
-      { name: 'Aromatic', score: isAromatic ? 8 : 6, pct: isAromatic ? '80%' : '60%' },
-      { name: 'Citrus', score: isCitrus ? 8 : 4, pct: isCitrus ? '80%' : '40%' },
-      { name: 'Sweet', score: isSweet ? 8 : 4, pct: isSweet ? '80%' : '40%' },
-      { name: 'Fresh', score: isFresh ? 8 : 3, pct: isFresh ? '80%' : '30%' }
-    ];
+    const list = product.mainAccords || product.specs?.mainAccords || product.traits || [];
+    if (Array.isArray(list)) return list.filter(Boolean);
+    if (typeof list === 'string') return list.split(/[;,]/).map(s => s.trim()).filter(Boolean);
+    return [];
   }, [product]);
 
   if (!product) {
@@ -261,8 +246,7 @@ export const ProductDetailPage = () => {
   const heartNote = String(product.pyramid?.heartNotes?.[0] || 'Damascena Rose');
   const baseNote = String(product.pyramid?.baseNotes?.[0] || 'Royal Woods');
 
-  // Visible accords based on accordion toggle
-  const visibleAccords = showAllAccords ? accords : accords.slice(0, 5);
+
 
 
 
@@ -494,36 +478,39 @@ export const ProductDetailPage = () => {
             <div className="pdp-scent-profile-wrapper">
               <div className="pdp-scent-profile-layout">
                 
-                {/* Col 1: Fragrance Profile (Accord Bars) */}
+                {/* Col 1: Dominant Accord & Main Accords */}
                 <div>
-                  <h3 className="pdp-section-card-title">Fragrance Profile</h3>
-                  <div className="pdp-accords-list">
-                    {visibleAccords.map((accord, i) => (
-                      <div key={i} className="pdp-accord-row">
-                        <span className="pdp-accord-name">{accord.name}</span>
-                        <div className="pdp-accord-track">
-                          <div 
-                            className="pdp-accord-fill" 
-                            style={{ width: accord.pct }}
-                          />
-                        </div>
-                        <span className="pdp-accord-score">{accord.score}/10</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="pdp-section-card-title">Accords</h3>
+                  
+                  {/* Dominant Accord Highlight Box */}
+                  {dominantAccord && (
+                    <div className="pdp-dominant-accord-box">
+                      <span className="pdp-dominant-accord-label">Dominant Accord</span>
+                      <div className="pdp-dominant-accord-value">{dominantAccord}</div>
+                    </div>
+                  )}
 
-                  {accords.length > 5 && (
-                    <button 
-                      type="button"
-                      className="pdp-accord-expand-btn"
-                      onClick={() => setShowAllAccords(!showAllAccords)}
-                    >
-                      {showAllAccords ? (
-                        <>View Less <ChevronUp size={14} /></>
-                      ) : (
-                        <>View More <ChevronDown size={14} /></>
-                      )}
-                    </button>
+                  {/* Main Accords List */}
+                  {mainAccords.length > 0 && (
+                    <div>
+                      <div className="pdp-main-accords-header">Main Accords</div>
+                      <div className="pdp-accords-list">
+                        {mainAccords.map((accordName, i) => {
+                          const pct = Math.max(35, 100 - i * 14);
+                          return (
+                            <div key={i} className="pdp-accord-row">
+                              <span className="pdp-accord-name">{accordName}</span>
+                              <div className="pdp-accord-track">
+                                <div 
+                                  className="pdp-accord-fill" 
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
                 </div>
 

@@ -87,6 +87,10 @@ export const formatProductFromDb = (row) => {
       { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0, isRefillable: true }
     ],
     features: Array.isArray(row.features) ? row.features : [],
+    dominantAccord: String(specs.dominantAccord || specs.character || ''),
+    mainAccords: Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0 
+      ? specs.mainAccords 
+      : (Array.isArray(specs.traits) && specs.traits.length > 0 ? specs.traits : traits),
     specs,
     images
   };
