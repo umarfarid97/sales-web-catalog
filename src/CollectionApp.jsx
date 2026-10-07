@@ -109,12 +109,11 @@ export const CollectionPageContent = () => {
       const priceB = Number(b.price) || 45;
       if (sortBy === 'price-low') return priceA - priceB;
       if (sortBy === 'price-high') return priceB - priceA;
-      if (sortBy === 'rating') return (Number(b.rating) || 5) - (Number(a.rating) || 5);
       // Default: best sellers (Tier S first)
       const tierRank = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
       const rankDiff = (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
       if (rankDiff !== 0) return rankDiff;
-      return (Number(b.reviewsCount) || 0) - (Number(a.reviewsCount) || 0);
+      return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
     });
   }, [products, activeGender, selectedChip, selectedAccords, priceMax, sortBy]);
 
@@ -400,7 +399,6 @@ export const CollectionPageContent = () => {
                 <option value="best-sellers">Best Sellers</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-                <option value="rating">Highest Rated</option>
               </select>
             </div>
 

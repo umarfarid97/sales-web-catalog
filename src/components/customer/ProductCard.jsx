@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Star } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
@@ -114,24 +113,14 @@ export const ProductCard = ({ product }) => {
         )}
       </div>
 
-      {/* 2. Price Row (Bold Price on Left, 5 Stars on Right) */}
+      {/* 2. Price Row */}
       <div 
         style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
           marginBottom: '6px'
         }}
       >
         <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1f140e', fontFamily: 'var(--font-brand, serif)' }}>
           RM{formattedPrice}
-        </div>
-
-        {/* 5 Warm Amber Stars */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="5.0 Rating">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} size={13} fill="#d97706" color="#d97706" strokeWidth={1} />
-          ))}
         </div>
       </div>
 

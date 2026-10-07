@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { 
   Heart, 
-  Star, 
   ChevronRight, 
   Maximize2, 
   X, 
@@ -324,17 +323,6 @@ export const ProductDetailPage = () => {
 
           <div className="pdp-product-subtitle">
             {product.concentration || 'Extrait de Parfum'}
-          </div>
-
-          {/* Star Rating */}
-          <div className="pdp-rating-row">
-            <div className="pdp-stars">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={15} fill="#f59e0b" color="#f59e0b" />
-              ))}
-            </div>
-            <span className="pdp-rating-number">{product.rating || '4.8'}</span>
-            <span className="pdp-rating-reviews">({product.reviewsCount || 124} reviews)</span>
           </div>
 
           {/* Editorial Italic Quote */}

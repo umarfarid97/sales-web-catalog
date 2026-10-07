@@ -361,27 +361,6 @@
   letter-spacing: 0.02em;
 }
 
-.pdp-rating-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.88rem;
-}
-
-.pdp-stars {
-  display: flex;
-  color: #f59e0b;
-}
-
-.pdp-rating-number {
-  font-weight: 700;
-  color: #111827;
-}
-
-.pdp-rating-reviews {
-  color: #6b7280;
-}
-
 .pdp-editorial-quote {
   font-family: var(--font-brand, 'Playfair Display', Georgia, serif);
   font-style: italic;

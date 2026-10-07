@@ -274,8 +274,8 @@ export const ProductManager = () => {
 
                       {/* Rating */}
                       <td>
-                        <span style={{ color: '#d97706', fontWeight: 700, fontSize: '0.85rem' }}>
-                          ★ {prod.rating} <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>({prod.reviewsCount})</span>
+                        <span style={{ color: prod.rating ? '#d97706' : '#9ca3af', fontWeight: 600, fontSize: '0.85rem' }}>
+                          {prod.rating ? `★ ${prod.rating} (${prod.reviewsCount || 0})` : '—'}
                         </span>
                       </td>
 

@@ -515,7 +515,7 @@ export const AnalyticsDashboard = () => {
               </h3>
             </div>
             <p style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '4px', marginBottom: 0 }}>
-              Ranked live by actual order quantity and customer reviews
+              Ranked live by actual order quantity and catalog popularity
             </p>
           </div>
           <button 
@@ -547,8 +547,8 @@ export const AnalyticsDashboard = () => {
                 </div>
                 <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>
                   {prod.isRealSale && prod.unitsSold > 0 
-                    ? `RM ${prod.revenue.toFixed(2)} revenue &bull; ★ ${prod.rating}`
-                    : `★ ${prod.rating} (${prod.reviewsCount} reviews)`}
+                    ? `RM ${prod.revenue.toFixed(2)} revenue`
+                    : `Catalog Tier ${prod.tier || 'A'}`}
                 </div>
               </div>
             </div>
