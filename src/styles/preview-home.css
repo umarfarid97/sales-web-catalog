@@ -607,18 +607,59 @@
 }
 
 @media (max-width: 640px) {
+  .prv-container {
+    padding: 0 1rem;
+  }
   .prv-nav-links, .prv-search-box {
     display: none;
   }
   .prv-hero-headline {
     font-size: 2.2rem;
   }
+  .prv-section {
+    padding: 2.25rem 0;
+  }
+  .prv-section-heading {
+    font-size: 1.75rem;
+    margin-bottom: 1.75rem;
+  }
   .prv-products-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .prv-card {
+    padding: 0.75rem;
+    border-radius: 6px;
+  }
+  .prv-card-image-box {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .prv-card-title {
+    font-size: 0.78rem;
+    line-height: 1.3;
+    min-height: 2.05rem;
+    margin-bottom: 0.25rem;
+  }
+  .prv-card-sub {
+    font-size: 0.68rem;
+    margin-bottom: 0.45rem;
+  }
+  .prv-card-bottom {
+    padding-top: 0.5rem;
+  }
+  .prv-card-price {
+    font-size: 0.92rem;
+  }
+  .prv-card-cart-btn {
+    width: 28px;
+    height: 28px;
   }
   .prv-brands-row {
-    gap: 1.5rem;
+    gap: 1.25rem;
     justify-content: center;
+  }
+  .prv-brand-item {
+    height: 32px;
   }
 }
