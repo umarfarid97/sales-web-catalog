@@ -181,29 +181,6 @@ export const ProductDetailModal = () => {
               </div>
             )}
 
-            {/* Structured Characteristic Facet Pills */}
-            {product.traits && product.traits.length > 0 && (
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
-                {product.traits.map((trait, tIdx) => (
-                  <span 
-                    key={tIdx} 
-                    style={{
-                      background: '#f4f4f5',
-                      color: '#27272a',
-                      fontSize: '0.7rem',
-                      fontWeight: 600,
-                      letterSpacing: '0.04em',
-                      padding: '3px 10px',
-                      borderRadius: '12px',
-                      border: '1px solid #e4e4e7'
-                    }}
-                  >
-                    {trait}
-                  </span>
-                ))}
-              </div>
-            )}
-
             <p style={{ fontStyle: 'italic', color: '#6b7280', fontSize: '0.92rem', marginBottom: '14px' }}>
               &ldquo;{product.tagline}&rdquo;
             </p>

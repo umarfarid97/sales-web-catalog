@@ -10,11 +10,7 @@ import {
   Minus, 
   ChevronDown, 
   ChevronUp, 
-  Clock, 
-  Radio, 
   Sparkles, 
-  Calendar, 
-  GlassWater,
   Check,
   MessageCircle
 } from 'lucide-react';
@@ -443,57 +439,6 @@ export const ProductDetailPage = () => {
                       </div>
                     </div>
                   )}
-                </div>
-
-                {/* Col 2: Characteristics & Wear */}
-                <div>
-                  <h3 className="pdp-section-card-title">Characteristics</h3>
-
-                  {/* 4 Performance Metrics */}
-                  <div className="pdp-specs-grid">
-                    <div className="pdp-spec-cell">
-                      <div className="pdp-spec-icon-box">
-                        <GlassWater size={17} />
-                      </div>
-                      <div className="pdp-spec-text-block">
-                        <span className="pdp-spec-title">Occasion</span>
-                        <span className="pdp-spec-value">
-                          {product.category === 'Pour Femme' || product.category === 'Women' ? 'Evening, Gala, Dates' : 'Night Out, Special Events'}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="pdp-spec-cell">
-                      <div className="pdp-spec-icon-box">
-                        <Calendar size={17} />
-                      </div>
-                      <div className="pdp-spec-text-block">
-                        <span className="pdp-spec-title">Season</span>
-                        <span className="pdp-spec-value">{product.season || 'Fall, Winter'}</span>
-                      </div>
-                    </div>
-
-                    <div className="pdp-spec-cell">
-                      <div className="pdp-spec-icon-box">
-                        <Clock size={17} />
-                      </div>
-                      <div className="pdp-spec-text-block">
-                        <span className="pdp-spec-title">Longevity</span>
-                        <span className="pdp-spec-value">{product.longevity || '8–10 Hours'}</span>
-                      </div>
-                    </div>
-
-                    <div className="pdp-spec-cell">
-                      <div className="pdp-spec-icon-box">
-                        <Radio size={17} />
-                      </div>
-                      <div className="pdp-spec-text-block">
-                        <span className="pdp-spec-title">Projection</span>
-                        <span className="pdp-spec-value">{product.sillage?.split(' ')?.[0] || 'Strong'}</span>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
 
               </div>

@@ -218,17 +218,6 @@ const PreviewHomeContent = () => {
                   <div className="prv-card-sub">
                     {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
                   </div>
-
-                  <div className="prv-card-bottom">
-                    <span className="prv-card-price">RM{Number(prod.price || 45).toFixed(2)}</span>
-                    <button 
-                      className="prv-card-cart-btn" 
-                      onClick={(e) => handleQuickAdd(e, prod)}
-                      title="Add to Bag"
-                    >
-                      <ShoppingBag size={14} />
-                    </button>
-                  </div>
                 </div>
               </div>
             ))}
@@ -315,17 +304,6 @@ const PreviewHomeContent = () => {
                   <h3 className="prv-card-title">{cleanPerfumeName(prod.name)}</h3>
                   <div className="prv-card-sub">
                     {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
-                  </div>
-
-                  <div className="prv-card-bottom">
-                    <span className="prv-card-price">RM{Number(prod.price || 45).toFixed(2)}</span>
-                    <button 
-                      className="prv-card-cart-btn" 
-                      onClick={(e) => handleQuickAdd(e, prod)}
-                      title="Add to Bag"
-                    >
-                      <ShoppingBag size={14} />
-                    </button>
                   </div>
                 </div>
               </div>

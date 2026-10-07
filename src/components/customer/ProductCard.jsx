@@ -19,7 +19,6 @@ export const ProductCard = ({ product }) => {
   };
 
   const displayName = cleanPerfumeName(product.name);
-  const formattedPrice = Number(product.price || 45).toFixed(2);
 
   return (
     <div 
@@ -139,7 +138,7 @@ export const ProductCard = ({ product }) => {
         style={{ 
           fontSize: '0.80rem', 
           color: '#786558', 
-          margin: '0 0 10px',
+          margin: '0',
           lineHeight: 1.35,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -150,29 +149,6 @@ export const ProductCard = ({ product }) => {
       >
         {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
       </p>
-
-      {/* 4. Price (Follows below inspired by, NOT bold text) */}
-      <div 
-        style={{ 
-          marginTop: 'auto',
-          paddingTop: '6px',
-          borderTop: '1px solid #f6f3ee',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <span
-          style={{ 
-            fontSize: '0.96rem', 
-            fontWeight: 500, // Not bold text
-            color: '#2b211a', 
-            fontFamily: 'var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif)'
-          }}
-        >
-          RM{formattedPrice}
-        </span>
-      </div>
 
     </div>
   );

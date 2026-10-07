@@ -609,20 +609,11 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. SCENT PROFILE 2-COLUMN GRID
+   6. SCENT PROFILE ACCORDS SECTION
    -------------------------------------------------------------------------- */
 .pdp-scent-profile-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
-  align-items: start;
-}
-
-@media (max-width: 768px) {
-  .pdp-scent-profile-layout {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+  display: block;
+  max-width: 720px;
 }
 
 .pdp-section-card-title {
