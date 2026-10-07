@@ -371,15 +371,19 @@ const PreviewHomeContent = () => {
             {/* Column 3: Customer Care */}
             <div className="prv-footer-col">
               <h4 className="prv-footer-heading">Customer Care</h4>
-              <a 
-                href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20would%20like%20assistance%20with%20your%20perfume%20catalog." 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="prv-footer-wa-pill"
-              >
-                <MessageCircle size={16} />
-                <span>WhatsApp: 018-286 8402</span>
-              </a>
+              <ul className="prv-footer-links">
+                <li>
+                  <a 
+                    href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20would%20like%20assistance%20with%20your%20perfume%20catalog." 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="prv-footer-wa-link"
+                  >
+                    <MessageCircle size={15} />
+                    <span>WhatsApp: 018-286 8402</span>
+                  </a>
+                </li>
+              </ul>
             </div>
 
           </div>
