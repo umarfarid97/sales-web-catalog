@@ -193,29 +193,16 @@ export const MenCollectionContent = () => {
             <span style={{ color: '#111827', fontWeight: 600 }}>Men</span>
           </div>
 
-          {/* Men's Collection Hero Banner (Matching Picture 2) */}
-          <div className="editorial-hero-banner">
-            {/* Deep dark protective scrim preventing any camouflage with model portrait */}
-            <div className="editorial-hero-scrim" />
-
-            {/* Ambient warm glow */}
-            <div 
-              style={{
-                position: 'absolute',
-                left: '5%',
-                top: '20%',
-                width: '240px',
-                height: '240px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, rgba(0,0,0,0) 70%)',
-                filter: 'blur(40px)',
-                pointerEvents: 'none',
-                zIndex: 2
-              }}
-            />
-
-            {/* Left Editorial Text Column (Matching Picture 2) */}
-            <div className="editorial-hero-text">
+          {/* Men's Collection Hero Banner (No Black Tint) */}
+          <div 
+            className="editorial-hero-banner"
+            style={{
+              backgroundImage: 'url(/images/hero-men.jpg)',
+              backgroundPosition: 'center 20%'
+            }}
+          >
+            {/* Left Editorial Text Card */}
+            <div className="editorial-hero-glass-card">
               <h1 className="editorial-hero-title">
                 Men&apos;s
                 <br />
@@ -225,15 +212,6 @@ export const MenCollectionContent = () => {
                 Bold. Refined. Confident.
               </p>
             </div>
-
-            {/* Right Visual: Male Model with smooth left fade */}
-            <div 
-              className="editorial-hero-media"
-              style={{
-                backgroundImage: 'url(/images/hero-men.jpg)',
-                backgroundPosition: 'center 20%'
-              }}
-            />
           </div>
 
           {/* Quick Accord Pill Filter Chips (Matching Picture 2: All, Fresh, Woody, Spicy, Leather, More v) */}

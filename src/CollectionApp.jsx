@@ -288,27 +288,16 @@ export const CollectionPageContent = () => {
             </span>
           </div>
 
-          {/* Collection Hero Banner */}
-          <div className="editorial-hero-banner">
-            <div className="editorial-hero-scrim" />
-
-            <div 
-              style={{
-                position: 'absolute',
-                left: '5%',
-                top: '20%',
-                width: '240px',
-                height: '240px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, rgba(0,0,0,0) 70%)',
-                filter: 'blur(40px)',
-                pointerEvents: 'none',
-                zIndex: 2
-              }}
-            />
-
-            {/* Left Editorial Text Column */}
-            <div className="editorial-hero-text">
+          {/* Collection Hero Banner (No Black Tint) */}
+          <div 
+            className="editorial-hero-banner"
+            style={{
+              backgroundImage: `url(${bannerData.bgImage})`,
+              backgroundPosition: bannerData.bgPosition || 'center 35%'
+            }}
+          >
+            {/* Left Editorial Text Card */}
+            <div className="editorial-hero-glass-card">
               <h1 className="editorial-hero-title">
                 {bannerData.title1}
                 <br />
@@ -318,15 +307,6 @@ export const CollectionPageContent = () => {
                 {bannerData.subtitle}
               </p>
             </div>
-
-            {/* Right Visual: Model / Perfume with smooth left fade */}
-            <div 
-              className="editorial-hero-media"
-              style={{
-                backgroundImage: `url(${bannerData.bgImage})`,
-                backgroundPosition: bannerData.bgPosition || 'center 20%'
-              }}
-            />
           </div>
 
           {/* Category Tabs: All Fragrances, Men's, Women's, Unisex */}
