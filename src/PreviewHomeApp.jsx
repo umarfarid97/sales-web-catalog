@@ -176,13 +176,27 @@ const PreviewHomeContent = () => {
       {/* ---------------- 3. BRAND LOGOS STRIP ---------------- */}
       <div className="prv-brands-strip">
         <div className="prv-container prv-brands-row">
-          <span className="prv-brand-name">Dior</span>
-          <span className="prv-brand-name" style={{ fontWeight: 800 }}>TOM FORD</span>
-          <span className="prv-brand-name">CHANEL</span>
-          <span className="prv-brand-name">Calvin Klein</span>
-          <span className="prv-brand-name">CLINIQUE</span>
-          <span className="prv-brand-name">D&G</span>
-          <span className="prv-brand-name">CREED</span>
+          <div className="prv-brand-item" title="Dior">
+            <img src="/brand-logos/dior.svg" alt="Dior" className="prv-brand-logo prv-brand-dior" />
+          </div>
+          <div className="prv-brand-item" title="Tom Ford">
+            <img src="/brand-logos/tom-ford.svg" alt="Tom Ford" className="prv-brand-logo prv-brand-tom-ford" />
+          </div>
+          <div className="prv-brand-item" title="Chanel">
+            <img src="/brand-logos/chanel.svg" alt="Chanel" className="prv-brand-logo prv-brand-chanel" />
+          </div>
+          <div className="prv-brand-item" title="Calvin Klein">
+            <img src="/brand-logos/calvin-klein.svg" alt="Calvin Klein" className="prv-brand-logo prv-brand-calvin-klein" />
+          </div>
+          <div className="prv-brand-item" title="Clinique">
+            <img src="/brand-logos/clinique.svg" alt="Clinique" className="prv-brand-logo prv-brand-clinique" />
+          </div>
+          <div className="prv-brand-item" title="Dolce & Gabbana">
+            <img src="/brand-logos/dolce-gabbana.svg" alt="Dolce & Gabbana" className="prv-brand-logo prv-brand-dg" />
+          </div>
+          <div className="prv-brand-item" title="Creed">
+            <img src="/brand-logos/creed.svg" alt="Creed" className="prv-brand-logo prv-brand-creed" />
+          </div>
         </div>
       </div>
 

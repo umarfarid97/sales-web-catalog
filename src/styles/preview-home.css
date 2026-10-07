@@ -294,6 +294,41 @@
   gap: 2.5rem;
 }
 
+.prv-brand-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  opacity: 0.85;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.prv-brand-item:hover {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.prv-brand-logo {
+  object-fit: contain;
+  display: block;
+  filter: brightness(0.12);
+  transition: filter 0.25s ease;
+}
+
+.prv-brand-item:hover .prv-brand-logo {
+  filter: brightness(0);
+}
+
+.prv-brand-dior { height: 23px; }
+.prv-brand-tom-ford { height: 16px; }
+.prv-brand-chanel { height: 16px; }
+.prv-brand-calvin-klein { height: 17px; }
+.prv-brand-clinique { height: 18px; }
+.prv-brand-dg { height: 22px; }
+.prv-brand-creed { height: 26px; }
+
 .prv-brand-name {
   font-family: 'Bodoni Moda', 'Playfair Display', serif;
   font-size: 1.25rem;
