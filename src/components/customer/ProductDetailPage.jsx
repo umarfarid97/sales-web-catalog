@@ -167,16 +167,18 @@ export const ProductDetailPage = () => {
     };
   }, []);
 
-  // Price calculations based on selected size
-  const priceBySize = useMemo(() => {
-    if (!product) return { '30ml': 0, '50ml': 0, '100ml': 0 };
-    const base = Number(product.price) || 189;
-    return {
-      '30ml': Math.round(base * 0.63),
-      '50ml': Math.round(base * 0.82),
-      '100ml': base
-    };
-  }, [product]);
+  // Standardized prices across all perfumes: 30ml = RM45, 50ml = RM65, 100ml = RM125
+  const priceBySize = useMemo(() => ({
+    '30ml': 45,
+    '50ml': 65,
+    '100ml': 125
+  }), []);
+
+  const originalPriceBySize = useMemo(() => ({
+    '30ml': 65,
+    '50ml': 95,
+    '100ml': 175
+  }), []);
 
   const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
   const totalPrice = currentUnitPrice * quantity;
@@ -393,7 +395,7 @@ export const ProductDetailPage = () => {
             <span className="pdp-price-size-indicator">({selectedSize})</span>
             {product.originalPrice && (
               <span className="pdp-price-original">
-                RM{Math.round(product.originalPrice * (selectedSize === '30ml' ? 0.63 : selectedSize === '50ml' ? 0.82 : 1))}
+                RM{originalPriceBySize[selectedSize] || 65}
               </span>
             )}
           </div>

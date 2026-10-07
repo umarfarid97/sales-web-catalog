@@ -1104,9 +1104,9 @@ export const StoreProvider = ({ children }) => {
         baseNotes: ['Royal Woods', 'Bourbon Vanilla']
       },
       sizes: productData.sizes || [
-        { label: '30 ml Travel Spray', ml: 30, priceMultiplier: 0.55 },
-        { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.78 },
-        { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0 }
+        { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
+        { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
+        { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
       ],
       features: productData.features || ['Valenszo Luxury Perfume', 'Eco-Friendly Refillable Bottle'],
       specs: productData.specs || { concentration: 'Extrait de Parfum (30%)', longevity: '14+ Hours' },

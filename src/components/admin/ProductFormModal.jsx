@@ -125,9 +125,9 @@ export const ProductFormModal = () => {
         baseNotes: formData.baseNotes.split(',').map((s) => s.trim()).filter(Boolean)
       },
       sizes: [
-        { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.72 },
-        { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0 },
-        { label: '10 ml Travel Atomizer', ml: 10, priceMultiplier: 0.28 }
+        { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
+        { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
+        { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
       ],
       images: [formData.imageUrl]
     };

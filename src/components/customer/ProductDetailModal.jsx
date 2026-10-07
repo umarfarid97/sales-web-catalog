@@ -31,17 +31,14 @@ export const ProductDetailModal = () => {
     ? product.images
     : (product.image ? [product.image] : ['https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80']);
 
-  const sizes = Array.isArray(product.sizes) && product.sizes.length > 0 
-    ? product.sizes 
-    : [
-        { label: '30 ml', ml: 30, priceMultiplier: 0.45, isRefillable: false },
-        { label: '60 ml', ml: 60, priceMultiplier: 0.75, isRefillable: true },
-        { label: '100 ml', ml: 100, priceMultiplier: 1.0, isRefillable: true },
-        { label: '200 ml Refillable', ml: 200, priceMultiplier: 1.68, isRefillable: true }
-      ];
+  const sizes = [
+    { label: '30 ml Travel Atomizer', ml: 30, price: 45 },
+    { label: '50 ml Haute Flacon', ml: 50, price: 65 },
+    { label: '100 ml Collector Flacon', ml: 100, price: 125 }
+  ];
 
   const currentSizeObj = sizes[selectedSizeIndex] || sizes[0];
-  const dynamicPrice = Math.round((Number(product.price) || 45) * (Number(currentSizeObj?.priceMultiplier) || 1.0));
+  const dynamicPrice = currentSizeObj.price || 45;
 
 
 
@@ -264,7 +261,7 @@ export const ProductDetailModal = () => {
                   >
                     <span>{s.label}</span>
                     <span style={{ fontSize: '0.72rem', opacity: selectedSizeIndex === idx ? 0.9 : 0.6 }}>
-                      RM {Math.round(product.price * s.priceMultiplier).toFixed(2)}
+                      RM {s.price.toFixed(2)}
                     </span>
                   </button>
                 ))}

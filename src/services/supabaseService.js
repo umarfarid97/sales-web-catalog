@@ -82,9 +82,9 @@ export const formatProductFromDb = (row) => {
       baseNotes: Array.isArray(specs.pyramid?.baseNotes) ? specs.pyramid.baseNotes : ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
     },
     sizes: Array.isArray(specs.sizes) && specs.sizes.length > 0 ? specs.sizes : [
-      { label: '30 ml Travel Spray', ml: 30, priceMultiplier: 0.55, isRefillable: true },
-      { label: '50 ml Bottle', ml: 50, priceMultiplier: 0.78, isRefillable: true },
-      { label: '100 ml Bottle', ml: 100, priceMultiplier: 1.0, isRefillable: true }
+      { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
+      { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
+      { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
     ],
     features: Array.isArray(row.features) ? row.features : [],
     dominantAccord: String(specs.dominantAccord || specs.character || ''),
