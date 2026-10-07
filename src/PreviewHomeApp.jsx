@@ -239,40 +239,52 @@ const PreviewHomeContent = () => {
       <section className="prv-collage-section">
         <div className="prv-container prv-collage-grid">
           
-          {/* Tile 1: Left Tall Model with Bottle */}
-          <div className="prv-collage-tall-tile">
+          {/* Tile 1: 3rd picture -> Unisex Perfume Page */}
+          <a 
+            href="/collection.html?gender=Unisex" 
+            className="prv-collage-tall-tile"
+            aria-label="Shop Unisex Perfume Collection"
+          >
             <img 
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&auto=format&fit=crop&q=85" 
-              alt="Model with Luxury Perfume" 
+              src="/images/collage-unisex.jpg" 
+              alt="Unisex Perfume Collection" 
             />
-            <a href="/collection.html" className="prv-tile-overlay-btn">
-              Shop Now
-            </a>
-          </div>
+            <span className="prv-tile-overlay-btn">
+              Shop Unisex
+            </span>
+          </a>
 
           {/* Right Stack: Two Tiles */}
           <div className="prv-collage-right-stack">
-            {/* Tile 2: Misting Fragrance Spray */}
-            <div className="prv-collage-wide-tile">
+            {/* Tile 2: 1st picture -> Men Perfume Page */}
+            <a 
+              href="/men.html" 
+              className="prv-collage-wide-tile"
+              aria-label="Shop Men's Perfume Collection"
+            >
               <img 
-                src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80" 
-                alt="Spray Atomizer Mist" 
+                src="/images/collage-men.jpg" 
+                alt="Men's Perfume Collection" 
               />
-              <a href="/collection.html?gender=women" className="prv-tile-overlay-btn">
-                Shop Now
-              </a>
-            </div>
+              <span className="prv-tile-overlay-btn">
+                Shop Men
+              </span>
+            </a>
 
-            {/* Tile 3: Perfume Flacon on Pedestal */}
-            <div className="prv-collage-wide-tile">
+            {/* Tile 3: 2nd picture -> Women Perfume Page */}
+            <a 
+              href="/women.html" 
+              className="prv-collage-wide-tile"
+              aria-label="Shop Women's Perfume Collection"
+            >
               <img 
-                src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=900&auto=format&fit=crop&q=80" 
-                alt="Perfume Flacon Pedestal" 
+                src="/images/collage-women.jpg" 
+                alt="Women's Perfume Collection" 
               />
-              <a href="/collection.html?gender=men" className="prv-tile-overlay-btn">
-                Shop Now
-              </a>
-            </div>
+              <span className="prv-tile-overlay-btn">
+                Shop Women
+              </span>
+            </a>
           </div>
 
         </div>

@@ -74,8 +74,17 @@ export const CollectionPageContent = () => {
 
       // Gender filter
       const pId = String(p.id || '');
-      const pGender = p.gender || (p.category === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') ? 'Women' : 'Men');
-      if (activeGender && pGender !== activeGender) return false;
+      const pCat = String(p.category || '');
+      const pGender = p.gender || (
+        pCat === 'Pour Femme' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom')
+          ? 'Women'
+          : (pCat.toLowerCase().includes('unisex') || pCat.toLowerCase().includes('niche') || pId.startsWith('vlz-uni')
+            ? 'Unisex'
+            : 'Men')
+      );
+      if (activeGender && activeGender.toLowerCase() !== 'all') {
+        if (pGender.toLowerCase() !== activeGender.toLowerCase()) return false;
+      }
 
       // Quick chip accord filter
       if (selectedChip !== 'All') {
@@ -146,11 +155,18 @@ export const CollectionPageContent = () => {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const bannerData = activeGender === 'Women' ? {
+  const isUnisex = activeGender && activeGender.toLowerCase() === 'unisex';
+  const isWomen = activeGender && activeGender.toLowerCase() === 'women';
+  const bannerData = isWomen ? {
     title1: "Women's",
     title2: "Collection",
     subtitle: "Elegant. Feminine. Unique.",
     bgImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80"
+  } : isUnisex ? {
+    title1: "Unisex",
+    title2: "Collection",
+    subtitle: "Harmonious. Versatile. Distinctive.",
+    bgImage: "/images/collage-unisex.jpg"
   } : {
     title1: "Men's",
     title2: "Collection",
