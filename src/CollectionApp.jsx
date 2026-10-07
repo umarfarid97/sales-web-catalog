@@ -230,22 +230,26 @@ export const CollectionPageContent = () => {
     title1: "All",
     title2: "Collections",
     subtitle: "Complete library of artisanal extrait de parfum across all categories.",
-    bgImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80"
+    bgImage: "/images/hero-all-collection.jpg",
+    bgPosition: "center 45%"
   } : isWomen ? {
     title1: "Women's",
     title2: "Collection",
     subtitle: "Elegant. Feminine. Unique.",
-    bgImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80"
+    bgImage: "/images/hero-women.jpg",
+    bgPosition: "center 20%"
   } : isUnisex ? {
     title1: "Unisex",
     title2: "Collection",
     subtitle: "Harmonious. Versatile. Distinctive.",
-    bgImage: "/images/collage-unisex.jpg"
+    bgImage: "/images/hero-unisex.jpg",
+    bgPosition: "center 25%"
   } : {
     title1: "Men's",
     title2: "Collection",
     subtitle: "Bold. Refined. Confident.",
-    bgImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80"
+    bgImage: "/images/hero-men.jpg",
+    bgPosition: "center 20%"
   };
 
   const [isMoreAccordsOpen, setIsMoreAccordsOpen] = useState(false);
@@ -320,7 +324,7 @@ export const CollectionPageContent = () => {
               className="editorial-hero-media"
               style={{
                 backgroundImage: `url(${bannerData.bgImage})`,
-                backgroundPosition: isAll ? 'center center' : 'center 15%'
+                backgroundPosition: bannerData.bgPosition || 'center 20%'
               }}
             />
           </div>

@@ -230,8 +230,8 @@ export const WomenCollectionContent = () => {
             <div 
               className="editorial-hero-media"
               style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1000&auto=format&fit=crop&q=80)',
-                backgroundPosition: 'center 15%'
+                backgroundImage: 'url(/images/hero-women.jpg)',
+                backgroundPosition: 'center 20%'
               }}
             />
           </div>

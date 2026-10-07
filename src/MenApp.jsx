@@ -226,12 +226,12 @@ export const MenCollectionContent = () => {
               </p>
             </div>
 
-            {/* Right Visual: Male Model with smooth left fade (Matching Picture 2) */}
+            {/* Right Visual: Male Model with smooth left fade */}
             <div 
               className="editorial-hero-media"
               style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1000&auto=format&fit=crop&q=80)',
-                backgroundPosition: 'center 15%'
+                backgroundImage: 'url(/images/hero-men.jpg)',
+                backgroundPosition: 'center 20%'
               }}
             />
           </div>
