@@ -135,14 +135,7 @@ const PreviewHomeContent = () => {
           
           {/* Left Column: Editorial Headline & Subtitle */}
           <div className="prv-hero-content">
-            <div className="prv-hero-star-decor" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="#000000">
-                <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
-              </svg>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="#000000" style={{ marginBottom: '8px' }}>
-                <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
-              </svg>
-            </div>
+
 
             <h1 className="prv-hero-headline">
               <span className="hero-line-1">Smell is a</span>
