@@ -675,11 +675,6 @@ export const HeroBanner = () => {
                           <span style={{ fontSize: 'clamp(1.35rem, 2.6vw, 1.85rem)', fontWeight: 800, color: '#ffffff', textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}>
                             RM {Number(slide.price).toFixed(2)}
                           </span>
-                          {slide.originalPrice > slide.price && (
-                            <span style={{ fontSize: '0.88rem', color: '#9ca3af', textDecoration: 'line-through' }}>
-                              RM {Number(slide.originalPrice).toFixed(2)}
-                            </span>
-                          )}
                         </div>
                         <div style={{ fontSize: '0.72rem', color: 'var(--dior-gold, #c5a059)', fontWeight: 700, letterSpacing: '0.04em' }}>
                           Extrait de Parfum (30%)

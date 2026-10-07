@@ -143,12 +143,6 @@ export const ProductDetailPage = () => {
     '100ml': 125
   }), []);
 
-  const originalPriceBySize = useMemo(() => ({
-    '30ml': 65,
-    '50ml': 95,
-    '100ml': 175
-  }), []);
-
   const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
   const totalPrice = currentUnitPrice * quantity;
 
@@ -352,11 +346,6 @@ export const ProductDetailPage = () => {
           <div className="pdp-price-row">
             <span className="pdp-price-current">RM{currentUnitPrice}</span>
             <span className="pdp-price-size-indicator">({selectedSize})</span>
-            {product.originalPrice && (
-              <span className="pdp-price-original">
-                RM{originalPriceBySize[selectedSize] || 65}
-              </span>
-            )}
           </div>
 
           {/* Size Pills */}
@@ -515,26 +504,6 @@ export const ProductDetailPage = () => {
                     </div>
                   </div>
 
-                </div>
-
-                {/* Col 3: High Fashion Campaign Card */}
-                <div className="pdp-campaign-col">
-                  <div 
-                    className="pdp-campaign-card"
-                    style={{
-                      backgroundImage: product.gender === 'Women' 
-                        ? 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80)'
-                        : 'url(https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&auto=format&fit=crop&q=80)'
-                    }}
-                  >
-                    <div className="pdp-campaign-overlay" />
-                    <div className="pdp-campaign-content">
-                      <div className="pdp-campaign-slogan">CONFIDENCE HAS A SCENT</div>
-                      <div className="pdp-campaign-caption">
-                        {product.name}. For what's next.
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
               </div>
