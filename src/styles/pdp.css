@@ -705,67 +705,31 @@
   margin-bottom: 0.75rem;
 }
 
-.pdp-accords-list {
+/* Main Accords Badges / Pills (No Bars) */
+.pdp-accords-pills-list {
   display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.pdp-accord-row {
-  display: grid;
-  grid-template-columns: minmax(115px, max-content) 1fr;
+.pdp-accord-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
+  background: #faf8f5;
+  color: #27272a;
+  border: 1px solid #e7dfd5;
+  padding: 6px 14px;
+  border-radius: 999px;
   font-size: 0.84rem;
-}
-
-.pdp-accord-name {
-  color: #374151;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.pdp-accord-track {
-  height: 7px;
-  background: #f0ece6;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.pdp-accord-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #b38b62 0%, #875c32 100%);
-  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.pdp-accord-score {
-  color: #6b7280;
-  font-size: 0.75rem;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  font-weight: 500;
-}
-
-.pdp-accord-expand-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  padding: 10px 0;
-  background: none;
-  border: none;
-  color: #111827;
-  font-size: 0.82rem;
   font-weight: 600;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  transition: color 0.2s;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
 }
 
-.pdp-accord-expand-btn:hover {
-  color: #875c32;
+.pdp-accord-pill:hover {
+  background: #f0e9df;
+  border-color: #d6c8b7;
+  color: #111827;
 }
 
 /* Key Notes Visual Swatches */

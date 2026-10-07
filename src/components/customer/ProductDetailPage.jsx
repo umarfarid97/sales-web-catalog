@@ -490,25 +490,16 @@ export const ProductDetailPage = () => {
                     </div>
                   )}
 
-                  {/* Main Accords List */}
+                  {/* Main Accords Badges / Pills */}
                   {mainAccords.length > 0 && (
                     <div>
                       <div className="pdp-main-accords-header">Main Accords</div>
-                      <div className="pdp-accords-list">
-                        {mainAccords.map((accordName, i) => {
-                          const pct = Math.max(35, 100 - i * 14);
-                          return (
-                            <div key={i} className="pdp-accord-row">
-                              <span className="pdp-accord-name">{accordName}</span>
-                              <div className="pdp-accord-track">
-                                <div 
-                                  className="pdp-accord-fill" 
-                                  style={{ width: `${pct}%` }}
-                                />
-                              </div>
-                            </div>
-                          );
-                        })}
+                      <div className="pdp-accords-pills-list">
+                        {mainAccords.map((accordName, i) => (
+                          <span key={i} className="pdp-accord-pill">
+                            {accordName}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   )}
