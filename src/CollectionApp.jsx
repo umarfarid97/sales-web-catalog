@@ -626,7 +626,7 @@ export const CollectionPageContent = () => {
 
 export const CollectionPageLayout = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#ffffff', color: '#111827' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fcfbf9', color: '#111827' }}>
       <Navbar />
       <CollectionPageContent />
       <BrandValuesFooter />

@@ -417,3 +417,14 @@
     display: none;
   }
 }
+
+/* Revamped Luxury Navbar Responsiveness */
+@media (max-width: 900px) {
+  .navbar-desktop-nav,
+  .navbar-desktop-search {
+    display: none !important;
+  }
+  .navbar-mobile-toggle {
+    display: flex !important;
+  }
+}

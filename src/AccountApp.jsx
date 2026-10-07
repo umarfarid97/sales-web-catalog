@@ -26,7 +26,7 @@ export const AccountPageContent = () => {
 
 const AccountLayout = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fcfbf9', color: '#111827' }}>
       {/* Universal Sticky Header */}
       <Navbar />
 
