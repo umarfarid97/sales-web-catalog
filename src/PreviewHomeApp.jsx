@@ -4,8 +4,7 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { CartDrawer } from './components/customer/CartDrawer';
 import { ProductDetailModal } from './components/customer/ProductDetailModal';
 import { ToastContainer } from './components/common/ToastContainer';
-import { BrandValuesFooter } from './components/common/BrandValuesFooter';
-import { Footer } from './components/common/Footer';
+
 import { 
   Search, 
   ShoppingBag, 
@@ -330,9 +329,123 @@ const PreviewHomeContent = () => {
         </div>
       </section>
 
-      {/* Brand Values Banner & Footer */}
-      <BrandValuesFooter />
-      <Footer />
+      {/* 6. EDITORIAL PRE-FOOTER INVITATION */}
+      <section className="prv-footer-invitation">
+        <div className="prv-container prv-footer-invitation-inner">
+          <div className="prv-invitation-left">
+            <span className="prv-invitation-tag">Bespoke Fragrance Consultation</span>
+            <h3 className="prv-invitation-title">Find Your Signature Note</h3>
+            <p className="prv-invitation-desc">
+              Unsure which scent complements your personality? Take our 60-second Scent Discovery Quiz to reveal perfumes harmonized to your aura.
+            </p>
+          </div>
+          <div className="prv-invitation-right">
+            <a href="/diagnostic.html" className="prv-pill-cta prv-invitation-btn">
+              <span>Start Scent Quiz</span>
+              <div className="prv-pill-arrow">
+                <ArrowRight size={14} />
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. REFINED EDITORIAL FOOTER */}
+      <footer className="prv-footer">
+        <div className="prv-container">
+          <div className="prv-footer-grid">
+            
+            {/* Column 1: Brand Mark & Heritage */}
+            <div className="prv-footer-col prv-footer-brand-col">
+              <a href="/preview-home.html" className="prv-footer-brand-mark">
+                <span className="prv-footer-monogram">VL</span>
+                <div className="prv-footer-brand-text">
+                  <span className="prv-footer-logo-title">VALENSZO</span>
+                  <span className="prv-footer-logo-sub">Fragrance Malaysia</span>
+                </div>
+              </a>
+              <p className="prv-footer-brand-desc">
+                Valenszo crafts long-lasting luxury perfumes using high-grade fragrance oils. Premium scents created for everyday elegance and enduring presence in Malaysia.
+              </p>
+              <div className="prv-footer-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#111111" aria-hidden="true">
+                  <path d="M12 0L13.8 8.2L22 10L13.8 11.8L12 20L10.2 11.8L2 10L10.2 8.2Z"/>
+                </svg>
+                <span>Curated with Precision</span>
+              </div>
+            </div>
+
+            {/* Column 2: Fragrance Collections */}
+            <div className="prv-footer-col">
+              <h4 className="prv-footer-heading">Fragrance Collections</h4>
+              <ul className="prv-footer-links">
+                <li><a href="/men.html" className="prv-footer-link">Men's Perfumes</a></li>
+                <li><a href="/women.html" className="prv-footer-link">Women's Perfumes</a></li>
+                <li><a href="/collection.html" className="prv-footer-link">All Collections</a></li>
+                <li><a href="/diagnostic.html" className="prv-footer-link">Scent Discovery Quiz</a></li>
+              </ul>
+            </div>
+
+            {/* Column 3: Customer Care & WhatsApp Concierge */}
+            <div className="prv-footer-col">
+              <h4 className="prv-footer-heading">Customer Care</h4>
+              <p className="prv-footer-care-text">
+                Speak directly with our fragrance concierge for order inquiries and scent advice.
+              </p>
+              <a 
+                href="https://wa.me/60182868402?text=Hello%20Valenszo!%20I%20would%20like%20assistance%20with%20your%20perfume%20catalog." 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="prv-footer-wa-pill"
+              >
+                <MessageCircle size={16} />
+                <span>WhatsApp: 018-286 8402</span>
+              </a>
+              <span className="prv-footer-hours">Daily Concierge Support • 9:00 AM – 10:00 PM</span>
+            </div>
+
+            {/* Column 4: Newsletter / Stay Connected */}
+            <div className="prv-footer-col">
+              <h4 className="prv-footer-heading">Join The Scent Circle</h4>
+              <p className="prv-footer-newsletter-text">
+                Receive private release alerts, olfactory notes, and bespoke member privileges.
+              </p>
+              <form 
+                className="prv-footer-form" 
+                onSubmit={(e) => { 
+                  e.preventDefault(); 
+                  showToast && showToast('Thank you for subscribing to Valenszo.'); 
+                }}
+              >
+                <input 
+                  type="email" 
+                  placeholder="Enter your email..." 
+                  className="prv-footer-input"
+                  required 
+                />
+                <button type="submit" className="prv-footer-submit" aria-label="Subscribe">
+                  <ArrowRight size={14} />
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="prv-footer-bottom">
+            <div className="prv-footer-copy">
+              &copy; {new Date().getFullYear()} Valenszo Fragrance Malaysia. All rights reserved.
+            </div>
+            <div className="prv-footer-legal">
+              <a href="#">Privacy Policy</a>
+              <span className="prv-footer-dot">•</span>
+              <a href="#">Legal Notice</a>
+              <span className="prv-footer-dot">•</span>
+              <a href="#">Terms of Service</a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {/* Overlays */}
       <CartDrawer />
