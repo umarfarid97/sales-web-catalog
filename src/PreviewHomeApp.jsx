@@ -1,0 +1,338 @@
+import React, { useState, useMemo } from 'react';
+import { AuthProvider } from './context/AuthContext';
+import { StoreProvider, useStore } from './context/StoreContext';
+import { CartDrawer } from './components/customer/CartDrawer';
+import { ProductDetailModal } from './components/customer/ProductDetailModal';
+import { ToastContainer } from './components/common/ToastContainer';
+import { BrandValuesFooter } from './components/common/BrandValuesFooter';
+import { Footer } from './components/common/Footer';
+import { 
+  Search, 
+  ShoppingBag, 
+  ArrowRight, 
+  Sparkles, 
+  Heart,
+  MessageCircle
+} from 'lucide-react';
+import './styles/preview-home.css';
+
+// Fallback high-res photos if DB product image isn't loaded
+const FALLBACK_BOTTLE = 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80';
+
+const PreviewHomeContent = () => {
+  const { 
+    products, 
+    cart, 
+    setIsCartOpen, 
+    openProductDetail,
+    addToCart,
+    showToast 
+  } = useStore();
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Cart total items
+  const cartCount = useMemo(() => {
+    return Array.isArray(cart) ? cart.reduce((sum, item) => sum + (item.quantity || 1), 0) : 0;
+  }, [cart]);
+
+  // Curated Popular Products (First 4 from Tier S or top catalog)
+  const popularProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const tierS = products.filter(p => p.tier === 'S');
+    const source = tierS.length >= 4 ? tierS : products;
+    return source.slice(0, 4);
+  }, [products]);
+
+  // Curated New Products (Next 4 distinct products)
+  const newProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    return products.slice(4, 8);
+  }, [products]);
+
+  const handleQuickAdd = (e, prod) => {
+    e.stopPropagation();
+    if (addToCart) {
+      addToCart({
+        ...prod,
+        selectedSize: '30ml',
+        price: 45
+      }, 1);
+    }
+  };
+
+  const handleCardClick = (prod) => {
+    if (openProductDetail) {
+      openProductDetail(prod);
+    } else {
+      window.location.href = `/product.html?product=${encodeURIComponent(prod.id)}`;
+    }
+  };
+
+  return (
+    <div className="prv-page">
+      {/* ---------------- 1. NAVBAR ---------------- */}
+      <header className="prv-navbar">
+        <div className="prv-container prv-nav-inner">
+          <a href="/preview-home.html" className="prv-logo">
+            VALENSZO
+          </a>
+
+          <ul className="prv-nav-links">
+            <li><a href="/preview-home.html" className="prv-nav-link active">Home</a></li>
+            <li><a href="/collection.html" className="prv-nav-link">Collection</a></li>
+            <li><a href="/men.html" className="prv-nav-link">Men</a></li>
+            <li><a href="/women.html" className="prv-nav-link">Women</a></li>
+            <li><a href="/diagnostic.html" className="prv-nav-link">Scent Quiz</a></li>
+            <li>
+              <a 
+                href="https://wa.me/60182868402?text=Hello%20Valenszo,%20I%20would%20like%20to%20inquire%20about%20your%20fragrances" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="prv-nav-link"
+              >
+                Contact Us
+              </a>
+            </li>
+          </ul>
+
+          <div className="prv-nav-actions">
+            {/* Search Input */}
+            <form 
+              className="prv-search-box" 
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (searchQuery.trim()) {
+                  window.location.href = `/collection.html?q=${encodeURIComponent(searchQuery.trim())}`;
+                }
+              }}
+            >
+              <Search size={15} color="#6b7280" />
+              <input 
+                type="text" 
+                className="prv-search-input" 
+                placeholder="Search..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
+
+            {/* Shopping Cart Button */}
+            <button 
+              className="prv-icon-btn" 
+              onClick={() => setIsCartOpen && setIsCartOpen(true)}
+              aria-label="Open Shopping Bag"
+            >
+              <ShoppingBag size={20} />
+              {cartCount > 0 && <span className="prv-cart-badge">{cartCount}</span>}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* ---------------- 2. HERO SECTION ---------------- */}
+      <section className="prv-hero">
+        <div className="prv-container prv-hero-grid">
+          
+          {/* Left Column: Editorial Headline & Subtitle */}
+          <div className="prv-hero-content">
+            <div className="prv-hero-sparkle">
+              <Sparkles size={14} color="#926917" />
+              <span>Haute Parfumerie</span>
+            </div>
+
+            <h1 className="prv-hero-headline">
+              Smell is a
+              <span className="sub-line">word • Perfume is</span>
+              <span className="bold-accent">literature</span>
+            </h1>
+
+            <p className="prv-hero-desc">
+              Discover the beauty of fragrance with our collection of premium perfumes to enrich your everyday smell
+            </p>
+
+            <a href="/collection.html" className="prv-pill-cta">
+              <span>Shop Now</span>
+              <div className="prv-pill-arrow">
+                <ArrowRight size={15} />
+              </div>
+            </a>
+          </div>
+
+          {/* Right Column: Hero Portrait Model */}
+          <div className="prv-hero-image-col">
+            <div className="prv-hero-portrait-frame">
+              <img 
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&auto=format&fit=crop&q=85" 
+                alt="Haute Parfumerie Model" 
+                loading="eager"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ---------------- 3. BRAND LOGOS STRIP ---------------- */}
+      <div className="prv-brands-strip">
+        <div className="prv-container prv-brands-row">
+          <span className="prv-brand-name">Dior</span>
+          <span className="prv-brand-name" style={{ fontWeight: 800 }}>TOM FORD</span>
+          <span className="prv-brand-name">CHANEL</span>
+          <span className="prv-brand-name">Calvin Klein</span>
+          <span className="prv-brand-name">CLINIQUE</span>
+          <span className="prv-brand-name">D&G</span>
+          <span className="prv-brand-name">CREED</span>
+        </div>
+      </div>
+
+      {/* ---------------- 4. POPULAR PRODUCTS ---------------- */}
+      <section className="prv-section">
+        <div className="prv-container">
+          <h2 className="prv-section-heading">Popular Products</h2>
+
+          <div className="prv-products-grid">
+            {popularProducts.map((prod) => (
+              <div 
+                key={prod.id} 
+                className="prv-card"
+                onClick={() => handleCardClick(prod)}
+              >
+                <div className="prv-card-image-box">
+                  <img 
+                    src={prod.images?.[0] || prod.image || FALLBACK_BOTTLE} 
+                    alt={prod.name} 
+                    onError={(e) => { e.currentTarget.src = FALLBACK_BOTTLE; }}
+                  />
+                </div>
+
+                <div className="prv-card-info">
+                  <h3 className="prv-card-title">{prod.name}</h3>
+                  <div className="prv-card-sub">
+                    {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
+                  </div>
+
+                  <div className="prv-card-bottom">
+                    <span className="prv-card-price">RM{Number(prod.price || 45).toFixed(2)}</span>
+                    <button 
+                      className="prv-card-cart-btn" 
+                      onClick={(e) => handleQuickAdd(e, prod)}
+                      title="Add to Bag"
+                    >
+                      <ShoppingBag size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- 5. EDITORIAL LIFESTYLE COLLAGE ---------------- */}
+      <section className="prv-collage-section">
+        <div className="prv-container prv-collage-grid">
+          
+          {/* Tile 1: Left Tall Model with Bottle */}
+          <div className="prv-collage-tall-tile">
+            <img 
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900&auto=format&fit=crop&q=85" 
+              alt="Model with Luxury Perfume" 
+            />
+            <a href="/collection.html" className="prv-tile-overlay-btn">
+              Shop Now
+            </a>
+          </div>
+
+          {/* Right Stack: Two Tiles */}
+          <div className="prv-collage-right-stack">
+            {/* Tile 2: Misting Fragrance Spray */}
+            <div className="prv-collage-wide-tile">
+              <img 
+                src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900&auto=format&fit=crop&q=80" 
+                alt="Spray Atomizer Mist" 
+              />
+              <a href="/collection.html?gender=women" className="prv-tile-overlay-btn">
+                Shop Now
+              </a>
+            </div>
+
+            {/* Tile 3: Perfume Flacon on Pedestal */}
+            <div className="prv-collage-wide-tile">
+              <img 
+                src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=900&auto=format&fit=crop&q=80" 
+                alt="Perfume Flacon Pedestal" 
+              />
+              <a href="/collection.html?gender=men" className="prv-tile-overlay-btn">
+                Shop Now
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ---------------- 6. NEW PRODUCTS ---------------- */}
+      <section className="prv-section" style={{ paddingBottom: '5rem' }}>
+        <div className="prv-container">
+          <h2 className="prv-section-heading">New Products</h2>
+
+          <div className="prv-products-grid">
+            {newProducts.map((prod) => (
+              <div 
+                key={prod.id} 
+                className="prv-card"
+                onClick={() => handleCardClick(prod)}
+              >
+                <div className="prv-card-image-box">
+                  <img 
+                    src={prod.images?.[0] || prod.image || FALLBACK_BOTTLE} 
+                    alt={prod.name} 
+                    onError={(e) => { e.currentTarget.src = FALLBACK_BOTTLE; }}
+                  />
+                </div>
+
+                <div className="prv-card-info">
+                  <h3 className="prv-card-title">{prod.name}</h3>
+                  <div className="prv-card-sub">
+                    {prod.brandInspiration ? `Inspired by ${prod.brandInspiration}` : prod.category}
+                  </div>
+
+                  <div className="prv-card-bottom">
+                    <span className="prv-card-price">RM{Number(prod.price || 45).toFixed(2)}</span>
+                    <button 
+                      className="prv-card-cart-btn" 
+                      onClick={(e) => handleQuickAdd(e, prod)}
+                      title="Add to Bag"
+                    >
+                      <ShoppingBag size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Brand Values Banner & Footer */}
+      <BrandValuesFooter />
+      <Footer />
+
+      {/* Overlays */}
+      <CartDrawer />
+      <ProductDetailModal />
+      <ToastContainer />
+    </div>
+  );
+};
+
+export default function PreviewHomeApp() {
+  return (
+    <AuthProvider>
+      <StoreProvider>
+        <PreviewHomeContent />
+      </StoreProvider>
+    </AuthProvider>
+  );
+}
