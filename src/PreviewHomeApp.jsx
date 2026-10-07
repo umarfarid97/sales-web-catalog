@@ -4,6 +4,7 @@ import { StoreProvider, useStore } from './context/StoreContext';
 import { CartDrawer } from './components/customer/CartDrawer';
 import { ProductDetailModal } from './components/customer/ProductDetailModal';
 import { ToastContainer } from './components/common/ToastContainer';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 import { 
   Search, 
@@ -73,12 +74,12 @@ const PreviewHomeContent = () => {
       {/* ---------------- 1. NAVBAR ---------------- */}
       <header className="prv-navbar">
         <div className="prv-container prv-nav-inner">
-          <a href="/preview-home.html" className="prv-logo">
+          <a href="/index.html" className="prv-logo">
             VALENSZO
           </a>
 
           <ul className="prv-nav-links">
-            <li><a href="/preview-home.html" className="prv-nav-link active">Home</a></li>
+            <li><a href="/index.html" className="prv-nav-link active">Home</a></li>
             <li><a href="/collection.html" className="prv-nav-link">Collection</a></li>
             <li><a href="/men.html" className="prv-nav-link">Men</a></li>
             <li><a href="/women.html" className="prv-nav-link">Women</a></li>
@@ -348,7 +349,7 @@ const PreviewHomeContent = () => {
             
             {/* Column 1: Brand Mark */}
             <div className="prv-footer-col prv-footer-brand-col">
-              <a href="/preview-home.html" className="prv-footer-brand-mark">
+              <a href="/index.html" className="prv-footer-brand-mark">
                 <span className="prv-footer-monogram">VL</span>
                 <div className="prv-footer-brand-text">
                   <span className="prv-footer-logo-title">VALENSZO</span>
@@ -414,10 +415,12 @@ const PreviewHomeContent = () => {
 
 export default function PreviewHomeApp() {
   return (
-    <AuthProvider>
-      <StoreProvider>
-        <PreviewHomeContent />
-      </StoreProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <StoreProvider>
+          <PreviewHomeContent />
+        </StoreProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
