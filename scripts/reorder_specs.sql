@@ -14,7 +14,7 @@ USING specs::json;
 -- 3. Reorder specs fields logically across all products
 UPDATE public.products
 SET specs = json_build_object(
-  'catalogNo', COALESCE((specs->>'catalogNo')::int, 0),
+  'catalogNo', COALESCE((specs->>'catalogNo')::numeric::int, 0),
   'tier', COALESCE(specs->>'tier', 'B'),
   'originalListing', COALESCE(specs->>'originalListing', ''),
   'dominantAccord', COALESCE(specs->>'dominantAccord', specs->>'olfactoryFamily', specs->>'character', ''),
@@ -30,7 +30,7 @@ SET specs = json_build_object(
   'concentration', COALESCE(specs->>'concentration', 'Extrait de Parfum (30%)'),
   'longevity', COALESCE(specs->>'longevity', '14+ Hours'),
   'sillage', COALESCE(specs->>'sillage', 'Radiant & Enveloping'),
-  'intensityScore', COALESCE((specs->>'intensityScore')::int, 4),
+  'intensityScore', COALESCE((specs->>'intensityScore')::numeric, 4.0),
   'season', COALESCE(specs->>'season', 'All Seasons & Signature Occasions'),
   'refillable', COALESCE((specs->>'refillable')::boolean, true)
 );
