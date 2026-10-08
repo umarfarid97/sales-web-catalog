@@ -125,13 +125,11 @@ export const ProductFormModal = () => {
       stock: parseInt(formData.stock, 10) || 0,
       rating: formData.rating ? parseFloat(formData.rating) : null,
       reviewsCount: parseInt(formData.reviewsCount, 10) || 0,
+      dominantAccord: formData.category,
+      concentration: formData.concentration,
       specs: {
         ...(editingProduct?.specs || {}),
-        brandInspiration: formData.brand,
-        gender: formData.gender,
-        category: formData.category,
-        character: formData.category,
-        olfactoryFamily: formData.category,
+        dominantAccord: formData.category,
         concentration: formData.concentration
       },
       pyramid: {

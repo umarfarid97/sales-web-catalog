@@ -67,117 +67,134 @@ export const formatProductFromDb = (row) => {
   const resolvedBrand = String(row.brand || specs.brandInspiration || specs.brand || '').trim();
   const resolvedAccord = String(specs.dominantAccord || specs.olfactoryFamily || specs.character || resolvedCategory);
 
-  return {
-    id: String(row.id || `vlz-gen-${Date.now()}`),
-    sku: String(row.sku || ''),
-    catalogNo: parsedCatalogNo,
-    name: String(row.name || 'Perfume').trim(),
-    brand: resolvedBrand,
-    brandInspiration: resolvedBrand,
-    originalListing: String(specs.originalListing || ''),
-    gender: resolvedGender,
-    category: resolvedCategory,
-    character: resolvedAccord,
-    olfactoryFamily: resolvedAccord,
-    dominantAccord: resolvedAccord,
-    traits,
-    tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
-    tagline: String(row.tagline || ''),
-    description: String(row.description || ''),
-    price_30ml: price30,
-    price_50ml: price50,
-    price_100ml: price100,
-    price: price30,
-    discountPercent: Number(row.discount_percent || 0),
-    stock: parseInt(row.stock, 10) || 0,
-    rating: row.rating !== null && !isNaN(parseFloat(row.rating)) ? parseFloat(row.rating) : null,
-    reviewsCount: parseInt(row.reviews_count, 10) || 0,
-    badge: String(row.badge || ''),
-    isFeatured: Boolean(row.is_featured),
-    concentration: String(specs.concentration || 'Extrait de Parfum (30%)'),
-    sillage: String(specs.sillage || 'Enveloping & Magnetic'),
-    longevity: String(specs.longevity || '14+ Hours'),
-    season: String(specs.season || 'All Seasons'),
-    refillable: specs.refillable !== undefined ? Boolean(specs.refillable) : true,
-    intensityScore: Number(specs.intensityScore || (specs.tier === 'S' ? 5 : 4)),
-    pyramid: {
-      topNotes: Array.isArray(specs.pyramid?.topNotes) ? specs.pyramid.topNotes : ['Calabrian Bergamot', 'Spiced Saffron'],
-      heartNotes: Array.isArray(specs.pyramid?.heartNotes) ? specs.pyramid.heartNotes : ['Damascena Rose', 'French Lavender'],
-      baseNotes: Array.isArray(specs.pyramid?.baseNotes) ? specs.pyramid.baseNotes : ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
-    },
-    sizes: dynamicSizes,
-    features: Array.isArray(row.features) ? row.features : [],
-    mainAccords: Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0 
-      ? specs.mainAccords 
-      : (Array.isArray(specs.traits) && specs.traits.length > 0 ? specs.traits : traits),
-    specs,
-    images
+    const orderedSpecs = {
+      catalogNo: parsedCatalogNo,
+      tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
+      originalListing: String(specs.originalListing || '').trim(),
+      dominantAccord: resolvedAccord,
+      mainAccords: Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0 
+        ? specs.mainAccords 
+        : (Array.isArray(specs.traits) && specs.traits.length > 0 ? specs.traits : traits),
+      macroZone: String(specs.macroZone || 'Fresh / Clean'),
+      similarityGroup: String(specs.similarityGroup || ''),
+      layerFamily: String(specs.layerFamily || 'L1'),
+      pyramid: {
+        topNotes: Array.isArray(specs.pyramid?.topNotes) ? specs.pyramid.topNotes : ['Calabrian Bergamot', 'Spiced Saffron'],
+        heartNotes: Array.isArray(specs.pyramid?.heartNotes) ? specs.pyramid.heartNotes : ['Damascena Rose', 'French Lavender'],
+        baseNotes: Array.isArray(specs.pyramid?.baseNotes) ? specs.pyramid.baseNotes : ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
+      },
+      concentration: String(specs.concentration || 'Extrait de Parfum (30%)'),
+      longevity: String(specs.longevity || '14+ Hours'),
+      sillage: String(specs.sillage || 'Enveloping & Magnetic'),
+      intensityScore: Number(specs.intensityScore || (specs.tier === 'S' ? 5 : 4)),
+      season: String(specs.season || 'All Seasons'),
+      refillable: specs.refillable !== undefined ? Boolean(specs.refillable) : true
+    };
+
+    return {
+      id: String(row.id || `vlz-gen-${Date.now()}`),
+      sku: String(row.sku || ''),
+      catalogNo: parsedCatalogNo,
+      name: String(row.name || 'Perfume').trim(),
+      brand: resolvedBrand,
+      brandInspiration: resolvedBrand,
+      originalListing: String(specs.originalListing || ''),
+      gender: resolvedGender,
+      category: resolvedCategory,
+      character: resolvedAccord,
+      olfactoryFamily: resolvedAccord,
+      dominantAccord: resolvedAccord,
+      traits,
+      tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
+      tagline: String(row.tagline || ''),
+      description: String(row.description || ''),
+      price_30ml: price30,
+      price_50ml: price50,
+      price_100ml: price100,
+      price: price30,
+      discountPercent: Number(row.discount_percent || 0),
+      stock: parseInt(row.stock, 10) || 0,
+      rating: row.rating !== null && !isNaN(parseFloat(row.rating)) ? parseFloat(row.rating) : null,
+      reviewsCount: parseInt(row.reviews_count, 10) || 0,
+      badge: String(row.badge || ''),
+      isFeatured: Boolean(row.is_featured),
+      concentration: orderedSpecs.concentration,
+      sillage: orderedSpecs.sillage,
+      longevity: orderedSpecs.longevity,
+      season: orderedSpecs.season,
+      refillable: orderedSpecs.refillable,
+      intensityScore: orderedSpecs.intensityScore,
+      pyramid: orderedSpecs.pyramid,
+      sizes: dynamicSizes,
+      features: Array.isArray(row.features) ? row.features : [],
+      mainAccords: orderedSpecs.mainAccords,
+      specs: orderedSpecs,
+      images
+    };
   };
-};
 
-// Helper: Format JS camelCase to DB product row
-export const formatProductToDb = (product) => {
-  const p30 = product.price_30ml != null 
-    ? Number(product.price_30ml) 
-    : (product.sizes?.find(s => s.ml === 30)?.price ?? (Number(product.price) || 45));
-  const p50 = product.price_50ml != null 
-    ? Number(product.price_50ml) 
-    : (product.sizes?.find(s => s.ml === 50)?.price ?? 65);
-  const p100 = product.price_100ml != null 
-    ? Number(product.price_100ml) 
-    : (product.sizes?.find(s => s.ml === 100)?.price ?? 125);
-  const brandVal = String(product.brand || product.brandInspiration || '').trim();
+  // Helper: Format JS camelCase to DB product row
+  export const formatProductToDb = (product) => {
+    const p30 = product.price_30ml != null 
+      ? Number(product.price_30ml) 
+      : (product.sizes?.find(s => s.ml === 30)?.price ?? (Number(product.price) || 45));
+    const p50 = product.price_50ml != null 
+      ? Number(product.price_50ml) 
+      : (product.sizes?.find(s => s.ml === 50)?.price ?? 65);
+    const p100 = product.price_100ml != null 
+      ? Number(product.price_100ml) 
+      : (product.sizes?.find(s => s.ml === 100)?.price ?? 125);
+    const brandVal = String(product.brand || product.brandInspiration || '').trim();
 
-  const payload = {
-    id: product.id,
-    sku: product.sku,
-    name: product.name,
-    category: product.category,
-    tagline: product.tagline,
-    description: product.description,
-    price_30ml: p30,
-    price_50ml: p50,
-    price_100ml: p100,
-    discount_percent: product.discountPercent,
-    stock: product.stock,
-    rating: product.rating,
-    reviews_count: product.reviewsCount,
-    badge: product.badge,
-    is_featured: product.isFeatured,
-    features: product.features || [],
-    specs: (() => {
-      const baseSpecs = { ...(product.specs || {}) };
-      // Delete redundant keys so specs remains clean
-      delete baseSpecs.brandInspiration;
-      delete baseSpecs.gender;
-      delete baseSpecs.sizes;
-      delete baseSpecs.olfactoryFamily;
-      delete baseSpecs.traits;
-      delete baseSpecs.character;
-
-      return {
-        ...baseSpecs,
-        catalogNo: product.catalogNo || baseSpecs.catalogNo,
-        originalListing: product.originalListing || baseSpecs.originalListing || '',
-        dominantAccord: product.dominantAccord || product.olfactoryFamily || product.character || baseSpecs.dominantAccord || '',
-        mainAccords: Array.isArray(product.mainAccords) && product.mainAccords.length > 0 
+    const payload = {
+      id: product.id,
+      sku: product.sku,
+      name: product.name,
+      category: product.category,
+      tagline: product.tagline,
+      description: product.description,
+      price_30ml: p30,
+      price_50ml: p50,
+      price_100ml: p100,
+      discount_percent: product.discountPercent,
+      stock: product.stock,
+      rating: product.rating,
+      reviews_count: product.reviewsCount,
+      badge: product.badge,
+      is_featured: product.isFeatured,
+      features: product.features || [],
+      specs: (() => {
+        const baseSpecs = { ...(product.specs || {}) };
+        const dominant = product.dominantAccord || product.olfactoryFamily || product.character || baseSpecs.dominantAccord || '';
+        const accords = Array.isArray(product.mainAccords) && product.mainAccords.length > 0 
           ? product.mainAccords 
-          : (Array.isArray(baseSpecs.mainAccords) ? baseSpecs.mainAccords : (product.traits || [])),
-        tier: product.tier || baseSpecs.tier || 'B',
-        refillable: product.refillable !== undefined ? product.refillable : (baseSpecs.refillable ?? true),
-        intensityScore: product.intensityScore || baseSpecs.intensityScore || 4,
-        concentration: product.concentration || baseSpecs.concentration || 'Eau de Parfum (20%)',
-        pyramid: product.pyramid || baseSpecs.pyramid || { topNotes: [], heartNotes: [], baseNotes: [] },
-        sillage: product.sillage || baseSpecs.sillage || 'Radiant & Enveloping',
-        longevity: product.longevity || baseSpecs.longevity || '12+ Hours',
-        season: product.season || baseSpecs.season || 'All Seasons',
-        layerFamily: baseSpecs.layerFamily || 'L1',
-        macroZone: baseSpecs.macroZone || 'Fresh / Clean',
-        similarityGroup: baseSpecs.similarityGroup || ''
-      };
-    })(),
-    images: product.images || []
-  };
+          : (Array.isArray(baseSpecs.mainAccords) ? baseSpecs.mainAccords : (product.traits || []));
+        const pyr = product.pyramid || baseSpecs.pyramid || {};
+
+        return {
+          catalogNo: Number(product.catalogNo || baseSpecs.catalogNo || 0),
+          tier: product.tier || baseSpecs.tier || 'B',
+          originalListing: String(product.originalListing || baseSpecs.originalListing || '').trim(),
+          dominantAccord: dominant,
+          mainAccords: accords,
+          macroZone: baseSpecs.macroZone || 'Fresh / Clean',
+          similarityGroup: baseSpecs.similarityGroup || '',
+          layerFamily: baseSpecs.layerFamily || 'L1',
+          pyramid: {
+            topNotes: Array.isArray(pyr.topNotes) ? pyr.topNotes : [],
+            heartNotes: Array.isArray(pyr.heartNotes) ? pyr.heartNotes : [],
+            baseNotes: Array.isArray(pyr.baseNotes) ? pyr.baseNotes : []
+          },
+          concentration: product.concentration || baseSpecs.concentration || 'Extrait de Parfum (30%)',
+          longevity: product.longevity || baseSpecs.longevity || '14+ Hours',
+          sillage: product.sillage || baseSpecs.sillage || 'Radiant & Enveloping',
+          intensityScore: Number(product.intensityScore || baseSpecs.intensityScore || 4),
+          season: product.season || baseSpecs.season || 'All Seasons',
+          refillable: product.refillable !== undefined ? Boolean(product.refillable) : (baseSpecs.refillable ?? true)
+        };
+      })(),
+      images: product.images || []
+    };
 
   if (product.brand !== undefined || product.brandInspiration !== undefined) {
     payload.brand = brandVal;
