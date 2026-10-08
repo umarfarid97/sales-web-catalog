@@ -25,8 +25,9 @@ export const ProductFormModal = () => {
     gender: 'Men',
     category: 'Fresh / Aquatic / Citrus',
     concentration: 'Extrait de Parfum (30%)',
-    price: '',
-    originalPrice: '',
+    price_30ml: '',
+    price_50ml: '',
+    price_100ml: '',
     stock: '15',
     rating: '',
     reviewsCount: '0',
@@ -53,8 +54,9 @@ export const ProductFormModal = () => {
         gender: resolveProductGender(editingProduct),
         category: resolveProductCategory(editingProduct, defaultCat),
         concentration: resolveProductConcentration(editingProduct, defaultConc),
-        price: editingProduct.price?.toString() || '',
-        originalPrice: editingProduct.originalPrice?.toString() || '',
+        price_30ml: editingProduct.price_30ml?.toString() || (editingProduct.sizes?.find(s => s.ml === 30)?.price?.toString() || '45.00'),
+        price_50ml: editingProduct.price_50ml?.toString() || (editingProduct.sizes?.find(s => s.ml === 50)?.price?.toString() || '65.00'),
+        price_100ml: editingProduct.price_100ml?.toString() || (editingProduct.sizes?.find(s => s.ml === 100)?.price?.toString() || '125.00'),
         stock: editingProduct.stock?.toString() || '',
         rating: editingProduct.rating?.toString() || '4.95',
         reviewsCount: editingProduct.reviewsCount?.toString() || '24',
@@ -76,8 +78,9 @@ export const ProductFormModal = () => {
         gender: 'Men',
         category: defaultCat,
         concentration: defaultConc,
-        price: '45.00',
-        originalPrice: '55.00',
+        price_30ml: '45.00',
+        price_50ml: '65.00',
+        price_100ml: '125.00',
         stock: '15',
         rating: '',
         reviewsCount: '0',
@@ -99,6 +102,10 @@ export const ProductFormModal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const p30 = parseFloat(formData.price_30ml) || 45;
+    const p50 = parseFloat(formData.price_50ml) || 65;
+    const p100 = parseFloat(formData.price_100ml) || 125;
+
     const productPayload = {
       ...formData,
       gender: formData.gender,
@@ -106,8 +113,10 @@ export const ProductFormModal = () => {
       character: formData.category,
       olfactoryFamily: formData.category,
       concentration: formData.concentration,
-      price: parseFloat(formData.price) || 0,
-      originalPrice: parseFloat(formData.originalPrice) || parseFloat(formData.price) || 0,
+      price_30ml: p30,
+      price_50ml: p50,
+      price_100ml: p100,
+      price: p30,
       stock: parseInt(formData.stock, 10) || 0,
       rating: formData.rating ? parseFloat(formData.rating) : null,
       reviewsCount: parseInt(formData.reviewsCount, 10) || 0,
@@ -125,9 +134,9 @@ export const ProductFormModal = () => {
         baseNotes: formData.baseNotes.split(',').map((s) => s.trim()).filter(Boolean)
       },
       sizes: [
-        { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
-        { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
-        { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
+        { label: '30 ml Travel Atomizer', ml: 30, price: p30, isRefillable: true },
+        { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
+        { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
       ],
       images: [formData.imageUrl]
     };
@@ -229,24 +238,37 @@ export const ProductFormModal = () => {
 
               <div className="admin-form-row-3col">
                 <div className="form-group">
-                  <label className="admin-form-label">Base Price (RM) *</label>
+                  <label className="admin-form-label">30ml Price (RM) *</label>
                   <input
                     type="number"
                     step="0.01"
                     required
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    value={formData.price_30ml}
+                    onChange={(e) => setFormData({ ...formData, price_30ml: e.target.value })}
                     className="admin-form-input"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="admin-form-label">Original Price (RM)</label>
+                  <label className="admin-form-label">50ml Price (RM) *</label>
                   <input
                     type="number"
                     step="0.01"
-                    value={formData.originalPrice}
-                    onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
+                    required
+                    value={formData.price_50ml}
+                    onChange={(e) => setFormData({ ...formData, price_50ml: e.target.value })}
+                    className="admin-form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="admin-form-label">100ml Price (RM) *</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={formData.price_100ml}
+                    onChange={(e) => setFormData({ ...formData, price_100ml: e.target.value })}
                     className="admin-form-input"
                   />
                 </div>

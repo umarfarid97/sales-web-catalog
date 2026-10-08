@@ -131,14 +131,23 @@ export const ProductDetailPage = () => {
     };
   }, []);
 
-  // Standardized prices across all perfumes: 30ml = RM45, 50ml = RM65, 100ml = RM125
-  const priceBySize = useMemo(() => ({
-    '30ml': 45,
-    '50ml': 65,
-    '100ml': 125
-  }), []);
+  // Dynamic variant prices directly from database table (price_30ml, price_50ml, price_100ml)
+  const priceBySize = useMemo(() => {
+    if (!product) {
+      return { '30ml': 45, '50ml': 65, '100ml': 125 };
+    }
+    const p30 = product.price_30ml ?? product.sizes?.find(s => s.ml === 30 || s.label?.includes('30'))?.price ?? (product.price || 45);
+    const p50 = product.price_50ml ?? product.sizes?.find(s => s.ml === 50 || s.label?.includes('50'))?.price ?? 65;
+    const p100 = product.price_100ml ?? product.sizes?.find(s => s.ml === 100 || s.label?.includes('100'))?.price ?? 125;
 
-  const currentUnitPrice = product ? (priceBySize[selectedSize] || product.price) : 0;
+    return {
+      '30ml': Number(p30),
+      '50ml': Number(p50),
+      '100ml': Number(p100)
+    };
+  }, [product]);
+
+  const currentUnitPrice = product ? (priceBySize[selectedSize] ?? product.price ?? 45) : 0;
   const totalPrice = currentUnitPrice * quantity;
 
   // Actual Product Imagery (single or multiple) without fake filler perfumes

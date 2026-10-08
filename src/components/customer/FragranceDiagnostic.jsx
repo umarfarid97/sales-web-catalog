@@ -826,11 +826,17 @@ export const FragranceDiagnostic = () => {
                       Select Format
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
-                      {[
-                        { key: '30ml', label: '30ml Travel', price: 'RM45' },
-                        { key: '50ml', label: '50ml Bottle', price: 'RM75' },
-                        { key: '100ml', label: '100ml Bottle', price: 'RM125' }
-                      ].map((fmt) => (
+                      {(() => {
+                        const p = anchor?.product;
+                        const p30 = p?.price_30ml ?? p?.sizes?.find(s => s.ml === 30 || s.label?.includes('30'))?.price ?? 45;
+                        const p50 = p?.price_50ml ?? p?.sizes?.find(s => s.ml === 50 || s.label?.includes('50'))?.price ?? 65;
+                        const p100 = p?.price_100ml ?? p?.sizes?.find(s => s.ml === 100 || s.label?.includes('100'))?.price ?? 125;
+                        return [
+                          { key: '30ml', label: '30ml Travel', price: `RM${p30}` },
+                          { key: '50ml', label: '50ml Bottle', price: `RM${p50}` },
+                          { key: '100ml', label: '100ml Bottle', price: `RM${p100}` }
+                        ];
+                      })().map((fmt) => (
                         <button
                           key={fmt.key}
                           type="button"

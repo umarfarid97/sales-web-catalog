@@ -255,7 +255,7 @@ export const ProductManager = () => {
                       {/* Price */}
                       <td>
                         <span style={{ fontWeight: 700, color: '#111827', fontFamily: 'var(--font-mono)' }}>
-                          RM {Number(prod.price || 0).toFixed(2)}
+                          RM {Number(prod.price_30ml || prod.price || 45).toFixed(2)}
                         </span>
                       </td>
 
@@ -339,7 +339,7 @@ export const ProductManager = () => {
                         )}
                       </div>
                       <div className="admin-mobile-card-price-row">
-                        <span className="admin-mobile-card-price">RM {Number(prod.price || 0).toFixed(2)}</span>
+                        <span className="admin-mobile-card-price">RM {Number(prod.price_30ml || prod.price || 45).toFixed(2)}</span>
                         <span className={`badge ${
                           isOutOfStock ? 'badge-danger' :
                           isLow ? 'badge-warning' : 'badge-success'

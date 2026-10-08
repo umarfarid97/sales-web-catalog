@@ -32,11 +32,23 @@ export const ProductDetailModal = () => {
     ? product.images
     : (product.image ? [product.image] : ['https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80']);
 
-  const sizes = [
-    { label: '30 ml Travel Atomizer', ml: 30, price: 45 },
-    { label: '50 ml Haute Flacon', ml: 50, price: 65 },
-    { label: '100 ml Collector Flacon', ml: 100, price: 125 }
-  ];
+  const sizes = useMemo(() => {
+    if (!product) {
+      return [
+        { label: '30 ml Travel Atomizer', ml: 30, price: 45 },
+        { label: '50 ml Haute Flacon', ml: 50, price: 65 },
+        { label: '100 ml Collector Flacon', ml: 100, price: 125 }
+      ];
+    }
+    const p30 = product.price_30ml ?? product.sizes?.find(s => s.ml === 30 || s.label?.includes('30'))?.price ?? (product.price || 45);
+    const p50 = product.price_50ml ?? product.sizes?.find(s => s.ml === 50 || s.label?.includes('50'))?.price ?? 65;
+    const p100 = product.price_100ml ?? product.sizes?.find(s => s.ml === 100 || s.label?.includes('100'))?.price ?? 125;
+    return [
+      { label: '30 ml Travel Atomizer', ml: 30, price: Number(p30) },
+      { label: '50 ml Haute Flacon', ml: 50, price: Number(p50) },
+      { label: '100 ml Collector Flacon', ml: 100, price: Number(p100) }
+    ];
+  }, [product]);
 
   const currentSizeObj = sizes[selectedSizeIndex] || sizes[0];
   const dynamicPrice = currentSizeObj.price || 45;

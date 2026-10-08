@@ -38,11 +38,25 @@ export const formatProductFromDb = (row) => {
   const resolvedGender = isWomen ? 'Women' : 'Men';
   const resolvedCategory = isWomen ? 'Women' : 'Men';
 
-  // Safe price & numbers
-  const price = Number(row.price);
-  const safePrice = !isNaN(price) && price > 0 ? price : 45;
-  const origPrice = Number(row.original_price);
-  const safeOriginalPrice = !isNaN(origPrice) && origPrice >= safePrice ? origPrice : safePrice;
+  // Variant prices from DB columns (price_30ml, price_50ml, price_100ml)
+  // Takes directly from the database table, falling back to specs or defaults if not yet migrated
+  const price30 = row.price_30ml != null && !isNaN(Number(row.price_30ml))
+    ? Number(row.price_30ml)
+    : (row.price != null && !isNaN(Number(row.price)) ? Number(row.price) : 45);
+
+  const price50 = row.price_50ml != null && !isNaN(Number(row.price_50ml))
+    ? Number(row.price_50ml)
+    : 65;
+
+  const price100 = row.price_100ml != null && !isNaN(Number(row.price_100ml))
+    ? Number(row.price_100ml)
+    : 125;
+
+  const dynamicSizes = [
+    { label: '30 ml Travel Atomizer', ml: 30, price: price30, isRefillable: true },
+    { label: '50 ml Haute Flacon', ml: 50, price: price50, isRefillable: true },
+    { label: '100 ml Collector Flacon', ml: 100, price: price100, isRefillable: true }
+  ];
 
   return {
     id: String(row.id || `vlz-gen-${Date.now()}`),
@@ -59,8 +73,10 @@ export const formatProductFromDb = (row) => {
     tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
     tagline: String(row.tagline || ''),
     description: String(row.description || ''),
-    price: safePrice,
-    originalPrice: safeOriginalPrice,
+    price_30ml: price30,
+    price_50ml: price50,
+    price_100ml: price100,
+    price: price30,
     discountPercent: Number(row.discount_percent || 0),
     stock: parseInt(row.stock, 10) || 0,
     rating: row.rating !== null && !isNaN(parseFloat(row.rating)) ? parseFloat(row.rating) : null,
@@ -78,11 +94,7 @@ export const formatProductFromDb = (row) => {
       heartNotes: Array.isArray(specs.pyramid?.heartNotes) ? specs.pyramid.heartNotes : ['Damascena Rose', 'French Lavender'],
       baseNotes: Array.isArray(specs.pyramid?.baseNotes) ? specs.pyramid.baseNotes : ['Royal Woods', 'Ambergris', 'Bourbon Vanilla']
     },
-    sizes: Array.isArray(specs.sizes) && specs.sizes.length > 0 ? specs.sizes : [
-      { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
-      { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
-      { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
-    ],
+    sizes: dynamicSizes,
     features: Array.isArray(row.features) ? row.features : [],
     dominantAccord: String(specs.dominantAccord || specs.character || ''),
     mainAccords: Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0 
@@ -95,6 +107,16 @@ export const formatProductFromDb = (row) => {
 
 // Helper: Format JS camelCase to DB product row
 export const formatProductToDb = (product) => {
+  const p30 = product.price_30ml != null 
+    ? Number(product.price_30ml) 
+    : (product.sizes?.find(s => s.ml === 30)?.price ?? (Number(product.price) || 45));
+  const p50 = product.price_50ml != null 
+    ? Number(product.price_50ml) 
+    : (product.sizes?.find(s => s.ml === 50)?.price ?? 65);
+  const p100 = product.price_100ml != null 
+    ? Number(product.price_100ml) 
+    : (product.sizes?.find(s => s.ml === 100)?.price ?? 125);
+
   return {
     id: product.id,
     sku: product.sku,
@@ -102,8 +124,9 @@ export const formatProductToDb = (product) => {
     category: product.category,
     tagline: product.tagline,
     description: product.description,
-    price: product.price,
-    original_price: product.originalPrice,
+    price_30ml: p30,
+    price_50ml: p50,
+    price_100ml: p100,
     discount_percent: product.discountPercent,
     stock: product.stock,
     rating: product.rating,
@@ -125,7 +148,11 @@ export const formatProductToDb = (product) => {
       intensityScore: product.intensityScore,
       concentration: product.concentration,
       pyramid: product.pyramid,
-      sizes: product.sizes,
+      sizes: [
+        { label: '30 ml Travel Atomizer', ml: 30, price: p30, isRefillable: true },
+        { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
+        { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
+      ],
       sillage: product.sillage,
       longevity: product.longevity,
       season: product.season

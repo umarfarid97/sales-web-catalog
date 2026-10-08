@@ -48,8 +48,9 @@ CREATE TABLE IF NOT EXISTS public.products (
   category TEXT NOT NULL,
   tagline TEXT,
   description TEXT,
-  price NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
-  original_price NUMERIC(10, 2),
+  price_30ml NUMERIC(10, 2) NOT NULL DEFAULT 45.00,
+  price_50ml NUMERIC(10, 2) NOT NULL DEFAULT 65.00,
+  price_100ml NUMERIC(10, 2) NOT NULL DEFAULT 125.00,
   discount_percent INTEGER DEFAULT 0,
   stock INTEGER NOT NULL DEFAULT 0,
   rating NUMERIC(3, 2) DEFAULT 5.00,
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS public.products (
 -- Indices for catalog searching and filtering
 CREATE INDEX IF NOT EXISTS idx_products_category ON public.products(category);
 CREATE INDEX IF NOT EXISTS idx_products_sku ON public.products(sku);
-CREATE INDEX IF NOT EXISTS idx_products_price ON public.products(price);
+CREATE INDEX IF NOT EXISTS idx_products_price_30ml ON public.products(price_30ml);
 CREATE INDEX IF NOT EXISTS idx_products_specs ON public.products USING GIN (specs);
 
 -- ----------------------------------------------------------------------------

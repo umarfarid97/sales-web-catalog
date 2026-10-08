@@ -1087,6 +1087,10 @@ export const StoreProvider = ({ children }) => {
   // --- Product CRUD (Admin Operations Cloud + Local) ---
   const addProduct = async (productData) => {
     const id = `vlz-custom-${Date.now()}`;
+    const p30 = parseFloat(productData.price_30ml) || parseFloat(productData.price) || 45;
+    const p50 = parseFloat(productData.price_50ml) || 65;
+    const p100 = parseFloat(productData.price_100ml) || 125;
+
     const newProduct = {
       id,
       sku: productData.sku || `VAL-C-${Date.now().toString().slice(-4)}`,
@@ -1094,8 +1098,10 @@ export const StoreProvider = ({ children }) => {
       category: productData.category || 'Woody & Smoky',
       tagline: productData.tagline || '',
       description: productData.description || '',
-      price: parseFloat(productData.price) || 45,
-      originalPrice: parseFloat(productData.originalPrice) || parseFloat(productData.price) || 55,
+      price_30ml: p30,
+      price_50ml: p50,
+      price_100ml: p100,
+      price: p30,
       discountPercent: productData.discountPercent || 0,
       stock: parseInt(productData.stock, 10) || 15,
       rating: productData.rating ? parseFloat(productData.rating) : null,
@@ -1109,9 +1115,9 @@ export const StoreProvider = ({ children }) => {
         baseNotes: ['Royal Woods', 'Bourbon Vanilla']
       },
       sizes: productData.sizes || [
-        { label: '30 ml Travel Atomizer', ml: 30, price: 45, isRefillable: true },
-        { label: '50 ml Haute Flacon', ml: 50, price: 65, isRefillable: true },
-        { label: '100 ml Collector Flacon', ml: 100, price: 125, isRefillable: true }
+        { label: '30 ml Travel Atomizer', ml: 30, price: p30, isRefillable: true },
+        { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
+        { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
       ],
       features: productData.features || ['Valenszo Luxury Perfume', 'Eco-Friendly Refillable Bottle'],
       specs: productData.specs || { concentration: 'Extrait de Parfum (30%)', longevity: '14+ Hours' },
@@ -1134,11 +1140,21 @@ export const StoreProvider = ({ children }) => {
     setProducts((prev) =>
       prev.map((prod) => {
         if (prod.id === productId) {
+          const p30 = updatedData.price_30ml !== undefined ? (parseFloat(updatedData.price_30ml) || 45) : (prod.price_30ml || prod.price || 45);
+          const p50 = updatedData.price_50ml !== undefined ? (parseFloat(updatedData.price_50ml) || 65) : (prod.price_50ml || 65);
+          const p100 = updatedData.price_100ml !== undefined ? (parseFloat(updatedData.price_100ml) || 125) : (prod.price_100ml || 125);
           savedProd = {
             ...prod,
             ...updatedData,
-            price: parseFloat(updatedData.price) || prod.price,
-            originalPrice: parseFloat(updatedData.originalPrice) || prod.originalPrice,
+            price_30ml: p30,
+            price_50ml: p50,
+            price_100ml: p100,
+            price: p30,
+            sizes: [
+              { label: '30 ml Travel Atomizer', ml: 30, price: p30, isRefillable: true },
+              { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
+              { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
+            ],
             stock: parseInt(updatedData.stock, 10) ?? prod.stock
           };
           return savedProd;
