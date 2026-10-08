@@ -14,7 +14,6 @@ import {
   Check,
   MessageCircle
 } from 'lucide-react';
-import { cleanPerfumeName } from '../../utils/taxonomy';
 import '../../styles/pdp.css';
 
 export const ProductDetailPage = () => {
@@ -201,7 +200,7 @@ export const ProductDetailPage = () => {
   }
 
   const isFav = Array.isArray(favorites) && product?.id ? favorites.includes(product.id) : false;
-  const displayName = cleanPerfumeName(product.name || 'Perfume');
+  const displayName = product.name || 'Perfume';
   const handleSelectThumbnail = (index) => {
     setActiveThumbIndex(index);
     if (galleryItems[index].type === 'video') {

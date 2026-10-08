@@ -23,7 +23,6 @@ import {
   resolveProductCategory,
   resolveProductConcentration,
   generateAttributeId,
-  cleanPerfumeName,
   TAXONOMY_TYPE,
   CORE_GENDERS
 } from '../utils/taxonomy';
@@ -235,10 +234,7 @@ export const StoreProvider = ({ children }) => {
         if (Array.isArray(parsed) && parsed.length > 0) {
           const valid = parsed.filter((p) => p && typeof p === 'object' && typeof p.id === 'string' && p.id.trim());
           if (valid.length > 0) {
-            return valid.map((p) => ({
-              ...p,
-              name: cleanPerfumeName(p.name)
-            }));
+            return valid;
           }
         }
       }
@@ -710,7 +706,7 @@ export const StoreProvider = ({ children }) => {
   const addToCart = (product, arg2 = 1, arg3 = null) => {
     if (!product) return false;
     const selectedSize = typeof arg2 === 'string' ? arg2 : (typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || 'Standard'));
-    const safeName = cleanPerfumeName(product.name || 'Perfume');
+    const safeName = product.name || 'Perfume';
     const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am browsing your online catalog and would like to order / inquire about:\n• Perfume: ${safeName}\n• Size: ${selectedSize}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
     return true;
@@ -743,7 +739,7 @@ export const StoreProvider = ({ children }) => {
         (i.id === idOrCartItemId && (!optionalSize || i.selectedSize === optionalSize))
       );
       if (item) {
-        showToast(`Removed "${cleanPerfumeName(item.name)}" from bag`, 'info');
+        showToast(`Removed "${item.name || 'Item'}" from bag`, 'info');
       }
       return prevCart.filter((i) => 
         !(i.cartItemId === idOrCartItemId || 
@@ -787,7 +783,7 @@ export const StoreProvider = ({ children }) => {
     setFavorites((prev) => {
       const isFav = prev.includes(productId);
       const product = products.find((p) => p.id === productId);
-      const productName = product ? cleanPerfumeName(product.name) : 'Item';
+      const productName = product ? (product.name || 'Item') : 'Item';
       if (isFav) {
         showToast(`Removed "${productName}" from wishlist`, 'info');
         return prev.filter((id) => id !== productId);

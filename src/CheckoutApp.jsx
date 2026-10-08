@@ -10,7 +10,6 @@ import { AuthModal } from './components/common/AuthModal';
 import { COMPLIMENTARY_SAMPLES } from './data/initialProducts';
 import { PAYMENT_METHODS, MAISON_BANK_DETAILS, initiatePayment, parseToyyibPayStatus } from './services/paymentService';
 import { MALAYSIAN_STATES } from './components/customer/AccountPage';
-import { cleanPerfumeName } from './utils/taxonomy';
 import { 
   Check, 
   CheckCircle2, 
@@ -547,9 +546,9 @@ export const CheckoutPageContent = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                   {cart.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <img src={item.image} alt={cleanPerfumeName(item.name)} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
+                      <img src={item.image} alt={item.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cleanPerfumeName(item.name)}</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
                         <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>Qty: {item.quantity} · {item.selectedSize}</div>
                       </div>
                       <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>RM{(item.price * item.quantity).toFixed(2)}</div>

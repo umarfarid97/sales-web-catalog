@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const ProductCard = ({ product }) => {
   const { 
@@ -18,7 +17,7 @@ export const ProductCard = ({ product }) => {
     }
   };
 
-  const displayName = cleanPerfumeName(product.name);
+  const displayName = product.name || 'Perfume';
 
   return (
     <div 

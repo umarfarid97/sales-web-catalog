@@ -6,7 +6,6 @@ import {
   RefreshCw, 
   Feather
 } from 'lucide-react';
-import { cleanPerfumeName } from '../../utils/taxonomy';
 
 export const ProductDetailModal = () => {
   const { 
@@ -18,7 +17,7 @@ export const ProductDetailModal = () => {
   } = useStore();
 
   const product = selectedProductModal;
-  const displayName = cleanPerfumeName(product?.name || 'Perfume');
+  const displayName = product?.name || 'Perfume';
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(1);
   const [quantity] = useState(1);
