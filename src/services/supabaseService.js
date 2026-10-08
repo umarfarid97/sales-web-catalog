@@ -28,6 +28,8 @@ export const formatProductFromDb = (row) => {
     traits = specs.mainAccords.filter(t => typeof t === 'string' && t.trim());
   } else if (Array.isArray(specs.traits) && specs.traits.length > 0) {
     traits = specs.traits.filter(t => typeof t === 'string' && t.trim());
+  } else if (typeof specs.dominantAccord === 'string') {
+    traits = specs.dominantAccord.split('/').map(t => t.trim()).filter(Boolean);
   } else if (typeof specs.olfactoryFamily === 'string') {
     traits = specs.olfactoryFamily.split('/').map(t => t.trim()).filter(Boolean);
   } else if (typeof specs.character === 'string') {
@@ -63,6 +65,7 @@ export const formatProductFromDb = (row) => {
   ];
 
   const resolvedBrand = String(row.brand || specs.brandInspiration || specs.brand || '').trim();
+  const resolvedAccord = String(specs.dominantAccord || specs.olfactoryFamily || specs.character || resolvedCategory);
 
   return {
     id: String(row.id || `vlz-gen-${Date.now()}`),
@@ -74,8 +77,9 @@ export const formatProductFromDb = (row) => {
     originalListing: String(specs.originalListing || ''),
     gender: resolvedGender,
     category: resolvedCategory,
-    character: String(specs.character || resolvedCategory),
-    olfactoryFamily: String(specs.olfactoryFamily || specs.character || resolvedCategory),
+    character: resolvedAccord,
+    olfactoryFamily: resolvedAccord,
+    dominantAccord: resolvedAccord,
     traits,
     tier: specs.tier || (row.badge?.includes('Tier S') ? 'S' : 'B'),
     tagline: String(row.tagline || ''),
@@ -103,7 +107,6 @@ export const formatProductFromDb = (row) => {
     },
     sizes: dynamicSizes,
     features: Array.isArray(row.features) ? row.features : [],
-    dominantAccord: String(specs.dominantAccord || specs.character || ''),
     mainAccords: Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0 
       ? specs.mainAccords 
       : (Array.isArray(specs.traits) && specs.traits.length > 0 ? specs.traits : traits),
@@ -144,11 +147,11 @@ export const formatProductToDb = (product) => {
     features: product.features || [],
     specs: (() => {
       const baseSpecs = { ...(product.specs || {}) };
-      // Delete any redundant keys if present in incoming product.specs
+      // Delete redundant keys so specs remains clean
       delete baseSpecs.brandInspiration;
       delete baseSpecs.gender;
       delete baseSpecs.sizes;
-      delete baseSpecs.dominantAccord;
+      delete baseSpecs.olfactoryFamily;
       delete baseSpecs.traits;
       delete baseSpecs.character;
 
@@ -156,7 +159,7 @@ export const formatProductToDb = (product) => {
         ...baseSpecs,
         catalogNo: product.catalogNo || baseSpecs.catalogNo,
         originalListing: product.originalListing || baseSpecs.originalListing || '',
-        olfactoryFamily: product.olfactoryFamily || product.character || baseSpecs.olfactoryFamily || '',
+        dominantAccord: product.dominantAccord || product.olfactoryFamily || product.character || baseSpecs.dominantAccord || '',
         mainAccords: Array.isArray(product.mainAccords) && product.mainAccords.length > 0 
           ? product.mainAccords 
           : (Array.isArray(baseSpecs.mainAccords) ? baseSpecs.mainAccords : (product.traits || [])),

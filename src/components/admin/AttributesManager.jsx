@@ -194,10 +194,10 @@ SELECT
   family,
   ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) as display_order
 FROM (
-  SELECT COALESCE(specs->>'olfactoryFamily', specs->>'character') as family
+  SELECT COALESCE(specs->>'dominantAccord', specs->>'olfactoryFamily', specs->>'character') as family
   FROM public.products
-  WHERE COALESCE(specs->>'olfactoryFamily', specs->>'character') IS NOT NULL
-    AND COALESCE(specs->>'olfactoryFamily', specs->>'character') NOT IN ('', 'Pour Femme', 'Pour Homme')
+  WHERE COALESCE(specs->>'dominantAccord', specs->>'olfactoryFamily', specs->>'character') IS NOT NULL
+    AND COALESCE(specs->>'dominantAccord', specs->>'olfactoryFamily', specs->>'character') NOT IN ('', 'Pour Femme', 'Pour Homme')
 ) f
 GROUP BY family
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, display_order = EXCLUDED.display_order;

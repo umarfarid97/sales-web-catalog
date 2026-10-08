@@ -72,8 +72,10 @@ export const resolveProductGender = (product) => {
 export const resolveProductCategory = (product, defaultCategory = 'Fresh / Aquatic / Citrus') => {
   if (!product) return defaultCategory;
 
-  // 1. Direct olfactory family / character specs take precedence
-  const directFamily = product.olfactoryFamily || 
+  // 1. Direct olfactory family / dominant accord specs take precedence
+  const directFamily = product.dominantAccord ||
+                       product.specs?.dominantAccord ||
+                       product.olfactoryFamily || 
                        product.specs?.olfactoryFamily || 
                        product.character || 
                        product.specs?.character;

@@ -4,10 +4,12 @@
 -- ============================================================================
 
 UPDATE public.products
-SET specs = specs 
-  - 'brandInspiration' -- Redundant with top-level `brand` column
-  - 'gender'           -- Redundant with top-level `category` column
-  - 'sizes'            -- Redundant with top-level `price_30ml`, `price_50ml`, `price_100ml`
-  - 'dominantAccord'   -- Duplicate of `olfactoryFamily`
-  - 'traits'           -- Duplicate of `mainAccords`
-  - 'character';       -- Duplicate of `olfactoryFamily`
+SET specs = (
+  specs 
+    - 'brandInspiration' -- Redundant with top-level `brand` column
+    - 'gender'           -- Redundant with top-level `category` column
+    - 'sizes'            -- Redundant with top-level `price_30ml`, `price_50ml`, `price_100ml`
+    - 'olfactoryFamily'  -- Renamed to `dominantAccord`
+    - 'traits'           -- Duplicate of `mainAccords`
+    - 'character'        -- Duplicate of `dominantAccord`
+) || jsonb_build_object('dominantAccord', COALESCE(specs->>'dominantAccord', specs->>'olfactoryFamily', specs->>'character'));

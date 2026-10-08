@@ -1241,7 +1241,7 @@ export const StoreProvider = ({ children }) => {
     // Dynamic fallback: extract distinct fragrance categories directly from products
     const famCounts = {};
     (products || []).forEach(p => {
-      const f = p.specs?.olfactoryFamily || p.specs?.character || p.olfactoryFamily || p.character;
+      const f = p.specs?.dominantAccord || p.specs?.olfactoryFamily || p.dominantAccord || p.olfactoryFamily || p.specs?.character || p.character;
       if (f && typeof f === 'string' && f.trim() && f !== 'Pour Femme' && f !== 'Pour Homme') {
         famCounts[f.trim()] = (famCounts[f.trim()] || 0) + 1;
       }
