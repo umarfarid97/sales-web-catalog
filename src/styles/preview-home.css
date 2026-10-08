@@ -198,13 +198,13 @@
 }
 
 .prv-hero-headline {
-  font-family: var(--font-brand);
-  font-size: clamp(2.8rem, 5.2vw, 4.4rem);
-  line-height: 1.12;
-  font-weight: 700;
+  font-family: 'Rebound', serif;
+  font-size: clamp(3.2rem, 5.6vw, 5.2rem);
+  line-height: 1.14;
+  font-weight: 400;
   color: #000000;
   letter-spacing: -0.015em;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   text-transform: none !important;
   word-wrap: break-word;
   overflow-wrap: break-word;
