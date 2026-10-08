@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS public.products (
   id TEXT PRIMARY KEY,
   sku TEXT UNIQUE NOT NULL,
   name TEXT NOT NULL,
+  brand TEXT,
   category TEXT NOT NULL,
   tagline TEXT,
   description TEXT,
@@ -66,6 +67,7 @@ CREATE TABLE IF NOT EXISTS public.products (
 
 -- Indices for catalog searching and filtering
 CREATE INDEX IF NOT EXISTS idx_products_category ON public.products(category);
+CREATE INDEX IF NOT EXISTS idx_products_brand ON public.products(brand);
 CREATE INDEX IF NOT EXISTS idx_products_sku ON public.products(sku);
 CREATE INDEX IF NOT EXISTS idx_products_price_30ml ON public.products(price_30ml);
 CREATE INDEX IF NOT EXISTS idx_products_specs ON public.products USING GIN (specs);

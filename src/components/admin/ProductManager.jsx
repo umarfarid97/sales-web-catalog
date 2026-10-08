@@ -208,8 +208,9 @@ export const ProductManager = () => {
                           />
                           <div>
                             <div className="font-serif-title" style={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>{prod.name}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                              {prod.badge && <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 6px', marginRight: '6px' }}>{prod.badge}</span>}
+                            <div style={{ fontSize: '0.75rem', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '2px' }}>
+                              {(prod.brand || prod.brandInspiration) && <span style={{ color: '#4b5563', fontWeight: 600 }}>{prod.brand || prod.brandInspiration}</span>}
+                              {prod.badge && <span className="badge badge-gold" style={{ fontSize: '0.65rem', padding: '1px 6px' }}>{prod.badge}</span>}
                             </div>
                           </div>
                         </div>

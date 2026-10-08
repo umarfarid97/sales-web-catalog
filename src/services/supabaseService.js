@@ -58,12 +58,15 @@ export const formatProductFromDb = (row) => {
     { label: '100 ml Collector Flacon', ml: 100, price: price100, isRefillable: true }
   ];
 
+  const resolvedBrand = String(row.brand || specs.brandInspiration || specs.brand || '').trim();
+
   return {
     id: String(row.id || `vlz-gen-${Date.now()}`),
     sku: String(row.sku || ''),
     catalogNo: parsedCatalogNo,
     name: String(row.name || 'Perfume').trim(),
-    brandInspiration: String(specs.brandInspiration || ''),
+    brand: resolvedBrand,
+    brandInspiration: resolvedBrand,
     originalListing: String(specs.originalListing || ''),
     gender: resolvedGender,
     category: resolvedCategory,
@@ -116,8 +119,9 @@ export const formatProductToDb = (product) => {
   const p100 = product.price_100ml != null 
     ? Number(product.price_100ml) 
     : (product.sizes?.find(s => s.ml === 100)?.price ?? 125);
+  const brandVal = String(product.brand || product.brandInspiration || '').trim();
 
-  return {
+  const payload = {
     id: product.id,
     sku: product.sku,
     name: product.name,
@@ -137,7 +141,7 @@ export const formatProductToDb = (product) => {
     specs: {
       ...product.specs,
       catalogNo: product.catalogNo,
-      brandInspiration: product.brandInspiration,
+      brandInspiration: brandVal,
       originalListing: product.originalListing,
       gender: product.gender,
       character: product.character,
@@ -159,6 +163,12 @@ export const formatProductToDb = (product) => {
     },
     images: product.images || []
   };
+
+  if (product.brand !== undefined || product.brandInspiration !== undefined) {
+    payload.brand = brandVal;
+  }
+
+  return payload;
 };
 
 // Helper: Format DB order row to JS camelCase

@@ -21,6 +21,7 @@ export const ProductFormModal = () => {
 
   const [formData, setFormData] = useState({
     name: '',
+    brand: '',
     sku: '',
     gender: 'Men',
     category: 'Fresh / Aquatic / Citrus',
@@ -50,6 +51,7 @@ export const ProductFormModal = () => {
     if (editingProduct) {
       setFormData({
         name: editingProduct.name || '',
+        brand: editingProduct.brand || editingProduct.brandInspiration || '',
         sku: editingProduct.sku || '',
         gender: resolveProductGender(editingProduct),
         category: resolveProductCategory(editingProduct, defaultCat),
@@ -74,6 +76,7 @@ export const ProductFormModal = () => {
     } else {
       setFormData({
         name: '',
+        brand: '',
         sku: `VAL-PAR-${Math.floor(100 + Math.random() * 900)}`,
         gender: 'Men',
         category: defaultCat,
@@ -108,6 +111,8 @@ export const ProductFormModal = () => {
 
     const productPayload = {
       ...formData,
+      brand: formData.brand,
+      brandInspiration: formData.brand,
       gender: formData.gender,
       category: formData.category,
       character: formData.category,
@@ -122,6 +127,7 @@ export const ProductFormModal = () => {
       reviewsCount: parseInt(formData.reviewsCount, 10) || 0,
       specs: {
         ...(editingProduct?.specs || {}),
+        brandInspiration: formData.brand,
         gender: formData.gender,
         category: formData.category,
         character: formData.category,
@@ -182,16 +188,29 @@ export const ProductFormModal = () => {
             
             {/* Left: General Info */}
             <div>
-              <div className="form-group">
-                <label className="admin-form-label">Fragrance Title *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Oud Royal Extrait"
-                  className="admin-form-input"
-                />
+              <div className="admin-form-row-2col">
+                <div className="form-group">
+                  <label className="admin-form-label">Fragrance Title *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Oud Royal Extrait"
+                    className="admin-form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="admin-form-label">Brand / Inspired By</label>
+                  <input
+                    type="text"
+                    value={formData.brand}
+                    onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                    placeholder="e.g. Louis Vuitton, Chanel, Dior"
+                    className="admin-form-input"
+                  />
+                </div>
               </div>
 
               <div className="admin-form-row-2col">

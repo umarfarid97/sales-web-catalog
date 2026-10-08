@@ -186,9 +186,9 @@ export const ProductDetailModal = () => {
               {displayName}
             </h2>
 
-            {product.brandInspiration && (
+            {(product.brand || product.brandInspiration) && (
               <div style={{ fontSize: '0.82rem', color: '#926917', fontWeight: 700, letterSpacing: '0.06em', marginBottom: '10px' }}>
-                Inspired by {product.brandInspiration} &bull; Catalog No. {product.catalogNo}
+                Inspired by {product.brand || product.brandInspiration} &bull; Catalog No. {product.catalogNo}
               </div>
             )}
 

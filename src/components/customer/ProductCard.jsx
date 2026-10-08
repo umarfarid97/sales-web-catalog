@@ -144,9 +144,9 @@ export const ProductCard = ({ product }) => {
           textOverflow: 'ellipsis',
           fontFamily: 'var(--font-sans, "Plus Jakarta Sans", system-ui, -apple-system, sans-serif)'
         }}
-        title={product.brandInspiration ? `Inspired by ${product.brandInspiration}` : ''}
+        title={(product.brand || product.brandInspiration) ? `Inspired by ${product.brand || product.brandInspiration}` : ''}
       >
-        {product.brandInspiration ? `Inspired by ${product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
+        {(product.brand || product.brandInspiration) ? `Inspired by ${product.brand || product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
       </p>
 
     </div>

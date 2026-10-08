@@ -327,6 +327,12 @@ export const ProductDetailPage = () => {
             {displayName}
           </h1>
 
+          {(product.brand || product.brandInspiration) && (
+            <div style={{ fontSize: '0.92rem', color: '#6B7280', margin: '4px 0 8px', fontWeight: 600 }}>
+              Inspired by {product.brand || product.brandInspiration}
+            </div>
+          )}
+
           <div className="pdp-product-subtitle">
             {product.concentration || 'Extrait de Parfum'}
           </div>

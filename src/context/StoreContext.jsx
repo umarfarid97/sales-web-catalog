@@ -1095,6 +1095,8 @@ export const StoreProvider = ({ children }) => {
       id,
       sku: productData.sku || `VAL-C-${Date.now().toString().slice(-4)}`,
       name: productData.name,
+      brand: productData.brand || productData.brandInspiration || '',
+      brandInspiration: productData.brand || productData.brandInspiration || '',
       category: productData.category || 'Woody & Smoky',
       tagline: productData.tagline || '',
       description: productData.description || '',
@@ -1120,7 +1122,12 @@ export const StoreProvider = ({ children }) => {
         { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
       ],
       features: productData.features || ['Valenszo Luxury Perfume', 'Eco-Friendly Refillable Bottle'],
-      specs: productData.specs || { concentration: 'Extrait de Parfum (30%)', longevity: '14+ Hours' },
+      specs: {
+        ...(productData.specs || {}),
+        brandInspiration: productData.brand || productData.brandInspiration || '',
+        concentration: productData.concentration || 'Extrait de Parfum (30%)',
+        longevity: '14+ Hours'
+      },
       images: productData.images && productData.images.length > 0
         ? productData.images
         : ['https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1000&q=80']
@@ -1143,9 +1150,12 @@ export const StoreProvider = ({ children }) => {
           const p30 = updatedData.price_30ml !== undefined ? (parseFloat(updatedData.price_30ml) || 45) : (prod.price_30ml || prod.price || 45);
           const p50 = updatedData.price_50ml !== undefined ? (parseFloat(updatedData.price_50ml) || 65) : (prod.price_50ml || 65);
           const p100 = updatedData.price_100ml !== undefined ? (parseFloat(updatedData.price_100ml) || 125) : (prod.price_100ml || 125);
+          const updatedBrand = updatedData.brand !== undefined ? updatedData.brand : (prod.brand || prod.brandInspiration || '');
           savedProd = {
             ...prod,
             ...updatedData,
+            brand: updatedBrand,
+            brandInspiration: updatedBrand,
             price_30ml: p30,
             price_50ml: p50,
             price_100ml: p100,
@@ -1155,6 +1165,11 @@ export const StoreProvider = ({ children }) => {
               { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
               { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
             ],
+            specs: {
+              ...(prod.specs || {}),
+              ...(updatedData.specs || {}),
+              brandInspiration: updatedBrand
+            },
             stock: parseInt(updatedData.stock, 10) ?? prod.stock
           };
           return savedProd;
