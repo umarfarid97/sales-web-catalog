@@ -22,10 +22,14 @@ export const formatProductFromDb = (row) => {
   const defaultFallbackImg = 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1000&auto=format&fit=crop&q=80';
   const images = rawImages.length > 0 ? rawImages : [defaultFallbackImg];
 
-  // Safe traits extraction
+  // Safe main accords extraction (prioritizing mainAccords over legacy traits)
   let traits = [];
-  if (Array.isArray(specs.traits)) {
+  if (Array.isArray(specs.mainAccords) && specs.mainAccords.length > 0) {
+    traits = specs.mainAccords.filter(t => typeof t === 'string' && t.trim());
+  } else if (Array.isArray(specs.traits) && specs.traits.length > 0) {
     traits = specs.traits.filter(t => typeof t === 'string' && t.trim());
+  } else if (typeof specs.olfactoryFamily === 'string') {
+    traits = specs.olfactoryFamily.split('/').map(t => t.trim()).filter(Boolean);
   } else if (typeof specs.character === 'string') {
     traits = specs.character.split('/').map(t => t.trim()).filter(Boolean);
   }
@@ -138,29 +142,37 @@ export const formatProductToDb = (product) => {
     badge: product.badge,
     is_featured: product.isFeatured,
     features: product.features || [],
-    specs: {
-      ...product.specs,
-      catalogNo: product.catalogNo,
-      brandInspiration: brandVal,
-      originalListing: product.originalListing,
-      gender: product.gender,
-      character: product.character,
-      olfactoryFamily: product.olfactoryFamily,
-      traits: product.traits,
-      tier: product.tier,
-      refillable: product.refillable,
-      intensityScore: product.intensityScore,
-      concentration: product.concentration,
-      pyramid: product.pyramid,
-      sizes: [
-        { label: '30 ml Travel Atomizer', ml: 30, price: p30, isRefillable: true },
-        { label: '50 ml Haute Flacon', ml: 50, price: p50, isRefillable: true },
-        { label: '100 ml Collector Flacon', ml: 100, price: p100, isRefillable: true }
-      ],
-      sillage: product.sillage,
-      longevity: product.longevity,
-      season: product.season
-    },
+    specs: (() => {
+      const baseSpecs = { ...(product.specs || {}) };
+      // Delete any redundant keys if present in incoming product.specs
+      delete baseSpecs.brandInspiration;
+      delete baseSpecs.gender;
+      delete baseSpecs.sizes;
+      delete baseSpecs.dominantAccord;
+      delete baseSpecs.traits;
+      delete baseSpecs.character;
+
+      return {
+        ...baseSpecs,
+        catalogNo: product.catalogNo || baseSpecs.catalogNo,
+        originalListing: product.originalListing || baseSpecs.originalListing || '',
+        olfactoryFamily: product.olfactoryFamily || product.character || baseSpecs.olfactoryFamily || '',
+        mainAccords: Array.isArray(product.mainAccords) && product.mainAccords.length > 0 
+          ? product.mainAccords 
+          : (Array.isArray(baseSpecs.mainAccords) ? baseSpecs.mainAccords : (product.traits || [])),
+        tier: product.tier || baseSpecs.tier || 'B',
+        refillable: product.refillable !== undefined ? product.refillable : (baseSpecs.refillable ?? true),
+        intensityScore: product.intensityScore || baseSpecs.intensityScore || 4,
+        concentration: product.concentration || baseSpecs.concentration || 'Eau de Parfum (20%)',
+        pyramid: product.pyramid || baseSpecs.pyramid || { topNotes: [], heartNotes: [], baseNotes: [] },
+        sillage: product.sillage || baseSpecs.sillage || 'Radiant & Enveloping',
+        longevity: product.longevity || baseSpecs.longevity || '12+ Hours',
+        season: product.season || baseSpecs.season || 'All Seasons',
+        layerFamily: baseSpecs.layerFamily || 'L1',
+        macroZone: baseSpecs.macroZone || 'Fresh / Clean',
+        similarityGroup: baseSpecs.similarityGroup || ''
+      };
+    })(),
     images: product.images || []
   };
 
