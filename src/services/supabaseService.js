@@ -31,16 +31,13 @@ export const formatProductFromDb = (row) => {
     traits = specs.character.split('/').map(t => t.trim()).filter(Boolean);
   }
 
-  // Safe gender resolution
-  const resolvedCategory = row.category || 'Men';
-  let resolvedGender = specs.gender;
-  if (!resolvedGender) {
-    if (resolvedCategory === 'Pour Femme' || resolvedCategory === 'Women' || (row.sku && row.sku.startsWith('VLZ-W')) || (row.id && (row.id.startsWith('vlz-women') || row.id.startsWith('vlz-wom')))) {
-      resolvedGender = 'Women';
-    } else {
-      resolvedGender = 'Men';
-    }
-  }
+  // Safe gender resolution: strictly 'Women' or 'Men'
+  const rawGender = (specs.gender || row.category || '').toLowerCase();
+  const isWomen = rawGender.includes('women') || rawGender.includes('femme') ||
+    (row.sku && row.sku.startsWith('VLZ-W')) ||
+    (row.id && (row.id.startsWith('vlz-women') || row.id.startsWith('vlz-wom')));
+  const resolvedGender = isWomen ? 'Women' : 'Men';
+  const resolvedCategory = isWomen ? 'Women' : 'Men';
 
   // Safe price & numbers
   const price = Number(row.price);

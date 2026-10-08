@@ -79,7 +79,7 @@ export const WomenCollectionContent = () => {
       // Exclusively Women's Fragrances (support both vlz-women and vlz-wom prefixes)
       const pId = String(p.id || '');
       const pSku = String(p.sku || '');
-      const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
+      const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Women' || p.category === 'Pour Femme' || p.gender === 'Women';
       if (!isWomen) return false;
 
       // Real-time Search Query Filter

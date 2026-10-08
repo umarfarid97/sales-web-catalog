@@ -231,18 +231,18 @@ const PreviewHomeContent = () => {
       <section className="prv-collage-section">
         <div className="prv-container prv-collage-grid">
           
-          {/* Tile 1: 3rd picture -> Unisex Perfume Page */}
+          {/* Tile 1: 3rd picture -> All Collections Page */}
           <a 
-            href="collection.html?gender=Unisex" 
+            href="collection.html" 
             className="prv-collage-tall-tile"
-            aria-label="Shop Unisex Perfume Collection"
+            aria-label="Shop All Fragrances Collection"
           >
             <img 
               src="/images/collage-unisex.jpg" 
-              alt="Unisex Perfume Collection" 
+              alt="All Fragrances Collection" 
             />
             <span className="prv-tile-overlay-btn">
-              Shop Unisex
+              Explore All
             </span>
           </a>
 
@@ -358,7 +358,6 @@ const PreviewHomeContent = () => {
                 <li><a href="collection.html" className="prv-footer-link">All Collections</a></li>
                 <li><a href="men.html" className="prv-footer-link">Men's Perfumes</a></li>
                 <li><a href="women.html" className="prv-footer-link">Women's Perfumes</a></li>
-                <li><a href="collection.html?gender=Unisex" className="prv-footer-link">Unisex Perfumes</a></li>
                 <li><a href="diagnostic.html" className="prv-footer-link">Scent Discovery Quiz</a></li>
               </ul>
             </div>

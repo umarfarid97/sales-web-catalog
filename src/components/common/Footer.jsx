@@ -31,7 +31,6 @@ export const Footer = () => {
               <li><a href="collection.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>All Collections</a></li>
               <li><a href="men.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Men's Perfumes</a></li>
               <li><a href="women.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Women's Perfumes</a></li>
-              <li><a href="collection.html?gender=Unisex" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Unisex Perfumes</a></li>
               <li><a href="diagnostic.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Scent Discovery Quiz</a></li>
             </ul>
           </div>

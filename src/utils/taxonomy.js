@@ -13,7 +13,7 @@ export const TAXONOMY_TYPE = Object.freeze({
   CONCENTRATION: 'concentration'
 });
 
-export const CORE_GENDERS = Object.freeze(['Women', 'Men', 'Unisex']);
+export const CORE_GENDERS = Object.freeze(['Men', 'Women']);
 
 const NON_CATEGORY_KEYWORDS = new Set([
   'men',
@@ -25,11 +25,11 @@ const NON_CATEGORY_KEYWORDS = new Set([
 ]);
 
 /**
- * Resolves a product's gender strictly into 'Women', 'Men', or 'Unisex'.
+ * Resolves a product's gender strictly into 'Women' or 'Men'.
  * Handles specs.gender, direct gender, and legacy category aliases.
  * 
  * @param {Object} product
- * @returns {'Women' | 'Men' | 'Unisex'}
+ * @returns {'Women' | 'Men'}
  */
 export const resolveProductGender = (product) => {
   if (!product) return 'Men';
@@ -46,13 +46,16 @@ export const resolveProductGender = (product) => {
       if (lower === 'women' || lower === 'pour femme' || lower.includes('femme')) {
         return 'Women';
       }
-      if (lower === 'unisex' || lower === 'niche & unisex' || lower.includes('unisex')) {
-        return 'Unisex';
-      }
       if (lower === 'men' || lower === 'pour homme' || lower.includes('homme')) {
         return 'Men';
       }
     }
+  }
+
+  const pId = String(product.id || '').toLowerCase();
+  const pSku = String(product.sku || '').toLowerCase();
+  if (pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('vlz-w')) {
+    return 'Women';
   }
 
   return 'Men';

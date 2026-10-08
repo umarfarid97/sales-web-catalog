@@ -115,9 +115,8 @@ export const ProductManager = () => {
               className="admin-form-select"
               style={{ height: '40px', fontSize: '0.85rem', width: 'auto' }}
             >
-              <option value="All">All Genders (3 Types)</option>
+              <option value="All">All Genders</option>
               <option value="Men">Men</option>
-              <option value="Unisex">Unisex</option>
               <option value="Women">Women</option>
             </select>
 

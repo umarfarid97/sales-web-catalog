@@ -178,12 +178,11 @@ END $$;
 -- 6. Clean and re-seed
 TRUNCATE TABLE public.attributes;
 
--- 7. Seed GENDERS (3 types only: Women, Men, Unisex)
+-- 7. Seed GENDERS (2 types only: Men, Women)
 INSERT INTO public.attributes (id, type, name, value, display_order)
 VALUES
-  ('gen-women', 'gender', 'Women', 'Women', 1),
-  ('gen-men', 'gender', 'Men', 'Men', 2),
-  ('gen-unisex', 'gender', 'Unisex', 'Unisex', 3)
+  ('gen-men', 'gender', 'Men', 'Men', 1),
+  ('gen-women', 'gender', 'Women', 'Women', 2)
 ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, display_order = EXCLUDED.display_order;
 
 -- 8. Seed CATEGORIES (Fragrance Families from real public.products)
@@ -421,7 +420,7 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, dis
                   </h3>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '4px 0 0' }}>
-                  Strictly 3 types only: Women, Men, and Unisex. Defines catalog collection partitioning.
+                  Strictly 2 types only: Men and Women. Defines catalog collection partitioning.
                 </p>
               </div>
 
@@ -541,7 +540,7 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, dis
                 gap: '8px' 
               }}>
                 <CheckCircle2 size={15} color="#10b981" />
-                <span>All {totalCatalogCount} perfumes in the store catalog are strictly mapped to these 3 core genders (Women: 219, Men: 104, Unisex: 23).</span>
+                <span>All {totalCatalogCount} perfumes in the store catalog are strictly mapped to Men and Women based on the Excel master.</span>
               </div>
             </div>
           </div>
@@ -858,7 +857,7 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, value = EXCLUDED.value, dis
                 />
                 {editingAttr && editingAttr.type === 'gender' && (
                   <span style={{ fontSize: '0.72rem', color: '#92400e', marginTop: '4px', display: 'block' }}>
-                    Core gender names (Women, Men, Unisex) cannot be renamed to preserve catalog collections.
+                    Core gender names (Men, Women) cannot be renamed to preserve catalog collections.
                   </span>
                 )}
               </div>

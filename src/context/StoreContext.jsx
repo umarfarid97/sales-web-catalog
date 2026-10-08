@@ -32,11 +32,10 @@ const StoreContext = createContext();
 
 // Helper to derive attributes directly from real products in database
 const deriveAttributesFromProducts = (productsList) => {
-  // 1. Genders (Strictly 3 types only: Women, Men, Unisex)
+  // 1. Genders (Strictly 2 types only: Men, Women)
   const genders = [
-    { id: 'gen-women', type: 'gender', name: 'Women', value: 'Women', displayOrder: 1 },
-    { id: 'gen-men', type: 'gender', name: 'Men', value: 'Men', displayOrder: 2 },
-    { id: 'gen-unisex', type: 'gender', name: 'Unisex', value: 'Unisex', displayOrder: 3 }
+    { id: 'gen-men', type: 'gender', name: 'Men', value: 'Men', displayOrder: 1 },
+    { id: 'gen-women', type: 'gender', name: 'Women', value: 'Women', displayOrder: 2 }
   ];
 
   if (!Array.isArray(productsList) || productsList.length === 0) {
@@ -1190,10 +1189,10 @@ export const StoreProvider = ({ children }) => {
 
   // --- Attributes Management (Admin Operations Cloud + Local) ---
 
-  // 1. Genders: Strictly 3 types only (Women, Men, Unisex)
+  // 1. Genders: Strictly 2 types only (Men, Women)
   const genders = useMemo(() => {
-    const list = (attributes || []).filter(a => a && (a.type === 'gender' || (a.type === 'category' && ['Women', 'Men', 'Unisex'].includes(a.name))));
-    const validNames = ['Women', 'Men', 'Unisex'];
+    const list = (attributes || []).filter(a => a && (a.type === 'gender' || (a.type === 'category' && ['Men', 'Women'].includes(a.name))));
+    const validNames = ['Men', 'Women'];
     const map = new Map(list.map(c => [c.name, c]));
     return validNames.map((name, idx) => map.get(name) || {
       id: `gen-${name.toLowerCase()}`,
@@ -1300,7 +1299,7 @@ export const StoreProvider = ({ children }) => {
 
   // Real product distribution counts for Genders, Categories and Concentrations (Centralized Taxonomy)
   const attributeStats = useMemo(() => {
-    const genderCounts = { Women: 0, Men: 0, Unisex: 0 };
+    const genderCounts = { Women: 0, Men: 0 };
     const categoryCounts = {};
     const concentrationCounts = {};
 
@@ -1412,7 +1411,7 @@ export const StoreProvider = ({ children }) => {
   const deleteAttribute = useCallback(async (id) => {
     const target = attributes.find(a => a.id === id);
     if (target && target.type === 'gender') {
-      showToast('Core gender categories (Men, Women, Unisex) cannot be deleted as they define the catalog taxonomy.', 'warning');
+      showToast('Core gender categories (Men, Women) cannot be deleted as they define the catalog taxonomy.', 'warning');
       return false;
     }
 
@@ -1521,8 +1520,8 @@ export const StoreProvider = ({ children }) => {
     // 1. Gender Collection Filter
     const pId = String(product.id || '');
     const pSku = String(product.sku || '');
-    const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || product.category === 'Pour Homme' || product.gender === 'Men';
-    const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || product.category === 'Pour Femme' || product.gender === 'Women';
+    const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || product.category === 'Men' || product.gender === 'Men';
+    const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || product.category === 'Women' || product.gender === 'Women';
 
     if (activeGender === 'Men' && !isMen) return false;
     if (activeGender === 'Women' && !isWomen) return false;
@@ -1634,7 +1633,7 @@ export const StoreProvider = ({ children }) => {
       if (!p || typeof p !== 'object') return false;
       const pId = String(p.id || '');
       const pSku = String(p.sku || '');
-      return pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
+      return pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Men' || p.gender === 'Men';
     }).length;
   }, [products]);
 
@@ -1643,7 +1642,7 @@ export const StoreProvider = ({ children }) => {
       if (!p || typeof p !== 'object') return false;
       const pId = String(p.id || '');
       const pSku = String(p.sku || '');
-      return pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Pour Femme' || p.gender === 'Women';
+      return pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Women' || p.gender === 'Women';
     }).length;
   }, [products]);
 

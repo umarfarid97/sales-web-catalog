@@ -35,9 +35,8 @@ export const Navbar = () => {
   const isHome = pathname === '' || pathname === '/' || pathname.endsWith('index.html') || pathname.endsWith('/');
   const isWomen = pathname.includes('women');
   const isMen = !isWomen && (pathname.includes('men.html') || pathname.endsWith('/men') || pathname === '/men' || (pathname.includes('men') && !pathname.includes('women')));
-  const isUnisex = search.includes('gender=unisex');
   const isCollection = pathname.includes('collection');
-  const isAllCollection = isCollection && !isUnisex && !isMen && !isWomen;
+  const isAllCollection = isCollection && !isMen && !isWomen;
   const isDiagnostic = pathname.includes('diagnostic');
 
   // Bulletproof body scroll lock when side drawer is open
@@ -210,21 +209,6 @@ export const Navbar = () => {
               }}
             >
               Women
-            </a>
-            <a 
-              href="collection.html?gender=Unisex" 
-              style={{ 
-                textDecoration: 'none', 
-                color: isUnisex ? '#111111' : '#4b5563', 
-                fontSize: '0.86rem', 
-                fontWeight: isUnisex ? 700 : 500, 
-                letterSpacing: '0.04em',
-                transition: 'color 0.2s',
-                borderBottom: isUnisex ? '1.5px solid #111111' : '1.5px solid transparent',
-                paddingBottom: '2px'
-              }}
-            >
-              Unisex
             </a>
             <a 
               href="diagnostic.html" 
@@ -547,26 +531,6 @@ export const Navbar = () => {
                   <ArrowRight size={14} color="#8c7d70" />
                 </a>
 
-                <a 
-                  href="collection.html?gender=Unisex" 
-                  onClick={() => setIsMenuOpen(false)}
-                  style={{
-                    padding: '12px 14px',
-                    borderRadius: '6px',
-                    background: isUnisex ? '#ffffff' : 'transparent',
-                    color: '#111111',
-                    fontWeight: isUnisex ? 700 : 500,
-                    textDecoration: 'none',
-                    fontSize: '0.92rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    border: isUnisex ? '1px solid #eeebdf' : '1px solid transparent'
-                  }}
-                >
-                  <span>For Unisex Fragrance</span>
-                  <ArrowRight size={14} color="#8c7d70" />
-                </a>
 
                 <a 
                   href="diagnostic.html" 

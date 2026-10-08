@@ -79,7 +79,7 @@ export const MenCollectionContent = () => {
       // Exclusively Men's Fragrances
       const pId = String(p.id || '');
       const pSku = String(p.sku || '');
-      const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Pour Homme' || p.gender === 'Men';
+      const isMen = pId.startsWith('vlz-men') || pSku.startsWith('VLZ-M') || p.category === 'Men' || p.category === 'Pour Homme' || p.gender === 'Men';
       if (!isMen) return false;
 
       // Real-time Search Query Filter

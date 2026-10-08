@@ -93,27 +93,23 @@ export const CollectionPageContent = () => {
     const pId = String(p.id || '').toLowerCase();
     const pCat = String(p.category || '').toLowerCase();
     const pGen = String(p.gender || '').toLowerCase();
-    if (pGen === 'women' || pCat.includes('femme') || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom')) {
+    if (pGen === 'women' || pCat === 'women' || pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || String(p.sku || '').startsWith('VLZ-W')) {
       return 'Women';
-    }
-    if (pGen === 'unisex' || pCat.includes('unisex') || pCat.includes('niche') || pId.startsWith('vlz-uni')) {
-      return 'Unisex';
     }
     return 'Men';
   };
 
   const categoryCounts = useMemo(() => {
-    if (!products) return { all: 0, men: 0, women: 0, unisex: 0 };
-    let all = 0, men = 0, women = 0, unisex = 0;
+    if (!products) return { all: 0, men: 0, women: 0 };
+    let all = 0, men = 0, women = 0;
     products.forEach(p => {
       if (!p || typeof p !== 'object' || !p.id) return;
       all++;
       const g = getProductGender(p);
       if (g === 'Women') women++;
-      else if (g === 'Unisex') unisex++;
       else men++;
     });
-    return { all, men, women, unisex };
+    return { all, men, women };
   }, [products]);
 
   // Handle switching category tab
@@ -231,7 +227,6 @@ export const CollectionPageContent = () => {
   const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const isAll = !activeGender || activeGender.toLowerCase() === 'all';
-  const isUnisex = !isAll && activeGender.toLowerCase() === 'unisex';
   const isWomen = !isAll && activeGender.toLowerCase() === 'women';
   const isMen = !isAll && activeGender.toLowerCase() === 'men';
 
@@ -247,12 +242,6 @@ export const CollectionPageContent = () => {
     subtitle: "Elegant. Feminine. Unique.",
     bgImage: "/images/hero-women.jpg",
     bgPosition: "center 20%"
-  } : isUnisex ? {
-    title1: "Unisex",
-    title2: "Collection",
-    subtitle: "Harmonious. Versatile. Distinctive.",
-    bgImage: "/images/hero-unisex.jpg",
-    bgPosition: "center 25%"
   } : {
     title1: "Men's",
     title2: "Collection",
@@ -318,13 +307,12 @@ export const CollectionPageContent = () => {
             </div>
           </div>
 
-          {/* Category Tabs: All Fragrances, Men's, Women's, Unisex */}
+          {/* Category Tabs: All Fragrances, Men's, Women's */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px' }}>
             {[
               { id: 'All', label: 'All Fragrances', count: categoryCounts.all },
               { id: 'Men', label: "Men's Collection", count: categoryCounts.men },
-              { id: 'Women', label: "Women's Collection", count: categoryCounts.women },
-              { id: 'Unisex', label: 'For Unisex Fragrance', count: categoryCounts.unisex }
+              { id: 'Women', label: "Women's Collection", count: categoryCounts.women }
             ].map((tab) => {
               const isSelected = (tab.id === 'All' && isAll) || (!isAll && activeGender.toLowerCase() === tab.id.toLowerCase());
               return (
@@ -775,9 +763,8 @@ export const CollectionPageContent = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                 {[
                   { id: 'All', label: 'All Categories' },
-                  { id: 'Men', label: "Men's" },
-                  { id: 'Women', label: "Women's" },
-                  { id: 'Unisex', label: 'For Unisex' }
+                  { id: 'Men', label: "Men's Collection" },
+                  { id: 'Women', label: "Women's Collection" }
                 ].map(cat => {
                   const isSelected = (cat.id === 'All' && isAll) || (!isAll && activeGender.toLowerCase() === cat.id.toLowerCase());
                   return (

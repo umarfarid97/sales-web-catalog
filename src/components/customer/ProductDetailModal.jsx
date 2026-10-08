@@ -152,7 +152,7 @@ export const ProductDetailModal = () => {
             
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
               <div style={{ fontSize: '0.74rem', fontFamily: 'var(--font-couture)', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#6b7280' }}>
-                {product.gender ? `${product.gender.toUpperCase()} · ` : ''}{product.category}
+                {product.gender ? `${product.gender.toUpperCase()}'S COLLECTION` : ''}
               </div>
               {product.tier && (
                 <span 
