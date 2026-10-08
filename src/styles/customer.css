@@ -275,11 +275,11 @@
 }
 
 .dior-card-title {
-  font-family: var(--font-couture);
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #000000;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #111111;
   margin-bottom: 8px;
 }
 
@@ -760,7 +760,7 @@
 }
 
 .editorial-hero-title {
-  font-family: var(--font-brand, "Bodoni Moda", "Playfair Display", serif);
+  font-family: var(--font-brand);
   font-size: clamp(2.2rem, 5vw, 3.6rem);
   font-weight: 700;
   line-height: 1.05;

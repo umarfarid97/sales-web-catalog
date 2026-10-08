@@ -268,7 +268,7 @@ export const CartDrawer = () => {
                     <div className="cart-item-info" style={{ flex: 1 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
-                          <h4 className="couture-title" style={{ fontSize: '0.92rem', color: '#000000', fontWeight: 700, marginBottom: '4px' }}>
+                          <h4 style={{ fontFamily: 'var(--font-sans)', fontSize: '0.92rem', color: '#111111', fontWeight: 700, marginBottom: '4px' }}>
                             {item.name}
                           </h4>
                           <div style={{ fontSize: '0.78rem', color: '#926917', fontWeight: 600, marginBottom: '4px' }}>

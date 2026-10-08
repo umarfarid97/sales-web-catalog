@@ -99,6 +99,7 @@ export const ProductCard = ({ product }) => {
                 background: product.tier === 'S' ? '#2b1810' : '#4a382e',
                 color: product.tier === 'S' ? '#fbbf24' : '#ffffff',
                 border: product.tier === 'S' ? '1px solid #d97706' : '1px solid rgba(255,255,255,0.2)',
+                fontFamily: 'var(--font-couture)',
                 fontSize: '0.62rem',
                 fontWeight: 800,
                 letterSpacing: '0.08em',

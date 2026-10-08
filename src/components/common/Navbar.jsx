@@ -123,7 +123,7 @@ export const Navbar = () => {
             <a 
               href="index.html" 
               style={{ 
-                fontFamily: 'var(--font-brand, "Bodoni Moda", "Playfair Display", serif)', 
+                fontFamily: 'var(--font-brand)', 
                 fontSize: 'clamp(1.25rem, 2.5vw, 1.48rem)', 
                 fontWeight: 800, 
                 letterSpacing: '0.22em', 
@@ -147,7 +147,8 @@ export const Navbar = () => {
               gap: 'clamp(18px, 2.2vw, 32px)',
               listStyle: 'none',
               margin: 0,
-              padding: 0
+              padding: 0,
+              fontFamily: 'var(--font-sans)'
             }}
           >
             <a 

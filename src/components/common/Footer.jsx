@@ -14,20 +14,20 @@ export const Footer = () => {
           {/* Column 1: Brand Mark */}
           <div>
             <a href="index.html" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: '#111111' }}>
-              <span style={{ fontFamily: 'var(--font-brand, "Bodoni Moda", serif)', fontSize: '1.85rem', fontWeight: 800, letterSpacing: '0.05em' }}>VL</span>
+              <span style={{ fontFamily: 'var(--font-brand)', fontSize: '1.85rem', fontWeight: 800, letterSpacing: '0.05em' }}>VL</span>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontFamily: 'var(--font-brand, "Bodoni Moda", serif)', fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.2em' }}>VALENSZO</span>
-                <span style={{ fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#8c7d70', fontWeight: 600 }}>Fragrance Malaysia</span>
+                <span style={{ fontFamily: 'var(--font-brand)', fontSize: '1.15rem', fontWeight: 800, letterSpacing: '0.22em' }}>VALENSZO</span>
+                <span style={{ fontFamily: 'var(--font-couture)', fontSize: '0.58rem', letterSpacing: '0.26em', textTransform: 'uppercase', color: '#8c7d70', fontWeight: 700 }}>Fragrance Malaysia</span>
               </div>
             </a>
           </div>
 
           {/* Column 2: Fragrance Collections */}
           <div>
-            <h4 style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#111111', marginBottom: '1rem' }}>
+            <h4 style={{ fontFamily: 'var(--font-couture)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#111111', marginBottom: '1rem' }}>
               Fragrance Collections
             </h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: 0, margin: 0 }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: 0, margin: 0, fontFamily: 'var(--font-sans)' }}>
               <li><a href="collection.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>All Collections</a></li>
               <li><a href="men.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Men's Perfumes</a></li>
               <li><a href="women.html" style={{ fontSize: '0.84rem', color: '#63574c', textDecoration: 'none', transition: 'color 0.2s' }}>Women's Perfumes</a></li>
@@ -37,7 +37,7 @@ export const Footer = () => {
 
           {/* Column 3: Customer Care */}
           <div>
-            <h4 style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#111111', marginBottom: '1rem' }}>
+            <h4 style={{ fontFamily: 'var(--font-couture)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#111111', marginBottom: '1rem' }}>
               Customer Care
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>

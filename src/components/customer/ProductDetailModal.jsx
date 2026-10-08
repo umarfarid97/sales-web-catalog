@@ -182,7 +182,7 @@ export const ProductDetailModal = () => {
               )}
             </div>
 
-            <h2 className="couture-title" style={{ fontSize: '1.9rem', marginBottom: '4px', color: '#000000' }}>
+            <h2 style={{ fontFamily: 'var(--font-brand)', fontSize: 'clamp(1.6rem, 3vw, 2.1rem)', fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.2, marginBottom: '6px', color: '#111827', textTransform: 'none' }}>
               {displayName}
             </h2>
 
