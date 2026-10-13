@@ -171,15 +171,31 @@ export const MenCollectionContent = () => {
       return true;
     }).sort((a, b) => {
       if (!a || !b) return 0;
-      const priceA = Number(a.price_30ml || a.price) || 45;
-      const priceB = Number(b.price_30ml || b.price) || 45;
-      if (sortBy === 'price-low') return priceA - priceB;
-      if (sortBy === 'price-high') return priceB - priceA;
-      // Default: best sellers (Tier S first)
+      if (sortBy === 'name-asc') {
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (sortBy === 'name-desc') {
+        return (b.name || '').localeCompare(a.name || '');
+      }
+      if (sortBy === 'brand-asc') {
+        const brandA = (a.brand || a.brandInspiration || '').trim();
+        const brandB = (b.brand || b.brandInspiration || '').trim();
+        const cmp = brandA.localeCompare(brandB);
+        if (cmp !== 0) return cmp;
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (sortBy === 'catalog-asc') {
+        const numA = Number(a.catalogNo ?? a.specs?.catalogNo) || 9999;
+        const numB = Number(b.catalogNo ?? b.specs?.catalogNo) || 9999;
+        return numA - numB;
+      }
+      // Default: best sellers (Tier S first, then catalog order)
       const tierRank = { 'S': 3, 'A': 2, 'B': 1, 'C': 0 };
       const rankDiff = (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
       if (rankDiff !== 0) return rankDiff;
-      return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
+      const numA = Number(a.catalogNo ?? a.specs?.catalogNo) || 9999;
+      const numB = Number(b.catalogNo ?? b.specs?.catalogNo) || 9999;
+      return numA - numB;
     });
   }, [products, selectedBrands, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
 
@@ -485,8 +501,10 @@ export const MenCollectionContent = () => {
                 }}
               >
                 <option value="best-sellers">Best Sellers</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
+                <option value="name-asc">Name: A to Z</option>
+                <option value="name-desc">Name: Z to A</option>
+                <option value="brand-asc">Brand Inspiration: A to Z</option>
+                <option value="catalog-asc">Catalog Number (001 – 345)</option>
               </select>
             </div>
 
