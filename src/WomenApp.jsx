@@ -899,6 +899,10 @@ export const WomenCollectionLayout = () => {
       <WomenCollectionContent />
       <BrandValuesFooter />
       <Footer />
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderTrackerModal />
+      <AuthModal />
       <ToastContainer />
     </div>
   );

@@ -41,6 +41,10 @@ const ProductPageLayout = () => {
       <Footer />
 
       {/* Universal Interactive Overlays & Modals */}
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderTrackerModal />
+      <AuthModal />
       <ToastContainer />
     </div>
   );

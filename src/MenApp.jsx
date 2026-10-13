@@ -899,6 +899,10 @@ export const MenCollectionLayout = () => {
       <MenCollectionContent />
       <BrandValuesFooter />
       <Footer />
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderTrackerModal />
+      <AuthModal />
       <ToastContainer />
     </div>
   );
