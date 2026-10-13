@@ -14,7 +14,9 @@ import {
   Check,
   MessageCircle,
   Clock,
-  ShoppingBag
+  ShoppingBag,
+  Layers,
+  ArrowRight
 } from 'lucide-react';
 import '../../styles/pdp.css';
 
@@ -185,6 +187,81 @@ export const ProductDetailPage = () => {
     if (typeof list === 'string') return list.split(/[;,]/).map(s => s.trim()).filter(Boolean);
     return [];
   }, [product]);
+
+  // Curated Layering Companion based on Excel layerFamily data
+  const layeringPartner = useMemo(() => {
+    if (!product || !products || products.length === 0) return null;
+
+    const currentLf = product.specs?.layerFamily || product.layerFamily || 'L1';
+    
+    // Pairing map based on harmonic olfactory rules
+    const COMPLEMENTARY_PAIRS = {
+      'L1': ['L5', 'L8', 'L2', 'L6'], // Fresh/Clean -> Sweet/Warm (L5) or Woody/Dark (L8/L2)
+      'L2': ['L1', 'L3', 'L5'],       // Fresh Musc -> Citrus/Fresh (L1) or Floral (L3)
+      'L3': ['L1', 'L5', 'L8'],       // Fruity/Floral -> Fresh/Clean (L1) or Sweet Warm (L5)
+      'L4': ['L1', 'L5', 'L2'],       // White Floral/Amber -> Fresh (L1) or Vanilla (L5)
+      'L5': ['L1', 'L8', 'L6'],       // Sweet/Warm -> Fresh/Clean (L1) or Dark Woods (L8)
+      'L6': ['L1', 'L3', 'L5'],       // Spiced Elixir -> Citrus Fresh (L1) or Fruity (L3)
+      'L7': ['L1', 'L5', 'L3'],       // Woody/Dark -> Fresh (L1) or Warm Sweet (L5)
+      'L8': ['L1', 'L3', 'L5'],       // Woody Dark -> Fresh (L1) or Fruity (L3)
+      'L9': ['L1', 'L2', 'L8'],       // Tropical Fruity -> Fresh (L1) or Woody (L8)
+      'L0': ['L1', 'L5']              // Mixed -> Fresh or Sweet
+    };
+
+    const targetFamilies = COMPLEMENTARY_PAIRS[currentLf] || ['L1', 'L5', 'L8'];
+
+    // Find candidate matching products:
+    // 1. Must not be the same perfume
+    // 2. Prefers Tier S or Tier A icons from the target family
+    const candidates = products.filter(p => {
+      if (p.id === product.id) return false;
+      const pLf = p.specs?.layerFamily || p.layerFamily || '';
+      return targetFamilies.includes(pLf);
+    });
+
+    if (candidates.length === 0) {
+      // Fallback: pick any other high-tier product
+      const fallback = products.find(p => p.id !== product.id && p.tier === 'S') || products.find(p => p.id !== product.id);
+      if (!fallback) return null;
+      return {
+        companion: fallback,
+        technique: 'Contrast & Longevity Boost',
+        reason: 'Harmonizes with this scent to create an elevated, bespoke trail with boosted longevity.'
+      };
+    }
+
+    // Sort by Tier S first, then Tier A
+    const sorted = [...candidates].sort((a, b) => {
+      const rank = (tier) => (tier === 'S' ? 2 : tier === 'A' ? 1 : 0);
+      return rank(b.tier) - rank(a.tier);
+    });
+
+    const companion = sorted[0];
+    const compLf = companion.specs?.layerFamily || companion.layerFamily || '';
+
+    let technique = 'Base & Radiance Layering';
+    let reason = 'Blends the distinct accords together for a signature bespoke sillage.';
+
+    if (['L1', 'L2'].includes(currentLf) && ['L5', 'L6', 'L8'].includes(compLf)) {
+      technique = 'Warm Anchor & Fresh Radiance';
+      reason = `Apply ${companion.name} as the warm rich anchor, then mist ${product.name} on top to lift the sillage with fresh vitality.`;
+    } else if (['L5', 'L6', 'L8', 'L7'].includes(currentLf) && ['L1', 'L2'].includes(compLf)) {
+      technique = 'Velvet Depth & Sparkling Opening';
+      reason = `Spritz ${product.name} first for deep woody/warm longevity, then accent with ${companion.name} for an airy, radiant impression.`;
+    } else if (['L3', 'L4', 'L9'].includes(currentLf)) {
+      technique = 'Floral Harmony & Gourmand Depth';
+      reason = `Layering ${product.name} with ${companion.name} enhances the floral heart with rich, seductive complexity.`;
+    } else {
+      technique = 'Complementary Olfactory Harmony';
+      reason = `Pairs the ${product.dominantAccord || 'signature'} notes with ${companion.dominantAccord || 'contrasting'} facets for all-day projection.`;
+    }
+
+    return {
+      companion,
+      technique,
+      reason
+    };
+  }, [product, products]);
 
   if (!product) {
     if (!products || products.length === 0) {
@@ -630,6 +707,171 @@ export const ProductDetailPage = () => {
           )}
         </div>
       </section>
+
+      {/* ================= 4. THE ART OF LAYERING (CURATED DUO) ================= */}
+      {layeringPartner && layeringPartner.companion && (
+        <section 
+          className="pdp-layering-section" 
+          style={{
+            marginTop: '3.5rem',
+            marginBottom: '3.5rem',
+            padding: '28px 24px',
+            background: 'linear-gradient(135deg, #fdfbf7 0%, #f6f1ea 100%)',
+            border: '1px solid #ebdccb',
+            borderRadius: '16px',
+            boxShadow: '0 8px 30px rgba(74, 56, 46, 0.05)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#1a1410', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Layers size={18} />
+              </div>
+              <div>
+                <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                  The Art of Layering &bull; Signature Duo
+                </span>
+                <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.45rem', margin: '2px 0 0', color: '#1a1410', letterSpacing: '-0.01em' }}>
+                  Curated Olfactory Partner
+                </h3>
+              </div>
+            </div>
+
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              background: '#ffffff',
+              border: '1px solid #e0d5c5',
+              borderRadius: '20px',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: '#4a382e'
+            }}>
+              <Sparkles size={13} color="#d97706" />
+              <span>Harmonized via Excel Layer Family ({product.specs?.layerFamily || 'L1'} &bull; {layeringPartner.companion.specs?.layerFamily || 'L5'})</span>
+            </div>
+          </div>
+
+          <p style={{ color: '#68574c', fontSize: '0.88rem', lineHeight: '1.6', margin: '0 0 24px', maxWidth: '780px' }}>
+            Master perfumers design extraits to be layered. When combined, the two formulas interlock to project an unforgettable, customized scent signature that belongs exclusively to you.
+          </p>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '20px',
+            background: '#ffffff',
+            borderRadius: '12px',
+            border: '1px solid #ede3d5',
+            padding: '20px',
+            alignItems: 'center'
+          }}>
+            {/* Visual Bottles Duo Representation */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <img 
+                  src={galleryItems[0]?.url || product.image} 
+                  alt={product.name} 
+                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                />
+                <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#1a1410', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
+                  Base
+                </span>
+              </div>
+
+              <div style={{ fontSize: '1.2rem', color: '#926917', fontWeight: 800 }}>
+                +
+              </div>
+
+              <a 
+                href={`product.html?product=${encodeURIComponent(layeringPartner.companion.name || layeringPartner.companion.id)}`}
+                style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', textDecoration: 'none' }}
+              >
+                <img 
+                  src={layeringPartner.companion.images?.[0] || layeringPartner.companion.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
+                  alt={layeringPartner.companion.name} 
+                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                />
+                <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#d97706', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
+                  Accent
+                </span>
+              </a>
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#926917', fontWeight: 700 }}>
+                  Recommended Layer
+                </div>
+                <h4 style={{ fontSize: '1.05rem', margin: '2px 0 4px', color: '#1a1410', fontWeight: 700 }}>
+                  {layeringPartner.companion.name}
+                </h4>
+                <div style={{ fontSize: '0.76rem', color: '#786558' }}>
+                  {layeringPartner.companion.brand ? `Inspired by ${layeringPartner.companion.brand}` : (layeringPartner.companion.dominantAccord || 'Complementary Extrait')}
+                </div>
+              </div>
+            </div>
+
+            {/* Technique & Action Column */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', borderLeft: '1px solid #f2ece4', paddingLeft: '20px' }}>
+              <div>
+                <div style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1a1410', marginBottom: '4px' }}>
+                  Layering Method: {layeringPartner.technique}
+                </div>
+                <p style={{ fontSize: '0.82rem', color: '#524339', lineHeight: '1.5', margin: 0 }}>
+                  &ldquo;{layeringPartner.reason}&rdquo;
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    addToCart(product, 1, selectedSize);
+                    addToCart(layeringPartner.companion, 1, '50ml');
+                    showToast(`Added Signature Duo: ${product.name} + ${layeringPartner.companion.name} to bag`);
+                    setIsCartOpen(true);
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '11px 18px',
+                    borderRadius: '6px',
+                    background: '#1a1410',
+                    color: '#ffffff',
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.04em',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(26, 20, 16, 0.2)'
+                  }}
+                >
+                  <ShoppingBag size={15} />
+                  <span>Add Signature Duo to Bag</span>
+                </button>
+
+                <a
+                  href={`product.html?product=${encodeURIComponent(layeringPartner.companion.name || layeringPartner.companion.id)}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    color: '#926917',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>Explore {layeringPartner.companion.name}</span>
+                  <ArrowRight size={13} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ================= 5. MOBILE STICKY BOTTOM INQUIRY & BAG BAR ================= */}
       <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
