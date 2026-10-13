@@ -723,59 +723,36 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
-      {/* ================= 4. THE ART OF LAYERING (3 CURATED DUOS) ================= */}
+      {/* ================= 4. THE ART OF LAYERING (MINIMAL EDITORIAL) ================= */}
       {layeringOptions && layeringOptions.length > 0 && (
         <section 
           className="pdp-layering-section" 
           style={{
-            marginTop: '3.5rem',
-            marginBottom: '3.5rem',
-            padding: '28px 24px',
-            background: 'linear-gradient(135deg, #fdfbf7 0%, #f6f1ea 100%)',
-            border: '1px solid #ebdccb',
-            borderRadius: '16px',
-            boxShadow: '0 8px 30px rgba(74, 56, 46, 0.05)'
+            marginTop: '3rem',
+            marginBottom: '3rem',
+            padding: '24px 20px',
+            background: '#ffffff',
+            border: '1px solid #ede8e1',
+            borderRadius: '12px'
           }}
         >
-          {/* Header & Badges */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#1a1410', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Layers size={18} />
+          {/* Header */}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+            <div>
+              <div style={{ fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                Layering Suggestions
               </div>
-              <div>
-                <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
-                  The Art of Layering &bull; 3 Signature Styles
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.45rem', margin: '2px 0 0', color: '#1a1410', letterSpacing: '-0.01em' }}>
-                  Curated Olfactory Duos
-                </h3>
-              </div>
+              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.25rem', margin: '2px 0 0', color: '#1a1410', fontWeight: 700 }}>
+                Pairs Well With
+              </h3>
             </div>
-
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              background: '#ffffff',
-              border: '1px solid #e0d5c5',
-              borderRadius: '20px',
-              fontSize: '0.72rem',
-              fontWeight: 700,
-              color: '#4a382e'
-            }}>
-              <Sparkles size={13} color="#d97706" />
-              <span>Harmonized via Excel Layer Family ({product.specs?.layerFamily || 'L1'})</span>
+            <div style={{ fontSize: '0.74rem', color: '#8c7d72', fontStyle: 'italic' }}>
+              Designed to be worn together
             </div>
           </div>
 
-          <p style={{ color: '#68574c', fontSize: '0.88rem', lineHeight: '1.6', margin: '0 0 20px', maxWidth: '780px' }}>
-            Master perfumers craft extraits to interlock. Choose your desired scent vibe below to discover how {product.name} evolves with its curated companion.
-          </p>
-
-          {/* 3 Interactive Vibe Tabs */}
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
+          {/* Minimal Clean Tabs */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
             {layeringOptions.map((opt, idx) => {
               const isActive = selectedLayerIndex === idx;
               return (
@@ -784,32 +761,25 @@ export const ProductDetailPage = () => {
                   type="button"
                   onClick={() => setSelectedLayerIndex(idx)}
                   style={{
-                    padding: '10px 16px',
-                    borderRadius: '8px',
-                    border: isActive ? '1.5px solid #1a1410' : '1px solid #e0d6cb',
-                    background: isActive ? '#1a1410' : '#ffffff',
-                    color: isActive ? '#ffffff' : '#3d3028',
+                    padding: '6px 14px',
+                    borderRadius: '9999px',
+                    border: isActive ? '1px solid #1a1410' : '1px solid #e5ded6',
+                    background: isActive ? '#1a1410' : 'transparent',
+                    color: isActive ? '#ffffff' : '#68574c',
                     cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: '2px',
-                    transition: 'all 0.2s ease',
-                    flex: '1 1 200px'
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.02em',
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <span style={{ fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.02em' }}>
-                    {opt.tag}
-                  </span>
-                  <span style={{ fontSize: '0.68rem', color: isActive ? '#d1c4b7' : '#78685c' }}>
-                    {opt.companion.name} ({opt.companion.specs?.layerFamily || 'L'})
-                  </span>
+                  {opt.tag}
                 </button>
               );
             })}
           </div>
 
-          {/* Selected Layering Option Details Card */}
+          {/* Active Pairing Row */}
           {(() => {
             const activeOpt = layeringOptions[selectedLayerIndex] || layeringOptions[0];
             if (!activeOpt || !activeOpt.companion) return null;
@@ -817,71 +787,63 @@ export const ProductDetailPage = () => {
 
             return (
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '20px',
-                background: '#ffffff',
-                borderRadius: '12px',
-                border: '1px solid #ede3d5',
-                padding: '20px',
-                alignItems: 'center'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '16px',
+                padding: '16px',
+                background: '#faf7f2',
+                borderRadius: '8px',
+                border: '1px solid #ede5da'
               }}>
-                {/* Visual Bottles Duo Representation */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                    <img 
-                      src={galleryItems[0]?.url || product.image} 
-                      alt={product.name} 
-                      style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                    />
-                    <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#1a1410', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
-                      Base
-                    </span>
-                  </div>
-
-                  <div style={{ fontSize: '1.2rem', color: '#926917', fontWeight: 800 }}>
-                    +
-                  </div>
-
-                  <a 
+                {/* Bottle + Title */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0, flex: '1 1 240px' }}>
+                  <a
                     href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
-                    style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', textDecoration: 'none' }}
+                    style={{
+                      width: '64px',
+                      height: '64px',
+                      background: '#ffffff',
+                      border: '1px solid #e8e0d5',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      flexShrink: 0
+                    }}
                   >
-                    <img 
-                      src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
-                      alt={comp.name} 
-                      style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                    <img
+                      src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'}
+                      alt={comp.name}
+                      style={{ maxWidth: '85%', maxHeight: '85%', objectFit: 'contain' }}
                     />
-                    <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#d97706', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
-                      Accent
-                    </span>
                   </a>
 
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#926917', fontWeight: 700 }}>
-                      {activeOpt.tag}
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: '0.68rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                      + {activeOpt.tag}
                     </div>
-                    <h4 style={{ fontSize: '1.05rem', margin: '2px 0 4px', color: '#1a1410', fontWeight: 700 }}>
+                    <a
+                      href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                      style={{ fontSize: '0.96rem', fontWeight: 700, color: '#1a1410', textDecoration: 'none', display: 'block', margin: '1px 0' }}
+                    >
                       {comp.name}
-                    </h4>
-                    <div style={{ fontSize: '0.76rem', color: '#786558' }}>
+                    </a>
+                    <div style={{ fontSize: '0.74rem', color: '#786558' }}>
                       {comp.brand ? `Inspired by ${comp.brand}` : (comp.dominantAccord || 'Complementary Extrait')}
                     </div>
                   </div>
                 </div>
 
-                {/* Technique & Action Column */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', borderLeft: '1px solid #f2ece4', paddingLeft: '20px' }}>
-                  <div>
-                    <div style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1a1410', marginBottom: '4px' }}>
-                      Method: {activeOpt.technique}
-                    </div>
-                    <p style={{ fontSize: '0.82rem', color: '#524339', lineHeight: '1.5', margin: 0 }}>
-                      &ldquo;{activeOpt.reason}&rdquo;
-                    </p>
+                {/* Scent note quote + CTAs */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', flex: '1 1 300px', justifyContent: 'flex-end' }}>
+                  <div style={{ fontSize: '0.78rem', color: '#68574c', fontStyle: 'italic', maxWidth: '320px', lineHeight: 1.4 }}>
+                    &ldquo;{activeOpt.reason}&rdquo;
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -891,39 +853,41 @@ export const ProductDetailPage = () => {
                         setIsCartOpen(true);
                       }}
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '11px 18px',
+                        padding: '10px 16px',
                         borderRadius: '6px',
                         background: '#1a1410',
                         color: '#ffffff',
-                        fontSize: '0.82rem',
+                        fontSize: '0.78rem',
                         fontWeight: 800,
                         letterSpacing: '0.04em',
                         border: 'none',
                         cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(26, 20, 16, 0.2)'
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
                       }}
                     >
-                      <ShoppingBag size={15} />
-                      <span>Add This Duo to Bag</span>
+                      <ShoppingBag size={14} />
+                      <span>Add Duo to Bag</span>
                     </button>
-
                     <a
                       href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
                       style={{
+                        padding: '9px 12px',
+                        borderRadius: '6px',
+                        background: '#ffffff',
+                        border: '1px solid #d5cbc0',
+                        color: '#1a1410',
+                        fontSize: '0.76rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '4px',
-                        fontSize: '0.78rem',
-                        fontWeight: 700,
-                        color: '#926917',
-                        textDecoration: 'none'
+                        gap: '4px'
                       }}
                     >
-                      <span>Explore {comp.name}</span>
-                      <ArrowRight size={13} />
+                      <span>View</span>
+                      <ArrowRight size={12} />
                     </a>
                   </div>
                 </div>
