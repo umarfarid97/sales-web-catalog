@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useStore } from '../../context/StoreContext';
+import bundleRecommendations from '../../data/bundleRecommendations.json';
 import { 
   ArrowLeft, 
   RotateCcw, 
@@ -21,7 +22,8 @@ import {
   Moon, 
   Feather, 
   Compass,
-  ArrowRight
+  ArrowRight,
+  ShoppingBag
 } from 'lucide-react';
 
 export const QUESTIONS = [
@@ -232,7 +234,7 @@ export const QUESTIONS = [
 ];
 
 export const FragranceDiagnostic = () => {
-  const { products, addToCart, showToast } = useStore();
+  const { products, addToCart, showToast, setIsCartOpen } = useStore();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({
@@ -403,23 +405,92 @@ export const FragranceDiagnostic = () => {
 
     const anchorItem = scored[0]?.product || products[0];
     
-    // Pick 4 complementary recommendations that contrast nicely for layering
-    const remaining = scored.filter((s) => s.product.id !== anchorItem.id);
-    const companions = [];
-    const seenFamilies = new Set([anchorItem.olfactoryFamily]);
+    // Official Excel Bundle Recommendations lookup for R1, R2, R3, R4
+    const getLookupSku = (p) => {
+      const rawSku = (p.sku || p.id || '').toUpperCase();
+      const match = rawSku.match(/(?:VLZ-)?([MW])-?(\d+)/i);
+      if (match) {
+        const prefix = match[1].toUpperCase();
+        const num = match[2].padStart(3, '0');
+        return prefix + num;
+      }
+      if (p.specs?.catalogNo != null || p.catalogNo != null) {
+        const catNum = p.specs?.catalogNo ?? p.catalogNo;
+        const prefix = (p.gender || p.category || '').toLowerCase().includes('women') ? 'W' : 'M';
+        return prefix + String(catNum).padStart(3, '0');
+      }
+      return null;
+    };
 
-    // First try picking from different olfactory families
-    for (const item of remaining) {
-      if (!seenFamilies.has(item.product.olfactoryFamily) && companions.length < 4) {
-        companions.push(item.product);
-        seenFamilies.add(item.product.olfactoryFamily);
+    const targetKey = getLookupSku(anchorItem);
+    const bundleData = targetKey ? bundleRecommendations[targetKey] : null;
+
+    let companions = [];
+    if (bundleData && Array.isArray(bundleData.recommendations) && bundleData.recommendations.length > 0) {
+      companions = bundleData.recommendations.map((rec) => {
+        const match = products.find((p) => {
+          const pGender = (p.gender || p.category || '').toLowerCase();
+          const recGender = (rec.gender || (rec.sku.startsWith('W') ? 'women' : 'men')).toLowerCase();
+          const isSameGender = pGender.includes(recGender) || recGender.includes(pGender);
+
+          if (rec.catalogNo && isSameGender) {
+            if (Number(p.catalogNo) === Number(rec.catalogNo)) return true;
+            if (Number(p.specs?.catalogNo) === Number(rec.catalogNo)) return true;
+          }
+          if (p.sku && p.sku.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rec.sku.replace(/[^A-Z0-9]/g, ''))) return true;
+          if (p.id && p.id.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rec.sku.replace(/[^A-Z0-9]/g, ''))) return true;
+          if (p.name && rec.name && p.name.toLowerCase().trim() === rec.name.toLowerCase().trim()) return true;
+          return false;
+        });
+
+        const companionProduct = match ? { ...match } : {
+          id: `rec-${rec.sku.toLowerCase()}`,
+          name: rec.name,
+          brand: rec.brand,
+          brandInspiration: rec.brand,
+          dominantAccord: rec.macroZone,
+          price: 45,
+          price_30ml: 45,
+          price_50ml: 65,
+          images: ['https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80']
+        };
+
+        return {
+          ...companionProduct,
+          roleKey: rec.key,
+          role: rec.role,
+          layerScore: rec.layerScore,
+          macroZone: rec.macroZone
+        };
+      });
+    } else {
+      // Fallback if anchor not found in bundle table
+      const remaining = scored.filter((s) => s.product.id !== anchorItem.id);
+      const fallbackList = [];
+      const seenFamilies = new Set([anchorItem.olfactoryFamily]);
+
+      for (const item of remaining) {
+        if (!seenFamilies.has(item.product.olfactoryFamily) && fallbackList.length < 4) {
+          fallbackList.push({
+            ...item.product,
+            roleKey: `R${fallbackList.length + 1}`,
+            role: ['Closest Match', 'Same Character', 'Complementary', 'Layering Bridge'][fallbackList.length],
+            layerScore: 88 - fallbackList.length * 2
+          });
+          seenFamilies.add(item.product.olfactoryFamily);
+        }
       }
-    }
-    // Fill remaining if needed
-    for (const item of remaining) {
-      if (companions.length < 4 && !companions.some((c) => c.id === item.product.id)) {
-        companions.push(item.product);
+      for (const item of remaining) {
+        if (fallbackList.length < 4 && !fallbackList.some((c) => c.id === item.product.id)) {
+          fallbackList.push({
+            ...item.product,
+            roleKey: `R${fallbackList.length + 1}`,
+            role: ['Closest Match', 'Same Character', 'Complementary', 'Layering Bridge'][fallbackList.length],
+            layerScore: 88 - fallbackList.length * 2
+          });
+        }
       }
+      companions = fallbackList;
     }
 
     return {
@@ -861,10 +932,15 @@ export const FragranceDiagnostic = () => {
 
                   {/* Promotional Inquiry & Explore CTAs */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                    <a
-                      href={`product.html?product=${encodeURIComponent(anchor.product?.name || anchor.product?.id)}`}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addToCart(anchor.product, 1, selectedAnchorFormat);
+                        showToast(`Added ${anchor.product.name} (${selectedAnchorFormat}) to bag`);
+                        setIsCartOpen(true);
+                      }}
                       style={{
-                        padding: '14px 28px',
+                        padding: '14px 26px',
                         borderRadius: '4px',
                         background: '#111827',
                         color: '#FFFFFF',
@@ -872,15 +948,38 @@ export const FragranceDiagnostic = () => {
                         fontSize: '0.82rem',
                         letterSpacing: '0.08em',
                         textTransform: 'uppercase',
-                        textDecoration: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '8px',
                         boxShadow: '0 4px 14px rgba(0,0,0,0.25)'
                       }}
                     >
-                      <span>Explore Fragrance</span>
-                      <ArrowRight size={16} />
+                      <ShoppingBag size={16} />
+                      <span>Add to Bag</span>
+                    </button>
+
+                    <a
+                      href={`product.html?product=${encodeURIComponent(anchor.product?.name || anchor.product?.id)}`}
+                      style={{
+                        padding: '13px 22px',
+                        borderRadius: '4px',
+                        background: '#FFFFFF',
+                        border: '1px solid #D1D5DB',
+                        color: '#111827',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <span>Explore</span>
+                      <ArrowRight size={15} />
                     </a>
 
                     <a
@@ -888,7 +987,7 @@ export const FragranceDiagnostic = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        padding: '14px 24px',
+                        padding: '13px 20px',
                         borderRadius: '4px',
                         background: '#128C7E',
                         color: '#FFFFFF',
@@ -904,7 +1003,7 @@ export const FragranceDiagnostic = () => {
                       }}
                     >
                       <MessageCircle size={16} />
-                      <span>Order via WhatsApp</span>
+                      <span>WhatsApp</span>
                     </a>
                   </div>
                 </div>
@@ -914,60 +1013,130 @@ export const FragranceDiagnostic = () => {
 
           {/* 2. FOUR RECOMMENDATIONS TO LAYER */}
           <div style={{ marginBottom: '40px' }}>
-            <div style={{ fontSize: '0.74rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111827', marginBottom: '14px' }}>
-              FOUR RECOMMENDATIONS TO LAYER
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '14px' }}>
+              <div>
+                <div style={{ fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                  Signature Pairings &bull; Layering Engine
+                </div>
+                <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#111827' }}>
+                  FOUR RECOMMENDATIONS TO LAYER
+                </div>
+              </div>
+              <div style={{ fontSize: '0.74rem', color: '#6B7280', fontStyle: 'italic' }}>
+                One Anchor &rarr; Four Recommendations &rarr; Any Two Can Layer
+              </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '14px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '14px' }}>
               {layeringRecommendations.map((comp) => (
-                <a 
-                  key={comp.id}
-                  href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                <div 
+                  key={comp.id || comp.sku}
                   style={{
-                    display: 'block',
-                    textDecoration: 'none',
                     background: '#FFFFFF',
                     border: '1px solid #E5E7EB',
                     borderRadius: '8px',
                     padding: '14px',
                     textAlign: 'center',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.03)';
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative'
                   }}
                 >
-                  <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '10px' }}>
-                    <img 
-                      src={comp.images?.[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'} 
-                      alt={comp.name} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                  <div>
+                    {/* Top Role & Score Pill */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '0.66rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: '#926917', background: '#faf5ea', padding: '2px 6px', borderRadius: '4px' }}>
+                        {comp.roleKey ? `${comp.roleKey} · ${comp.role}` : 'Complementary'}
+                      </span>
+                      {comp.layerScore && (
+                        <span style={{ fontSize: '0.64rem', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                          {comp.layerScore}% Match
+                        </span>
+                      )}
+                    </div>
+
+                    <a 
+                      href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                    >
+                      <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '10px' }}>
+                        <img 
+                          src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=700&auto=format&fit=crop&q=80'} 
+                          alt={comp.name} 
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      </div>
+
+                      <div style={{ fontSize: '0.68rem', color: '#B45309', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        {comp.concentration || 'Extrait de Parfum'}
+                      </div>
+
+                      <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '0.98rem', fontWeight: 700, color: '#111827', margin: '4px 0 2px' }}>
+                        {comp.name}
+                      </div>
+
+                      {(comp.brand || comp.brandInspiration) && (
+                        <div style={{ fontSize: '0.72rem', color: '#6B7280', fontWeight: 600, marginBottom: '4px' }}>
+                          Inspired by {comp.brand || comp.brandInspiration}
+                        </div>
+                      )}
+
+                      <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#111827', margin: '6px 0 10px' }}>
+                        RM{comp.price_50ml || comp.price || 65}
+                      </div>
+                    </a>
                   </div>
 
-                  <div style={{ fontSize: '0.68rem', color: '#B45309', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                    {comp.concentration || 'Extrait de Parfum'}
+                  <div style={{ display: 'flex', gap: '6px', marginTop: 'auto' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addToCart(comp, 1, '50ml');
+                        showToast(`Added ${comp.name} to bag`);
+                        setIsCartOpen(true);
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: '9px 10px',
+                        borderRadius: '6px',
+                        background: '#111827',
+                        color: '#FFFFFF',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.02em',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <ShoppingBag size={13} />
+                      <span>Add to Bag</span>
+                    </button>
+                    <a
+                      href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                      style={{
+                        padding: '8px 10px',
+                        borderRadius: '6px',
+                        background: '#F9FAFB',
+                        border: '1px solid #D1D5DB',
+                        color: '#111827',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <ArrowRight size={13} />
+                    </a>
                   </div>
-
-                  <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1rem', fontWeight: 700, color: '#111827', margin: '4px 0 2px' }}>
-                    {comp.name}
-                  </div>
-
-                  <div style={{ fontSize: '0.72rem', color: '#6B7280', marginBottom: '8px' }}>
-                    {(comp.traits || []).slice(0, 3).join(' • ')}
-                  </div>
-
-                  <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#111827' }}>
-                    RM{comp.price || 45}
-                  </div>
-                </a>
+                </div>
               ))}
             </div>
           </div>
