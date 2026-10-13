@@ -105,7 +105,6 @@ export const ProductDetailPage = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isUpsellDrawerOpen, setIsUpsellDrawerOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
-  const [selectedLayerIndex, setSelectedLayerIndex] = useState(0);
   const mainCtaRef = useRef(null);
 
   useEffect(() => {
@@ -189,10 +188,6 @@ export const ProductDetailPage = () => {
     if (typeof list === 'string') return list.split(/[;,]/).map(s => s.trim()).filter(Boolean);
     return [];
   }, [product]);
-
-  useEffect(() => {
-    setSelectedLayerIndex(0);
-  }, [product?.id]);
 
   // Official Bundle & Layering Recommendations directly from Excel CALC sheet
   const layeringOptions = useMemo(() => {
@@ -735,134 +730,120 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
-      {/* ================= 4. THE ART OF LAYERING (MINIMAL EDITORIAL) ================= */}
+      {/* ================= 4. THE ART OF LAYERING (FOUR RECOMMENDATIONS TO LAYER) ================= */}
       {layeringOptions && layeringOptions.length > 0 && (
         <section 
           className="pdp-layering-section" 
           style={{
-            marginTop: '3rem',
-            marginBottom: '3rem',
-            padding: '24px 20px',
-            background: '#ffffff',
-            border: '1px solid #ede8e1',
-            borderRadius: '12px'
+            marginTop: '3.5rem',
+            marginBottom: '3.5rem'
           }}
         >
           {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-            <div>
-              <div style={{ fontSize: '0.72rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
-                Layering Suggestions
-              </div>
-              <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.25rem', margin: '2px 0 0', color: '#1a1410', fontWeight: 700 }}>
-                Pairs Well With
-              </h3>
-            </div>
-            <div style={{ fontSize: '0.74rem', color: '#8c7d72', fontStyle: 'italic' }}>
-              Designed to be worn together
+          <div style={{ marginBottom: '16px' }}>
+            <h3 style={{
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#111827',
+              margin: '0 0 4px'
+            }}>
+              FOUR RECOMMENDATIONS TO LAYER
+            </h3>
+            <div style={{ fontSize: '0.76rem', color: '#6B7280', fontStyle: 'italic' }}>
+              One Anchor &rarr; Four Recommendations &rarr; Any Two Can Layer
             </div>
           </div>
 
-          {/* Minimal Clean Tabs */}
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            {layeringOptions.map((opt, idx) => {
-              const isActive = selectedLayerIndex === idx;
+          {/* 4 Cards Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '16px'
+          }}>
+            {layeringOptions.map((opt) => {
+              const comp = opt.companion;
+              if (!comp) return null;
+
+              const traitsList = Array.isArray(comp.traits) && comp.traits.length > 0
+                ? comp.traits
+                : [comp.dominantAccord || comp.macroZone || (comp.brand ? `Inspired by ${comp.brand}` : 'Harmonious Scent')];
+
               return (
-                <button
+                <div 
                   key={opt.id}
-                  type="button"
-                  onClick={() => setSelectedLayerIndex(idx)}
                   style={{
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    border: isActive ? '1px solid #1a1410' : '1px solid #e5ded6',
-                    background: isActive ? '#1a1410' : 'transparent',
-                    color: isActive ? '#ffffff' : '#68574c',
-                    cursor: 'pointer',
-                    fontSize: '0.76rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.02em',
-                    transition: 'all 0.15s ease'
+                    background: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    padding: '16px 14px',
+                    textAlign: 'center',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.03)';
                   }}
                 >
-                  {opt.tag}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Pairing Row */}
-          {(() => {
-            const activeOpt = layeringOptions[selectedLayerIndex] || layeringOptions[0];
-            if (!activeOpt || !activeOpt.companion) return null;
-            const comp = activeOpt.companion;
-
-            return (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '16px',
-                padding: '16px',
-                background: '#faf7f2',
-                borderRadius: '8px',
-                border: '1px solid #ede5da'
-              }}>
-                {/* Bottle + Title */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0, flex: '1 1 240px' }}>
-                  <a
-                    href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
-                    style={{
-                      width: '64px',
-                      height: '64px',
-                      background: '#ffffff',
-                      border: '1px solid #e8e0d5',
-                      borderRadius: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      overflow: 'hidden',
-                      flexShrink: 0
-                    }}
-                  >
-                    <img
-                      src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'}
-                      alt={comp.name}
-                      style={{ maxWidth: '85%', maxHeight: '85%', objectFit: 'contain' }}
-                    />
-                  </a>
-
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                      <span style={{ fontSize: '0.68rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
-                        + {activeOpt.tag}
+                  <div>
+                    {/* Role & Layer Score Pill */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '0.66rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: '#926917', background: '#faf5ea', padding: '2px 6px', borderRadius: '4px' }}>
+                        {opt.tag}
                       </span>
-                      {activeOpt.layerScore && (
-                        <span style={{ fontSize: '0.65rem', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
-                          {activeOpt.layerScore}% Match
+                      {opt.layerScore && (
+                        <span style={{ fontSize: '0.64rem', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                          {opt.layerScore}% Match
                         </span>
                       )}
                     </div>
-                    <a
+
+                    <a 
                       href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
-                      style={{ fontSize: '0.96rem', fontWeight: 700, color: '#1a1410', textDecoration: 'none', display: 'block', margin: '1px 0' }}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                     >
-                      {comp.name}
+                      <div style={{ aspectRatio: '1', borderRadius: '6px', overflow: 'hidden', background: '#F4F4F5', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img 
+                          src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
+                          alt={comp.name} 
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                          loading="lazy"
+                        />
+                      </div>
+
+                      {/* Concentration in amber uppercase */}
+                      <div style={{ fontSize: '0.68rem', color: '#B45309', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>
+                        {comp.concentration || 'Extrait de Parfum (30%)'}
+                      </div>
+
+                      {/* Fragrance Name */}
+                      <div style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: '2px 0 4px', lineHeight: 1.25 }}>
+                        {comp.name}
+                      </div>
+
+                      {/* Traits list */}
+                      <div style={{ fontSize: '0.72rem', color: '#6B7280', marginBottom: '8px', lineHeight: 1.35 }}>
+                        {traitsList.slice(0, 3).join(' • ')}
+                      </div>
+
+                      {/* Price */}
+                      <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#111827', marginBottom: '12px' }}>
+                        RM{comp.price_50ml || comp.price || 45}
+                      </div>
                     </a>
-                    <div style={{ fontSize: '0.74rem', color: '#786558' }}>
-                      {comp.brand ? `Inspired by ${comp.brand}` : (comp.dominantAccord || 'Complementary Extrait')}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Scent note quote + CTAs */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', flex: '1 1 300px', justifyContent: 'flex-end' }}>
-                  <div style={{ fontSize: '0.78rem', color: '#68574c', fontStyle: 'italic', maxWidth: '320px', lineHeight: 1.4 }}>
-                    &ldquo;{activeOpt.reason}&rdquo;
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                  {/* Actions: Add to Bag + View Arrow */}
+                  <div style={{ display: 'flex', gap: '6px', marginTop: 'auto' }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -871,47 +852,53 @@ export const ProductDetailPage = () => {
                         setIsCartOpen(true);
                       }}
                       style={{
-                        padding: '10px 16px',
+                        flex: 1,
+                        padding: '9px 10px',
                         borderRadius: '6px',
                         background: '#1a1410',
                         color: '#ffffff',
-                        fontSize: '0.78rem',
+                        fontSize: '0.75rem',
                         fontWeight: 800,
                         letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
                         border: 'none',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        justifyContent: 'center',
+                        gap: '6px',
+                        transition: 'background 0.15s ease'
                       }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#000000'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#1a1410'; }}
                     >
-                      <ShoppingBag size={14} />
+                      <ShoppingBag size={13} />
                       <span>Add to Bag</span>
                     </button>
                     <a
                       href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
                       style={{
-                        padding: '9px 12px',
+                        padding: '8px 10px',
                         borderRadius: '6px',
-                        background: '#ffffff',
-                        border: '1px solid #d5cbc0',
-                        color: '#1a1410',
-                        fontSize: '0.76rem',
+                        background: '#F9FAFB',
+                        border: '1px solid #D1D5DB',
+                        color: '#111827',
+                        fontSize: '0.74rem',
                         fontWeight: 700,
                         textDecoration: 'none',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '4px'
+                        justifyContent: 'center'
                       }}
+                      aria-label={`View ${comp.name}`}
                     >
-                      <span>View</span>
-                      <ArrowRight size={12} />
+                      <ArrowRight size={13} />
                     </a>
                   </div>
                 </div>
-              </div>
-            );
-          })()}
+              );
+            })}
+          </div>
         </section>
       )}
 
