@@ -4,7 +4,8 @@ import {
   X, 
   MessageCircle, 
   RefreshCw, 
-  Feather
+  Feather,
+  ShoppingBag
 } from 'lucide-react';
 
 export const ProductDetailModal = () => {
@@ -12,6 +13,7 @@ export const ProductDetailModal = () => {
     selectedProductModal, 
     setSelectedProductModal, 
     addToCart, 
+    setIsCartOpen,
     favorites, 
     toggleFavorite
   } = useStore();
@@ -317,22 +319,49 @@ export const ProductDetailModal = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const chosenSizeLabel = currentSizeObj?.label?.includes('100') ? '100ml' : (currentSizeObj?.label?.includes('30') ? '30ml' : '50ml');
+                    addToCart(product, quantity, chosenSizeLabel);
+                    setSelectedProductModal(null);
+                    setIsCartOpen(true);
+                  }}
+                  className="btn"
+                  style={{
+                    padding: '12px 20px',
+                    background: '#1a1410',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.82rem',
+                    border: 'none',
+                    borderRadius: '4px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <ShoppingBag size={16} />
+                  <span>Add to Bag</span>
+                </button>
+
                 <a
                   href={`product.html?product=${encodeURIComponent(displayName || product.id)}`}
                   className="btn"
                   style={{
-                    padding: '12px 20px',
+                    padding: '12px 16px',
                     background: '#ffffff',
                     color: '#000000',
-                    border: '1px solid #000000',
+                    border: '1px solid #d1d5db',
                     fontWeight: 700,
                     textDecoration: 'none',
                     fontSize: '0.82rem',
                     borderRadius: '4px'
                   }}
                 >
-                  View Details
+                  Full Details
                 </a>
 
                 <a
@@ -341,7 +370,7 @@ export const ProductDetailModal = () => {
                   rel="noopener noreferrer"
                   className="btn"
                   style={{
-                    padding: '12px 24px',
+                    padding: '12px 18px',
                     background: '#128C7E',
                     color: '#ffffff',
                     fontWeight: 800,
@@ -349,13 +378,13 @@ export const ProductDetailModal = () => {
                     fontSize: '0.82rem',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     borderRadius: '4px',
                     boxShadow: '0 2px 10px rgba(18,140,126,0.25)'
                   }}
                 >
-                  <MessageCircle size={16} />
-                  <span>Order via WhatsApp</span>
+                  <MessageCircle size={15} />
+                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>

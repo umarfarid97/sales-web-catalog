@@ -702,13 +702,64 @@ export const StoreProvider = ({ children }) => {
   const cartDiscountAmount = (cartSubtotal * discountPercent) / 100;
   const cartTotal = Math.max(0, cartSubtotal - cartDiscountAmount + cartShipping);
 
-  // --- Cart Actions (Disabled for pure promotional catalog mode) ---
+  // --- Cart Actions ---
   const addToCart = (product, arg2 = 1, arg3 = null) => {
-    if (!product) return false;
-    const selectedSize = typeof arg2 === 'string' ? arg2 : (typeof arg3 === 'string' ? arg3 : (product.sizes?.[0]?.label || 'Standard'));
-    const safeName = product.name || 'Perfume';
-    const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am browsing your online catalog and would like to order / inquire about:\n• Perfume: ${safeName}\n• Size: ${selectedSize}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    if (!product || !product.id) return false;
+
+    // Support both signatures: addToCart(product, quantity, size) and addToCart(product, size)
+    const quantity = typeof arg2 === 'number' ? Math.max(1, arg2) : 1;
+    const selectedSize = typeof arg2 === 'string' ? arg2 : (typeof arg3 === 'string' ? arg3 : '50ml');
+
+    // Resolve price dynamically for selected size
+    let unitPrice = Number(product.price) || 65;
+    if (selectedSize.includes('30')) {
+      unitPrice = Number(product.price_30ml ?? product.sizes?.find(s => s.ml === 30 || s.label?.includes('30'))?.price ?? 45);
+    } else if (selectedSize.includes('50')) {
+      unitPrice = Number(product.price_50ml ?? product.sizes?.find(s => s.ml === 50 || s.label?.includes('50'))?.price ?? 65);
+    } else if (selectedSize.includes('100')) {
+      unitPrice = Number(product.price_100ml ?? product.sizes?.find(s => s.ml === 100 || s.label?.includes('100'))?.price ?? 125);
+    }
+
+    const firstImg = product.images?.[0] || product.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80';
+    const cartItemId = `${product.id}-${selectedSize}`;
+    const displayName = product.name || 'Perfume';
+
+    setCart((prevCart) => {
+      const existingIndex = prevCart.findIndex(
+        (item) => item.cartItemId === cartItemId || (item.id === product.id && item.selectedSize === selectedSize)
+      );
+
+      if (existingIndex > -1) {
+        const next = [...prevCart];
+        const existing = next[existingIndex];
+        next[existingIndex] = {
+          ...existing,
+          quantity: (existing.quantity || 1) + quantity,
+          price: unitPrice
+        };
+        return next;
+      }
+
+      const newItem = {
+        id: product.id,
+        cartItemId,
+        name: displayName,
+        brand: product.brand || product.brandInspiration || '',
+        price: unitPrice,
+        quantity,
+        selectedSize,
+        size: selectedSize,
+        image: firstImg,
+        images: product.images || [firstImg],
+        concentration: product.concentration || 'Extrait de Parfum',
+        catalogNo: product.catalogNo || '',
+        maxStock: product.stock ?? 99
+      };
+
+      return [...prevCart, newItem];
+    });
+
+    showToast(`Added ${displayName} (${selectedSize}) to bag`, 'success');
     return true;
   };
 

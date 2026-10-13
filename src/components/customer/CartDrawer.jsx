@@ -72,11 +72,23 @@ export const CartDrawer = () => {
 
   const handleProceedCheckout = () => {
     if (!cart || cart.length === 0) return;
-    const itemsList = cart.map((item, idx) => 
-      `${idx + 1}. ${item.name} (${item.size || '50ml'}) x${item.quantity} = RM${((Number(item.price) || 0) * item.quantity).toFixed(2)}`
-    ).join('\n');
+    const itemsList = cart.map((item, idx) => {
+      const catNum = item.catalogNo ? ` [#${item.catalogNo}]` : '';
+      const brandStr = item.brand ? ` (Inspired by ${item.brand})` : '';
+      const sizeStr = item.selectedSize || item.size || '50ml';
+      const qtyStr = item.quantity || 1;
+      const priceStr = ((Number(item.price) || 0) * qtyStr).toFixed(2);
+      return `${idx + 1}. *${item.name}*${catNum}${brandStr}\n   • Size: ${sizeStr} | Qty: ${qtyStr} | RM${priceStr}`;
+    }).join('\n\n');
     
-    const summary = `Hello Valenszo! 🛍️\n\nI would like to order the following from your online catalog:\n\n${itemsList}\n\nEstimated Subtotal: RM${safeSubtotal.toFixed(2)}\nDelivery: ${cartShipping === 0 ? 'FREE' : `RM${cartShipping.toFixed(2)}`}\nTotal: RM${cartTotal.toFixed(2)}\n\nCould you please assist me with payment and delivery arrangement? Thank you!`;
+    let promoLine = '';
+    if (appliedPromo && cartDiscountAmount > 0) {
+      promoLine = `\n• Privilege Discount (${appliedPromo.code}): -RM${cartDiscountAmount.toFixed(2)}`;
+    }
+
+    const shippingLine = cartShipping === 0 ? 'FREE Courier Shipping' : `RM${cartShipping.toFixed(2)}`;
+
+    const summary = `Hello Valenszo! 🛍️\n\nI would like to place an order from your online catalog:\n\n${itemsList}\n\n───────────────\n• Subtotal: RM${safeSubtotal.toFixed(2)}${promoLine}\n• Delivery: ${shippingLine}\n• *Total: RM${cartTotal.toFixed(2)}*\n───────────────\n\nCould you please confirm stock availability and advise on payment & delivery arrangement? Thank you!`;
     
     const waUrl = `https://wa.me/60182868402?text=${encodeURIComponent(summary)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');

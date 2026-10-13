@@ -1,10 +1,13 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
+import { ShoppingBag } from 'lucide-react';
 
 export const ProductCard = ({ product }) => {
   const { 
     openProductDetail,
-    setSelectedProductModal
+    setSelectedProductModal,
+    addToCart,
+    setIsCartOpen
   } = useStore();
 
   if (!product || !product.id) return null;
@@ -150,7 +153,7 @@ export const ProductCard = ({ product }) => {
         {(product.brand || product.brandInspiration) ? `Inspired by ${product.brand || product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
       </p>
 
-      {/* 4. Format & Starting Price Micro-label */}
+      {/* 4. Format & Starting Price Micro-label with Quick Add */}
       <div
         style={{
           display: 'flex',
@@ -166,9 +169,45 @@ export const ProductCard = ({ product }) => {
         <span style={{ letterSpacing: '0.02em', fontWeight: 500 }}>
           30ml • 50ml • 100ml
         </span>
-        <span style={{ fontWeight: 700, color: '#2b1810', fontFamily: 'var(--font-mono)' }}>
-          From RM{product.price_30ml ? Number(product.price_30ml).toFixed(0) : '45'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontWeight: 700, color: '#2b1810', fontFamily: 'var(--font-mono)' }}>
+            From RM{product.price_30ml ? Number(product.price_30ml).toFixed(0) : '45'}
+          </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product, 1, '50ml');
+              if (setIsCartOpen) setIsCartOpen(true);
+            }}
+            aria-label={`Add ${displayName} to bag`}
+            title="Quick add 50ml to bag"
+            style={{
+              width: '26px',
+              height: '26px',
+              borderRadius: '50%',
+              background: '#f5f0eb',
+              border: '1px solid #e5ded7',
+              color: '#2b1810',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              padding: 0
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#2b1810';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#f5f0eb';
+              e.currentTarget.style.color = '#2b1810';
+            }}
+          >
+            <ShoppingBag size={13} />
+          </button>
+        </div>
       </div>
 
     </div>
