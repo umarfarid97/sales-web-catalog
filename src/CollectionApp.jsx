@@ -657,22 +657,15 @@ export const CollectionPageContent = () => {
             </div>
           )}
 
-          {/* Controls Bar: Sort & Filter Toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1.25rem', borderBottom: '1px solid #f3f4f6', marginBottom: '1.75rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '0.82rem', color: '#6b7280' }}>Sort by:</span>
+          {/* Controls Bar: Sort, Search & Filter (Responsive Mobile & Desktop) */}
+          <div className="catalog-controls-bar">
+            <div className="catalog-controls-left">
+              <span className="catalog-controls-label">Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                style={{
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  padding: '6px 12px',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  background: '#fff',
-                  cursor: 'pointer'
-                }}
+                className="catalog-controls-select"
+                aria-label="Sort collection"
               >
                 <option value="best-sellers">Best Sellers</option>
                 <option value="name-asc">Name: A to Z</option>
@@ -682,31 +675,18 @@ export const CollectionPageContent = () => {
               </select>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {/* Search Button near Filter */}
+            <div className="catalog-controls-right">
+              {/* Search Button */}
               <button
                 type="button"
                 onClick={() => setIsSearchOpen((prev) => !prev)}
                 aria-label="Search Fragrance Collection"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 14px',
-                  borderRadius: '4px',
-                  border: isSearchOpen || searchQuery ? '1px solid #111827' : '1px solid #d1d5db',
-                  background: isSearchOpen || searchQuery ? '#f9fafb' : '#ffffff',
-                  color: '#111827',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  transition: 'all 0.15s ease'
-                }}
+                className={`catalog-controls-btn ${isSearchOpen || searchQuery ? 'active' : ''}`}
               >
                 <Search size={14} />
                 <span>Search</span>
                 {searchQuery.trim() && (
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#000000' }} />
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#000000' }} />
                 )}
               </button>
 
@@ -714,24 +694,13 @@ export const CollectionPageContent = () => {
               <button
                 type="button"
                 onClick={() => setIsFilterDrawerOpen(true)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 16px',
-                  borderRadius: '4px',
-                  border: '1px solid #d1d5db',
-                  background: activeFiltersCount > 0 ? '#faf9f6' : '#ffffff',
-                  color: '#111827',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}
+                className={`catalog-controls-btn ${activeFiltersCount > 0 ? 'active' : ''}`}
+                aria-label="Filter Collection"
               >
                 <SlidersHorizontal size={14} />
                 <span>Filter</span>
                 {activeFiltersCount > 0 && (
-                  <span style={{ background: '#000', color: '#fff', borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.65rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span className="catalog-controls-badge">
                     {activeFiltersCount}
                   </span>
                 )}
