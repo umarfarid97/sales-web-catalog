@@ -104,6 +104,7 @@ export const ProductDetailPage = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isUpsellDrawerOpen, setIsUpsellDrawerOpen] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [selectedLayerIndex, setSelectedLayerIndex] = useState(0);
   const mainCtaRef = useRef(null);
 
   useEffect(() => {
@@ -188,79 +189,93 @@ export const ProductDetailPage = () => {
     return [];
   }, [product]);
 
-  // Curated Layering Companion based on Excel layerFamily data
-  const layeringPartner = useMemo(() => {
-    if (!product || !products || products.length === 0) return null;
+  // Curated 3 Distinct Layering Companions based on Excel layerFamily data
+  const layeringOptions = useMemo(() => {
+    if (!product || !products || products.length === 0) return [];
 
     const currentLf = product.specs?.layerFamily || product.layerFamily || 'L1';
     
-    // Pairing map based on harmonic olfactory rules
-    const COMPLEMENTARY_PAIRS = {
-      'L1': ['L5', 'L8', 'L2', 'L6'], // Fresh/Clean -> Sweet/Warm (L5) or Woody/Dark (L8/L2)
-      'L2': ['L1', 'L3', 'L5'],       // Fresh Musc -> Citrus/Fresh (L1) or Floral (L3)
-      'L3': ['L1', 'L5', 'L8'],       // Fruity/Floral -> Fresh/Clean (L1) or Sweet Warm (L5)
-      'L4': ['L1', 'L5', 'L2'],       // White Floral/Amber -> Fresh (L1) or Vanilla (L5)
-      'L5': ['L1', 'L8', 'L6'],       // Sweet/Warm -> Fresh/Clean (L1) or Dark Woods (L8)
-      'L6': ['L1', 'L3', 'L5'],       // Spiced Elixir -> Citrus Fresh (L1) or Fruity (L3)
-      'L7': ['L1', 'L5', 'L3'],       // Woody/Dark -> Fresh (L1) or Warm Sweet (L5)
-      'L8': ['L1', 'L3', 'L5'],       // Woody Dark -> Fresh (L1) or Fruity (L3)
-      'L9': ['L1', 'L2', 'L8'],       // Tropical Fruity -> Fresh (L1) or Woody (L8)
-      'L0': ['L1', 'L5']              // Mixed -> Fresh or Sweet
-    };
+    // Group candidate target families into 3 distinct sensory vibes
+    // Vibe 1: Velvet Warm / Amber / Gourmand (L5, L6)
+    // Vibe 2: Lacquered Woods & Smoky Trail (L8, L7, L2)
+    // Vibe 3: Sparkling Fresh / Green / Floral Radiance (L1, L3, L4, L9)
+    const vibeProfiles = [
+      {
+        id: 'warm-velvet',
+        tag: 'Warm Evening Depth',
+        subtitle: 'Velvet Amber & Gourmand Longevity',
+        targetFamilies: ['L5', 'L6'],
+        fallbackFamilies: ['L8', 'L3'],
+        technique: 'Warm Base & Accent Contrast',
+        reason: (comp) => `Spritz ${comp.name} first as a rich vanilla-amber anchor, then mist ${product.name} on top to create an intoxicating, multi-layered evening presence.`
+      },
+      {
+        id: 'woody-sillage',
+        tag: 'Smoky & Woody Trail',
+        subtitle: 'Lacquered Woods & Magnetic Projection',
+        targetFamilies: ['L8', 'L7'],
+        fallbackFamilies: ['L2', 'L6'],
+        technique: 'Dark Anchor & Radiant Diffusion',
+        reason: (comp) => `Layering with ${comp.name} infuses refined woods and spicy undertones that extend longevity past 14+ hours.`
+      },
+      {
+        id: 'fresh-sparkle',
+        tag: 'Daytime Fresh Lift',
+        subtitle: 'Crisp Citrus, Green Tea & Floral Radiance',
+        targetFamilies: ['L1', 'L3', 'L4', 'L2'],
+        fallbackFamilies: ['L9', 'L5'],
+        technique: 'Sparkling Top & Character Accent',
+        reason: (comp) => `Spray ${product.name} followed by ${comp.name} over your collar or hair to lift the opening with effortless, sunlit vitality.`
+      }
+    ];
 
-    const targetFamilies = COMPLEMENTARY_PAIRS[currentLf] || ['L1', 'L5', 'L8'];
+    const results = [];
+    const usedProductIds = new Set([product.id]);
 
-    // Find candidate matching products:
-    // 1. Must not be the same perfume
-    // 2. Prefers Tier S or Tier A icons from the target family
-    const candidates = products.filter(p => {
-      if (p.id === product.id) return false;
-      const pLf = p.specs?.layerFamily || p.layerFamily || '';
-      return targetFamilies.includes(pLf);
+    vibeProfiles.forEach(vibe => {
+      // Find candidate products that match this vibe's layerFamilies, avoiding duplicate products
+      let candidates = products.filter(p => {
+        if (usedProductIds.has(p.id)) return false;
+        const pLf = p.specs?.layerFamily || p.layerFamily || '';
+        return vibe.targetFamilies.includes(pLf) && pLf !== currentLf;
+      });
+
+      // Fallback if none found in primary target families
+      if (candidates.length === 0) {
+        candidates = products.filter(p => {
+          if (usedProductIds.has(p.id)) return false;
+          const pLf = p.specs?.layerFamily || p.layerFamily || '';
+          return vibe.fallbackFamilies.includes(pLf) && pLf !== currentLf;
+        });
+      }
+
+      // Secondary fallback: any other product from another family
+      if (candidates.length === 0) {
+        candidates = products.filter(p => !usedProductIds.has(p.id));
+      }
+
+      if (candidates.length > 0) {
+        // Prioritize Tier S icon, then Tier A
+        const sorted = [...candidates].sort((a, b) => {
+          const rank = (tier) => (tier === 'S' ? 2 : tier === 'A' ? 1 : 0);
+          return rank(b.tier) - rank(a.tier);
+        });
+
+        const selected = sorted[0];
+        usedProductIds.add(selected.id);
+
+        results.push({
+          id: vibe.id,
+          tag: vibe.tag,
+          subtitle: vibe.subtitle,
+          companion: selected,
+          technique: vibe.technique,
+          reason: vibe.reason(selected)
+        });
+      }
     });
 
-    if (candidates.length === 0) {
-      // Fallback: pick any other high-tier product
-      const fallback = products.find(p => p.id !== product.id && p.tier === 'S') || products.find(p => p.id !== product.id);
-      if (!fallback) return null;
-      return {
-        companion: fallback,
-        technique: 'Contrast & Longevity Boost',
-        reason: 'Harmonizes with this scent to create an elevated, bespoke trail with boosted longevity.'
-      };
-    }
-
-    // Sort by Tier S first, then Tier A
-    const sorted = [...candidates].sort((a, b) => {
-      const rank = (tier) => (tier === 'S' ? 2 : tier === 'A' ? 1 : 0);
-      return rank(b.tier) - rank(a.tier);
-    });
-
-    const companion = sorted[0];
-    const compLf = companion.specs?.layerFamily || companion.layerFamily || '';
-
-    let technique = 'Base & Radiance Layering';
-    let reason = 'Blends the distinct accords together for a signature bespoke sillage.';
-
-    if (['L1', 'L2'].includes(currentLf) && ['L5', 'L6', 'L8'].includes(compLf)) {
-      technique = 'Warm Anchor & Fresh Radiance';
-      reason = `Apply ${companion.name} as the warm rich anchor, then mist ${product.name} on top to lift the sillage with fresh vitality.`;
-    } else if (['L5', 'L6', 'L8', 'L7'].includes(currentLf) && ['L1', 'L2'].includes(compLf)) {
-      technique = 'Velvet Depth & Sparkling Opening';
-      reason = `Spritz ${product.name} first for deep woody/warm longevity, then accent with ${companion.name} for an airy, radiant impression.`;
-    } else if (['L3', 'L4', 'L9'].includes(currentLf)) {
-      technique = 'Floral Harmony & Gourmand Depth';
-      reason = `Layering ${product.name} with ${companion.name} enhances the floral heart with rich, seductive complexity.`;
-    } else {
-      technique = 'Complementary Olfactory Harmony';
-      reason = `Pairs the ${product.dominantAccord || 'signature'} notes with ${companion.dominantAccord || 'contrasting'} facets for all-day projection.`;
-    }
-
-    return {
-      companion,
-      technique,
-      reason
-    };
+    return results;
   }, [product, products]);
 
   if (!product) {
@@ -708,8 +723,8 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
-      {/* ================= 4. THE ART OF LAYERING (CURATED DUO) ================= */}
-      {layeringPartner && layeringPartner.companion && (
+      {/* ================= 4. THE ART OF LAYERING (3 CURATED DUOS) ================= */}
+      {layeringOptions && layeringOptions.length > 0 && (
         <section 
           className="pdp-layering-section" 
           style={{
@@ -722,6 +737,7 @@ export const ProductDetailPage = () => {
             boxShadow: '0 8px 30px rgba(74, 56, 46, 0.05)'
           }}
         >
+          {/* Header & Badges */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#1a1410', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -729,10 +745,10 @@ export const ProductDetailPage = () => {
               </div>
               <div>
                 <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
-                  The Art of Layering &bull; Signature Duo
+                  The Art of Layering &bull; 3 Signature Styles
                 </span>
                 <h3 style={{ fontFamily: 'var(--font-brand, serif)', fontSize: '1.45rem', margin: '2px 0 0', color: '#1a1410', letterSpacing: '-0.01em' }}>
-                  Curated Olfactory Partner
+                  Curated Olfactory Duos
                 </h3>
               </div>
             </div>
@@ -750,126 +766,170 @@ export const ProductDetailPage = () => {
               color: '#4a382e'
             }}>
               <Sparkles size={13} color="#d97706" />
-              <span>Harmonized via Excel Layer Family ({product.specs?.layerFamily || 'L1'} &bull; {layeringPartner.companion.specs?.layerFamily || 'L5'})</span>
+              <span>Harmonized via Excel Layer Family ({product.specs?.layerFamily || 'L1'})</span>
             </div>
           </div>
 
-          <p style={{ color: '#68574c', fontSize: '0.88rem', lineHeight: '1.6', margin: '0 0 24px', maxWidth: '780px' }}>
-            Master perfumers design extraits to be layered. When combined, the two formulas interlock to project an unforgettable, customized scent signature that belongs exclusively to you.
+          <p style={{ color: '#68574c', fontSize: '0.88rem', lineHeight: '1.6', margin: '0 0 20px', maxWidth: '780px' }}>
+            Master perfumers craft extraits to interlock. Choose your desired scent vibe below to discover how {product.name} evolves with its curated companion.
           </p>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '20px',
-            background: '#ffffff',
-            borderRadius: '12px',
-            border: '1px solid #ede3d5',
-            padding: '20px',
-            alignItems: 'center'
-          }}>
-            {/* Visual Bottles Duo Representation */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                <img 
-                  src={galleryItems[0]?.url || product.image} 
-                  alt={product.name} 
-                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                />
-                <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#1a1410', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
-                  Base
-                </span>
-              </div>
-
-              <div style={{ fontSize: '1.2rem', color: '#926917', fontWeight: 800 }}>
-                +
-              </div>
-
-              <a 
-                href={`product.html?product=${encodeURIComponent(layeringPartner.companion.name || layeringPartner.companion.id)}`}
-                style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', textDecoration: 'none' }}
-              >
-                <img 
-                  src={layeringPartner.companion.images?.[0] || layeringPartner.companion.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
-                  alt={layeringPartner.companion.name} 
-                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                />
-                <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#d97706', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
-                  Accent
-                </span>
-              </a>
-
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#926917', fontWeight: 700 }}>
-                  Recommended Layer
-                </div>
-                <h4 style={{ fontSize: '1.05rem', margin: '2px 0 4px', color: '#1a1410', fontWeight: 700 }}>
-                  {layeringPartner.companion.name}
-                </h4>
-                <div style={{ fontSize: '0.76rem', color: '#786558' }}>
-                  {layeringPartner.companion.brand ? `Inspired by ${layeringPartner.companion.brand}` : (layeringPartner.companion.dominantAccord || 'Complementary Extrait')}
-                </div>
-              </div>
-            </div>
-
-            {/* Technique & Action Column */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', borderLeft: '1px solid #f2ece4', paddingLeft: '20px' }}>
-              <div>
-                <div style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1a1410', marginBottom: '4px' }}>
-                  Layering Method: {layeringPartner.technique}
-                </div>
-                <p style={{ fontSize: '0.82rem', color: '#524339', lineHeight: '1.5', margin: 0 }}>
-                  &ldquo;{layeringPartner.reason}&rdquo;
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* 3 Interactive Vibe Tabs */}
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '18px' }}>
+            {layeringOptions.map((opt, idx) => {
+              const isActive = selectedLayerIndex === idx;
+              return (
                 <button
+                  key={opt.id}
                   type="button"
-                  onClick={() => {
-                    addToCart(product, 1, selectedSize);
-                    addToCart(layeringPartner.companion, 1, '50ml');
-                    showToast(`Added Signature Duo: ${product.name} + ${layeringPartner.companion.name} to bag`);
-                    setIsCartOpen(true);
-                  }}
+                  onClick={() => setSelectedLayerIndex(idx)}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '11px 18px',
-                    borderRadius: '6px',
-                    background: '#1a1410',
-                    color: '#ffffff',
-                    fontSize: '0.82rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.04em',
-                    border: 'none',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    border: isActive ? '1.5px solid #1a1410' : '1px solid #e0d6cb',
+                    background: isActive ? '#1a1410' : '#ffffff',
+                    color: isActive ? '#ffffff' : '#3d3028',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(26, 20, 16, 0.2)'
-                  }}
-                >
-                  <ShoppingBag size={15} />
-                  <span>Add Signature Duo to Bag</span>
-                </button>
-
-                <a
-                  href={`product.html?product=${encodeURIComponent(layeringPartner.companion.name || layeringPartner.companion.id)}`}
-                  style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '0.78rem',
-                    fontWeight: 700,
-                    color: '#926917',
-                    textDecoration: 'none'
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: '2px',
+                    transition: 'all 0.2s ease',
+                    flex: '1 1 200px'
                   }}
                 >
-                  <span>Explore {layeringPartner.companion.name}</span>
-                  <ArrowRight size={13} />
-                </a>
-              </div>
-            </div>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.02em' }}>
+                    {opt.tag}
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: isActive ? '#d1c4b7' : '#78685c' }}>
+                    {opt.companion.name} ({opt.companion.specs?.layerFamily || 'L'})
+                  </span>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Selected Layering Option Details Card */}
+          {(() => {
+            const activeOpt = layeringOptions[selectedLayerIndex] || layeringOptions[0];
+            if (!activeOpt || !activeOpt.companion) return null;
+            const comp = activeOpt.companion;
+
+            return (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '20px',
+                background: '#ffffff',
+                borderRadius: '12px',
+                border: '1px solid #ede3d5',
+                padding: '20px',
+                alignItems: 'center'
+              }}>
+                {/* Visual Bottles Duo Representation */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    <img 
+                      src={galleryItems[0]?.url || product.image} 
+                      alt={product.name} 
+                      style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                    />
+                    <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#1a1410', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
+                      Base
+                    </span>
+                  </div>
+
+                  <div style={{ fontSize: '1.2rem', color: '#926917', fontWeight: 800 }}>
+                    +
+                  </div>
+
+                  <a 
+                    href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                    style={{ position: 'relative', width: '90px', height: '90px', background: '#fdf8f4', borderRadius: '10px', border: '1px solid #ede5dc', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', textDecoration: 'none' }}
+                  >
+                    <img 
+                      src={comp.images?.[0] || comp.image || 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'} 
+                      alt={comp.name} 
+                      style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                    />
+                    <span style={{ position: 'absolute', bottom: '4px', left: '4px', background: '#d97706', color: '#fff', fontSize: '0.55rem', fontWeight: 800, padding: '1px 5px', borderRadius: '3px' }}>
+                      Accent
+                    </span>
+                  </a>
+
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#926917', fontWeight: 700 }}>
+                      {activeOpt.tag}
+                    </div>
+                    <h4 style={{ fontSize: '1.05rem', margin: '2px 0 4px', color: '#1a1410', fontWeight: 700 }}>
+                      {comp.name}
+                    </h4>
+                    <div style={{ fontSize: '0.76rem', color: '#786558' }}>
+                      {comp.brand ? `Inspired by ${comp.brand}` : (comp.dominantAccord || 'Complementary Extrait')}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Technique & Action Column */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', borderLeft: '1px solid #f2ece4', paddingLeft: '20px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#1a1410', marginBottom: '4px' }}>
+                      Method: {activeOpt.technique}
+                    </div>
+                    <p style={{ fontSize: '0.82rem', color: '#524339', lineHeight: '1.5', margin: 0 }}>
+                      &ldquo;{activeOpt.reason}&rdquo;
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addToCart(product, 1, selectedSize);
+                        addToCart(comp, 1, '50ml');
+                        showToast(`Added Signature Duo: ${product.name} + ${comp.name} to bag`);
+                        setIsCartOpen(true);
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '11px 18px',
+                        borderRadius: '6px',
+                        background: '#1a1410',
+                        color: '#ffffff',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.04em',
+                        border: 'none',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(26, 20, 16, 0.2)'
+                      }}
+                    >
+                      <ShoppingBag size={15} />
+                      <span>Add This Duo to Bag</span>
+                    </button>
+
+                    <a
+                      href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        color: '#926917',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <span>Explore {comp.name}</span>
+                      <ArrowRight size={13} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </section>
       )}
 
