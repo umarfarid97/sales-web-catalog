@@ -227,34 +227,53 @@ export const ProductDetailModal = () => {
                 Select Format
               </div>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {sizes.map((s, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setSelectedSizeIndex(idx)}
-                    style={{
-                      padding: '10px 18px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: selectedSizeIndex === idx ? '#000000' : '#ffffff',
-                      color: selectedSizeIndex === idx ? '#ffffff' : '#000000',
-                      border: selectedSizeIndex === idx ? '1px solid #000000' : '1px solid var(--border-subtle)',
-                      fontFamily: 'var(--font-couture)',
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.08em',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '2px'
-                    }}
-                  >
-                    <span>{s.label}</span>
-                    <span style={{ fontSize: '0.72rem', opacity: selectedSizeIndex === idx ? 0.9 : 0.6 }}>
-                      RM {s.price.toFixed(2)}
-                    </span>
-                  </button>
-                ))}
+                {sizes.map((s, idx) => {
+                  const tag = s.label?.includes('100') ? 'Best Value' : (s.label?.includes('50') ? 'Popular' : null);
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setSelectedSizeIndex(idx)}
+                      style={{
+                        padding: '10px 18px',
+                        borderRadius: 'var(--radius-sm)',
+                        background: selectedSizeIndex === idx ? '#000000' : '#ffffff',
+                        color: selectedSizeIndex === idx ? '#ffffff' : '#000000',
+                        border: selectedSizeIndex === idx ? '1px solid #000000' : '1px solid var(--border-subtle)',
+                        fontFamily: 'var(--font-couture)',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.08em',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '2px',
+                        position: 'relative'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>{s.label}</span>
+                        {tag && (
+                          <span style={{
+                            fontSize: '0.6rem',
+                            fontWeight: 800,
+                            padding: '1px 5px',
+                            borderRadius: '2px',
+                            background: selectedSizeIndex === idx ? '#d97706' : '#fef3c7',
+                            color: selectedSizeIndex === idx ? '#ffffff' : '#92400e',
+                            letterSpacing: '0.04em'
+                          }}>
+                            {tag}
+                          </span>
+                        )}
+                      </div>
+                      <span style={{ fontSize: '0.72rem', opacity: selectedSizeIndex === idx ? 0.9 : 0.6 }}>
+                        RM {s.price.toFixed(2)}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

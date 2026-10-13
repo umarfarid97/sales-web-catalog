@@ -68,6 +68,29 @@ export const WomenCollectionContent = () => {
   const [selectedAccords, setSelectedAccords] = useState([]);
   const [selectedOccasions, setSelectedOccasions] = useState([]);
   const [selectedIntensities, setSelectedIntensities] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [brandSearch, setBrandSearch] = useState('');
+
+  // Available Brands in Women's Collection
+  const availableBrands = useMemo(() => {
+    if (!products) return [];
+    const brandMap = new Map();
+    products.forEach((p) => {
+      if (!p || typeof p !== 'object' || !p.id) return;
+      const pId = String(p.id || '');
+      const pSku = String(p.sku || '');
+      const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Women' || p.category === 'Pour Femme' || p.gender === 'Women';
+      if (!isWomen) return;
+
+      const b = (p.brand || p.brandInspiration || '').trim();
+      if (b && b !== 'Unknown' && b !== 'Unknown / catalog reference') {
+        brandMap.set(b, (brandMap.get(b) || 0) + 1);
+      }
+    });
+    return Array.from(brandMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [products]);
 
   // STRICT WOMEN'S FILTERING
   const filteredProducts = useMemo(() => {
@@ -82,12 +105,20 @@ export const WomenCollectionContent = () => {
       const isWomen = pId.startsWith('vlz-women') || pId.startsWith('vlz-wom') || pSku.startsWith('VLZ-W') || p.category === 'Women' || p.category === 'Pour Femme' || p.gender === 'Women';
       if (!isWomen) return false;
 
+      // Brand filter
+      if (selectedBrands.length > 0) {
+        const pBrand = (p.brand || p.brandInspiration || '').trim();
+        if (!selectedBrands.includes(pBrand)) return false;
+      }
+
       // Real-time Search Query Filter
       if (searchQuery && typeof searchQuery === 'string' && searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
+        const cleanDigits = q.replace(/[#\s]/g, '');
         const name = String(p.name || '').toLowerCase();
+        const brand = String(p.brand || p.brandInspiration || '').toLowerCase();
         const inspiration = String(p.brandInspiration || '').toLowerCase();
-        const family = String(p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || p.dominantAccord || '').toLowerCase();
         const character = String(p.character || '').toLowerCase();
         const sku = String(p.sku || '').toLowerCase();
         const catalogNo = String(p.catalogNo || '');
@@ -98,11 +129,12 @@ export const WomenCollectionContent = () => {
 
         const matchesSearch =
           name.includes(q) ||
+          brand.includes(q) ||
           inspiration.includes(q) ||
           family.includes(q) ||
           character.includes(q) ||
           sku.includes(q) ||
-          catalogNo.includes(q) ||
+          (cleanDigits && catalogNo === cleanDigits) ||
           traits.includes(q) ||
           topNotes.includes(q) ||
           heartNotes.includes(q) ||
@@ -114,7 +146,7 @@ export const WomenCollectionContent = () => {
       // Quick chip accord filter
       if (selectedChip !== 'All') {
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
-        const family = String(p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || p.dominantAccord || '').toLowerCase();
         const chipLower = selectedChip.toLowerCase();
         if (!traits.includes(chipLower) && !family.includes(chipLower)) {
           return false;
@@ -124,7 +156,7 @@ export const WomenCollectionContent = () => {
       // Drawer Accord Filters
       if (selectedAccords.length > 0) {
         const traits = Array.isArray(p.traits) ? p.traits.join(' ').toLowerCase() : '';
-        const family = String(p.olfactoryFamily || '').toLowerCase();
+        const family = String(p.olfactoryFamily || p.dominantAccord || '').toLowerCase();
         const matchesAny = selectedAccords.some((acc) => {
           const accLower = acc.toLowerCase();
           return traits.includes(accLower) || family.includes(accLower);
@@ -133,14 +165,14 @@ export const WomenCollectionContent = () => {
       }
 
       // Price filter
-      const pPrice = Number(p.price) || 45;
+      const pPrice = Number(p.price_30ml || p.price) || 45;
       if (pPrice > priceMax) return false;
 
       return true;
     }).sort((a, b) => {
       if (!a || !b) return 0;
-      const priceA = Number(a.price) || 45;
-      const priceB = Number(b.price) || 45;
+      const priceA = Number(a.price_30ml || a.price) || 45;
+      const priceB = Number(b.price_30ml || b.price) || 45;
       if (sortBy === 'price-low') return priceA - priceB;
       if (sortBy === 'price-high') return priceB - priceA;
       // Default: best sellers (Tier S first)
@@ -149,7 +181,13 @@ export const WomenCollectionContent = () => {
       if (rankDiff !== 0) return rankDiff;
       return (Number(a.catalogNo) || 0) - (Number(b.catalogNo) || 0);
     });
-  }, [products, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
+  }, [products, selectedBrands, searchQuery, selectedChip, selectedAccords, priceMax, sortBy]);
+
+  const toggleBrand = (brandName) => {
+    setSelectedBrands((prev) =>
+      prev.includes(brandName) ? prev.filter((b) => b !== brandName) : [...prev, brandName]
+    );
+  };
 
   const toggleAccord = (accord) => {
     setSelectedAccords((prev) => 
@@ -158,15 +196,17 @@ export const WomenCollectionContent = () => {
   };
 
   const handleClearFilters = () => {
+    setSelectedBrands([]);
     setSelectedAccords([]);
     setSelectedOccasions([]);
     setSelectedIntensities([]);
     setPriceMax(250);
     setSelectedChip('All');
     setSearchQuery('');
+    setBrandSearch('');
   };
 
-  const activeFiltersCount = selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0) + (searchQuery.trim() ? 1 : 0);
+  const activeFiltersCount = selectedBrands.length + selectedAccords.length + selectedOccasions.length + selectedIntensities.length + (priceMax < 250 ? 1 : 0);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -175,7 +215,7 @@ export const WomenCollectionContent = () => {
   // Reset to first page when filtering or searching
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedChip, selectedAccords, selectedOccasions, selectedIntensities, priceMax, sortBy]);
+  }, [selectedBrands, searchQuery, selectedChip, selectedAccords, selectedOccasions, selectedIntensities, priceMax, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -507,6 +547,64 @@ export const WomenCollectionContent = () => {
             </div>
           </div>
 
+          {/* Active Filter Badges Bar */}
+          {(selectedBrands.length > 0 || selectedAccords.length > 0 || priceMax < 250 || (selectedChip !== 'All')) && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '1.25rem', padding: '10px 14px', background: '#f8f6f2', borderRadius: '8px', border: '1px solid #ede8e0' }}>
+              <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#786558', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Active Filters:
+              </span>
+              {selectedBrands.map((b) => (
+                <button
+                  key={b}
+                  type="button"
+                  onClick={() => toggleBrand(b)}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: '#ffffff', border: '1px solid #dcd5ca', borderRadius: '999px', fontSize: '0.76rem', fontWeight: 600, color: '#1a1410', cursor: 'pointer' }}
+                >
+                  <span>Brand: {b}</span>
+                  <X size={12} />
+                </button>
+              ))}
+              {selectedAccords.map((a) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => toggleAccord(a)}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: '#ffffff', border: '1px solid #dcd5ca', borderRadius: '999px', fontSize: '0.76rem', fontWeight: 600, color: '#1a1410', cursor: 'pointer' }}
+                >
+                  <span>Accord: {a}</span>
+                  <X size={12} />
+                </button>
+              ))}
+              {priceMax < 250 && (
+                <button
+                  type="button"
+                  onClick={() => setPriceMax(250)}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: '#ffffff', border: '1px solid #dcd5ca', borderRadius: '999px', fontSize: '0.76rem', fontWeight: 600, color: '#1a1410', cursor: 'pointer' }}
+                >
+                  <span>Max RM{priceMax}</span>
+                  <X size={12} />
+                </button>
+              )}
+              {selectedChip !== 'All' && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedChip('All')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '4px 10px', background: '#ffffff', border: '1px solid #dcd5ca', borderRadius: '999px', fontSize: '0.76rem', fontWeight: 600, color: '#1a1410', cursor: 'pointer' }}
+                >
+                  <span>Family: {selectedChip}</span>
+                  <X size={12} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                style={{ background: 'none', border: 'none', color: '#8c5e3c', fontSize: '0.76rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', marginLeft: 'auto' }}
+              >
+                Clear All
+              </button>
+            </div>
+          )}
+
           {/* Product Grid (2 columns mobile, 4 columns desktop) */}
           <div 
             id="women-catalog-grid"
@@ -522,27 +620,72 @@ export const WomenCollectionContent = () => {
           </div>
 
           {/* Luxury Pagination Controls */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={filteredProducts.length}
-            pageSize={ITEMS_PER_PAGE}
-            onPageChange={setCurrentPage}
-            itemLabel="women's creations"
-            scrollTargetId="women-catalog-grid"
-          />
+          {filteredProducts.length > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredProducts.length}
+              pageSize={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+              itemLabel="women's creations"
+              scrollTargetId="women-catalog-grid"
+            />
+          )}
 
           {filteredProducts.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
-              <p style={{ color: '#6b7280', fontSize: '1rem' }}>No perfumes match your selected filters.</p>
-              <button
-                type="button"
-                className="dior-btn"
-                onClick={handleClearFilters}
-                style={{ marginTop: '1rem', background: '#000', color: '#fff', padding: '10px 20px', borderRadius: '4px' }}
-              >
-                Clear All Filters
-              </button>
+            <div style={{ textAlign: 'center', padding: '4.5rem 1rem', maxWidth: '540px', margin: '0 auto' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#f5f3ef', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#8a776a' }}>
+                <Search size={24} />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-brand)', fontSize: '1.4rem', fontWeight: 700, margin: '0 0 8px', color: '#1a1410' }}>
+                No Fragrance Creations Found
+              </h3>
+              <p style={{ color: '#786558', fontSize: '0.88rem', lineHeight: 1.5, marginBottom: '20px' }}>
+                We couldn't find perfumes matching your criteria. Try adjusting your search query, or explore our most sought-after icons:
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '24px' }}>
+                {['Baccarat Rouge 540', 'Lost Cherry', 'Bombshell', 'Good Girl'].map((term) => (
+                  <button
+                    key={term}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(term);
+                      setSelectedChip('All');
+                      setSelectedBrands([]);
+                      setSelectedAccords([]);
+                      setPriceMax(250);
+                    }}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: '999px',
+                      border: '1px solid #dcd5ca',
+                      background: '#ffffff',
+                      color: '#2b1810',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    "{term}"
+                  </button>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  style={{ background: '#111111', color: '#ffffff', padding: '10px 22px', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 700, border: 'none', cursor: 'pointer' }}
+                >
+                  Reset All Filters
+                </button>
+                <a
+                  href="diagnostic.html"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0ebe4', color: '#8c5e3c', padding: '10px 20px', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 700, textDecoration: 'none' }}
+                >
+                  <Sparkles size={14} color="#d97706" />
+                  <span>Take Scent Quiz</span>
+                </a>
+              </div>
             </div>
           )}
 
@@ -593,6 +736,80 @@ export const WomenCollectionContent = () => {
                 >
                   <X size={20} />
                 </button>
+              </div>
+            </div>
+
+            {/* Brand Filter */}
+            <div style={{ padding: '1.25rem 0', borderBottom: '1px solid #e5e7eb' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <h3 style={{ fontSize: '0.88rem', fontWeight: 700, margin: 0 }}>
+                  Brand ({availableBrands.length})
+                </h3>
+                {selectedBrands.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBrands([])}
+                    style={{ background: 'none', border: 'none', fontSize: '0.74rem', color: '#8c5e3c', cursor: 'pointer', fontWeight: 600 }}
+                  >
+                    Reset ({selectedBrands.length})
+                  </button>
+                )}
+              </div>
+
+              {availableBrands.length > 6 && (
+                <div style={{ position: 'relative', marginBottom: '10px' }}>
+                  <input
+                    type="text"
+                    placeholder="Search brands (e.g. Chanel, Dior)..."
+                    value={brandSearch}
+                    onChange={(e) => setBrandSearch(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '7px 10px',
+                      fontSize: '0.8rem',
+                      borderRadius: '4px',
+                      border: '1px solid #d1d5db',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  {brandSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setBrandSearch('')}
+                      style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '2px' }}
+                    >
+                      <X size={12} />
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <div style={{ maxHeight: '180px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px', paddingRight: '4px' }}>
+                {availableBrands
+                  .filter(b => !brandSearch.trim() || b.name.toLowerCase().includes(brandSearch.trim().toLowerCase()))
+                  .map(({ name, count }) => {
+                    const isChecked = selectedBrands.includes(name);
+                    return (
+                      <label
+                        key={name}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', color: isChecked ? '#111827' : '#4b5563', cursor: 'pointer', padding: '3px 0', fontWeight: isChecked ? 600 : 400 }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleBrand(name)}
+                            style={{ accentColor: '#000000', cursor: 'pointer' }}
+                          />
+                          <span>{name}</span>
+                        </div>
+                        <span style={{ fontSize: '0.72rem', color: '#9ca3af' }}>
+                          {count}
+                        </span>
+                      </label>
+                    );
+                  })}
               </div>
             </div>
 

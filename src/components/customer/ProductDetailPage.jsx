@@ -12,7 +12,9 @@ import {
   ChevronUp, 
   Sparkles, 
   Check,
-  MessageCircle
+  MessageCircle,
+  Clock,
+  ShoppingBag
 } from 'lucide-react';
 import '../../styles/pdp.css';
 
@@ -21,7 +23,9 @@ export const ProductDetailPage = () => {
     activeProduct,
     products,
     favorites = [],
-    showToast
+    showToast,
+    addToCart,
+    setIsCartOpen
   } = useStore();
 
   // Fallback if accessed directly with no product or during initial load
@@ -348,29 +352,80 @@ export const ProductDetailPage = () => {
             <span className="pdp-price-size-indicator">({selectedSize})</span>
           </div>
 
-          {/* Size Pills */}
+          {/* Size Pills with Value Badges */}
           <div className="pdp-size-selection-area">
             <span className="pdp-size-label">Select Size</span>
             <div className="pdp-size-pills-row">
-              {['30ml', '50ml', '100ml'].map((size) => (
+              {[
+                { size: '30ml', tag: null },
+                { size: '50ml', tag: 'Most Popular' },
+                { size: '100ml', tag: 'Best Value (RM1.25/ml)' }
+              ].map(({ size, tag }) => (
                 <button
                   key={size}
                   type="button"
                   className={`pdp-size-pill ${selectedSize === size ? 'active' : ''}`}
                   onClick={() => setSelectedSize(size)}
+                  style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: tag ? '8px 16px 6px' : '10px 16px' }}
                 >
-                  {size}
+                  <span style={{ fontWeight: 700 }}>{size}</span>
+                  {tag && (
+                    <span style={{ 
+                      fontSize: '0.62rem', 
+                      letterSpacing: '0.04em', 
+                      color: selectedSize === size ? '#f59e0b' : '#926917',
+                      fontWeight: 800,
+                      marginTop: '2px'
+                    }}>
+                      {tag}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Direct WhatsApp Order & Inquiry */}
-          <div className="pdp-cta-row" ref={mainCtaRef} style={{ marginTop: '16px' }}>
-            <a
-              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+          {/* Sensory Intensity & Longevity Gauge */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+            gap: '10px',
+            padding: '12px 14px',
+            background: 'rgba(255, 255, 255, 0.7)',
+            border: '1px solid #ede8e1',
+            borderRadius: '8px',
+            marginTop: '16px',
+            marginBottom: '4px'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8c7d72', fontWeight: 700 }}>
+                Intensity
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1a1410', fontSize: '0.82rem', fontWeight: 700 }}>
+                <span style={{ color: '#d97706', letterSpacing: '2px' }}>●●●●◐</span>
+                <span style={{ fontSize: '0.72rem', color: '#6b7280' }}>(4.5/5)</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8c7d72', fontWeight: 700 }}>
+                Longevity
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#1a1410', fontSize: '0.82rem', fontWeight: 700 }}>
+                <Clock size={13} color="#d97706" />
+                <span>8 - 12+ Hours</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Dual CTAs: Luxury Add to Bag + Direct WhatsApp Order */}
+          <div className="pdp-cta-row" ref={mainCtaRef} style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              type="button"
+              onClick={() => {
+                addToCart(product, quantity, selectedSize);
+                showToast(`Added ${displayName} (${selectedSize}) to bag`);
+                setIsCartOpen(true);
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -379,21 +434,51 @@ export const ProductDetailPage = () => {
                 width: '100%',
                 padding: '16px 24px',
                 borderRadius: '8px',
-                background: '#128C7E',
+                background: '#1a1410',
                 color: '#ffffff',
                 fontWeight: 800,
-                fontSize: '0.88rem',
-                letterSpacing: '0.06em',
+                fontSize: '0.9rem',
+                letterSpacing: '0.08em',
                 textTransform: 'uppercase',
-                textDecoration: 'none',
-                boxShadow: '0 6px 20px rgba(18, 140, 126, 0.28)',
-                transition: 'background 0.2s ease',
+                border: 'none',
+                boxShadow: '0 6px 20px rgba(26, 20, 16, 0.25)',
+                transition: 'all 0.2s ease',
                 cursor: 'pointer'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#075E54'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#128C7E'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#000000'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#1a1410'; e.currentTarget.style.transform = 'none'; }}
             >
-              <MessageCircle size={20} />
+              <ShoppingBag size={19} />
+              <span>Add to Bag &bull; RM{totalPrice}</span>
+            </button>
+
+            <a
+              href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '13px 20px',
+                borderRadius: '8px',
+                background: '#ffffff',
+                color: '#128C7E',
+                border: '1.5px solid #128C7E',
+                fontWeight: 700,
+                fontSize: '0.84rem',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#f0fdf4'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; }}
+            >
+              <MessageCircle size={17} />
               <span>Inquire & Order via WhatsApp</span>
             </a>
           </div>
@@ -546,30 +631,57 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
-      {/* ================= 5. MOBILE STICKY BOTTOM INQUIRY BAR ================= */}
+      {/* ================= 5. MOBILE STICKY BOTTOM INQUIRY & BAG BAR ================= */}
       <div className={`pdp-mobile-sticky-bar ${showStickyBar ? 'visible' : ''}`}>
-        <div className="pdp-sticky-bar-inner">
+        <div className="pdp-sticky-bar-inner" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={() => {
+              addToCart(product, quantity, selectedSize);
+              showToast(`Added ${displayName} (${selectedSize}) to bag`);
+              setIsCartOpen(true);
+            }}
+            className="pdp-sticky-add-cart-btn"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              background: '#1a1410',
+              color: '#ffffff',
+              borderRadius: '6px',
+              fontWeight: 800,
+              fontSize: '0.82rem',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '12px 10px'
+            }}
+          >
+            <ShoppingBag size={16} />
+            <span>Bag • RM{totalPrice}</span>
+          </button>
+          
           <a 
             href={`https://wa.me/60182868402?text=${encodeURIComponent(`Hello Valenszo! 🛍️\n\nI am viewing your online catalog and would like to order / inquire about:\n• Perfume: ${displayName}\n• Concentration: ${product.concentration || 'Extrait de Parfum'}\n• Selected Size: ${selectedSize}\n• Price: RM${totalPrice}\n\nCould you please assist me with stock availability & delivery arrangement? Thank you!`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="pdp-sticky-add-cart-btn"
             style={{
-              width: '100%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '6px',
               background: '#128C7E',
               color: '#ffffff',
               textDecoration: 'none',
               borderRadius: '6px',
               fontWeight: 800,
-              fontSize: '0.85rem'
+              fontSize: '0.82rem',
+              padding: '12px 10px'
             }}
           >
-            <MessageCircle size={18} />
-            <span>Inquire via WhatsApp — RM{totalPrice}</span>
+            <MessageCircle size={16} />
+            <span>WhatsApp</span>
           </a>
         </div>
       </div>

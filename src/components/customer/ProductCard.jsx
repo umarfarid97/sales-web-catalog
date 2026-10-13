@@ -60,7 +60,7 @@ export const ProductCard = ({ product }) => {
       {/* 1. Neutral Crisp Product Image Wrap */}
       <div 
         style={{
-          background: '#ffffff',
+          background: 'radial-gradient(circle, #ffffff 60%, #f7f4ef 100%)',
           border: '1px solid #ede8e1',
           borderRadius: '12px',
           aspectRatio: '1 / 1.08',
@@ -149,6 +149,27 @@ export const ProductCard = ({ product }) => {
       >
         {(product.brand || product.brandInspiration) ? `Inspired by ${product.brand || product.brandInspiration}` : (product.tagline || 'Extrait de Parfum • High Longevity')}
       </p>
+
+      {/* 4. Format & Starting Price Micro-label */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: '8px',
+          paddingTop: '6px',
+          borderTop: '1px solid #f2ede7',
+          fontSize: '0.74rem',
+          color: '#8a776a'
+        }}
+      >
+        <span style={{ letterSpacing: '0.02em', fontWeight: 500 }}>
+          30ml • 50ml • 100ml
+        </span>
+        <span style={{ fontWeight: 700, color: '#2b1810', fontFamily: 'var(--font-mono)' }}>
+          From RM{product.price_30ml ? Number(product.price_30ml).toFixed(0) : '45'}
+        </span>
+      </div>
 
     </div>
   );

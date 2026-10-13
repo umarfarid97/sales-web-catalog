@@ -10,7 +10,8 @@ import {
   Gift, 
   Truck, 
   Feather,
-  MessageCircle
+  MessageCircle,
+  Sparkles
 } from 'lucide-react';
 import '../../styles/customer.css';
 
@@ -19,6 +20,8 @@ export const CartDrawer = () => {
     isCartOpen,
     setIsCartOpen,
     cart,
+    products,
+    addToCart,
     cartSubtotal,
     cartDiscountAmount,
     cartShipping,
@@ -190,14 +193,14 @@ export const CartDrawer = () => {
           </button>
         </div>
 
-        {/* Free Shipping Progress Indicator */}
-        <div className="free-shipping-progress" style={{ background: '#fafafa', borderBottom: '1px solid #e5e7eb', padding: '12px 24px', flexShrink: 0 }}>
+        {/* Free Shipping Progress Indicator & Milestone Celebration */}
+        <div className="free-shipping-progress" style={{ background: isFreeShipping ? '#ecfdf5' : '#fafafa', borderBottom: '1px solid #e5e7eb', padding: '12px 20px', flexShrink: 0, transition: 'background 0.3s ease' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', fontWeight: 600, marginBottom: '8px' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: isFreeShipping ? '#059669' : '#111827' }}>
-              <Truck size={16} color={isFreeShipping ? '#059669' : '#000000'} />
+              {isFreeShipping ? <Sparkles size={16} color="#059669" /> : <Truck size={16} color="#000000" />}
               {isFreeShipping 
-                ? 'Unlocked Free Express Delivery!' 
-                : `Add RM${amountToFreeShipping.toFixed(2)} more for Free Express Delivery`}
+                ? "🎉 You've unlocked FREE Courier Shipping!" 
+                : `Add RM${amountToFreeShipping.toFixed(2)} more for Free Courier Shipping`}
             </span>
             <span style={{ color: isFreeShipping ? '#059669' : '#000000', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
               {Math.round(freeShippingProgress)}%
@@ -208,10 +211,66 @@ export const CartDrawer = () => {
               className="progress-bar-fill" 
               style={{ 
                 width: `${freeShippingProgress}%`,
-                background: isFreeShipping ? '#059669' : '#000000'
+                background: isFreeShipping ? '#059669' : '#000000',
+                transition: 'width 0.4s ease, background 0.3s ease'
               }} 
             />
           </div>
+
+          {/* 1-Tap Free Shipping Booster (Only when under threshold and cart has items) */}
+          {!isFreeShipping && cart && cart.length > 0 && (
+            <div style={{
+              marginTop: '10px',
+              padding: '8px 12px',
+              background: '#ffffff',
+              border: '1px dashed #d1d5db',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '10px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+                <span style={{ fontSize: '1.1rem' }}>✨</span>
+                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                  <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Free Shipping Booster
+                  </span>
+                  <span style={{ fontSize: '0.68rem', color: '#6b7280' }}>
+                    Add 30ml Travel Spray • RM45
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const boosterProduct = (products && products.length > 0) ? products[0] : {
+                    id: 'booster-30ml',
+                    name: 'Discovery 30ml Travel Spray',
+                    price: 45,
+                    price_30ml: 45,
+                    concentration: 'Extrait de Parfum',
+                    image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'
+                  };
+                  addToCart(boosterProduct, 1, '30ml');
+                }}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '4px',
+                  background: '#000000',
+                  color: '#ffffff',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.04em',
+                  border: 'none',
+                  cursor: 'pointer',
+                  flexShrink: 0
+                }}
+              >
+                + Add
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Cart Items List */}
