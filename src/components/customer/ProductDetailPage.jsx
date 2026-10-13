@@ -866,9 +866,8 @@ export const ProductDetailPage = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        addToCart(product, 1, selectedSize);
                         addToCart(comp, 1, '50ml');
-                        showToast(`Added Signature Duo: ${product.name} + ${comp.name} to bag`);
+                        showToast(`Added ${comp.name} to bag`);
                         setIsCartOpen(true);
                       }}
                       style={{
@@ -887,7 +886,7 @@ export const ProductDetailPage = () => {
                       }}
                     >
                       <ShoppingBag size={14} />
-                      <span>Add Duo to Bag</span>
+                      <span>Add to Bag</span>
                     </button>
                     <a
                       href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
