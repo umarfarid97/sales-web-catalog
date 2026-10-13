@@ -18,6 +18,7 @@ import {
   Layers,
   ArrowRight
 } from 'lucide-react';
+import bundleRecommendations from '../../data/bundleRecommendations.json';
 import '../../styles/pdp.css';
 
 export const ProductDetailPage = () => {
@@ -189,93 +190,104 @@ export const ProductDetailPage = () => {
     return [];
   }, [product]);
 
-  // Curated 3 Distinct Layering Companions based on Excel layerFamily data
+  useEffect(() => {
+    setSelectedLayerIndex(0);
+  }, [product?.id]);
+
+  // Official Bundle & Layering Recommendations directly from Excel CALC sheet
   const layeringOptions = useMemo(() => {
     if (!product || !products || products.length === 0) return [];
 
-    const currentLf = product.specs?.layerFamily || product.layerFamily || 'L1';
-    
-    // Group candidate target families into 3 distinct sensory vibes
-    // Vibe 1: Velvet Warm / Amber / Gourmand (L5, L6)
-    // Vibe 2: Lacquered Woods & Smoky Trail (L8, L7, L2)
-    // Vibe 3: Sparkling Fresh / Green / Floral Radiance (L1, L3, L4, L9)
-    const vibeProfiles = [
-      {
-        id: 'warm-velvet',
-        tag: 'Warm Evening Depth',
-        subtitle: 'Velvet Amber & Gourmand Longevity',
-        targetFamilies: ['L5', 'L6'],
-        fallbackFamilies: ['L8', 'L3'],
-        technique: 'Warm Base & Accent Contrast',
-        reason: (comp) => `Spritz ${comp.name} first as a rich vanilla-amber anchor, then mist ${product.name} on top to create an intoxicating, multi-layered evening presence.`
-      },
-      {
-        id: 'woody-sillage',
-        tag: 'Smoky & Woody Trail',
-        subtitle: 'Lacquered Woods & Magnetic Projection',
-        targetFamilies: ['L8', 'L7'],
-        fallbackFamilies: ['L2', 'L6'],
-        technique: 'Dark Anchor & Radiant Diffusion',
-        reason: (comp) => `Layering with ${comp.name} infuses refined woods and spicy undertones that extend longevity past 14+ hours.`
-      },
-      {
-        id: 'fresh-sparkle',
-        tag: 'Daytime Fresh Lift',
-        subtitle: 'Crisp Citrus, Green Tea & Floral Radiance',
-        targetFamilies: ['L1', 'L3', 'L4', 'L2'],
-        fallbackFamilies: ['L9', 'L5'],
-        technique: 'Sparkling Top & Character Accent',
-        reason: (comp) => `Spray ${product.name} followed by ${comp.name} over your collar or hair to lift the opening with effortless, sunlit vitality.`
+    // Helper to normalize product SKU to match Excel CALC key (e.g. 'VLZ-W-102' -> 'W102', 'vlz-men-79' -> 'M079')
+    const getLookupSku = (p) => {
+      const rawSku = (p.sku || p.id || '').toUpperCase();
+      const match = rawSku.match(/(?:VLZ-)?([MW])-?(\d+)/i);
+      if (match) {
+        const prefix = match[1].toUpperCase();
+        const num = match[2].padStart(3, '0');
+        return prefix + num;
       }
-    ];
+      if (p.specs?.catalogNo != null || p.catalogNo != null) {
+        const catNum = p.specs?.catalogNo ?? p.catalogNo;
+        const prefix = (p.gender || p.category || '').toLowerCase().includes('women') ? 'W' : 'M';
+        return prefix + String(catNum).padStart(3, '0');
+      }
+      return null;
+    };
 
-    const results = [];
-    const usedProductIds = new Set([product.id]);
+    const targetKey = getLookupSku(product);
+    const bundleData = targetKey ? bundleRecommendations[targetKey] : null;
 
-    vibeProfiles.forEach(vibe => {
-      // Find candidate products that match this vibe's layerFamilies, avoiding duplicate products
-      let candidates = products.filter(p => {
-        if (usedProductIds.has(p.id)) return false;
-        const pLf = p.specs?.layerFamily || p.layerFamily || '';
-        return vibe.targetFamilies.includes(pLf) && pLf !== currentLf;
+    if (bundleData && Array.isArray(bundleData.recommendations) && bundleData.recommendations.length > 0) {
+      // Find matching product in catalog for each recommended item
+      const resolvedList = bundleData.recommendations.map((rec) => {
+        // Try matching product in catalog by catalogNo, sku, or name
+        const match = products.find((p) => {
+          const pGender = (p.gender || p.category || '').toLowerCase();
+          const recGender = (rec.gender || (rec.sku.startsWith('W') ? 'women' : 'men')).toLowerCase();
+          const isSameGender = pGender.includes(recGender) || recGender.includes(pGender);
+
+          if (rec.catalogNo && isSameGender) {
+            if (Number(p.catalogNo) === Number(rec.catalogNo)) return true;
+            if (Number(p.specs?.catalogNo) === Number(rec.catalogNo)) return true;
+          }
+          if (p.sku && p.sku.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rec.sku.replace(/[^A-Z0-9]/g, ''))) return true;
+          if (p.id && p.id.toUpperCase().replace(/[^A-Z0-9]/g, '').includes(rec.sku.replace(/[^A-Z0-9]/g, ''))) return true;
+          if (p.name && rec.name && p.name.toLowerCase().trim() === rec.name.toLowerCase().trim()) return true;
+          return false;
+        });
+
+        // Determine specific reason based on role
+        let reason = `Layering score ${rec.layerScore}% verified. Blends beautifully with ${product.name}.`;
+        if (rec.key === 'R1') {
+          reason = `Closest match (${rec.layerScore}%). Harmonious variation sharing your favorite scent accords.`;
+        } else if (rec.key === 'R2') {
+          reason = `Same character (${rec.layerScore}%). Explores complementary accords while preserving the core DNA.`;
+        } else if (rec.key === 'R3') {
+          reason = `Complementary contrast (${rec.layerScore}%). Shifts into ${rec.macroZone || 'alternate notes'} for variety.`;
+        } else if (rec.key === 'R4') {
+          reason = `Layering bridge (${rec.layerScore}%). The ultimate universal harmonizer across the collection.`;
+        }
+
+        const companionProduct = match || {
+          id: `rec-${rec.sku.toLowerCase()}`,
+          name: rec.name,
+          brand: rec.brand,
+          dominantAccord: rec.macroZone,
+          price_30ml: 45,
+          price_50ml: 65,
+          image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80'
+        };
+
+        return {
+          id: rec.key,
+          roleKey: rec.key,
+          tag: `${rec.key} · ${rec.role}`,
+          role: rec.role,
+          layerScore: rec.layerScore,
+          companion: companionProduct,
+          technique: rec.role,
+          reason
+        };
       });
 
-      // Fallback if none found in primary target families
-      if (candidates.length === 0) {
-        candidates = products.filter(p => {
-          if (usedProductIds.has(p.id)) return false;
-          const pLf = p.specs?.layerFamily || p.layerFamily || '';
-          return vibe.fallbackFamilies.includes(pLf) && pLf !== currentLf;
-        });
-      }
+      return resolvedList;
+    }
 
-      // Secondary fallback: any other product from another family
-      if (candidates.length === 0) {
-        candidates = products.filter(p => !usedProductIds.has(p.id));
-      }
+    // Fallback if anchor not found in bundle table
+    const fallbackCompanion = products.find((p) => p.id !== product.id && p.tier === 'S') || products.find((p) => p.id !== product.id);
+    if (!fallbackCompanion) return [];
 
-      if (candidates.length > 0) {
-        // Prioritize Tier S icon, then Tier A
-        const sorted = [...candidates].sort((a, b) => {
-          const rank = (tier) => (tier === 'S' ? 2 : tier === 'A' ? 1 : 0);
-          return rank(b.tier) - rank(a.tier);
-        });
-
-        const selected = sorted[0];
-        usedProductIds.add(selected.id);
-
-        results.push({
-          id: vibe.id,
-          tag: vibe.tag,
-          subtitle: vibe.subtitle,
-          companion: selected,
-          technique: vibe.technique,
-          reason: vibe.reason(selected)
-        });
-      }
-    });
-
-    return results;
+    return [{
+      id: 'R1',
+      roleKey: 'R1',
+      tag: 'R1 · Closest Match',
+      role: 'Closest Match',
+      layerScore: 92,
+      companion: fallbackCompanion,
+      technique: 'Harmonious Pairing',
+      reason: `Complementary scent partner for ${product.name}.`
+    }];
   }, [product, products]);
 
   if (!product) {
@@ -822,8 +834,15 @@ export const ProductDetailPage = () => {
                   </a>
 
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: '0.68rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
-                      + {activeOpt.tag}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                      <span style={{ fontSize: '0.68rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#926917', fontWeight: 800 }}>
+                        + {activeOpt.tag}
+                      </span>
+                      {activeOpt.layerScore && (
+                        <span style={{ fontSize: '0.65rem', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                          {activeOpt.layerScore}% Match
+                        </span>
+                      )}
                     </div>
                     <a
                       href={`product.html?product=${encodeURIComponent(comp.name || comp.id)}`}
